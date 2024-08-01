@@ -5,8 +5,8 @@
 \usepackage{fullpage}
 \usepackage{booktabs}
 \usepackage{hyperref}
-\usepackage{algorithm}
-\usepackage{algorithmic}
+\usepackage{algorithm, algorithmic}
+\usepackage{mathtools}
 
 \title{Notes for Advanced Topics in Mathematical Engineering}
 %\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
@@ -22,6 +22,7 @@
 \newtheorem{remark}{Remark}
 \newtheorem{definition}{Definition}
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\D}{\mathcal{D}}
 
 \newcommand{\tin}{\text{in}}
 \newcommand{\ton}{\text{on}}
@@ -63,7 +64,7 @@
 
 \section*{Context}
 
-These notes exist as backup material for a course on some deeper topics in Math Eng at Pontificia Universidad Católica de Chile, the 2nd semester of 2024. The idea is to provide mathematical tools for students that give them the ability to assess the difficulty of mathematical problems, mainly within the world of Partial Differential Equations (PDEs). The target is finally to implement these models, so that all tools are oriented towards having solid foundations that allows one to trust a computational model. Informally speaking, the main mathematical concepts to haunt us during all these notes are: 
+These notes exist as backup material for a course on some deeper topics in Math Eng at Pontificia Universidad Católica de Chile, the 2nd semester of 2024. The idea is to provide mathematical tools for students that give them the ability to assess the difficulty of mathematical problems, mainly within the world of Partial Differential Equations (PDEs). The target is ultimately to implement these models, so that all tools are oriented towards having solid foundations that allows one to trust a computational model. Informally speaking, the main mathematical concepts to haunt us during all these notes are: 
     \begin{itemize}
         \item Existence and uniqueness: It is a natural baseline in the mathematician's world to try to solve only problems that \emph{have} a solution. Otherwise, things might be as pointless as developing an iterative method for finding real numbers such that $x^2 = -1$. Uniqueness is a further luxury, but sometimes two different methods give two different solutions, and having only those things at hand can make it difficult to distinguish whether that is a bug or a feature of the model. There exist some root-isolation methods that allow to find solutions of a problem that are \emph{different} from a given one. This is out of the scope of this course. 
         \item Stability: The intuitive idea behind this is that small perturbations in the data give rise to small changes in the solution. This typically looks like 
@@ -88,9 +89,11 @@ In this section we will review some important properties of functional spaces an
         \item Continuous linear operators acting on Banach spaces have an induced norm: If $T: X\mapsto Y$, then 
             $$ \| T\| =  \sup_{x\in X}\frac{|Tx|_Y}{|x|_X}. $$
         Some people write this space as $L(X,Y)$. 
-        \item Hilbert spaces are Banach spaces with a dot (inner) product, i.e. a bilinear form $\langle\cdot, \cdot \rangle: X\times X\mapsto \R $ such which is: 
+        \item Hilbert spaces are Banach spaces with respect to the distance induced by a dot (inner) product, i.e. a bilinear form $\langle\cdot, \cdot \rangle: X\times X\mapsto \R $ such that: 
             \begin{itemize}
-                \item [TODO]
+                \item It is symmetric: $\langle x,y\rangle = \langle y, x\rangle$
+                \item It is linear in its first argument: $\langle \alpha x_1 + \beta x_2, y\rangle=\alpha\langle x_1, y\rangle + \beta\langle x_2, y\rangle$
+                \item It is positive definite: $\langle x,x\rangle \geq 0$, where it is 0 only if $x=0$.
             \end{itemize}
         \item The inner product yields the fantastic Riesz map, which is actually an isometry. This is given as follows: Consider a Hilbert space $H$ with inner product $\langle\cdot, \cdot\rangle_H$, then a Riesz map is an operator $R_H: H\mapsto H'$ such that for any $x,y$ in $H$ it holds that $\langle R_H(x), y\rangle_{H'\times H} = \langle x, y\rangle_H$. Notably, $\|R_H(x)\|_{H'} = \| x \|_H$. 
         \item Inner products are mostly used as projections. This means that, in the same way that we can orthogonalize a vector $x$ with respect to $y$, we can also do this in the Hilbert space setting analogously as 
@@ -110,13 +113,11 @@ as given by integration by parts. This is known as a \emph{weak derivative}. Arb
         \langle \dive T, f\rangle &\coloneqq -\langle T, \grad f\rangle \\
         \langle \curl T, f\rangle &\coloneqq \langle T, \curl f\rangle.
     \end{align*}
-Naturally, weak derivatives and the common ones coincide under differentiability assumptions. 
-
-The notion of weak derivatives allows us to define differentiable Hilbert spaces, given by 
+Naturally, weak derivatives and the common ones coincide under differentiability assumptions. The notion of weak derivatives allows us to define differentiable Hilbert spaces, given by 
     $$ W^{1,p}(\Omega) \coloneqq \{ f\in L^p(\Omega): \grad f \in L^p(\Omega)\}. $$
 These are Banach spaces with norm
     $$ \| x \|_{W^{1,p}(\Omega)} \coloneqq \| x \|_{L^p(\Omega)} + \| \grad x \|_{L^p(\Omega)}. $$
-This can be seen as the $\ell^1$ norm of the two-dimensional vector $(x, \grad x)$, and thus all vector norms for such a vector induce equivalent norms for Sobolev spaces. It is very common to use the following notations:   
+This can be seen as the $\ell^1$ norm of the two-dimensional vector $(\|x\|_{L^p(\Omega)}, \|\grad x\|_{L^p(\Omega)})$, and thus all vector norms for such a vector induce equivalent norms for Sobolev spaces. It is very common to use the following notations:   
     \begin{itemize}
         \item $H^1(\Omega) = W^{1,2}(\Omega)$.
         \item $\| x \|_{L^2(\Omega)} = \| x \|_{0,\Omega}$, or even simply $ \| x\|_0$, depending on the laziness of the person writing. 
@@ -125,18 +126,63 @@ This can be seen as the $\ell^1$ norm of the two-dimensional vector $(x, \grad x
 The space $H^1(\Omega)$ is very important, as it is a Hilbert space with inner product
     $$ \langle x,y\rangle_{H^1(\Omega)} \coloneqq \langle x,y\rangle_{L^2(\Omega)} + \langle \grad x, \grad y\rangle_{L^2(\Omega)}. $$
 Analogously, we can define the spaces
-    $$ H(\dive; \Omega) = [...] $$
+    $$ H(\dive; \Omega) = \left\{f\in L^2(\Omega): \dive f \in L^2(\Omega)\right\} $$
 and    
-    $$ H(\curl; \Omega) = [...] $$
+    $$ H(\curl; \Omega) = \left\{f\in L^2(\Omega): \curl f \in L^2(\Omega)\right\}$$
 Their application depends on the context, so we only keep here their definition. They are also Hilbert spaces, with the inner product defined as the one in $H^1$ but with the corresponding differential operators. Note that $H^1$ functions belong to both $H(\dive)$ and $H(\curl)$, but inclusions among them are not clear. 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Traces and weak forms}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Traces and weak forms}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Traces or trace operators are the ones that restrict a function in $\R^d$ to some set in $\R^{d-1}$, most commonly the boundary of a domain. They are fundamental to adequately define boundary conditions.
+Traces or trace operators are the ones that restrict a function in $\R^d$ to some set in $\R^{d-1}$, most commonly the boundary of a domain. They are fundamental to adequately define boundary conditions. For the presentation of this section, we follow Gatica and Monk. The fundamental difficulty of defining trace operators is that the domain where the boundary condition is defined has measure 0 in the measure of the starting domain, so some regularity of the function is required to guarantee that this operation makes sense. We will not enter the details of how a Lipschitz boundary is defined, see Monk for further details.
 
-[ADD DEFINITION OF DIRICHLET TRACE. DO THEN NEUMANN AND CURL]
+There are several definitions and constructions here that are needed for everything to make sense. We will follow them in a reasonable order, but this might be a very personal vision, so please read other formulations to have a more well-rounded vision. We will denote with $C_0^\infty(X)$ the space of functions with compact support in $X$, and also with $\D(\bar\Omega)$ the functions in $C_0^\infty(\R^d)$ with support in an open set $U$ such that $\bar\Omega\subset U$. This belongs to a wider set known as the Schwartz class of functions. If the set $X$ is open, we may denote $\D(X)$ as $C_0^\infty(X)$ with a bit of an abuse of notation.
+
+\begin{itemize}
+    \item Classic densities: $\D(\bar\Omega)$ is dense in $L^p(\Omega)$ if $\Omega$ is bounded and Lipschitz.
+    \item $C^\infty(\bar\Omega)$ is dense in $W^{s,p}(\Omega)$ for $s$ a positive integer and $p\in [1,\infty)$.
+    \item For $s$ a positive integer and $p\in (1,\infty)$, we have that there is a continuous linear extension $\Pi: W^{s,p}(\Omega) \to W^{s,p}(\R^d)$ such that $\Pi u|_\Omega = u$ for all $u$ in $W^{s,p}(\Omega)$.
+\end{itemize}
+
+Some technicalities arise when $\Omega$ is unbounded. For the sake of this course, all domains are bounded and Lipschitz unless otherwise stated. The following theorem allows us to extend the trace operator, which we initially define as $\gamma_0: \D(\bar\Omega) \to C^\infty(\partial\Omega)$, given by
+    $$ \gamma_0 u = u|_{\partial\Omega}.$$
+
+\begin{theorem}[Trace theorem]\label{thm:trace-theorem}
+    Set $\Omega$ a bounded and Lipscthiz domain. Then, considering $1/p < s \leq 1$, there exists a continuous extension of $\gamma_0$ given by $\gamma_0: W^{s,p}(\Omega) \to W^{\frac{s-1}{p}, p}(\Omega)$
+    \begin{proof}
+        See proof of $s=1$ in Gatica. 
+    \end{proof}
+\end{theorem}
+
+This trace is sometimes referred to as the \emph{Dirichlet} trace, as it is used to define Dirichlet boundary conditions. We can now define the Sobolev spaces "with boundary conditions", i.e. 
+    $$ W_0^{1,p} = \{ u \in L^p(\Omega): \grad u \in [L^p(\Omega)]^d \text{ and } \gamma_0 u = 0 \}. $$
+Here, we used the standard notation $[X(\Omega)]^d \coloneqq X(\Omega)\times \hdots \times X(\Omega)$. We thus get the extensively used spaces: 
+    $$
+    \begin{aligned}
+        H_0^1(\Omega) &= W_0^{1,2}(\Omega) \\
+        H^{-1}(\Omega) &= [H_0^1(\Omega)]' \\
+        H^{1/2}(\partial\Omega) &= W^{1/2,2}(\partial\Omega) \\
+        H^{-1/2}(\partial\Omega) &= [H^{1/2}(\partial\Omega)]',
+    \end{aligned}
+    $$
+where the space $H^{1/2}(\partial\Omega)$ is the trace space associated to $H^1(\Omega)$, and the kernel of $\gamma_0$ is given by $H_0^1(\Omega)$. 
+
+\paragraph{The trace spaces} This space has some nice properties, which we detail now. Its norm\footnote{Sobolev spaces of fractional order are a best on their own. The rigorous definition can be given using either Fourier transforms or by using the Slobodeckij seminorm. Both are very cumbersome and seldom used.} is given by 
+
+    $$ \| u \|_{1/2,\partial\Omega} \coloneqq \inf\{\|U\|_{1,\Omega}: U \in H^1(\Omega) \text{ and } u = \gamma_0 U\}, $$
+which naturally yields the following continuity estimate for the trace operator: 
+    $$ \| \gamma_0 U\|_{1/2,\partial\Omega} \leq \| U \|_{1,\Omega} . $$
+The trace space $H^{1/2}$ can be seen as a quotient space derived from $H^1$, so it is also a Hilbert space. A natural question is what the inner product looks like. To do that, we consider for a given $u$ in $H^{1/2}(\partial\Omega)$, an element that yields the norm, i.e. $U$ in $H^1(\Omega)$ such that $\gamma_0 U = u$ and $\| u \|_{1/2,\partial\Omega} = \| U \|_{1,\Omega}$. In such a case, we can consider the following inner product: 
+    $$ (v_1, v_2)_{1/2,\partial\Omega} \coloneqq (V_1, V_2)_{1,\Omega}, $$
+where $V_i$ are the extension functions. Finally, it will be useful to know that $H_0^1(\Omega)$ (and indeed also $W_0^{s,p}$) can be defined as a closure in terms of the $H^1$ norm: 
+    $$ H_0^1(\Omega) \coloneqq \overline{C_0^\infty(\Omega)}^{\|\cdot \|_{1,\Omega}}. $$
+
+\paragraph{$H(\dive)$ and the normal trace}
+\paragraph{$H(\curl)$ and the tangential trace}
+
+
+[NEUMANN AND CURL]
 
 [LAX-MILGRAM]
 
