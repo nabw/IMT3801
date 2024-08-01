@@ -1,0 +1,242 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm, amssymb, mathpazo, isomath, mathtools}
+\usepackage{subcaption,graphicx,pgfplots}
+\usepackage{fullpage}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\title{Notes for Advanced Topics in Mathematical Engineering}
+%\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
+\author{Nicol\'as A Barnafi}
+%\date{}
+
+\renewcommand{\vec}{\vectorsym}
+\newcommand{\mat}{\matrixsym}
+\newcommand{\ten}{\tensorsym}
+\DeclareMathOperator{\grad}{\nabla}
+\DeclareMathOperator{\dive}{\text{div}}
+\DeclareMathOperator{\curl}{\text{curl}}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+\newcommand{\R}{\mathbb{R}}
+
+\newcommand{\tin}{\text{in}}
+\newcommand{\ton}{\text{on}}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+%   breaklines=false,                     
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=none,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2,
+%   frameround=tttn,
+  framerule=1.5pt,
+  rulecolor=\color{red!60!black}
+}
+\lstset{style=mystyle}
+
+\begin{document}
+
+\maketitle
+
+\section*{Context}
+
+These notes exist as backup material for a course on some deeper topics in Math Eng at Pontificia Universidad Católica de Chile, the 2nd semester of 2024. The idea is to provide mathematical tools for students that give them the ability to assess the difficulty of mathematical problems, mainly within the world of Partial Differential Equations (PDEs). The target is finally to implement these models, so that all tools are oriented towards having solid foundations that allows one to trust a computational model. Informally speaking, the main mathematical concepts to haunt us during all these notes are: 
+    \begin{itemize}
+        \item Existence and uniqueness: It is a natural baseline in the mathematician's world to try to solve only problems that \emph{have} a solution. Otherwise, things might be as pointless as developing an iterative method for finding real numbers such that $x^2 = -1$. Uniqueness is a further luxury, but sometimes two different methods give two different solutions, and having only those things at hand can make it difficult to distinguish whether that is a bug or a feature of the model. There exist some root-isolation methods that allow to find solutions of a problem that are \emph{different} from a given one. This is out of the scope of this course. 
+        \item Stability: The intuitive idea behind this is that small perturbations in the data give rise to small changes in the solution. This typically looks like 
+            $$ \| u\|_X \leq \| f\|_{X'}, $$
+        where $u$ is the solution of a problem that depends on $f$, and $X$ is some functional (hopefully Hilbert) space. More rigorously, this means that the solution map $f \mapsto u(f)$ is bounded, or continuous in the linear case. Stability also sometimes refers to time dynamics and the fact that a discrete solution stays \emph{within a certain distance} of the real solution throughout a simulation. In the continuous setting, it might also mean that there are no finite-time singularities. In general, stability is not a well defined term, but still a widely understood one to anyone who has struggled to get a code to run correctly, and a highly desired property. 
+    \end{itemize}
+All other properties (or at least most of them anyway) are ways to guarantee that a problem enjoys one of these nice properties. There are ways to handle problems that do not have those properties, but they are almost always extremely problem dependent, and the person studying such problems should dive deep into the sectorial knowledge to see how certain communities deal with such issues. This is an aspect that mathematically oriented people almost always disregard, which has some severe mathematical (and social) consequences. In fact, some extremely classical models in engineering are still far from understood mathematically, such as the Navier-Stokes equations. This has not prevented the CFD community from solving these models with extreme efficiency, and from further leveraging them for industrial applications which, unsurprisingly, work fantastically. Discovering the amazing ways in which mathematically obvlivious communities solve mathematically hard problems is, and will probably be for very long, a beautiful opportunity for collaboration.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Analysis preliminaries}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In this section we will review some important properties of functional spaces and operators. These things should be deemed as 'review' material. Intrinsically new things will start appearing in Secion~\ref{section:beyond-ellipticity}. Most, if not all, results will be coming from the amazing book \emph{Linear and nonlinear functional analysis} by PG Ciarlet.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Functional spaces}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Banach and Hilbert spaces} Throughout the entire manuscript, we will rely on Banach spaces, Hilbert spaces, and their duals. Despite the existence of a flexible theory of Banach space formulations, we will mostly rely on Hilbert spaces because of their many nice properties. For now, let's simply review some relevant properties: 
+    \begin{itemize}
+        \item Banach spaces are complete metric spaces. For a given Banach space $X$, its (topological) dual is the space $X'$ of functions $X\mapsto \R$. The action of an element in the dual space is sometimes denoted as $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. In general, one can identify a part of the bidual space $X''$ through the evaluation operator $T_f:X'\mapsto \R$ in $X''$ defined as $T_f(L) = L(f)$. This immersion is not surjective. 
+        \item Continuous linear operators acting on Banach spaces have an induced norm: If $T: X\mapsto Y$, then 
+            $$ \| T\| =  \sup_{x\in X}\frac{|Tx|_Y}{|x|_X}. $$
+        Some people write this space as $L(X,Y)$. 
+        \item Hilbert spaces are Banach spaces with a dot (inner) product, i.e. a bilinear form $\langle\cdot, \cdot \rangle: X\times X\mapsto \R $ such which is: 
+            \begin{itemize}
+                \item [TODO]
+            \end{itemize}
+        \item The inner product yields the fantastic Riesz map, which is actually an isometry. This is given as follows: Consider a Hilbert space $H$ with inner product $\langle\cdot, \cdot\rangle_H$, then a Riesz map is an operator $R_H: H\mapsto H'$ such that for any $x,y$ in $H$ it holds that $\langle R_H(x), y\rangle_{H'\times H} = \langle x, y\rangle_H$. Notably, $\|R_H(x)\|_{H'} = \| x \|_H$. 
+        \item Inner products are mostly used as projections. This means that, in the same way that we can orthogonalize a vector $x$ with respect to $y$, we can also do this in the Hilbert space setting analogously as 
+            $$ x_\perp \coloneqq x - \langle x, y\rangle_H y. $$
+        It can be quickly verified that the function $x_\perp$ is indeed perpendicular to $y$ in the sense that $\langle x_\perp, y\rangle_H=0$. 
+    \end{itemize}
+The most important spaces for us will be the Lebesgue spaces $L^p(\Omega;\R^d)$ given by measurable functions $f:\Omega \mapsto \R^d$ such that
+    $$ \int_\Omega |f|_{\R^d}^p\,dx < \infty. $$
+It will be important to know that if $|\Omega|<\infty$, then these spaces form an ordered inclusion: 
+    $$ L^\infty(\Omega) \subset L^p(\Omega) \subset ... \subset L^1(\Omega). $$
+A simple way to remember this is to split a function as $f = I_{|f|\leq 1}f + I_{|f|\geq 1}f$ and note that $|x|^p < |x|^{p+\epsilon}$ for $\epsilon > 0$. 
+
+\paragraph{Distributions and derivatives} To formulate differential equations in Banach/Hilbert spaces, it will be important to be able to define derivatives in such spaces. This is done through the language of distributions, invented (discovered) by L Schwartz. For this, we require the notion of 'test functions', i.e. functions on which we can discharge derivatives of abstract objects through integration by parts. Consider then a function $f$ in $C_0^\infty(\R^d)$, the space of infinitely differentiable scalar functions with compact support in $\R^d$, then a distribution is simply an element $T$ in the dual space $(C_0^\infty)'$, whose action can be written as $\langle T, f\rangle_{(C_0^\infty)'\times C_0^\infty}$, or sometimes simply as $\langle T, f\rangle$, if it is clear by context. This allows us to define distribution derivatives as
+    $$ \langle \partial_i T, f\rangle \coloneqq -\langle T, \partial_i f\rangle, $$
+as given by integration by parts. This is known as a \emph{weak derivative}. Arbitrary order differential operators can be defined analogously, most importantly $\grad, \dive, \curl$, given by 
+    \begin{align*}
+        \langle \dive T, f\rangle &\coloneqq -\langle T, \grad f\rangle \\
+        \langle \curl T, f\rangle &\coloneqq \langle T, \curl f\rangle.
+    \end{align*}
+Naturally, weak derivatives and the common ones coincide under differentiability assumptions. 
+
+The notion of weak derivatives allows us to define differentiable Hilbert spaces, given by 
+    $$ W^{1,p}(\Omega) \coloneqq \{ f\in L^p(\Omega): \grad f \in L^p(\Omega)\}. $$
+These are Banach spaces with norm
+    $$ \| x \|_{W^{1,p}(\Omega)} \coloneqq \| x \|_{L^p(\Omega)} + \| \grad x \|_{L^p(\Omega)}. $$
+This can be seen as the $\ell^1$ norm of the two-dimensional vector $(x, \grad x)$, and thus all vector norms for such a vector induce equivalent norms for Sobolev spaces. It is very common to use the following notations:   
+    \begin{itemize}
+        \item $H^1(\Omega) = W^{1,2}(\Omega)$.
+        \item $\| x \|_{L^2(\Omega)} = \| x \|_{0,\Omega}$, or even simply $ \| x\|_0$, depending on the laziness of the person writing. 
+        \item $\| x \|_{H^1(\Omega)} = \|x\|_{1,\Omega}$.
+    \end{itemize}
+The space $H^1(\Omega)$ is very important, as it is a Hilbert space with inner product
+    $$ \langle x,y\rangle_{H^1(\Omega)} \coloneqq \langle x,y\rangle_{L^2(\Omega)} + \langle \grad x, \grad y\rangle_{L^2(\Omega)}. $$
+Analogously, we can define the spaces
+    $$ H(\dive; \Omega) = [...] $$
+and    
+    $$ H(\curl; \Omega) = [...] $$
+Their application depends on the context, so we only keep here their definition. They are also Hilbert spaces, with the inner product defined as the one in $H^1$ but with the corresponding differential operators. Note that $H^1$ functions belong to both $H(\dive)$ and $H(\curl)$, but inclusions among them are not clear. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Traces and weak forms}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Traces or trace operators are the ones that restrict a function in $\R^d$ to some set in $\R^{d-1}$, most commonly the boundary of a domain. They are fundamental to adequately define boundary conditions.
+
+[ADD DEFINITION OF DIRICHLET TRACE. DO THEN NEUMANN AND CURL]
+
+[LAX-MILGRAM]
+
+[POINCARÈ INQEUALITIES]
+
+Using all of the previous definitions, we can finally look at actual problems and some first well-posedness results. 
+
+\paragraph{The Poisson problem} Consider $f$ in $H^{-1}(\Omega)$ and $g$ in $H^{1/2}(\Gamma)$ with $\Gamma\coloneqq \partial\Omega$. The Poisson problem in strong form is given as the following PDE: 
+    \begin{align*}
+        -\Delta u  &= f \qquad \tin\quad\Omega\\
+        \gamma_0 u &= g \qquad \ton\quad \Gamma.
+    \end{align*}
+Note that the strong form must be understood in the distributional sense, i.e. as an equation in $H^{-1}(\Omega)$. To derive the weak formulation, consider a function $v$ in $H_0^1(\Omega)$, then using the boundary conditions we obtain that 
+    $$ -\langle \Delta u,v\rangle = (\grad u, \grad v),$$
+where $(\cdot, \cdot)$ is the $L^2(\Omega)$ product. Thus the weak formulation reads: Find $u$ in $H_0^1(\Omega)$ such that 
+    $$ \int_\Omega \grad u\cdot \grad v\,dx = \langle f, v\rangle \qquad \forall v\in H_0^1(\Omega).$$
+This problem can be shown to be well-posed using Lax-Milgram's lemma and the Poincarè inequality. 
+
+\paragraph{The $\dive$ and $\curl$ formulations} Similarly to the Poisson problem, we can consider the following problems: Consider $f$ in $(H(\dive;\Omega))'$ and $g$ in $H^{-1/2}(\Gamma)$. Then the strong form of the $\dive$ problem reads
+    \begin{align*}
+        u + \grad \dive u &= f \qquad\tin\quad\Omega\\
+        u\cdot \vec n &= g \qquad\ton\quad\Gamma,
+    \end{align*}
+where the boundary condition is understood in the sense of traces, more specifically the Neumann trace. Then, the weak formulation reads: Find $u$ in $H(\dive; \Omega)$ such that 
+    $$(u,v) + (\dive u, \dive v) = \langle f, v\rangle \qquad \forall v \in H(\dive; \Omega). $$
+The $\curl$ formulation is done analogously with the second order operator $\curl\curl$ and a tangential boundary condition. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Finite elements for elliptic problems}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+To be more fair, we will actually consider a Galerkin scheme, which can be described as follows: Consider the problem of finding $u$ in $H$ such that
+    $$ a( $$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Beyond ellipticity}\label{section:beyond-ellipticity}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Inf-sup conditions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Saddle point problems}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Discretization of saddle point problems}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Beyond linearity}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Fixed point theorems}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Monotone operators}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Time dependent problems}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Faedo-Galerkin and the method of lines}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Space and time discretization}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Poroelasticity}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Equilibrium equations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Constitutive modeling}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Darcy and Biot equations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
