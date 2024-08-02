@@ -1,0 +1,5 @@
+# Context
+
+These notes were born as a way to keep track of the contents I intended to show in a course on Advanced Topics for Mathematical Engineering at Pontificia Universidad Católica de Chile, the second semester of 2024. The idea of the course is to give a modern set of tools for a rigorous computational scientist, so that they can understand the complexity of a given problem and squeeze the most mathematics out of a problem whenever possible. This should help in developing efficient numerical methods and robust strategies to be able to trust the computational pipelines that they propose. 
+
+I have been writing most things in a rush, so help in finding typos and mistakes will be much appreciated. Raise it either by email (nicolas.barnafi at uc.cl) or directly here as an issue. Using git for everything is a personal pathology.

@@ -132,10 +132,10 @@ and
 Their application depends on the context, so we only keep here their definition. They are also Hilbert spaces, with the inner product defined as the one in $H^1$ but with the corresponding differential operators. Note that $H^1$ functions belong to both $H(\dive)$ and $H(\curl)$, but inclusions among them are not clear. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Traces and weak forms}%
+\subsection{Traces}%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Traces or trace operators are the ones that restrict a function in $\R^d$ to some set in $\R^{d-1}$, most commonly the boundary of a domain. They are fundamental to adequately define boundary conditions. For the presentation of this section, we follow Gatica and Monk. The fundamental difficulty of defining trace operators is that the domain where the boundary condition is defined has measure 0 in the measure of the starting domain, so some regularity of the function is required to guarantee that this operation makes sense. We will not enter the details of how a Lipschitz boundary is defined, see Monk for further details.
+Traces or trace operators are the ones that restrict a function in $\R^d$ to some set in $\R^{d-1}$, most commonly the boundary of a domain. They are fundamental to adequately define boundary conditions. For the presentation of this section, we follow \cite{gatica2014simple} and \cite{monk2003finite}. Some details about Sobolev spaces are drawn from \cite{adams2003sobolev}. The fundamental difficulty of defining trace operators is that the domain where the boundary condition is defined has measure 0 in the measure of the starting domain, so some regularity of the function is required to guarantee that this operation makes sense. We will not enter the details of how a Lipschitz boundary is defined, see \cite{monk2003finite} for further details.
 
 There are several definitions and constructions here that are needed for everything to make sense. We will follow them in a reasonable order, but this might be a very personal vision, so please read other formulations to have a more well-rounded vision. We will denote with $C_0^\infty(X)$ the space of functions with compact support in $X$, and also with $\D(\bar\Omega)$ the functions in $C_0^\infty(\R^d)$ with support in an open set $U$ such that $\bar\Omega\subset U$. This belongs to a wider set known as the Schwartz class of functions. If the set $X$ is open, we may denote $\D(X)$ as $C_0^\infty(X)$ with a bit of an abuse of notation.
 
@@ -151,7 +151,7 @@ Some technicalities arise when $\Omega$ is unbounded. For the sake of this cours
 \begin{theorem}[Trace theorem]\label{thm:trace-theorem}
     Set $\Omega$ a bounded and Lipscthiz domain. Then, considering $1/p < s \leq 1$, there exists a continuous extension of $\gamma_0$ given by $\gamma_0: W^{s,p}(\Omega) \to W^{\frac{s-1}{p}, p}(\Omega)$
     \begin{proof}
-        See proof of $s=1$ in Gatica. 
+        See proof of $s=1$ in \cite{gatica2014simple}. 
     \end{proof}
 \end{theorem}
 
@@ -178,15 +178,37 @@ The trace space $H^{1/2}$ can be seen as a quotient space derived from $H^1$, so
 where $V_i$ are the extension functions. Finally, it will be useful to know that $H_0^1(\Omega)$ (and indeed also $W_0^{s,p}$) can be defined as a closure in terms of the $H^1$ norm: 
     $$ H_0^1(\Omega) \coloneqq \overline{C_0^\infty(\Omega)}^{\|\cdot \|_{1,\Omega}}. $$
 
+\paragraph{Note on integration by parts formulas} These formulas will be important to define the normal and tangential traces. All formulas stem from the divergence theorem: 
+
+\begin{theorem}[Divergence Theorem]
+    Consider a bounded Lipschitz domain $\Omega$ in $\R^{d=2,3}$ and consider a vector field $\vec F:\R^d \to \R^d$ in $[C^1(\bar\Omega)]^d$. Then it holds that
+        $$ \int_\Omega \dive \vec F\,dx = \int_{\partial\Omega}\vec F\cdot \vec n\,ds,$$
+    where $\vec n$ is the outwards normal vector, $dx$ is the volume measure and $ds$ is the surface measure.
+\end{theorem}
+
+The relevant formulas are the following: 
+    \begin{itemize}
+        \item If $\xi$ in $C^1(\bar\Omega)$ and $\vec u$ in $[C^1(\bar\Omega)]^d$:
+            $$ \int_\Omega (\dive \vec u) \xi\,dx = -\int_\Omega\vec u\cdot \grad \xi\,dx + \int_{\partial\Omega} \vec u \cdot \vec n \xi\,ds.$$
+        \item (Green's [first] identity)\footnote{See \cite{monk2003finite} for the second one. It is useful to derive Boundary Element (BEM) methods.} If $\xi$ in $C^1(\bar\Omega)$ and $p$ in $C^2(\bar\Omega)$:
+            $$ -\int_\Omega (\Delta p) \xi\,dx = \int_\Omega\grad p\cdot \grad \xi\,dx - \int_{\partial\Omega}\left(\grad p\cdot \vec n\right)\xi\,ds.$$
+        \item Consider $\vec u,\vec \phi$ in $[C^1(\bar\Omega)]^d$: 
+            $$ \int_\Omega (\curl \vec u) \cdot \vec\phi\,dx = \int_\Omega \vec u \cdot (\curl \vec \phi)\,dx  + \int_{\partial\Omega}(\vec n\times \vec u)\cdot \vec\phi\,ds.$$
+    \end{itemize}
+
 \paragraph{$H(\dive)$ and the normal trace}
+[TODO]
 \paragraph{$H(\curl)$ and the tangential trace}
+[TODO]
 
 
 [NEUMANN AND CURL]
+\subsection{Integration by parts formulas}
 
-[LAX-MILGRAM]
+\subsection{Weak formulations}
 
-[POINCARÈ INQEUALITIES]
+\subsection{Poincarè inequalities and Lax-Milgram}
+
 
 Using all of the previous definitions, we can finally look at actual problems and some first well-posedness results. 
 
@@ -284,5 +306,7 @@ To be more fair, we will actually consider a Galerkin scheme, which can be descr
 \subsection{Darcy and Biot equations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\bibliography{main}
+\bibliographystyle{alpha}
 \end{document}
 
