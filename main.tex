@@ -100,6 +100,19 @@ In this section we will review some important properties of functional spaces an
             $$ x_\perp \coloneqq x - \langle x, y\rangle_H y. $$
         It can be quickly verified that the function $x_\perp$ is indeed perpendicular to $y$ in the sense that $\langle x_\perp, y\rangle_H=0$. 
     \end{itemize}
+One fundamental aspect of Hilbert spaces is that they provide some intuitive properties related to projections, which we recall through the following results: 
+\begin{theorem}{Best approximation}
+    Set $U\subset H$ a closed subspace of a Hilbert space $H$ and set $f$ in $H$. Then there exists a unique $g$ in $U$ such that
+        $$ \|f - g \|_H = \inf_{u\in U} \| f - u\|_H. $$
+\end{theorem}
+Using this, we can uniquely definte the orthogonal complement of a set $U$: 
+    $$ U^\perp \coloneqq \{v\in H: (v, u)_H = 0 \quad\forall u\in U\}. $$
+\begin{theorem}
+    Set $U$ a closed subspace of a Hilbert space $H$. Then, if $f$ is in $H$, there exists a unique pair $(u,v)$ in $U\times U^\perp$ such that 
+        $$f = u + v.$$
+\end{theorem}
+Some common and/or simple examples: Helmholtz decomposition, zero average functions, zero trace tensors, symmetric tensors. Note that the orthogonal complement is defined with respect to a \emph{given} inner product.
+
 The most important spaces for us will be the Lebesgue spaces $L^p(\Omega;\R^d)$ given by measurable functions $f:\Omega \mapsto \R^d$ such that
     $$ \int_\Omega |f|_{\R^d}^p\,dx < \infty. $$
 It will be important to know that if $|\Omega|<\infty$, then these spaces form an ordered inclusion: 
@@ -129,7 +142,31 @@ Analogously, we can define the spaces
     $$ H(\dive; \Omega) = \left\{f\in L^2(\Omega): \dive f \in L^2(\Omega)\right\} $$
 and    
     $$ H(\curl; \Omega) = \left\{f\in L^2(\Omega): \curl f \in L^2(\Omega)\right\}$$
-Their application depends on the context, so we only keep here their definition. They are also Hilbert spaces, with the inner product defined as the one in $H^1$ but with the corresponding differential operators. Note that $H^1$ functions belong to both $H(\dive)$ and $H(\curl)$, but inclusions among them are not clear. 
+Their application depends on the context, so we only keep here their definition. They are also Hilbert spaces, with the inner product defined as the one in $H^1$ but with the corresponding differential operators. Note that $H^1$ functions belong to both $H(\dive)$ and $H(\curl)$, but inclusions among them are not clear. We conclude this section with the celebrated Sobolev embedding results: 
+
+\begin{theorem}[Sobolev embeddings (continuous)]
+    Consider $\Omega$ a bounded Lipschitz domain in $\R^d$, set $m,j$ two non-negative integers, and $p$ in $[1,\infty]$. Then the following embeddings hold: 
+    \begin{enumerate}
+        \item If $mp < d$ then for $p \leq q \leq \frac{dp}{d-mp}$:
+            $$ W^{j+m, p}(\Omega) \hookrightarrow W^{j,q}(\Omega). $$
+        \item If $mp = d$, then for $p \leq q < \infty$:
+            $$ W^{j+m, p}(\Omega) \hookrightarrow W^{j,q}(\Omega). $$
+        \item If $mp > d \geq (m-1)p$, then 
+            $$ W^{j+m,p}(\Omega) \hookrightarrow C^j(\bar\Omega). $$
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Sobolev embeddings (compact)]
+Consider $\Omega$ a bounded Lipschitz domain in $\R^d$, $m\geq 1$ integer, $j\geq 0$ integer and let $p$ in $[1,\infty)$. Then the following embeddings are compact:
+    \begin{enumerate}
+        \item If $mp \leq d$  then for $q$ in $[1, \frac{dp}{d - mp}]$:
+            $$ W^{j+m, p}(\Omega) \hookrightarrow W^{j,q}(\Omega). $$
+        \item If $mp > d$, then 
+            $$ W^{j+m, p}(\Omega \hookrightarrow C^j(\bar\Omega). $$
+    \end{enumerate}
+These inclusions hold also if the arrival domain is an arbitrary subdomain of $\Omega$. 
+\end{theorem}
+These theorems hold in greater generality, and are typically used together with the weak-compactness of the unit ball to show the existence of certain strongly convergent subsequence. We will see examples of this further ahead. One fundamental consequence is that $H^1$ is compactly embedded in $L^2$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Traces}%
