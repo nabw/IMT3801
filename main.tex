@@ -9,6 +9,8 @@
 \usepackage{mathtools}
 \usepackage{todonotes}
 
+\newcommand{\example}[1]{\todo[inline,color=green!30!white]{#1}}
+
 \title{Notes for Advanced Topics in Mathematical Engineering}
 %\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
 \author{Nicol\'as A Barnafi}
@@ -114,8 +116,13 @@ Using this, we can uniquely definte the orthogonal complement of a set $U$:
 \end{theorem}
 Some common and/or simple examples: Helmholtz decomposition, zero average functions, zero trace tensors, symmetric tensors. Note that the orthogonal complement is defined with respect to a \emph{given} inner product.
 
-\todo[inline]{
-    ASDF
+\example{
+  Assume we want to orthogonalize with respect to $U=\R$. Then, we have that there is a constant $c$ such that for $f$ in a Hilbert space $H$ we can write
+    $$ f = h + c, $$
+  with $h\perp U$. Noting that a function $x$ satisfies $x\perp U$ iff $(x,1)_H = 0$, then we can use the previous expression to obtain 
+    $$ (f,1)_H = (c,1) = c(1,1)_H, $$ 
+  which gives
+    $$ c = \frac{(f,1)_H}{(1,1)_H}. $$
 }
 
 The most important spaces for us will be the Lebesgue spaces $L^p(\Omega;\R^d)$ given by measurable functions $f:\Omega \mapsto \R^d$ such that
@@ -137,7 +144,7 @@ Naturally, weak derivatives and the common ones coincide under differentiability
     $$ W^{1,p}(\Omega) \coloneqq \{ f\in L^p(\Omega): \grad f \in L^p(\Omega)\}. $$
 These are Banach spaces with norm
     $$ \| x \|_{W^{1,p}(\Omega)} \coloneqq \| x \|_{L^p(\Omega)} + \| \grad x \|_{L^p(\Omega)}. $$
-This can be seen as the $\ell^1$ norm of the two-dimensional vector $(\|x\|_{L^p(\Omega)}, \|\grad x\|_{L^p(\Omega)})$, and thus all vector norms for such a vector induce equivalent norms for Sobolev spaces. It is very common to use the following notations:   
+This is the graph norm of the $\nabla$ operator, and it can be further seen as the $\ell^1$ norm of the two-dimensional vector $(\|x\|_{L^p(\Omega)}, \|\grad x\|_{L^p(\Omega)})$, and thus all vector norms for such a vector induce equivalent norms for Sobolev spaces. It is very common to use the following notations:   
     \begin{itemize}
         \item $H^1(\Omega) = W^{1,2}(\Omega)$.
         \item $\| x \|_{L^2(\Omega)} = \| x \|_{0,\Omega}$, or even simply $ \| x\|_0$, depending on the laziness of the person writing. 
