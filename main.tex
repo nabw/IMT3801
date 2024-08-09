@@ -9,7 +9,7 @@
 \usepackage{mathtools}
 \usepackage{todonotes}
 
-\newcommand{\example}[1]{\todo[inline,color=green!30!white]{#1}}
+\newcommand{\example}[1]{\todo[inline,color=green!30!white]{\textbf{Example:} #1}}
 
 \title{Notes for Advanced Topics in Mathematical Engineering}
 %\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
@@ -140,6 +140,12 @@ as given by integration by parts. This is known as a \emph{weak derivative}. Arb
         \langle \dive T, f\rangle &\coloneqq -\langle T, \grad f\rangle \\
         \langle \curl T, f\rangle &\coloneqq \langle T, \curl f\rangle.
     \end{align*}
+\example{All classical (or strong) derivatives coincide with the weak derivatives, as seen from the integration by parts formulas. Also, consider the Dirac delta distribution given by
+    $$ \langle \delta_x, f\rangle = f(x), $$
+sometimes written as $\delta_x(f)$, or also simply as $\int_\Omega \delta_x f\,dx$ (with a \emph{not too mild} abuse of notation).
+Then, its derivative is given by 
+    $$ \langle \delta', f \rangle = -\langle \delta_x, f'\rangle = - f'(x).$$
+}
 Naturally, weak derivatives and the common ones coincide under differentiability assumptions. The notion of weak derivatives allows us to define differentiable Hilbert spaces, given by 
     $$ W^{1,p}(\Omega) \coloneqq \{ f\in L^p(\Omega): \grad f \in L^p(\Omega)\}. $$
 These are Banach spaces with norm
@@ -198,11 +204,17 @@ There are several definitions and constructions here that are needed for everyth
 
 Some technicalities arise when $\Omega$ is unbounded. For the sake of this course, all domains are bounded and Lipschitz unless otherwise stated. The following theorem allows us to extend the trace operator, which we initially define as $\gamma_0: \D(\bar\Omega) \to C^\infty(\partial\Omega)$, given by
     $$ \gamma_0 u = u|_{\partial\Omega}.$$
+An important property that we will use many times is the \emph{trace inequality}, which states that there exists $C$ positive such that 
+    $$ \| \gamma_0 f \|_{0,\partial\Omega} \leq C \| f \|_{1,\Omega} \qquad\forall f \in \mathcal D(\bar\Omega). $$
 
 \begin{theorem}[Trace theorem]\label{thm:trace-theorem}
     Set $\Omega$ a bounded and Lipscthiz domain. Then, considering $1/p < s \leq 1$, there exists a continuous extension of $\gamma_0$ given by $\gamma_0: W^{s,p}(\Omega) \to W^{\frac{s-1}{p}, p}(\Omega)$
     \begin{proof}
-        See proof of $s=1$ in \cite{gatica2014simple}. 
+        We refer to \cite{adams2003sobolev} for a complete proof. We will simply see how to extend $\gamma_0$ from smooth functions to a linear bounded operator from $H^1(\Omega)$ to $L^2(\partial\Omega)$. This result requires the density of $\mathcal D$ in $H^1$ and the trace inequality. Consider thus a Cauchy sequence $\{\varphi_i\}_i$ in $\mathcal D(\bar\Omega)$ converging to some $v$ in $H^1(\Omega)$. Using linearity and continuity, we get that for some pair of indexes $i,j$: 
+        $$ \| \gamma_0 \varphi_i - \gamma_0 \varphi_j \|_{0,\partial\Omega} = \| \gamma_0 (\varphi_i - \varphi_j) \|_{0,\partial\Omega} \leq C \| \varphi_i - \varphi_j \|_{1,\Omega}. $$
+        This states that $\{ \gamma_0 \varphi_i \}_i $ is a Cauchy sequence in $L^2$, and thus has a limit $\xi$ in $L^2(\partial\Omega)$. Before setting $\xi$ as our extension, we need to check it is independent of the chosen sequence. This can be simply done by choosing another sequence such that $\{\tilde \varphi_i\}_i$ converges also to $v$. Then, it holds that 
+        $$ \| \gamma_0 \tilde \varphi_i - \xi \| \leq \| \gamma_0(\tilde\varphi_i - \varphi_i) + \gamma_0 \varphi_i - \xi \| \leq \| \gamma_0(\tilde\varphi_0 - \varphi_i) \| + \| \gamma\varphi_i - \xi \|. $$
+        The second term goes to zero as we showed previously. FINISH
     \end{proof}
 \end{theorem}
 
