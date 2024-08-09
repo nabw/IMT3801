@@ -208,13 +208,15 @@ An important property that we will use many times is the \emph{trace inequality}
     $$ \| \gamma_0 f \|_{0,\partial\Omega} \leq C \| f \|_{1,\Omega} \qquad\forall f \in \mathcal D(\bar\Omega). $$
 
 \begin{theorem}[Trace theorem]\label{thm:trace-theorem}
-    Set $\Omega$ a bounded and Lipscthiz domain. Then, considering $1/p < s \leq 1$, there exists a continuous extension of $\gamma_0$ given by $\gamma_0: W^{s,p}(\Omega) \to W^{\frac{s-1}{p}, p}(\Omega)$
+    Set $\Omega$ a bounded and Lipscthiz domain. Then, considering $1/p < s \leq 1$, there exists a continuous extension of $\gamma_0$ given by $\gamma_0: W^{s,p}(\Omega) \to W^{\frac{s-1}{p}, p}(\partial\Omega)$
     \begin{proof}
         We refer to \cite{adams2003sobolev} for a complete proof. We will simply see how to extend $\gamma_0$ from smooth functions to a linear bounded operator from $H^1(\Omega)$ to $L^2(\partial\Omega)$. This result requires the density of $\mathcal D$ in $H^1$ and the trace inequality. Consider thus a Cauchy sequence $\{\varphi_i\}_i$ in $\mathcal D(\bar\Omega)$ converging to some $v$ in $H^1(\Omega)$. Using linearity and continuity, we get that for some pair of indexes $i,j$: 
         $$ \| \gamma_0 \varphi_i - \gamma_0 \varphi_j \|_{0,\partial\Omega} = \| \gamma_0 (\varphi_i - \varphi_j) \|_{0,\partial\Omega} \leq C \| \varphi_i - \varphi_j \|_{1,\Omega}. $$
         This states that $\{ \gamma_0 \varphi_i \}_i $ is a Cauchy sequence in $L^2$, and thus has a limit $\xi$ in $L^2(\partial\Omega)$. Before setting $\xi$ as our extension, we need to check it is independent of the chosen sequence. This can be simply done by choosing another sequence such that $\{\tilde \varphi_i\}_i$ converges also to $v$. Then, it holds that 
-        $$ \| \gamma_0 \tilde \varphi_i - \xi \| \leq \| \gamma_0(\tilde\varphi_i - \varphi_i) + \gamma_0 \varphi_i - \xi \| \leq \| \gamma_0(\tilde\varphi_0 - \varphi_i) \| + \| \gamma\varphi_i - \xi \|. $$
-        The second term goes to zero as we showed previously. FINISH
+        $$ \| \gamma_0 \tilde \varphi_i - \xi \| \leq \| \gamma_0(\tilde\varphi_i - \varphi_i) + \gamma_0 \varphi_i - \xi \| \leq \| \gamma_0(\tilde\varphi_i - \varphi_i) \| + \| \gamma\varphi_i - \xi \|. $$
+        The second term goes to zero as we showed previously. For the first one, we use the trace inquality again to obtain 
+        $$ \| \gamma_0(\varphi_i - \tilde\varphi_i) \| \leq C \|\varphi_i - \tilde \varphi_i \|, $$
+        which concludes the proof. 
     \end{proof}
 \end{theorem}
 
@@ -259,8 +261,18 @@ The relevant formulas are the following:
             $$ \int_\Omega (\curl \vec u) \cdot \vec\phi\,dx = \int_\Omega \vec u \cdot (\curl \vec \phi)\,dx  + \int_{\partial\Omega}(\vec n\times \vec u)\cdot \vec\phi\,ds.$$
     \end{itemize}
 
-\paragraph{$H(\dive)$ and the normal trace}
-[TODO]
+\paragraph{$H(\dive)$ and the normal trace} In this space, we have a first simple density result: 
+
+\begin{theorem} Consider a bounded and Lipschitz domain $\Omega$ in $\R^d$, then $H(\dive;\Omega)$ is the closure of $[C(\bar\Omega)]^d$ in the $H(\dive)$ norm.
+    \begin{proof}
+        Sketch: The main idea is to show that the orthogonal complement of $[C(\bar\Omega]^d$ in $H(\dive;\Omega)$ is the trivial one. Then, one uses the orthogonality condition 
+            $$ (\vec u, \vec \phi) + (\dive \vec u, \dive \vec \phi) = 0$$
+        for all $\vec\phi$ in $[C(\Omega)]^d$ implies that $\grad \dive\vec u = \vec u$ is in $L^2$, and thus $\dive \vec u$ is in $H^1$. An adequate extension to all $\R^d$ and a density argument concludes the proof. For details, see \cite{monk2003finite}. 
+    \end{proof}
+\end{theorem}
+The normal trace is simply given for a smooth function as 
+    $$ \gamma_N \vec v = \vec v|_{\partial\Omega} \cdot n, $$
+where $\vec n $ is the outwards normal vector. 
 \paragraph{$H(\curl)$ and the tangential trace}
 [TODO]
 
