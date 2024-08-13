@@ -267,18 +267,80 @@ The relevant formulas are the following:
     \begin{proof}
         Sketch: The main idea is to show that the orthogonal complement of $[C(\bar\Omega]^d$ in $H(\dive;\Omega)$ is the trivial one. Then, one uses the orthogonality condition 
             $$ (\vec u, \vec \phi) + (\dive \vec u, \dive \vec \phi) = 0$$
-        for all $\vec\phi$ in $[C(\Omega)]^d$ implies that $\grad \dive\vec u = \vec u$ is in $L^2$, and thus $\dive \vec u$ is in $H^1$. An adequate extension to all $\R^d$ and a density argument concludes the proof. For details, see \cite{monk2003finite}. 
+        for all $\vec\phi$ in $[C(\Omega)]^d$ implies that $\grad \dive\vec u = \vec u$ is in $L^2$, and thus $\dive \vec u$ is in $H^1$. An adequate extension to all $\R^d$ and a density argument concludes the proof. For details, see \cite[Thm 3.22]{monk2003finite}. 
     \end{proof}
 \end{theorem}
 The normal trace is simply given for a smooth function as 
     $$ \gamma_N \vec v = \vec v|_{\partial\Omega} \cdot n, $$
-where $\vec n $ is the outwards normal vector. 
-\paragraph{$H(\curl)$ and the tangential trace}
-[TODO]
+where $\vec n $ is the outwards normal vector. This can be extended up to functions in $H(\dive)$ as stated in the following theorem. 
 
+\begin{theorem}[Normal trace]
+Consider a bounded Lipschitz domain $\Omega$ in $\R^d$ with outwards unit normal $\vec n$. Then, the mapping $\gamma_N$ can be extended to a continuous linear map $\gamma_N: H(\dive; \Omega) \to H^{-1/2}(\partial\Omega)$, and the following integration by parts formula holds: 
+        $$ \langle \gamma_N \vec v, \phi \rangle_{-1/2, 1/2} = (\vec v, \grad \phi) + (\dive \vec v, \phi) \qquad \forall \vec v\in H(\dive;\Omega), \phi \in H^1(\Omega). $$
+    \begin{proof}
+        First, we note that the integration by parts formula, which holds for $C^\infty$ functions initially, can be extended by density to functions $\phi$ in $H^1(\Omega)$:
+        $$ \langle \vec v\cdot \vec n, \phi \rangle = (\vec v, \grad \phi) + (\dive \vec v, \phi) \qquad \forall \vec v\in H(\dive;\Omega), \phi \in H^1(\Omega), \qquad \forall \vec v\in H(\dive;\Omega), \phi \in H^1(\Omega). $$
+        Cauchy-Schwartz further yields
+            $$ |\langle \vec v\cdot \vec n, \phi\rangle | \leq \| \vec v \|_{\dive} \| \phi \|_1. $$
+        In particular, using the surjectivity of the Dirichlet trace, we get that for all $\mu$ in $H^{1/2}(\partial\Omega)$ it also holds that
+            $$ |\langle \vec v\cdot \vec n, \mu\rangle | \leq \| \vec v \|_{\dive} \| \mu \|_{1/2}, $$
+        which naturally yields
+            $$ \| \vec v \cdot \vec n\|_{-1/2} \leq \| \vec v\|_{\dive}. $$
+        This all implies that $\gamma_N$ is a bounded linear map from $[C(\bar\Omega)]^d$ to $H^{-1/2}(\partial\Omega)$, meaning that it can be extended by density to be defined in $H(\dive;\Omega)$ as well. We are only missing the surjectivity, for which we consider a generic function $\eta$ in $H^{-1/2}(\partial\Omega)$, and define the following problem: Find $\phi$ in $H^1(\Omega)$ such that
+        $$ (\grad \phi, \grad \psi) + (\phi, \psi) = \langle \eta, \gamma_0 \psi \rangle_{-1/2,1/2} \qquad\forall \psi \in H^1(\Omega).$$
+        This in particular implies that 
+        $$ (\grad \phi, \grad \psi_0) + (\phi, \psi_0) = 0 \qquad\forall \psi_0 \in H_0^1(\Omega),$$
+        so that, as in the previous proof, $-\dive \grad \phi = \phi$ distributionally and thus $\vec v \coloneqq \grad \phi$ is the $H(\dive;\Omega)$ function we were looking for.
+    \end{proof}
+\end{theorem}
+Finally, we will use the space of functions with null normal trace, so that we initially define
+    $$ H_0(\dive, \Omega) \coloneqq \overline{[C_0^\infty(\Omega)]^d}^{\|\cdot \|_{\dive}}, $$
+i.e. the closure in the $\dive$ norm. The following result makes all the trouble worth it. 
+\begin{theorem}
+    Consider a bounded Lipschitz domain $\Omega$ in $\R^d$. Then: 
+        $$ H_0(\dive;\Omega) = \{\vec v\in H(\dive;\Omega): \gamma_N \vec v = 0 \}. $$
+    \begin{proof}
+        The proof is done through the orthogonal complement. All techniques have been already shown here, so we simply refer the interested reader to \cite[Thm 3.25]{monk2003finite}.
+    \end{proof}
+\end{theorem}
 
-[NEUMANN AND CURL]
-\subsection{Integration by parts formulas}
+\paragraph{$H(\curl)$ and the tangential trace} In the proofs involving $H(\dive)$, we heavily used the fact that the $\grad$ and $\dive$ are the transpose of one another. This is not the case for the $\curl$ operator, so the proofs for this case are notoriously more complicated. Instead, we will be happy with simply stating the related results:
+    \begin{itemize}
+        \item $$ H_0(\curl, \Omega) \coloneqq \overline{[C_0^\infty(\Omega)]^d}^{\|\cdot\|_{\curl}}. $$
+        \begin{theorem}
+            For a bounded Lipschitz domain $\Omega$, it holds that $[C(\bar\Omega)]^3$ is dense in $H(\curl;\Omega)$.
+        \end{theorem}
+        \item For a bounded Lipschitz domain $\Omega$ it holds that, if $\vec u$ in $H(\curl;\Omega)$ is such that
+            $$ (\curl \vec u, \vec phi) - ( \vec u, \curl \vec \phi) = 0$$
+        for all $\vec \phi$ in $[C^\infty(\bar\Omega)]^3$, then $\vec u$ is actually in $H_0(\curl;\Omega)$.
+        \item The trace operators here are two: 
+            \begin{align*}
+                \gamma_t \vec v &= \vec n \times \vec v, \\
+                \gamma_T \vec v &= (\vec n \times \vec v) \times \vec n. 
+            \end{align*}
+        \item 
+        \begin{theorem}
+            For a bounded Lipschitz domain $\Omega$ it holds that the extension $\gamma_t: H(\curl;\Omega) \to H^{-1/2}(\partial\Omega)$ is bounded and linear, with the following integration by parts formula: 
+                $$ (\curl \vec v, \vec\phi) - (\vec v, \curl\vec \phi) = \langle \gamma_t \vec v, \vec \phi\rangle \qquad\forall \vec v \in H(\curl;\Omega), \vec\phi \in \vec H^1(\Omega). $$
+            **Note the bold space, which refers to a vector space. We will use this often. 
+        \end{theorem}
+        The operator $\gamma_t$ is not surjective simply because it is the limit of tangential vectors which will never have a normal component (at least intuitively). 
+        \item Characterizing $\gamma_T$ is out of scope in this course. 
+        \item 
+        \begin{theorem}
+            Consider a bounded Lipschitz domain $\Omega$. Then, 
+                $$ H_0(\curl;\Omega) = \{ \vec v \in H(\curl;\Omega): \gamma_t \vec v = \vec 0\}. $$
+        \end{theorem}
+    \end{itemize}
+
+\example{
+One interesting context in which these trace operators show up is when considering normal or tangential boundary conditions. As we will see, one typically requires boundary information on all components of the solution on the boundary, but how this is done is highly context dependent. One nice example are \emph{slip} boundary conditions in fluid dynamics, where only the normal component of the fluid velocity is required to be 0: 
+    $$ \vec u \cdot \vec n = 0.$$
+This has to be complemented with conditions in the tangential direction. One possibility would be to prescribe some tangential velocity: 
+    $$ (\ten I - \vec n \otimes \vec n)\vec u = (\vec n \times \vec u) \times \vec n = \vec v_\tau, $$
+but one can also look at the tangential components of the stress tensor, thus generating a "tangential" Neumann boundary condition: 
+    $$ (I - \vec n \otimes \vec n)[\sigma(\vec u)\vec n] = \vec g_\tau. $$
+}
 
 \subsection{Weak formulations}
 
