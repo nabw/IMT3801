@@ -343,6 +343,49 @@ but one can also look at the tangential components of the stress tensor, thus ge
 }
 
 \subsection{Weak formulations}
+A weak formulation refers to an integral form of a PDE, understood distributionally. This is typically a systematic procedure that should not be too difficult, and it helps in revealing what are the adequate boundary conditions for a given problem. The main tool for this will be the integration by parts formulas. Our test problem will be the Laplace problem, given by the $-\Delta$ operator. The minus sign will be better justified in the following section. Consider then the problem of finding $u$ such that 
+    $$ -\Delta u = f \qquad \text{ in $\Omega$}. $$
+Define an arbitrary smooth function $v$, then integration by parts yields
+    $$ - \int_\Omega \Delta u v\,dx = -\int_{\partial\Omega}\gamma_D v \gamma_N \grad u \,ds + \int_\Omega \grad u \cdot \grad v\,dx $$
+for all $v$. This function is typically called a \emph{test function}. The surface form suggest the boundary conditions: 
+    $$ \int_{\partial\Omega}\underbrace{\gamma_D v}_\text{Dirichlet boundary condition} \underbrace{\gamma_N \grad u}_\text{Neumann boundary condition} \,ds,$$
+so that we can have boundary conditions on the function itself  
+    $$ u = g, $$
+or on its normal derivative
+    $$ \grad u \cdot \vec n = h. $$
+This can be combined, so that for a given partition of the boundary into two sets $\Gamma_D$ and $\Gamma_N$ such that $\overline{\partial\Omega} = \overline{\Gamma_D}\cup\overline{\Gamma_N}$, one can have a Dirichlet boundary condition on $\Gamma_D$ and a Neumann boundary condition on $\Gamma_N$. For this type of boundary condition, one must define a solution space given by 
+    $$ V_g = \{v \in H^1(\Omega): \gamma_D v = g \text{ on $\Gamma_D$}\}, $$
+but let us focus first on spaces with null Dirichlet boundary condition ($V_0$). In this case, the boundary conditions will give
+    $$ \int_{\partial\Omega}\gamma_Dv \gamma_N \grad u\,ds = \int_{\gamma_N} h \gamma_D v\,ds, $$
+and thus the integral form of the equation will be given by
+    $$ -\int_\Omega\Delta u v\,dx = -\int_{\Gamma_N}v h\,ds + \int_\Omega \grad u \cdot \grad v\,dx = \int_\Omega f v\,dx, $$
+for all smooth $v$. Now, we note that (i) this formulation is well defined for $u,v$ in $H^1$ (and thus can be extended to hold for all $v$ in $H^1$ by density as long as $v$ satisfies the Dirichlet boundary conditions), (ii) the $\gamma_D$ operator has been omitted from the surface integral for convenience, and (iii) that the Dirichlet boundary condition does not appear anywhere in the formulation. This justifies naming Dirichlet boundary conditions \emph{essential}, and Neumann boundary conditions \emph{natural}. The \emph{weak formulation} of the problem thus refers to the following statement: Find $u$ in $V_0$ such that
+    $$ (\grad u, \grad v)_{0,\Omega} = \langle f, v\rangle  + \langle h,  v\rangle \qquad \forall v\in V_0, $$
+for given functions $f$ in $V_0'$ and $g$ in $(\gamma_D V_0)'$. Note the following: 
+    \begin{itemize}
+        \item The space of the solution and the test functions is the same. This is not mandatory, but it is common and can be better motivated by interpreting the Laplace problem as the first order equations related to the following minimization problem: 
+            $$ \min_{v \in V_0} \int_\Omega |\grad v|^2\,dx . $$
+        Then, one simply infers the spaces of each function from the definition of the Gateaux derivative. 
+        \item The solution $u$ was formulated in a space without boundary condition. This is important because the regularity theory will depend on the solution space being a Hilbert space, and the space $V_g$ is not even a vector space as it is not closed under addition. This can be solved by defining adequate \emph{lifting} operators, i.e. a function $G$ in $H^1(\Omega)$ such that $\gamma_D G = g$ that allows us to write $u$ in $V_g$ as 
+            $$ u = u_0 + G, $$
+        where $u_0$ belongs to $V_0$. We can then rewrite the problem in $V_g$ as a problem in $V_0$ (and I encourage the reader to do this procedure at least once in their life). The existence of a lifting function in this case is given by the surjectivity of the Dirichlet trace, but it can be tricky in other contexts. This is also tricky in nonlinear problems, which justifies that nonlinear problems are typically studied with homogeneous boundary conditions.  
+        \item We note that the Laplacian is now being interpreted as a \emph{distribution}, and thus the strong problem (including the boundary conditions) yields the definition of the \emph{action} of the distribution. In particular, this means that the action of the distribution naturally changes with the boundary conditions. This observation is fundamental to understand Discontinuous Galerkin methods, or other formulations defined on broken spaces (i.e. spaces that allow for discontinuities). 
+    \end{itemize}
+
+\example{
+    We encourage the reader to try to comptue the weak formulation of the Poisson problem in mixed form. To do this, one must define the auxiliary variable $\vec \sigma \coloneqq \vec u$, so that the strong form of the problem now becomes
+        $$
+            \begin{aligned}
+                -\dive \vec\sigma &= f &&\text{ in $\Omega$}, \\
+                \vec \sigma - \grad u &= 0 &&\text{ in $\Omega$}, \\
+                \gamma_D u &= g &&\text{ on $\Gamma_D$}, \\
+                \gamma_N \vec\sigma &= h &&\text{ on $\Gamma_N$}. 
+            \end{aligned}
+        $$
+    This problem will be studied in detail further ahead. 
+}
+
+
 
 \subsection{Poincarè inequalities and Lax-Milgram}
 
