@@ -390,7 +390,21 @@ for given functions $f$ in $V_0'$ and $g$ in $(\gamma_D V_0)'$. Note the followi
 \subsection{Poincarè inequalities and Lax-Milgram}
 
 
-Using all of the previous definitions, we can finally look at actual problems and some first well-posedness results. 
+Using all of the previous definitions, we can finally look at actual problems and some first well-posedness results. For all of them, the Poincaré inequality will be fundamental.
+
+\begin{lemma}[Poincaré inequality] There exists a positive constant $C$ such that for a non-empty portion of the subdomain $\Gamma \subseteq \partial\Omega$ it holds that
+        $$ \| u \|_{1,\Omega} \leq C\left(\| u \|_{0,\Omega} + \left|\int_\Gamma u\,ds\right| \right) \qquad \forall u \in H^1(\Omega). $$
+\end{lemma}
+Probably the most important consequence of this is that the semi-norm given by $| x | \coloneqq \|\grad x\|_{0,\Omega}$, sometimes referred to as the $H_0^1$ semi-norm, is equivalent to the $H^1$ norm in the following cases: (i) homogeneous Dirichlet boundary conditions, (ii) homoegeneous Neumann boundary conditions, and (iii) mixed homogeneous Dirichlet and Neumann boundary conditions. Verifying this is a simple but fundamental excercise. A fundamental property to be verified is the following: a bilinear form $a(\cdot, \cdot)$ defined on a Hilbert space $X$ is said to be elliptic if there exists a constant $\alpha$ such that
+        $$ a(x, x) \geq \alpha \| x \|^2_X \qquad \forall x\in X. $$
+
+\begin{lemma}[Lax-Milgram] Consider a bounded bilinear form $a: H\times H\to \R$ defined on a Hilbert space $H$ that is elliptic with constants $C$ and $\alpha$ respectively, and a linear functional $f$ in $H'$. Then, there exists a unique $u$ in $H$ such that 
+    $$ a(u, v) = f(v) \qquad \forall v \in H. $$
+This solution is continuous with respect to the data, in the sense that there exists a positive constant $C$ such that 
+    $$ \| u\|_H \leq \frac C \alpha \| f \|_{H'} .$$
+\end{lemma}
+
+
 
 \paragraph{The Poisson problem} Consider $f$ in $H^{-1}(\Omega)$ and $g$ in $H^{1/2}(\Gamma)$ with $\Gamma\coloneqq \partial\Omega$. The Poisson problem in strong form is given as the following PDE: 
     \begin{align*}
@@ -403,21 +417,12 @@ where $(\cdot, \cdot)$ is the $L^2(\Omega)$ product. Thus the weak formulation r
     $$ \int_\Omega \grad u\cdot \grad v\,dx = \langle f, v\rangle \qquad \forall v\in H_0^1(\Omega).$$
 This problem can be shown to be well-posed using Lax-Milgram's lemma and the Poincarè inequality. 
 
-\paragraph{The $\dive$ and $\curl$ formulations} Similarly to the Poisson problem, we can consider the following problems: Consider $f$ in $(H(\dive;\Omega))'$ and $g$ in $H^{-1/2}(\Gamma)$. Then the strong form of the $\dive$ problem reads
-    \begin{align*}
-        u + \grad \dive u &= f \qquad\tin\quad\Omega\\
-        u\cdot \vec n &= g \qquad\ton\quad\Gamma,
-    \end{align*}
-where the boundary condition is understood in the sense of traces, more specifically the Neumann trace. Then, the weak formulation reads: Find $u$ in $H(\dive; \Omega)$ such that 
-    $$(u,v) + (\dive u, \dive v) = \langle f, v\rangle \qquad \forall v \in H(\dive; \Omega). $$
-The $\curl$ formulation is done analogously with the second order operator $\curl\curl$ and a tangential boundary condition. 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Finite elements for elliptic problems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-To be more fair, we will actually consider a Galerkin scheme, which can be described as follows: Consider the problem of finding $u$ in $H$ such that
-    $$ a( $$
+To be fair, we will actually consider a Galerkin scheme, which can be described as follows: Consider the problem of finding $u$ in $H$ such that
+    $$ [...] $$
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
