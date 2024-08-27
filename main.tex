@@ -433,6 +433,7 @@ Probably the most important consequence of this is that the semi-norm given by $
     $$ a(u, v) = f(v) \qquad \forall v \in H. $$
 This solution is continuous with respect to the data, in the sense that there exists a positive constant $C$ such that 
     $$ \| u\|_H \leq \frac C \alpha \| f \|_{H'} .$$
+This is typically referred to as the \emph{a priori} estimate. 
 \end{lemma}
 
 
@@ -449,17 +450,51 @@ where $(\cdot, \cdot)$ is the $L^2(\Omega)$ product. Thus the weak formulation r
 This problem can be shown to be well-posed using Lax-Milgram's lemma and the Poincarè inequality. Small excercise: Extend the proof to the case of non-homogeneous Dirichlet boundary conditions.
 
 In the case of having a boundary condition defined only on a portion $\Gamma_D$ of the boundary, the formulation changes, because (i) we need further information regarding the Neumann trace on the complement of the boundary, (ii) the test space looks different. In particular, we define the solution space given by 
-    $$ V_0 = \{v\in H^1(\Omega): \quad v = 0 \quad\text{ on \Gamma_D}\}, $$
+    $$ V_0 = \{v\in H^1(\Omega): \quad v = 0 \quad\text{ on $\Gamma_D$}\}, $$
 which using the generalized Poincaré can be shown to still satisfy an ellipticity estimate. 
 
-\paragraph{The pure Neumann problem} In general, having Neumann boundary conditions is problematic for two reasons: It results in a \emph{data compatibility} condition and (ii) it results in having a non-trivial kernel in the problem. 
+\paragraph{The pure Neumann problem} In general, having Neumann boundary conditions is problematic for two reasons: It results in a \emph{data compatibility} condition and (ii) it results in having a non-trivial kernel in the problem. The problem in general reads: Find $u$ in $H^1(\Omega)$ such that
+    $$ \begin{aligned}
+        -\Delta u &= f \\
+        \grad u \cdot \vec n &= h.
+       \end{aligned}
+    $$
+The weak formulation is 
+    $$ (\grad u, \grad v) = \langle f, v \rangle \qquad \forall v\in H^1(\Omega),$$
+where it is easy to see that if $u$ is a solution, then $u+c$ is also a solution for all $c\in \R$. This means that the problem has a kernel, which is given by the space of constant functions, i.e. $\texttt{span}(\{1\})$. The other problem is that, when one considers a test function in the kernel of the problem, this yields the following: 
+    $$ (\grad u, \grad 1) = 0 = \langle f, 1\rangle. $$
+This is a compatibility condition on the data, and it shows that having compatible data is \emph{necessary} for having a well-posed formulation. Because of these reasons, one considers a solution (and test) space that is orthogonal to the kernel: 
+    $$ V = \{u\in H^1(\Omega): \int_\Omega u \,dx = 0\}, $$
+where the null average condition can be seen as 
+    $$ \int_\Omega u \,dx = (u, 1)_0 = (u,1)_0 + (\grad u, \grad 1)_0 = (u, 1)_1, $$
+and thus the orthogonality is being considered with respect to the natural space $H^1(\Omega)$. With it, the weak formulation is given as: Consider $f$ a compatible function in $H^{-1}(\Omega)$, then find $u$ in $V$ such that
+    $$ (\grad u, \grad v) = \langle f, v\rangle \qquad \forall v\in V. $$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Finite elements for elliptic problems}
+\subsection{Galerkin schemes for elliptic problems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-To be fair, we will actually consider a Galerkin scheme, which can be described as follows: Consider the problem of finding $u$ in $H$ such that
-    $$ [...] $$
+The idea here is that, instead of discretizing the differential operator as one would do in the case of finite differences to obtain discrete derivatives, one considers discrete functional spaces, with the idea that the discrete space somehow converges to the continuous space. This is known as a Galerkin scheme. The schemes here will be conforming in the sense that the discrete space $V_h$ is a subset of $V$, but this is not necessary, and indeed all Discontinuous Galerkin (DG) formulations are basically non-conforming schemes. 
+
+Consider thus an abstract differential problem given by finding $u$ in $V$ such that
+    $$ a(u, v) = L(v) \qquad \forall v \in V, $$
+such that the hypotheses of Lax-Milgram hold. In this case, we can consider a discrete space $V_h$ in $V$, and thus define the following discrete problem: 
+    $$ a(u_h, v_h) = L(v_h) \qquad \forall v_h \in V_h. $$
+The most notable aspect of Lax-Milgram is that all of its hypotheses hold also in $V_h$, which implies that the discrete problem is also invertible, and the \emph{a priori} estimate holds as well. The natural question is whether the discrete solution $u_h$ converges to the continuous solution $u$, which is studied through the \emph{error equation}. This is computed by setting the continuous test function $V$ as $V_h$ and then subtracting both problems: 
+    $$ a(e_h, v_h) = 0 \qquad \forall v_h \in V_h, $$
+where $e_h = u - h_h$.  This property is known as the \emph{Galerkin orthogonality}, and it can be used to compute the error estimate by considering an arbitrary function $z_h$ in $V_h$:
+    $$ \begin{aligned}
+        \alpha \| e_h \|_V^2 &\leq a(e_h, e_h) && \\ 
+                             &= a(e_h, u - z_h) && \text{(Galerkin orth.)} \\
+                             &\leq C\|e_h\|_V \|u - z_h\|_V &&\text{($a$ continuous)},
+        \end{aligned} $$
+where one obtains that for all $z_h$ it holds that
+    $$ \| e_h \|_V \leq \frac C \alpha \|u - z_h\|_V. $$
+Taking the infimum over $z_h$ one obtains the celebrated \emph{Ceà estimate}: 
+    $$ \| u - u_h \|_V \leq \frac C \alpha \inf_{v_h\in V_h} \|u - v_h\|_{V_h}. $$
+This inequality can reveal many things. For example, if the number $C/\alpha$ is very big, it can hint on a very wide gap between the optimal solution (i.e. the projection) and the discrete one computed from the space $V_h$. A more precise characterization of the approximation properties of a space can be given by the Kolmogorov width, which has been studied in \cite{evans2009n}.
+
+\subsection{Finite elements} 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
