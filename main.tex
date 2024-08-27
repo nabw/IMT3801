@@ -311,7 +311,7 @@ i.e. the closure in the $\dive$ norm. The following result makes all the trouble
             For a bounded Lipschitz domain $\Omega$, it holds that $[C(\bar\Omega)]^3$ is dense in $H(\curl;\Omega)$.
         \end{theorem}
         \item For a bounded Lipschitz domain $\Omega$ it holds that, if $\vec u$ in $H(\curl;\Omega)$ is such that
-            $$ (\curl \vec u, \vec phi) - ( \vec u, \curl \vec \phi) = 0$$
+            $$ (\curl \vec u, \vec \phi) - ( \vec u, \curl \vec \phi) = 0$$
         for all $\vec \phi$ in $[C^\infty(\bar\Omega)]^3$, then $\vec u$ is actually in $H_0(\curl;\Omega)$.
         \item The trace operators here are two: 
             \begin{align*}
@@ -348,7 +348,7 @@ A weak formulation refers to an integral form of a PDE, understood distributiona
 Define an arbitrary smooth function $v$, then integration by parts yields
     $$ - \int_\Omega \Delta u v\,dx = -\int_{\partial\Omega}\gamma_D v \gamma_N \grad u \,ds + \int_\Omega \grad u \cdot \grad v\,dx $$
 for all $v$. This function is typically called a \emph{test function}. The surface form suggest the boundary conditions: 
-    $$ \int_{\partial\Omega}\underbrace{\gamma_D v}_\text{Dirichlet boundary condition} \underbrace{\gamma_N \grad u}_\text{Neumann boundary condition} \,ds,$$
+    $$ \int_{\partial\Omega}\underbrace{\gamma_D v}_\text{Dirichlet BC} \underbrace{\gamma_N \grad u}_\text{Neumann BC} \,ds,$$
 so that we can have boundary conditions on the function itself  
     $$ u = g, $$
 or on its normal derivative
@@ -392,21 +392,30 @@ for given functions $f$ in $V_0'$ and $g$ in $(\gamma_D V_0)'$. Note the followi
 
 Using all of the previous definitions, we can finally look at actual problems and some first well-posedness results. For all of them, the Poincaré inequality will be fundamental.
 
-\begin{lemma}[Poincaré inequality] There exists a positive constant $C$ such that for a non-empty portion of the subdomain $\Gamma \subseteq \partial\Omega$ it holds that
+\begin{lemma}[Generalized Poincaré inequality] There exists a positive constant $C$ such that for a non-empty portion of the subdomain $\Gamma \subseteq \partial\Omega$ it holds that
         $$ \| u \|_{0,\Omega} \leq C\left(| u |_{1,\Omega} + \left|\int_\Gamma u\,ds\right| \right) \qquad \forall u \in H^1(\Omega). $$
 The result also holds in $L^p$ and $W_0^{1,p}$. 
 \end{lemma}
 
 We provide an incomplete proof to show some of the related techniques used to prove this result. Most developments come from \cite{brenner2008mathematical}.
 \begin{proof}
-The main result to be used is the Bramble-Hilbert Lemma, which establishes in particular that if $B$ is a sufficiently big ball in $\Omega$ such that $\Omega$ is starred with respect to it, then the average over $B$ given by $\bar u = 1/|B|\int_B u\,dx$ satisfies
+    The main result to be used is the Bramble-Hilbert Lemma, which establishes (among other things) that if $B$ is a sufficiently big ball in $\Omega$ such that $\Omega$ is starred with respect to it, then the average over $B$ given by $\bar u = 1/|B|\int_B u\,dx$ satisfies
     $$ \| u - \bar u \|_{0,\Omega} \leq C| u |_{1,\Omega}, $$
 where $C$ is a positive constant and $|\cdot|_{1,\Omega}$ is the $H^1$ semi-norm. The case $B=\Omega$ is known as the Friedrich's inequality. To recover Poincaré's inequality, one notes the two following properties: 
     $$ \|v \|_{0,\Omega} \leq \| v - \bar v\|_0 + \| \bar v\|_0 \leq C | v |_{1,\Omega} + \|\bar v\|_0,$$
-where the first tirm was controlled using the Friedrich inequality. The second term is controlled by forcing another triangle inequality: 
+where the first term was controlled using the Friedrich inequality. The second term is controlled by forcing another triangle inequality: 
     $$ \| \bar v\|^2_0 = \frac{|\Omega|}{|\Gamma|} \int_\Gamma \bar v\,ds \leq \frac{|\Omega|}{|\Gamma|}\left(\int_\Gamma (\bar v - v)\,ds + \left| \int_\Gamma v \,ds \right| \right)$$
 and finally by using the trace inequality plus another application of the Friedrich inequality one gets the desired result. 
 \end{proof}
+
+The case in which $u$ is restricted to be in $H_0^1(\Omega)$ is the well-known Poincaré inequality. Note that in that case the boundary integral disappears. For the case of pure Neumann boundary conditions, we will require the following inequality.
+
+\begin{lemma}[Poincaré-Wirtinger inequality]
+    Consider an open connected bounded domain $\Omega$ as previously. Then, if we define the volumetric average as $\bar u = \int_\Omega u\,dx$, then it holds that
+        $$ \| u - \bar u \|_{L^p(\Omega)} \leq C \| \grad u \|_{L^p(\Omega)}. $$
+    \begin{proof}
+    \end{proof}
+\end{lemma}
 
 Probably the most important consequence of this is that the semi-norm given by $| x | \coloneqq \|\grad x\|_{0,\Omega}$, sometimes referred to as the $H_0^1$ semi-norm, is equivalent to the $H^1$ norm in the following cases: (i) homogeneous Dirichlet boundary conditions, (ii) homoegeneous Neumann boundary conditions, and (iii) mixed homogeneous Dirichlet and Neumann boundary conditions. Verifying this is a simple but fundamental excercise. A fundamental property to be verified is the following: a bilinear form $a(\cdot, \cdot)$ defined on a Hilbert space $X$ is said to be elliptic if there exists a constant $\alpha$ such that
         $$ a(x, x) \geq \alpha \| x \|^2_X \qquad \forall x\in X. $$
