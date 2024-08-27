@@ -414,6 +414,15 @@ The case in which $u$ is restricted to be in $H_0^1(\Omega)$ is the well-known P
     Consider an open connected bounded domain $\Omega$ as previously. Then, if we define the volumetric average as $\bar u = \int_\Omega u\,dx$, then it holds that
         $$ \| u - \bar u \|_{L^p(\Omega)} \leq C \| \grad u \|_{L^p(\Omega)}. $$
     \begin{proof}
+        The proof has been taken from \cite{evans2022partial}. By contradiction, we assume that there exists a sequence of functions $(u_k)_k$ in $W^{1,p}(\Omega)$ such that
+            $$ \| u_k - \bar u_k \|_p > k \| \grad u_k \|_p. $$
+        We can renormalize the sequence by setting
+            $$ v_k = \frac{u_k - \bar u_k}{\|u_k - \bar u_k\|_p}, $$
+        so that $ \bar v_k = 0$ and $\| v_k \| = 1$. Our hypothesis yields
+        $$ \| \grad v_k \|_p = \| \|u_k - \bar u_k\|_p^{-1} \grad (u_k - \bar u_k) \|_p < \frac 1 k,  $$
+        which in particular means that $(v_k)_k$ is a bounded sequence in $W^{1,p}(\Omega)$. This means that $(v_k)_k$ has a weakly convergent sequence in $W^{1,p}(\Omega)$, and as this space is compactly embedded in $L^p(\Omega)$ (Rellich-Kondarchov), then there exists an element $v$ in $L^p(\Omega)$ such that, possibly up to a subsequence, $v_{k_j} \to v$. This implies that $\bar v=0$ and $\|v\|_p=1$. Using the bound on $\grad v_k$, one can also show that for smooth functions $\phi$, 
+        $$ \int_\Omega v \partial_i \phi\,dx = \lim_k \int v_k \partial_i \phi\,dx = - \lim_k \int_\Omega \partial_i v_k \phi = 0. $$
+        This establishes that $\grad v=0$, which implies that $v$ is constant (it is not trivial to check that null weak derivatives implies being a constant), and the null average condition yields that $v=0$. This contradicts the initial hypothesis. 
     \end{proof}
 \end{lemma}
 
@@ -438,6 +447,12 @@ Note that the strong form must be understood in the distributional sense, i.e. a
 where $(\cdot, \cdot)$ is the $L^2(\Omega)$ product. Thus the weak formulation reads: Find $u$ in $H_0^1(\Omega)$ such that 
     $$ \int_\Omega \grad u\cdot \grad v\,dx = \langle f, v\rangle \qquad \forall v\in H_0^1(\Omega).$$
 This problem can be shown to be well-posed using Lax-Milgram's lemma and the Poincarè inequality. Small excercise: Extend the proof to the case of non-homogeneous Dirichlet boundary conditions.
+
+In the case of having a boundary condition defined only on a portion $\Gamma_D$ of the boundary, the formulation changes, because (i) we need further information regarding the Neumann trace on the complement of the boundary, (ii) the test space looks different. In particular, we define the solution space given by 
+    $$ V_0 = \{v\in H^1(\Omega): \quad v = 0 \quad\text{ on \Gamma_D}\}, $$
+which using the generalized Poincaré can be shown to still satisfy an ellipticity estimate. 
+
+\paragraph{The pure Neumann problem} In general, having Neumann boundary conditions is problematic for two reasons: It results in a \emph{data compatibility} condition and (ii) it results in having a non-trivial kernel in the problem. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Finite elements for elliptic problems}
