@@ -494,7 +494,19 @@ Taking the infimum over $z_h$ one obtains the celebrated \emph{Ceà estimate}:
     $$ \| u - u_h \|_V \leq \frac C \alpha \inf_{v_h\in V_h} \|u - v_h\|_{V_h}. $$
 This inequality can reveal many things. For example, if the number $C/\alpha$ is very big, it can hint on a very wide gap between the optimal solution (i.e. the projection) and the discrete one computed from the space $V_h$. A more precise characterization of the approximation properties of a space can be given by the Kolmogorov width, which has been studied in \cite{evans2009n}.
 
+
+
 \subsection{Finite elements} 
+
+The idea, for this course, of studying specifically finite elements will be that of having more significative ways of expressing the projection error present in Ceà's estimate: 
+    $$ \inf_{v_h\in V_h} \| u - v_h\|_V. $$
+A typical use of this inequality will be that of bounding the projection error through a Finite Element (FEM) interpolant, such that one gets inequalities such as
+    $$ \inf_{v_h\in V_h} \| u - v_h\|_V \leq \| u - I_h u \|_V \leq h^s \|u \|_W, $$
+where $W$ is some space of higher regularity, $s$ is some (hopefully positive) exponent and $I_h:V \to V_h$ is an interpolation operator. Our idea is that of producing FEM spaces for all of our relevant Hilbert spaces: $L^2$, $H^1$, $H(\div)$, and $H(\curl)$. 
+
+A \emph{finite element} is defined as a triple $(K, P_K, \Sigma_K)$, where $K$ is a geometric domain (interal, triangle, etc), $P_K$ is a space of functions, and $\Sigma_K$ is a set of linear functionals defined on $P_K$ known as degrees of freedom. We will typically assume that the finite element is \emph{unisolvent} in the sense that the degrees of freedom uniquely characterize a function in $P_K$. One simple example in the interval $(0,1)$ would be considering as $P_K$ the space of linear functions and as degrees of freedom the functions $l_0(p) = p(0)$ and $l_1(p) = p(1)$. Associated with a finite element is an interpolant, which is the operator $\pi_K: C(K) \to P_K$ such that 
+    $$ l( \pi_K(u) - u) = 0 \qquad\forall l \in \Sigma_K,$$
+for all sufficiently smooth functions $u$. In words, the polynomial in $P_K$ that matches $u$ in the degrees of freedom. This is known as an \emph{interpolation operator}. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
