@@ -528,7 +528,7 @@ This space is said to be \emph{conforming} in $V$ if $X_h^k$ belongs to $V$. Nat
     \end{proof}
 \end{lemma}
 
-We now simply show the fundamental FEM bases and the related interpolation operators that we will use to recover most convergence estimates. We follow the presentation given in \cite{monk2003finite}. 
+We now simply show the fundamental FEM bases and the related interpolation operators that we will use to recover most convergence estimates. We follow the presentation given in \cite{monk2003finite}, but similar results can be found in \cite{ern2004theory}.
 
 \paragraph{$H(\dive)$:} Here we consider the local polynomial in $\R^d$ given by
     $$ D_k = [\P_{k-1}]^d \oplus \widetilde{\P_{k-1}} \vec x, $$
@@ -566,6 +566,23 @@ with a nice interpolation operator:
     \end{theorem}
 \paragraph{$L^2$:} We can finally write the space 
     $$ Z_h = \{ p_h \in L^2(\Omega): p_h|K \in P_{k-1} \qquad \forall K\in \T_h\}, $$
+and there exists an interpolation operator $P_0$ such that for $v$ in $W^{l,p}(\Omega)$ and $0\leq l \leq k, p\in[1,\infty]$, there is some positive $C$ such that
+    $$ \| v - P_0v\|_{L^p} \leq C h^l |v|_{W^{l,p}}. $$
+For sufficiently smooth functions ($\delta>0$ in the above), these spaces induce a de Rham complex that can be extremely useful in FEM analysis. 
+
+\subsection{Inverse inequalities}
+
+All of the discrete spaces considered are finite dimensional, which means that all their norms are equivalent. Of course, these relationships don't hold in the continuous setting, so there is bound to be some dependence of these constants on $h$. The great thing about inverse inequalities is that in the discrete settings we can sometimes get away with operations that would be otherwise not feasible, but using adequate bounds can yield convergence anyway. We provide a general result first and then show some important consequences. For details, see \cite{ern2004theory}. We will require the following definition: we say that a family of affine meshes in $\R^d$ is \emph{shape regular} if there exists $\sigma_0$ such that 
+    $$ \forall h: \sigma_K\coloneqq \frac{h_K}{\rho_K} \leq \sigma_0 \quad\forall K\in \T_h, $$
+where $\rho_K$ is the diameter of the largest ball that can be inscribed in $K$, and $h_K$ is the diameter of $K$. It is \emph{quasi-uniform} if it is shape-regular and there is some $C$ such that
+        $$ \forall h: h_K \geq C h \quad \forall K\in \T_h. $$
+
+    \begin{theorem}[Global inverse inequality]
+        Consider a finite element $(\hat K, \hat P, \hat \Sigma)$, $l\geq 0$ such that $\hat P\subset W^{l,\infty}(\hat K)$, a family of shape-regular and quasi-uniform meshes $\{\T_h\}_{h>0}$ with $h<1$, and set
+            $$ W_h = \{v_h: v_h\circ T_K \in \hat P \qquad\forall K\in \T_h \}, $$
+        where $T_K$ is the affine mapping from an element $K$ to the reference element $\hat K$; i.e. the family of discrete functions that locally belong to the finite element considered. Then, there is some positive $C$ such that for all $v_h$ in $W_h$ and $m\in [0,l]$ it holds that
+            $$ \left(\sum_K \| v_h\|^p_{W^{l,p}(K)}\right)^{1/p} \leq Ch^{m-l+\min(0, d/p - d/q)} \left(\sum_K \|v_h\|_{W^{m,q}(K)}^q\right)^{1/q}. $$
+    \end{theorem}
 
 
 
