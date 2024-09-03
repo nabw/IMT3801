@@ -26,6 +26,8 @@
 \newtheorem{definition}{Definition}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\D}{\mathcal{D}}
+\newcommand{\T}{\mathcal{T}}
+\renewcommand{\P}{\mathcal{P}}
 
 \newcommand{\tin}{\text{in}}
 \newcommand{\ton}{\text{on}}
@@ -507,6 +509,64 @@ where $W$ is some space of higher regularity, $s$ is some (hopefully positive) e
 A \emph{finite element} is defined as a triple $(K, P_K, \Sigma_K)$, where $K$ is a geometric domain (interal, triangle, etc), $P_K$ is a space of functions, and $\Sigma_K$ is a set of linear functionals defined on $P_K$ known as degrees of freedom. We will typically assume that the finite element is \emph{unisolvent} in the sense that the degrees of freedom uniquely characterize a function in $P_K$. One simple example in the interval $(0,1)$ would be considering as $P_K$ the space of linear functions and as degrees of freedom the functions $l_0(p) = p(0)$ and $l_1(p) = p(1)$. Associated with a finite element is an interpolant, which is the operator $\pi_K: C(K) \to P_K$ such that 
     $$ l( \pi_K(u) - u) = 0 \qquad\forall l \in \Sigma_K,$$
 for all sufficiently smooth functions $u$. In words, the polynomial in $P_K$ that matches $u$ in the degrees of freedom. This is known as an \emph{interpolation operator}. 
+
+A FEM space is a global space in the space that it is defined in all of the domain $\Omega$, or some approximation of it $\Omega_h$, which does not depend on the degrees of freedom. We will mostly use the following definitions: $\P^k_K$ is the space of polynomials of degree from 1 to $k$ defined on an element $K$, the geometry is discretized through a tesselation of elements such that
+    $$ \Omega = \bigcup_j K_j, $$
+and thus a scalar FEM space is given by
+    $$ X_h^k = \left\{ v_h \in C(\Omega): \quad v_h|_K \in \P_K^j, \,j\in\{1,\hdots,k\} \,\forall K \right\}. $$
+This space is said to be \emph{conforming} in $V$ if $X_h^k$ belongs to $V$. Naturally, a global FEM space will be conforming to either $H^1$, $H(\dive)$, or $H(\curl)$ depending on the continuity imposed on the degrees of freedom. We summarize the (somewhat expected) relevant continuity requirements in the following lemma. 
+
+\begin{lemma}[Conforming spaces]
+    Consider two non-overlapping Lipschitz domains $K_1$ and $K_2$ such that they meet at a common surface $\Sigma$. 
+    \begin{itemize}
+        \item Consider two scalar functions $p_1$ in $H^1(K_1)$ and $p_2$ in $H^1(K_2)$, and glue them as $p = p_1 I_{K_1} + p_2 I_{K_2}$. If $p_1|_\Sigma = p_2|_\Sigma$, then $p$ belongs to $H^1(K_1\cup K_2\cup \Sigma)$. 
+        \item Consider two vector functions $\vec u_1$ in $H(\dive;K_1)$ and $\vec u_2$ in $H(\dive; K_2)$, and glue them as $\vec u = \vec u_1 I_{K_1} + \vec u_2 I_{K_2}$. Then, if $\vec u_1\cdot \vec n= \vec u_2\cdot \vec n$ it holds that $\vec u$ belongs to $H(\dive; K_1\cup K_2 \cup \Sigma)$. 
+        \item Consider two vector functions $\vec u_1$ in $H(\curl;K_1)$ and $\vec u_2$ in $H(\curl; K_2)$, and glue them as $\vec u = \vec u_1 I_{K_1} + \vec u_2 I_{K_2}$. Then, if $\vec u_1\times \vec n= \vec u_2\times \vec n$ it holds that $\vec u$ belongs to $H(\curl; K_1\cup K_2 \cup \Sigma)$. 
+    \end{itemize}
+    \begin{proof}
+        Point (1) is proved in \cite{gatica2014simple}, (2) is in \cite{monk2003finite}, and (3) is homework :) . 
+    \end{proof}
+\end{lemma}
+
+We now simply show the fundamental FEM bases and the related interpolation operators that we will use to recover most convergence estimates. We follow the presentation given in \cite{monk2003finite}. 
+
+\paragraph{$H(\dive)$:} Here we consider the local polynomial in $\R^d$ given by
+    $$ D_k = [\P_{k-1}]^d \oplus \widetilde{\P_{k-1}} \vec x, $$
+where $\vec x$ is the identity map, and $\widetilde{\P_k}$ is the set of homogeneous\footnote{A homogeneous polynomial is one whose non-zero terms all have the same degree, such as $x^2 + xy$.} polynomials of degree exactly $k$. If $k=1$, this space will have $d+1$ degrees of freedom, characterized in a triangle/tetrahedron by degrees of freedom defined through the normal component of the polynomial on its facets. These elements are known as Raviart-Thomas elements.Thus, given a triangulation of the geometry $\T_h$, this allows us to define the space
+    $$ W_h = \left\{ \vec u_h \in H(\dive; \Omega):  \vec u_h|_K \in D_k \qquad\forall K \in \T_h \right\}, $$
+where $W_h$ is conforming in $H(\dive)$. In addition, we get the following result regarding an interpolation operator: 
+    \begin{theorem}[$H(\dive)$ interpolation]
+        Consider $0<\delta<1/2$ and $s\in [1/2+\delta, k]$. Then, if $\vec u$ belongs to $\vec H^s(\Omega)$, there exists an interpolation operator $\vec w_h$ and a positive constant $C$ such that
+            $$ \|\vec u - \vec w_h \vec u\|_0 \leq C h^s \| \vec u \|_{\vec H^s(\Omega)} $$
+        and 
+            $$ \|\dive\left(\vec u - \vec w_h \vec u\right)\|_0 \leq C h^s \| \dive \vec u \|_{H^s(\Omega)}. $$
+    \end{theorem}
+Naturally, this results implies the estimate in the $H(\dive)$ norm. 
+\paragraph{$H(\curl)$:} The procedure for this space is roughly similar to the previous one. For it, we define the space
+    $$ S_k = \{ \vec p \in [\widetilde{\P_k}]^3 | \vec p \cdot \vec x = 0 \}, $$
+which is somehow the orthogonal complement to the space $\widetilde{\P_{k-1}}\vec x$. With it, we define the local space as 
+    $$ R_k = [\P_{k-1}]^3\oplus S_k, $$
+and given a triangulation $\T_h$ of the geometry, we consider the space
+    $$ V_h = \left\{ \vec u_h \in H(\curl;\Omega): \vec u_h|_K \in R_k\qquad \forall K\in \T_h\right\}. $$
+This space is conforming in $H(\curl)$. In addition, we also get some nice intecrpolation properties. 
+    \begin{theorem}[$H(\curl)$ interpolation]
+        \begin{itemize}
+            \item Consider $\delta>0$ and $s$ in $[1/2+\delta, k]$. Then, if $\vec u$ is in $\vec H^s(\Omega)$, there exists a positive constant $C$ and an interpolation operator $\vec r_h$ such that 
+                $$ \| \vec u - \vec r_h \vec u\|_0 + \| \curl(\vec u - \vec r_h \vec u) \|_0 \leq C h^s \left(\| \vec u\|_{H^s} + \| \curl \vec u \|_{H^s}\right) . $$
+            \item Consider $0<\delta\leq 1/2$. If $\vec u$ belongs to $\vec H^{1/2+\delta}(\Omega)$ and $[\curl \vec u]|_K$ belongs to $D_k$ in all elements $K$, then we further have that
+                $$ \|\vec u - \vec r_h \vec u\|_0 \leq C\left(h_K^{1/2+\delta} \| \vec u\|_{\vec H^{1/2+\delta}} + h_K \| \curl \vec u\|_0 \right). $$
+        \end{itemize}
+    \end{theorem}
+\paragraph{$H^1$:} From the Lemma regarding conforming spaces, we can immediately see that the following is a conforming space in $H^1$: 
+    $$ U_h = \{ v_h \in H^1(\Omega): v_h|_K \in \P_k \qquad\forall K\in \T_h\}, $$
+with a nice interpolation operator:
+    \begin{theorem}
+        There exists a positive constant $C$ and an interpolation operator $\pi_h$ such that, for a positive $\delta$: 
+         $$\|p - \pi_h p \|_1 \leq C h^{s-1} \|p\|_{H^s} \qquad 3/2+\delta \leq s \leq k+1 . $$
+    \end{theorem}
+\paragraph{$L^2$:} We can finally write the space 
+    $$ Z_h = \{ p_h \in L^2(\Omega): p_h|K \in P_{k-1} \qquad \forall K\in \T_h\}, $$
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
