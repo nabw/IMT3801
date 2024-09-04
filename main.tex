@@ -568,7 +568,23 @@ with a nice interpolation operator:
     $$ Z_h = \{ p_h \in L^2(\Omega): p_h|K \in P_{k-1} \qquad \forall K\in \T_h\}, $$
 and there exists an interpolation operator $P_0$ such that for $v$ in $W^{l,p}(\Omega)$ and $0\leq l \leq k, p\in[1,\infty]$, there is some positive $C$ such that
     $$ \| v - P_0v\|_{L^p} \leq C h^l |v|_{W^{l,p}}. $$
-For sufficiently smooth functions ($\delta>0$ in the above), these spaces induce a de Rham complex that can be extremely useful in FEM analysis. 
+For sufficiently smooth functions ($\delta>0$ in the above), these spaces induce a de Rham complex that can be extremely useful in FEM analysis. For this, we can consider the following spaces for $\delta > 0$: 
+    $$
+    \begin{aligned}
+        U &= H^{3/2+\delta}(\Omega) \\
+        V &= \{\vec v \in \vec H^{1/2+\delta}(\Omega) : \curl \vec v \in \vec H^{1/2+\delta}(\Omega)\} \\
+        W &= \{ \vec w \in \vec H^{1/2+\delta}(\Omega): \dive \vec w \in \vec L^2(\Omega) \}
+    \end{aligned},
+    $$
+which yield the following: 
+
+    \begin{center} 
+    \begin{tabular}{ccccccc}
+    $H^1(\Omega)$ & $\xrightarrow{\quad\nabla\quad}$& $H(\curl;\Omega)$ & $\xrightarrow{\quad\curl\quad}$ & $H(\dive;\Omega)$ & $\xrightarrow{\quad\dive\quad} $ & $L^2(\Omega)$ \\
+    $U\subset$ & & $V\subset$ & & $W \subset$ & &  \\
+    
+    \end{tabular}
+    \end{center} 
 
 \subsection{Inverse inequalities}
 
