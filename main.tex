@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amsthm, amssymb, mathpazo, isomath, mathtools}
 \usepackage{subcaption,graphicx,pgfplots}
-\usepackage{fullpage}
+%\usepackage{fullpage}
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{algorithm, algorithmic}
@@ -549,7 +549,8 @@ which is somehow the orthogonal complement to the space $\widetilde{\P_{k-1}}\ve
 and given a triangulation $\T_h$ of the geometry, we consider the space
     $$ V_h = \left\{ \vec u_h \in H(\curl;\Omega): \vec u_h|_K \in R_k\qquad \forall K\in \T_h\right\}. $$
 This space is conforming in $H(\curl)$. In addition, we also get some nice intecrpolation properties. 
-    \begin{theorem}[$H(\curl)$ interpolation]
+    \begin{theorem}[$H(\curl)$ interpolation] The theorem states: 
+    
         \begin{itemize}
             \item Consider $\delta>0$ and $s$ in $[1/2+\delta, k]$. Then, if $\vec u$ is in $\vec H^s(\Omega)$, there exists a positive constant $C$ and an interpolation operator $\vec r_h$ such that 
                 $$ \| \vec u - \vec r_h \vec u\|_0 + \| \curl(\vec u - \vec r_h \vec u) \|_0 \leq C h^s \left(\| \vec u\|_{H^s} + \| \curl \vec u \|_{H^s}\right) . $$
@@ -582,9 +583,13 @@ which yield the following:
     \begin{tabular}{ccccccc}
     $H^1(\Omega)$ & $\xrightarrow{\quad\nabla\quad}$& $H(\curl;\Omega)$ & $\xrightarrow{\quad\curl\quad}$ & $H(\dive;\Omega)$ & $\xrightarrow{\quad\dive\quad} $ & $L^2(\Omega)$ \\
     $U\subset$ & & $V\subset$ & & $W \subset$ & &  \\
-    
+    $\pi_h \Bigg\downarrow$ && $\vec r_h \Bigg\downarrow$ && $\vec w_h\Bigg\downarrow$ && $P_0 \Bigg\downarrow$ \\
+    $U_h$ & $\xrightarrow{\quad\phantom{nabla}\quad}$& $V_h$ & $\xrightarrow{\quad\phantom{\curl}\quad}$ & $W_h$ & $\xrightarrow{\quad\phantom{\dive}\quad} $ & $Z_h$ \\
     \end{tabular}
     \end{center} 
+There is an intrinsic relationship between this structure and inf-sup conditions. It additionall commutes, and thus one can obtain identities such as 
+    $$ \vec r_h \grad = \grad \pi_h, $$
+which further relates the interpolation results. 
 
 \subsection{Inverse inequalities}
 
@@ -599,6 +604,11 @@ where $\rho_K$ is the diameter of the largest ball that can be inscribed in $K$,
         where $T_K$ is the affine mapping from an element $K$ to the reference element $\hat K$; i.e. the family of discrete functions that locally belong to the finite element considered. Then, there is some positive $C$ such that for all $v_h$ in $W_h$ and $m\in [0,l]$ it holds that
             $$ \left(\sum_K \| v_h\|^p_{W^{l,p}(K)}\right)^{1/p} \leq Ch^{m-l+\min(0, d/p - d/q)} \left(\sum_K \|v_h\|_{W^{m,q}(K)}^q\right)^{1/q}. $$
     \end{theorem}
+In particular this shows that
+    $$ \| v_h \|_{W^{1,p}} \leq C h^{-1} \| v_h \|_{L^p}. $$
+One can also obtain the followin local estimate in 2D for simplices \cite{warburton2003constants}:
+    $$ \| \vec v_h \|_{0,F} \leq C h_K^{-1/2} \| \vec v_h \|_{0,K}, $$
+where $F$ is a facet (line or triangle) and $K$ is the element (triangle or tetrahedron).
 
 
 
