@@ -6,10 +6,10 @@ These notes were born as a way to keep track of the contents I intended to show 
 
 For contributions, please follow the format of the manuscript, which should be fairly common mathematical notation. 
 
-    - Create vectors, matrices, and tensors with `\vec`, `\mat`, and `\ten`.
-    - Vector norms (and semi-norms) are `|\cdot|`. Function and operator norms are `\| \cdot \|`.
-    - Duality pairings and inner products are `\langle \cdot, \cdot\rangle`
-    - Small sections can be introduced with `\paragraph` instead of a `\subsubsubsubsubsubsubsubsubsubsection`. 
+  - Create vectors, matrices, and tensors with `\vec`, `\mat`, and `\ten`.
+  - Vector norms (and semi-norms) are `|\cdot|`. Function and operator norms are `\| \cdot \|`.
+  - Duality pairings and inner products are `\langle \cdot, \cdot\rangle`
+  - Small sections can be introduced with `\paragraph` instead of a `\subsubsubsubsubsubsubsubsubsubsection`. 
 
 Contributors may be added as editors upon request. Otherwise, pull requests are both encouraged and desired. Thanks in advance for the help in making these notes clear and useful :) . 
 
