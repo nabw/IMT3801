@@ -7,7 +7,7 @@ These notes were born as a way to keep track of the contents I intended to show 
 For contributions, please follow the format of the manuscript, which should be fairly common mathematical notation. 
 
   - Create vectors, matrices, and tensors with `\vec`, `\mat`, and `\ten`.
-  - Vector norms (and semi-norms) are $|\cdot|$. Function and operator norms are $\| \cdot \|$.
+  - Vector norms (and semi-norms) are $|\cdot|$. Function and operator norms are $\lVert \cdot \rVert$.
   - Duality pairings and inner products are $\langle \cdot, \cdot\rangle$
   - Small sections can be introduced with `\paragraph` instead of a `\subsubsubsubsubsubsubsubsubsubsection`. 
 
