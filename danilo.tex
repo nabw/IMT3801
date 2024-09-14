@@ -19,12 +19,12 @@ The weak form is:
 a(u,v) = (\nabla u, \nabla v) - k^2(u,v) = \langle f, v\rangle, \quad \forall v\in H_0^1.
 \]
 
-Using $H_0^1(\Omega)$ with the norm $\|v\|_{H^1_0} = \|\nabla v\|_0$, Poincaré inequality gives us $\|u\|_0\leq C_{\Omega}\|\nabla u\|_0$. 
+Using $H_0^1(\Omega)$ with the norm induced by the seminorm $|v|_1 = \|\nabla v\|_0$, Poincaré inequality gives us $\|u\|_0\leq C_{\Omega}\|\nabla u\|_0$. 
 
 \begin{itemize}
     \item Boundedness: 
     \begin{align*}
-        a(u,v) &\leq \|\nabla u\|\|\nabla v\| + k^2\|u\|\|v\|,\\ 
+        a(u,v) &\leq \|\nabla u\|_0\|\nabla v\|_0 + k^2\|u\|_0\|v\|_0,\\ 
         &\leq (1+k^2C_\Omega^2)|u|_1|v|_1.
     \end{align*}
 
@@ -74,7 +74,7 @@ A simpler way of showing that an operator is Fredholm, is through a Gårding ine
  If the inclusion $H\hookrightarrow V$ is compact, then the operator $A: H\to H^*$ associated to $a:H\times H\to \R$, i.e,
  \[\langle Ax,y\rangle = a(x,y),\]
 
- is such that $a$ satisfies Gårding then $A$ is Fredholm. 
+ is such that if $a$ satisfies Gårding then $A$ is Fredholm. 
 
 \begin{proof}
     We note that, by definition of Gårding,  \(a(u,v) + C_V(u,v)_V\) is invertible because of Lax-Milgram. 
@@ -98,7 +98,7 @@ A simpler way of showing that an operator is Fredholm, is through a Gårding ine
         \item $i$ is compact. 
     \end{itemize}
 
-    The last two implies that $T\circ i$ is compact, as the composition of continuous and compact operator is compact. 
+    The last two impliy that $T\circ i$ is compact, as the composition of continuous and compact operators is compact. 
     It follows that $A = B - C_V T\circ i$ is Fredholm.
 \end{proof}
 
@@ -132,7 +132,7 @@ Also:
     \iff &\Pi_h\mathbb{A}u_h = \Pi_h\mathbb{F},
 \end{align*}
 
-where $\mathbb{A} = R^-1\circ A$ and $\mathbb{F} = R^{-1}f$. The stability estimate, finally gives, 
+where $\mathbb{A} = R^-1\circ A$ and $\mathbb{F} = R^{-1}f$. The stability estimate gives, 
 
 \[\|u_h\| \leq\frac{1}{\alpha}\|\Pi_h\mathbb{F}\| = \frac{1}{\alpha}\|\Pi_h\mathbb{A} u_h\|\].
 
