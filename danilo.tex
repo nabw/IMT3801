@@ -1,0 +1,185 @@
+
+We study the Helmholtz equation,
+
+\[
+\left\{
+\begin{array}{rc}
+    -\Delta u -k^2 u = f, &\Omega,\\
+    u=0, &\partial\Omega,
+\end{array}\right.
+\]
+
+for some $f\in H^{-1}(\Omega)$ and some boundary condition. Let's first explore what we can conclude with Lax-Milgram. 
+%Boundedness is trivial, so we look only at coercivity, which 
+We will assume in $H_0^1(\Omega)$ for simplicity.
+
+The weak form is:
+
+\[
+a(u,v) = (\nabla u, \nabla v) - k^2(u,v) = \langle f, v\rangle, \quad \forall v\in H_0^1.
+\]
+
+Using $H_0^1(\Omega)$ with the norm induced by the seminorm $|v|_1 = \|\nabla v\|_0$, Poincaré inequality gives us $\|u\|_0\leq C_{\Omega}\|\nabla u\|_0$. 
+
+\begin{itemize}
+    \item Boundedness: 
+    \begin{align*}
+        a(u,v) &\leq \|\nabla u\|_0\|\nabla v\|_0 + k^2\|u\|_0\|v\|_0,\\ 
+        &\leq (1+k^2C_\Omega^2)|u|_1|v|_1.
+    \end{align*}
+
+    \item Coercivity: 
+    \begin{equation*}
+        a(v,v) = \|\nabla v\|^2_{0,\Omega} - k^2\|v\|^2_{0,\Omega}.
+    \end{equation*}
+
+    We note that, by Poincaré inequality,
+
+    \[ k^2\|v\|^2_0 \leq k^2 C^2_{\Omega}\|\nabla v\|^2_0, \]
+
+    and thus,
+
+    \begin{align*}
+        a(v,v) &\geq \|\nabla v\|^2_0 - k^2C_\Omega^2\|\nabla v\|^2_0 \\
+        &= (1- k^2 C_\Omega^2)\|\nabla v\|^2_{0,\Omega}.
+    \end{align*}
+
+    In other words, the problem is well-possed if 
+    $$1-k^2C_\Omega^2 > 0 \iff k^2 < \frac{1}{C_\Omega^2}$$
+\end{itemize}
+
+We will now answer what happens for arbitrary $k\in\R$.
+
+\begin{definition}
+    A linear operator $K:H_1 \to H_1$ is \textbf{compact} if the image of a bounded sequence admits a converging subsequence.
+\end{definition}
+\begin{definition}
+    A bounded linear operator is a \textbf{Fredholm operator} if it is the sum of an invertible and a compact operator. 
+\end{definition}
+
+\begin{theorem}[Fredholm alternative]
+    A Fredholm operator is injective if and only if it is surjective. In such case, it has a bounded inverse.
+\end{theorem}
+
+A simpler way of showing that an operator is Fredholm, is through a Gårding inequality.
+
+\begin{definition}
+    Consider $H\subset V$ Hilbert spaces with a continuous embedding $H\hookrightarrow V$. 
+    A bilinear form $a:H\times H\to \R$ satisfies a \textbf{Gårding inequality} if there exist two positive constants $\alpha$, $C_V$ subject to, 
+    
+    \[a(v,v) \geq \alpha \|v\|^2_H - C_V\|v\|^2_V,\quad \forall v\in H.\]
+\end{definition}
+
+\textbf{Proposition:}
+ If the inclusion $H\hookrightarrow V$ is compact, then the operator $A: H\to H^*$ associated to $a:H\times H\to \R$, i.e,
+ \[\langle Ax,y\rangle = a(x,y),\]
+
+ is such that if $a$ satisfies Gårding then $A$ is Fredholm. 
+
+\begin{proof}
+    We note that, by definition of Gårding,  \(a(u,v) + C_V(u,v)_V\) is invertible because of Lax-Milgram. 
+    We now try to write the equation in operator form. The form $(u,v)_V$ is handled as follows: set $T:V\to H^*$ as
+
+    \[\langle Tv, w\rangle_{H^*\times H} = "(v,w)_V"\equiv (v,iw)_V,\]
+
+    where $i: H\to V$ is the compact embedding. $T$ is clearly bounded:
+
+    \begin{align*}
+        \|Tv\|_{H^*} &= \sup_{w\in H}\frac{(v,iw)_V}{\|w\|_H},\\
+        &\leq \sup_{w\in H}\frac{\|v\|_V\|iw\|_V}{\|w\|_H},\\
+        &\leq \sup_{w\in H}\frac{\|v\|_V\|i\|\|w\|_H}{\|w\|_H},\\
+        &\leq \|i\|\|v\|.
+    \end{align*}
+
+    Then, the operator associated to the problem is $B :=A + C_V T\circ i$, where:
+    \begin{itemize}
+        \item $B$ is invertible,
+        \item $T$ is continuous,
+        \item $i$ is compact. 
+    \end{itemize}
+
+    The last two impliy that $T\circ i$ is compact, as the composition of continuous and compact operators is compact. 
+    It follows that $A = B - C_V T\circ i$ is Fredholm.
+\end{proof}
+
+
+
+\subsection{Galerkin Stability}
+
+We have seen that elliptic problems have the following a-priori stability estimate
+
+\[\alpha \|u\|_H \leq \|f\|_{H^*}\quad\text{ for }\quad a(u,v) = \langle f, v\rangle, \quad \forall v\in H.\]
+
+which carries naturally to the discrete problem:
+
+\[\alpha \|u_h\|_H \leq \|f\|_{H^*}\quad\text{ for }\quad a(u_h,v_h) = \langle f, v\rangle, \quad \forall v_h\in H_h.\]
+
+This can be rewritten as follows: denote the orthogonal projection $\Pi_h: H\to H^*$, and $R_H:H\to H^*$ the Riesz map.
+
+Then:
+
+\begin{align*}
+    &a(u,v) = \langle f, v\rangle_{H^*\times H}\quad \forall v\in H,\\
+    \iff &\langle Au, v\rangle_{H'\times H} = \langle f, v\rangle_{H'\times H}\quad \forall v\in H,\\
+    \iff &Au = f \quad\text{ in $H'$ and }(R^{-1}\circ A)u = R^{-1}f\quad\text{in }H.
+\end{align*}
+
+Also:
+
+\begin{align*}
+    &a(u_h,v_h) = \langle f, v_h\rangle\quad\forall v_h\in H_h,\\
+    \iff &(R^{-1}\circ A u_h,v_h)_H = (R^{-1}f,v_h)_H\quad\forall v_h\in H_h,\\
+    \iff &\Pi_h\mathbb{A}u_h = \Pi_h\mathbb{F},
+\end{align*}
+
+where $\mathbb{A} = R^-1\circ A$ and $\mathbb{F} = R^{-1}f$. The stability estimate gives, 
+
+\[\|u_h\| \leq\frac{1}{\alpha}\|\Pi_h\mathbb{F}\| = \frac{1}{\alpha}\|\Pi_h\mathbb{A} u_h\|\].
+
+Finally, by duality, we get
+
+\begin{align*}
+    \|u_h\| &\leq \frac{1}{\alpha}\|\Pi_h\mathbb{A}u_h\| = \frac{1}{\alpha}\sup_{v_h}\frac{(\Pi_h\mathbb{A}u_h,v_h)}{\|v_h\|}
+    =\frac{1}{\alpha}\sup_{v_h}\frac{\langle Au_h,v_h\rangle_{H'\times H}}{\|v_h\|} = \frac{1}{\alpha}\sup_{v_h}\frac{a(u_h,v_h)}{\|v_h\|}.
+\end{align*}
+
+We call this result,
+
+\[\|u_h\| \leq C\sup_{v_h\in V_h}\frac{a(u_h,v_h)}{\|v_h\|},\qquad \forall u_h\in H_h,\]
+
+an \textbf{inf-sup condition}, which we will later show to mean \textbf{surjectivity}. 
+
+Now, consider:
+\begin{itemize}
+    \item $a:H\times H\to \R$ elliptic. 
+    \item $b:H\times H\to \R$ associated to a compact operator such that $b(u,v) = \langle Ku,v\rangle.$
+    \item $A + K$ injective.
+\end{itemize}
+
+Then, there exists $C, h_0>0$ such that
+
+\[\|u_h\|_H\leq C\sup_{v_h}\frac{a(u_h,v_h)}{\|v_h\|},\quad \forall u_h\in H_h, \quad h\leq h_0.\]
+
+Consider the discrete problem
+\[a(u_h,v_h) + b(u_h,v_h) = \langle f, v_h\rangle\]
+
+and the Galerkin projection $G_h: H\to H_h$
+
+\[a(G_hu, v_h) + b(G_hu, v_h) = a(u, v_h) + b(u,v_h).\]
+
+Under the previous hypothesis, for $h\leq h_0$ we have, 
+
+\[\|G_hu\|\leq C\sup_{v_h}\frac{a(G_hu, v_h) + b(G_hu, v_h)}{\|v_h\|}\leq C\|A+K\|\|u\|.\]
+
+Then $G_h$ is bounded, and thus:
+\begin{align*}
+    \|u - G_hu\|&\leq \|u-\Pi_hu\| + \|\Pi_hu - G_hu\|,\\
+    &= \|u-\Pi_hu\| + \|G_h(\Pi_hu - u)\|,\\
+    &\leq (1+C\|A+K\|)\|u - \Pi_h u\|,
+\end{align*}
+
+which implies
+
+\[\|u-u_h\|\leq (1+C\|A+K\|)\inf_{v_h}\|u-v_h\|,\] 
+
+which is a Céa estimate for sufficiently small $h$.

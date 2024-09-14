@@ -83,7 +83,7 @@ All other properties (or at least most of them anyway) are ways to guarantee tha
 \section{Analysis preliminaries}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In this section we will review some important properties of functional spaces and operators. These things should be deemed as 'review' material. Intrinsically new things will start appearing in Secion~\ref{section:beyond-ellipticity}. Most, if not all, results will be coming from the amazing book \emph{Linear and nonlinear functional analysis} by PG Ciarlet.
+In this section we will review some important properties of functional spaces and operators. These things should be deemed as 'review' material. Intrinsically new things will start appearing in Section~\ref{section:beyond-ellipticity}. Most, if not all, results will be coming from the amazing book \emph{Linear and nonlinear functional analysis} by PG Ciarlet.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Functional spaces}
@@ -110,7 +110,7 @@ One fundamental aspect of Hilbert spaces is that they provide some intuitive pro
     Set $U\subset H$ a closed subspace of a Hilbert space $H$ and set $f$ in $H$. Then there exists a unique $g$ in $U$ such that
         $$ \|f - g \|_H = \inf_{u\in U} \| f - u\|_H. $$
 \end{theorem}
-Using this, we can uniquely definte the orthogonal complement of a set $U$: 
+Using this, we can uniquely define the orthogonal complement of a set $U$: 
     $$ U^\perp \coloneqq \{v\in H: (v, u)_H = 0 \quad\forall u\in U\}. $$
 \begin{theorem}
     Set $U$ a closed subspace of a Hilbert space $H$. Then, if $f$ is in $H$, there exists a unique pair $(u,v)$ in $U\times U^\perp$ such that 
@@ -216,7 +216,7 @@ An important property that we will use many times is the \emph{trace inequality}
         $$ \| \gamma_0 \varphi_i - \gamma_0 \varphi_j \|_{0,\partial\Omega} = \| \gamma_0 (\varphi_i - \varphi_j) \|_{0,\partial\Omega} \leq C \| \varphi_i - \varphi_j \|_{1,\Omega}. $$
         This states that $\{ \gamma_0 \varphi_i \}_i $ is a Cauchy sequence in $L^2$, and thus has a limit $\xi$ in $L^2(\partial\Omega)$. Before setting $\xi$ as our extension, we need to check it is independent of the chosen sequence. This can be simply done by choosing another sequence such that $\{\tilde \varphi_i\}_i$ converges also to $v$. Then, it holds that 
         $$ \| \gamma_0 \tilde \varphi_i - \xi \| \leq \| \gamma_0(\tilde\varphi_i - \varphi_i) + \gamma_0 \varphi_i - \xi \| \leq \| \gamma_0(\tilde\varphi_i - \varphi_i) \| + \| \gamma\varphi_i - \xi \|. $$
-        The second term goes to zero as we showed previously. For the first one, we use the trace inquality again to obtain 
+        The second term goes to zero as we showed previously. For the first one, we use the trace inequality again to obtain 
         $$ \| \gamma_0(\varphi_i - \tilde\varphi_i) \| \leq C \|\varphi_i - \tilde \varphi_i \|, $$
         which concludes the proof. 
     \end{proof}
@@ -375,7 +375,7 @@ for given functions $f$ in $V_0'$ and $g$ in $(\gamma_D V_0)'$. Note the followi
     \end{itemize}
 
 \example{
-    We encourage the reader to try to comptue the weak formulation of the Poisson problem in mixed form. To do this, one must define the auxiliary variable $\vec \sigma \coloneqq \vec u$, so that the strong form of the problem now becomes
+    We encourage the reader to try to compute the weak formulation of the Poisson problem in mixed form. To do this, one must define the auxiliary variable $\vec \sigma \coloneqq \vec u$, so that the strong form of the problem now becomes
         $$
             \begin{aligned}
                 -\dive \vec\sigma &= f &&\text{ in $\Omega$}, \\
@@ -428,7 +428,7 @@ The case in which $u$ is restricted to be in $H_0^1(\Omega)$ is the well-known P
     \end{proof}
 \end{lemma}
 
-Probably the most important consequence of this is that the semi-norm given by $| x | \coloneqq \|\grad x\|_{0,\Omega}$, sometimes referred to as the $H_0^1$ semi-norm, is equivalent to the $H^1$ norm in the following cases: (i) homogeneous Dirichlet boundary conditions, (ii) homoegeneous Neumann boundary conditions, and (iii) mixed homogeneous Dirichlet and Neumann boundary conditions. Verifying this is a simple but fundamental excercise. A fundamental property to be verified is the following: a bilinear form $a(\cdot, \cdot)$ defined on a Hilbert space $X$ is said to be elliptic if there exists a constant $\alpha$ such that
+Probably the most important consequence of this is that the semi-norm given by $| x | \coloneqq \|\grad x\|_{0,\Omega}$, sometimes referred to as the $H_0^1$ semi-norm, is equivalent to the $H^1$ norm in the following cases: (i) homogeneous Dirichlet boundary conditions, (ii) homogeneous Neumann boundary conditions, and (iii) mixed homogeneous Dirichlet and Neumann boundary conditions. Verifying this is a simple but fundamental exercise. A fundamental property to be verified is the following: a bilinear form $a(\cdot, \cdot)$ defined on a Hilbert space $X$ is said to be elliptic if there exists a constant $\alpha$ such that
         $$ a(x, x) \geq \alpha \| x \|^2_X \qquad \forall x\in X. $$
 
 \begin{lemma}[Lax-Milgram] Consider a bounded bilinear form $a: H\times H\to \R$ defined on a Hilbert space $H$ that is elliptic with constants $C$ and $\alpha$ respectively, and a linear functional $f$ in $H'$. Then, there exists a unique $u$ in $H$ such that 
@@ -449,7 +449,7 @@ Note that the strong form must be understood in the distributional sense, i.e. a
     $$ -\langle \Delta u,v\rangle = (\grad u, \grad v),$$
 where $(\cdot, \cdot)$ is the $L^2(\Omega)$ product. Thus the weak formulation reads: Find $u$ in $H_0^1(\Omega)$ such that 
     $$ \int_\Omega \grad u\cdot \grad v\,dx = \langle f, v\rangle \qquad \forall v\in H_0^1(\Omega).$$
-This problem can be shown to be well-posed using Lax-Milgram's lemma and the Poincarè inequality. Small excercise: Extend the proof to the case of non-homogeneous Dirichlet boundary conditions.
+This problem can be shown to be well-posed using Lax-Milgram's lemma and the Poincarè inequality. Small exercise: Extend the proof to the case of non-homogeneous Dirichlet boundary conditions.
 
 In the case of having a boundary condition defined only on a portion $\Gamma_D$ of the boundary, the formulation changes, because (i) we need further information regarding the Neumann trace on the complement of the boundary, (ii) the test space looks different. In particular, we define the solution space given by 
     $$ V_0 = \{v\in H^1(\Omega): \quad v = 0 \quad\text{ on $\Gamma_D$}\}, $$
@@ -504,13 +504,13 @@ The idea, for this course, of studying specifically finite elements will be that
     $$ \inf_{v_h\in V_h} \| u - v_h\|_V. $$
 A typical use of this inequality will be that of bounding the projection error through a Finite Element (FEM) interpolant, such that one gets inequalities such as
     $$ \inf_{v_h\in V_h} \| u - v_h\|_V \leq \| u - I_h u \|_V \leq h^s \|u \|_W, $$
-where $W$ is some space of higher regularity, $s$ is some (hopefully positive) exponent and $I_h:V \to V_h$ is an interpolation operator. Our idea is that of producing FEM spaces for all of our relevant Hilbert spaces: $L^2$, $H^1$, $H(\div)$, and $H(\curl)$. 
+where $W$ is some space of higher regularity, $s$ is some (hopefully positive) exponent and $I_h:V \to V_h$ is an interpolation operator. Our idea is that of producing FEM spaces for all of our relevant Hilbert spaces: $L^2$, $H^1$, $H(\dive)$, and $H(\curl)$. 
 
-A \emph{finite element} is defined as a triple $(K, P_K, \Sigma_K)$, where $K$ is a geometric domain (interal, triangle, etc), $P_K$ is a space of functions, and $\Sigma_K$ is a set of linear functionals defined on $P_K$ known as degrees of freedom. We will typically assume that the finite element is \emph{unisolvent} in the sense that the degrees of freedom uniquely characterize a function in $P_K$. One simple example in the interval $(0,1)$ would be considering as $P_K$ the space of linear functions and as degrees of freedom the functions $l_0(p) = p(0)$ and $l_1(p) = p(1)$. Associated with a finite element is an interpolant, which is the operator $\pi_K: C(K) \to P_K$ such that 
+A \emph{finite element} is defined as a triple $(K, P_K, \Sigma_K)$, where $K$ is a geometric domain (interval, triangle, etc), $P_K$ is a space of functions, and $\Sigma_K$ is a set of linear functionals defined on $P_K$ known as degrees of freedom. We will typically assume that the finite element is \emph{unisolvent} in the sense that the degrees of freedom uniquely characterize a function in $P_K$. One simple example in the interval $(0,1)$ would be considering as $P_K$ the space of linear functions and as degrees of freedom the functions $l_0(p) = p(0)$ and $l_1(p) = p(1)$. Associated with a finite element is an interpolant, which is the operator $\pi_K: C(K) \to P_K$ such that 
     $$ l( \pi_K(u) - u) = 0 \qquad\forall l \in \Sigma_K,$$
 for all sufficiently smooth functions $u$. In words, the polynomial in $P_K$ that matches $u$ in the degrees of freedom. This is known as an \emph{interpolation operator}. 
 
-A FEM space is a global space in the space that it is defined in all of the domain $\Omega$, or some approximation of it $\Omega_h$, which does not depend on the degrees of freedom. We will mostly use the following definitions: $\P^k_K$ is the space of polynomials of degree from 1 to $k$ defined on an element $K$, the geometry is discretized through a tesselation of elements such that
+A FEM space is a global space in the space that it is defined in all of the domain $\Omega$, or some approximation of it $\Omega_h$, which does not depend on the degrees of freedom. We will mostly use the following definitions: $\P^k_K$ is the space of polynomials of degree from 1 to $k$ defined on an element $K$, the geometry is discretized through a tessellation of elements such that
     $$ \Omega = \bigcup_j K_j, $$
 and thus a scalar FEM space is given by
     $$ X_h^k = \left\{ v_h \in C(\Omega): \quad v_h|_K \in \P_K^j, \,j\in\{1,\hdots,k\} \,\forall K \right\}. $$
@@ -532,7 +532,7 @@ We now simply show the fundamental FEM bases and the related interpolation opera
 
 \paragraph{$H(\dive)$:} Here we consider the local polynomial in $\R^d$ given by
     $$ D_k = [\P_{k-1}]^d \oplus \widetilde{\P_{k-1}} \vec x, $$
-where $\vec x$ is the identity map, and $\widetilde{\P_k}$ is the set of homogeneous\footnote{A homogeneous polynomial is one whose non-zero terms all have the same degree, such as $x^2 + xy$.} polynomials of degree exactly $k$. If $k=1$, this space will have $d+1$ degrees of freedom, characterized in a triangle/tetrahedron by degrees of freedom defined through the normal component of the polynomial on its facets. These elements are known as Raviart-Thomas elements.Thus, given a triangulation of the geometry $\T_h$, this allows us to define the space
+where $\vec x$ is the identity map, and $\widetilde{\P_k}$ is the set of homogeneous\footnote{A homogeneous polynomial is one whose non-zero terms all have the same degree, such as $x^2 + xy$.} polynomials of degree exactly $k$. If $k=1$, this space will have $d+1$ degrees of freedom, characterized in a triangle/tetrahedron by degrees of freedom defined through the normal component of the polynomial on its facets. These elements are known as Raviart-Thomas elements. Thus, given a triangulation of the geometry $\T_h$, this allows us to define the space
     $$ W_h = \left\{ \vec u_h \in H(\dive; \Omega):  \vec u_h|_K \in D_k \qquad\forall K \in \T_h \right\}, $$
 where $W_h$ is conforming in $H(\dive)$. In addition, we get the following result regarding an interpolation operator: 
     \begin{theorem}[$H(\dive)$ interpolation]
@@ -548,7 +548,7 @@ which is somehow the orthogonal complement to the space $\widetilde{\P_{k-1}}\ve
     $$ R_k = [\P_{k-1}]^3\oplus S_k, $$
 and given a triangulation $\T_h$ of the geometry, we consider the space
     $$ V_h = \left\{ \vec u_h \in H(\curl;\Omega): \vec u_h|_K \in R_k\qquad \forall K\in \T_h\right\}. $$
-This space is conforming in $H(\curl)$. In addition, we also get some nice intecrpolation properties. 
+This space is conforming in $H(\curl)$. In addition, we also get some nice interpolation properties. 
     \begin{theorem}[$H(\curl)$ interpolation] The theorem states: 
     
         \begin{itemize}
@@ -587,7 +587,7 @@ which yield the following:
     $U_h$ & $\xrightarrow{\quad\phantom{nabla}\quad}$& $V_h$ & $\xrightarrow{\quad\phantom{\curl}\quad}$ & $W_h$ & $\xrightarrow{\quad\phantom{\dive}\quad} $ & $Z_h$ \\
     \end{tabular}
     \end{center} 
-There is an intrinsic relationship between this structure and inf-sup conditions. It additionall commutes, and thus one can obtain identities such as 
+There is an intrinsic relationship between this structure and inf-sup conditions. It additionally commutes, and thus one can obtain identities such as 
     $$ \vec r_h \grad = \grad \pi_h, $$
 which further relates the interpolation results. 
 
@@ -606,7 +606,7 @@ where $\rho_K$ is the diameter of the largest ball that can be inscribed in $K$,
     \end{theorem}
 In particular this shows that
     $$ \| v_h \|_{W^{1,p}} \leq C h^{-1} \| v_h \|_{L^p}. $$
-One can also obtain the followin local estimate in 2D for simplices \cite{warburton2003constants}:
+One can also obtain the following local estimate in 2D for simplices \cite{warburton2003constants}:
     $$ \| \vec v_h \|_{0,F} \leq C h_K^{-1/2} \| \vec v_h \|_{0,K}, $$
 where $F$ is a facet (line or triangle) and $K$ is the element (triangle or tetrahedron).
 
@@ -620,7 +620,7 @@ where $F$ is a facet (line or triangle) and $K$ is the element (triangle or tetr
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Fredholm operators}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{danilo.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Inf-sup conditions}
