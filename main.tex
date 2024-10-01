@@ -811,10 +811,72 @@ which is a Céa estimate for sufficiently small $h$.
 \subsection{Saddle point problems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\paragraph{Common example: Darcy} We will present a the worked example of Darcy's problem, to be analyzed using the LBB theory. Its weak form is given as follows: Consider $\vec H=H(\dive; \Omega)\cap \{\vec u\cdot \vec n=0\}$ and $Q=L^2(\Omega)$, then find $(u,p)$ in $H\times Q$ such that
+    \[ \begin{aligned}
+    (\ten K^{-1}\vec u, \vec v) - (\dive \vec v, p) &= \langle f,\vec v\rangle && \forall \vec v\in \vec H \\
+    (\dive \vec u, q)  &= \langle g, q\rangle && \forall q \in Q,
+    \end{aligned} \]
+where $\ten K$ is symmetric and positive definite ($ k_1|\vec x|^2 \leq \vec x\cdot \ten K^{-1}\vec x \leq k_2 |\vec x|^2$), $f$ is in $\vec H'$ and $g$ is in $Q'$. We omit details regarding continuity as it is a simply application of the Cauchy-Schwartz inequality. The bilinear forms to be studied here are $a(\vec u, \vec v) = (\ten K^{-1}\vec u, \vec v)$ and $b(\vec v, q) = (\dive v, q)$.
+    \begin{itemize}
+        \item First, we need to show that $\Pi A|_V$ is invertible. To better understand this operator, we recall that $\Pi$ is the orthogonal projector of $\vec H$ into $\vec V = \ker B$, so let's look into all the pieces to make sense out of it. First, $B:H\to Q$ is the operator given by 
+        $$ (B\vec v, q) = (\dive \vec v, q),$$
+        and thus, as $L^2$ can be identified with its dual, we have that simply $B = \dive$ and thus $\vec V = \{\vec v \in \vec H: \dive \vec v = 0\}$,i.e. the space of solenoidal functions in $H(\dive;\Omega)$ with null normal component on the boundary. Second, the projection $\Pi$ is surjective, and thus 
+            \[ \langle \Pi A|_V \vec u, \vec v\rangle \]
+        which is defined for all $\vec u, \vec v$ in $\vec H$, can be written analogously as 
+            \[ \langle \Pi A \vec u, \vec v\rangle \]
+        for $\vec u$ in $\vec V$ and $\vec v$ in $\vec H$, where $A\vec u$ belongs to $\vec H$. Finally, $\Pi:\vec H\to\vec V$ is an orthogonal projector, meaning that if we denote $\vec H = \vec V \oplus \vec V^\perp$ and $\vec v = \vec v_0 + \vec v^\perp$, we obtain
+            \[  \langle A \vec u, \vec v_0\rangle \]
+        with $\vec u$ in $\vec V$ and $\vec v_0$ in $\vec V$. In other words, the operator $\Pi A|_V$ is simply the restricted bilinear form $a: \vec V\times \vec V \to \R$, given by
+        \[ a(\vec u, \vec v) = (\ten K^{-1}\vec u, \vec v). \]
+        In such a space, the form $a$ is elliptic: 
+        \[ a(\vec u, \vec u) = (\ten K^{-1}\vec u, \vec u) \geq k_1 \| \vec u \|_0^2 = k_1 \| \vec u\|_{\dive}^2 \qquad\forall \vec u \in \vec V,\]
+        where the term $\|\dive \vec u\|$ can be trivially added as $\dive \vec u = 0$ for $\vec u$ in $\vec V$. This shows that $\Pi A|_V$ is invertible using the Lax-Milgram lemma.
+        \item We now show the inf-sup property. For this, we will use the technique of the auxiliary problem. Consider the following problem
+        \[ \begin{aligned}
+            - \Delta z &= q && \Omega \\
+            \grad z\cdot \vec n &= 0 &&\partial\Omega,
+        \end{aligned} \]
+        which we have already shown to be invertible. Thus, it holds that the function $\tilde{\vec u} = -\grad z$ is such that it belongs to $\vec H$ and it satisfies that $\|\tilde{\vec u}\|_0 \leq C \| q\|_0$, which comes from the a-priori estimate. Also, as $\dive \tilde{\vec u} = q$, we have $\|\tilde{\vec u}\|_{\dive} \leq (C+1)\|q\|$. Going back to the original problem, we want to show that there exists $\beta>0$ such that
+        \[ \sup_{\vec v\in \vec H}\frac{b(\vec v, q)}{\|\vec v\|} \geq \beta \|q\|_0 \qquad \forall q \in Q.\]
+        Using our previously constructed solution, we obtain
+        \[ \sup_{\vec v\in \vec H}\frac{b(\vec v, q)}{\|\vec v\|} \geq \frac{(\dive \tilde{\vec u}, q)}{\|\tilde{\vec u}\|_{\dive}}\geq \frac{\|q\|_0^2}{(C+1)\|q\|} = \tilde\beta \|q\|, \]
+        where $\tilde \beta = 1/(C+1)$. This concludes the proof. We note that it was actually sufficient to show that for each $q$ there existed an element $\tilde{\vec u}$ in the desired space, as it proved the survectivity of the operator $B$, but showing the complete inf-sup estimate was more instructive. 
+    \end{itemize}
+    Given that we have shown the required properties for $a$ and $b$, then there exists a unique and stable solution $(u,p)$ of Darcy's problem. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Discretization of saddle point problems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+We consider finite dimensional and conforming spaces $\{H_h\}_h \subset H$ and $\{Q_h\}_h \subset Q$. Then, given $\vec F$ in $H'$ and $G$ in $Q'$, the discrete problem reads: Find $(u_h, p_h)$ in $H_h \times Q_h$ such that 
+    \[ \begin{aligned}
+        a(u_h, v_h) + b(v_h, p_h) &= \langle F, v_h\rangle &&\forall v_h \in H_h \\
+        b(u_h, q_h)  &= \langle G, q_h\rangle &&\forall q_h \in Q_h. 
+    \end{aligned} \]
+The previous theory can be used in this context unchanged, with only some mild changes in the definition of the operators, which we do in the following before announcing the operators. Consider the induced operators $A_h:H_h\to H_h$ and $B_h: H_h\to Q_h$, defined using convenient Riesz operators as done previously, and define the kernel space $V_h = \ker B_h = \{v_h \in H_h: b(v_h, q_h) = 0 \quad\forall q_h \in Q_h\}$. 
+\begin{theorem} Consider the orthogonal projection $\Pi_h: H_h \to Q_h$. Then, if 
+    \begin{itemize}
+        \item The operator $\Pi_h A_h|_{V_h}: V_h\to V_h$ is injective (or surjective), and
+        \item the bilinear form $b:H_h\times Q_h\to \R$ satisfies and inf-sup condition, then
+    \end{itemize}
+for each pair of functions $(F, G)$ there is a unique solution $(u_h, p_h)$ in $H_h\times Q_h$ such that 
+    \[ \| (u_h, p_h) \|_{H\times Q} \leq C_h\left( \|F|_{H_h}\|_{H_h'} + \| G|_{Q_h} \|_{Q_h'} \right), \]
+where $C_h = C_h(\| A_h\|, \| (\Pi_h A)^{-1} \|, \beta_h)$. 
+\end{theorem}
+From this result, it is easy to see that the Galerkin projection $G_h: H\times Q \to H_h\times Q_h$ is well-posed: 
+    \[\begin{aligned}
+        a(\Pi_H \circ G_h(u,p), v_h) + b(v_h, \Pi_Q \circ G_h(u,p)) &= a(u, v_h) + b(p, v_h) && \forall v_h \in H_h\\
+        b(\Pi_H \circ G_h(u,p), q_h) &= b(u, q_h) && \forall q_h \in Q_h,
+    \end{aligned}\]
+where $\Pi_H$ and $\Pi_Q$ are simply component projections, i.e. $\Pi_H(u,p) = u$ and $\Pi_Q(u,p) = p$. One can further prove a Céa estimate: 
+    \[ \| u - u_h\| \leq C_1 \|inf_{\zeta_h \in H_h}\| u -\zeta_h \|_H + C_2\inf_{w_h\in Q_h}\| p -w_h\|\]
+    \[ \|p - p_h\| \leq C_3 \|inf_{\zeta_h \in H_h}\| u -\zeta_h \|_H + C_4\inf_{w_h\in Q_h}\| p -w_h\|.\]
+Note that the discrete inf-sup condition \emph{does not} follow from the continuous one, so it is typically an additional difficulty during the analysis. Still, there is a classical lemma that allows to infer the discrete inf-sup in some conditions. 
+
+\begin{lemma}[Fortin's Lemma]
+Consider $b:H\times Q\to \R$ that satisfies an inf-sup condition with constant $\beta >0$. If there exists a famliy of discrete projectors $\Pi_h: H\to H_h$ such that 
+    \[ \|\Pi_h \|\leq \tilde C \quad \forall h \qquad \text{ and } \qquad b(\Pi_h u, q_h) = b(u, q_h) \quad\forall u\in H, q_h \in Q_h,\]
+then the discrete inf-sup of $b:H_h\to Q_h$ holds with $\tilde \beta = \beta / \tilde C$.
+\end{lemma}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
