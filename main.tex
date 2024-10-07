@@ -845,34 +845,40 @@ some examples:
     \item \textbf{Darcy (or mixed Poisson)}: We are dealing 
     with the problem
     \begin{displaymath}
-        -\Delta u = f
+        -\Delta u = f\quad \text{ in } \Omega
     \end{displaymath}
     Introducing the variable \(\sigma = -\nabla u\), the problem
     now reads:
     \begin{displaymath}
-    \begin{cases}
-        \dive \sigma &= f \\ 
-        \dive \sigma + \nabla u &= 0
-    \end{cases}
+    \left\{
+    \begin{aligned}
+        \dive \sigma &= f && \quad \text{ in } \Omega\\ 
+        \sigma + \nabla u &= 0 && \quad \text{ on } \partial\Omega
+    \end{aligned}
+    \right.
     \end{displaymath}
     Acting the equation over test function \(\tau\) and 
     \(v\) we end up with the saddle point problem. 
     \begin{displaymath}
-    \begin{cases}
+    \left\{
+    \begin{aligned}
         (\sigma, \tau) - (u, \dive \tau) &= 0
-        \hspace{3em} \forall \tau \\ 
+        &&\quad\forall \tau \\ 
         (\dive \sigma, v) &= \langle f,v \rangle
-        \hspace{1.2em} \forall v
-    \end{cases}
+        &&\quad \forall v
+    \end{aligned}
+    \right.
     \end{displaymath}
 
     \item \textbf{Primal-Mixed Poisson (Dirichlet with multipliers)}
     Consider the problem
     \begin{displaymath}
-    \begin{cases}
-        -\Delta u &= f \text{ over } \Omega \\ 
-        u &= g \text{ over } \partial\Omega
-    \end{cases}
+    \left\{
+    \begin{aligned}
+        -\Delta u &= f &&\quad\text{ in } \Omega \\ 
+        u &= g &&\quad\text{ on } \partial\Omega
+    \end{aligned}
+    \right.
     \end{displaymath}
     Integration by parts yields:
     \begin{displaymath}
@@ -891,20 +897,22 @@ some examples:
     \end{displaymath}
     Writing everything together shows a saddle point problem:
     \begin{displaymath}
-    \begin{cases}
+    \left\{
+    \begin{aligned}
         (\nabla u, \nabla v) + \langle \xi, \gamma_D v \rangle
         &= \langle f,v \rangle
-        \hspace{1cm} \forall v\\ 
+        &&\quad \forall v\\ 
         \langle \lambda, \gamma_D u \rangle &= \langle \lambda, g \rangle
-        \hspace{1cm} \forall \lambda
-    \end{cases}
+        &&\quad  \forall \lambda
+    \end{aligned}
+    \right.
     \end{displaymath}
 \end{itemize}
 
 Now that we know some examples of saddle points problems, a natural
 question is to ask for conditions for the existence and uniqueness
 of solutions. Fortunately, this has already been done and it's known
-as the \textbf{Babushka Breggy Theory}.
+as the \textbf{Babu\v{s}hka Brezzi Theory}.
 
 \begin{theorem}
     Consider the problem
@@ -925,12 +933,13 @@ as the \textbf{Babushka Breggy Theory}.
     projector. Suppose that
     \begin{itemize}
         \item \(\Pi A\colon V\to V\) is a bijection;
-        \item \(B\) satisfy the inf-sup condition.
+        \item the bilinear form \(b\) (associated to \(B\))
+        satisfies the inf-sup condition with constant \(\beta\).
     \end{itemize}
-    Then, for each \((f,f)\) in \(H'\times Q'\) there exists
+    Then, for each \((f,g)\) in \(H'\times Q'\) there exists
     a unique pair \((u,p)\in H\times Q\) such that~\eqref{mixed}
     holds. Moreover, there is a positive constant
-    \(C=C(\|A\|, \| (\Pi A)^{-1}\|, B)\) such that
+    \(C=C(\|A\|, \| (\Pi A)^{-1}\|, \beta)\) such that
     \begin{equation}
         \| (u,p) \|
         \le
