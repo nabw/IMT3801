@@ -809,6 +809,138 @@ which is a Céa estimate for sufficiently small $h$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Saddle point problems}
+
+A saddle point problem has the form:
+\begin{displaymath}
+    \begin{bmatrix}
+        A & B^{T}\\ 
+        B & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        u \\ p
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        f \\ g
+    \end{bmatrix}.
+\end{displaymath}
+
+To grasp the importance of this formulations, let's first see
+some examples:
+\begin{itemize}
+    \item \textbf{Stokes}: The variational formulation of
+    Stokes reads:
+    \begin{displaymath}
+    \begin{cases}
+        (\nabla u, \nabla v) - (p, \dive v)
+        &=
+        \langle f, v \rangle
+        \quad\forall v
+        \\
+        (\dive u, q) &= 0 \hspace{3em}\forall q
+    \end{cases}
+    \end{displaymath}
+    From where it's clear that \(A=-\Delta\), \(B=\dive\).
+
+    \item \textbf{Darcy (or mixed Poisson)}: We are dealing 
+    with the problem
+    \begin{displaymath}
+        -\Delta u = f
+    \end{displaymath}
+    Introducing the variable \(\sigma = -\nabla u\), the problem
+    now reads:
+    \begin{displaymath}
+    \begin{cases}
+        \dive \sigma &= f \\ 
+        \dive \sigma + \nabla u &= 0
+    \end{cases}
+    \end{displaymath}
+    Acting the equation over test function \(\tau\) and 
+    \(v\) we end up with the saddle point problem. 
+    \begin{displaymath}
+    \begin{cases}
+        (\sigma, \tau) - (u, \dive \tau) &= 0
+        \hspace{3em} \forall \tau \\ 
+        (\dive \sigma, v) &= \langle f,v \rangle
+        \hspace{1.2em} \forall v
+    \end{cases}
+    \end{displaymath}
+
+    \item \textbf{Primal-Mixed Poisson (Dirichlet with multipliers)}
+    Consider the problem
+    \begin{displaymath}
+    \begin{cases}
+        -\Delta u &= f \text{ over } \Omega \\ 
+        u &= g \text{ over } \partial\Omega
+    \end{cases}
+    \end{displaymath}
+    Integration by parts yields:
+    \begin{displaymath}
+        (\nabla u, \nabla v) 
+        - \langle \gamma_N u, \gamma_D v \rangle
+        = \langle f,v \rangle.
+    \end{displaymath}
+    Define \(\xi = \gamma_N u\) and impose Dirichlet boundary
+    conditions weakly. That is,
+    \begin{displaymath}
+        \forall \lambda \in H^{-1/2}(\partial\Omega)
+        \colon\qquad
+        \langle \lambda, \gamma_D u \rangle
+        =
+        \langle \lambda, g \rangle
+    \end{displaymath}
+    Writing everything together shows a saddle point problem:
+    \begin{displaymath}
+    \begin{cases}
+        (\nabla u, \nabla v) + \langle \xi, \gamma_D v \rangle
+        &= \langle f,v \rangle
+        \hspace{1cm} \forall v\\ 
+        \langle \lambda, \gamma_D u \rangle &= \langle \lambda, g \rangle
+        \hspace{1cm} \forall \lambda
+    \end{cases}
+    \end{displaymath}
+\end{itemize}
+
+Now that we know some examples of saddle points problems, a natural
+question is to ask for conditions for the existence and uniqueness
+of solutions. Fortunately, this has already been done and it's known
+as the \textbf{Babushka Breggy Theory}.
+
+\begin{theorem}
+    Consider the problem
+    \begin{equation}\label{mixed}
+        \begin{bmatrix}
+            A & B^{T}\\ 
+            B & 0
+        \end{bmatrix}
+        \begin{bmatrix}
+            u \\ p
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            f \\ g
+        \end{bmatrix}
+    \end{equation}
+    Let \(V = \ker B\) and \(\Pi\colon H\to V\) the orthogonal
+    projector. Suppose that
+    \begin{itemize}
+        \item \(\Pi A\colon V\to V\) is a bijection;
+        \item \(B\) satisfy the inf-sup condition.
+    \end{itemize}
+    Then, for each \((f,f)\) in \(H'\times Q'\) there exists
+    a unique pair \((u,p)\in H\times Q\) such that~\eqref{mixed}
+    holds. Moreover, there is a positive constant
+    \(C=C(\|A\|, \| (\Pi A)^{-1}\|, B)\) such that
+    \begin{equation}
+        \| (u,p) \|
+        \le
+        C \left( \|f\| + \|g\| \right) 
+    \end{equation}
+\end{theorem}
+\begin{proof}
+    Exercise :)
+\end{proof}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \paragraph{Common example: Darcy} We will present a the worked example of Darcy's problem, to be analyzed using the LBB theory. Its weak form is given as follows: Consider $\vec H=H(\dive; \Omega)\cap \{\vec u\cdot \vec n=0\}$ and $Q=L^2(\Omega)$, then find $(u,p)$ in $H\times Q$ such that
