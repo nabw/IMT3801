@@ -810,7 +810,7 @@ which is a Céa estimate for sufficiently small $h$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Saddle point problems}
 
-A saddle point problem has the form:
+In this sectino we will study the well-posedness theory of saddle point problems. The presentation has been taken, mostly verbatim, from \cite{gatica2014simple}. A saddle point problem has the form:
 \begin{displaymath}
     \begin{bmatrix}
         A & B^{T}\\ 
@@ -825,7 +825,7 @@ A saddle point problem has the form:
     \end{bmatrix}.
 \end{displaymath}
 
-To grasp the importance of this formulations, let's first see
+To grasp the relevance of this formulations, let's first see
 some examples:
 \begin{itemize}
     \item \textbf{Stokes}: The variational formulation of
@@ -835,12 +835,12 @@ some examples:
         (\nabla u, \nabla v) - (p, \dive v)
         &=
         \langle f, v \rangle
-        \quad\forall v
+        \quad\forall v,
         \\
-        (\dive u, q) &= 0 \hspace{3em}\forall q
+        (\dive u, q) &= 0 \hspace{3em}\forall q.
     \end{cases}
     \end{displaymath}
-    From where it's clear that \(A=-\Delta\), \(B=\dive\).
+    By inspection we see that \(A=-\Delta\), \(B=\dive\).
 
     \item \textbf{Darcy (or mixed Poisson)}: We are dealing 
     with the problem
@@ -857,18 +857,18 @@ some examples:
     \end{aligned}
     \right.
     \end{displaymath}
-    Acting the equation over test function \(\tau\) and 
-    \(v\) we end up with the saddle point problem. 
+    Testing the equation on \(\tau\) and :
     \begin{displaymath}
     \left\{
     \begin{aligned}
         (\sigma, \tau) - (u, \dive \tau) &= 0
-        &&\quad\forall \tau \\ 
+        &&\quad\forall \tau, \\ 
         (\dive \sigma, v) &= \langle f,v \rangle
-        &&\quad \forall v
+        &&\quad \forall v,
     \end{aligned}
     \right.
     \end{displaymath}
+    where $A$ is the identity operatir and $B=\dive$ as before.
 
     \item \textbf{Primal-Mixed Poisson (Dirichlet with multipliers)}
     Consider the problem
@@ -886,7 +886,7 @@ some examples:
         - \langle \gamma_N u, \gamma_D v \rangle
         = \langle f,v \rangle.
     \end{displaymath}
-    Define \(\xi = \gamma_N u\) and impose Dirichlet boundary
+    Define \(\xi = -\gamma_N u\) and impose Dirichlet boundary
     conditions weakly. That is,
     \begin{displaymath}
         \forall \lambda \in H^{-1/2}(\partial\Omega)
@@ -901,9 +901,9 @@ some examples:
     \begin{aligned}
         (\nabla u, \nabla v) + \langle \xi, \gamma_D v \rangle
         &= \langle f,v \rangle
-        &&\quad \forall v\\ 
+        &&\quad \forall v,\\ 
         \langle \lambda, \gamma_D u \rangle &= \langle \lambda, g \rangle
-        &&\quad  \forall \lambda
+        &&\quad  \forall \lambda.
     \end{aligned}
     \right.
     \end{displaymath}
@@ -912,7 +912,7 @@ some examples:
 Now that we know some examples of saddle points problems, a natural
 question is to ask for conditions for the existence and uniqueness
 of solutions. Fortunately, this has already been done and it's known
-as the \textbf{Babu\v{s}hka Brezzi Theory}.
+as the \emph{Ladyzhenskaya-Babu\v{s}hka-Brezzi Theory}, typically denoted as LBB theory.
 
 \begin{theorem}
     Consider the problem
@@ -957,18 +957,18 @@ as the \textbf{Babu\v{s}hka Brezzi Theory}.
     (\ten K^{-1}\vec u, \vec v) - (\dive \vec v, p) &= \langle f,\vec v\rangle && \forall \vec v\in \vec H \\
     (\dive \vec u, q)  &= \langle g, q\rangle && \forall q \in Q,
     \end{aligned} \]
-where $\ten K$ is symmetric and positive definite ($ k_1|\vec x|^2 \leq \vec x\cdot \ten K^{-1}\vec x \leq k_2 |\vec x|^2$), $f$ is in $\vec H'$ and $g$ is in $Q'$. We omit details regarding continuity as it is a simply application of the Cauchy-Schwartz inequality. The bilinear forms to be studied here are $a(\vec u, \vec v) = (\ten K^{-1}\vec u, \vec v)$ and $b(\vec v, q) = (\dive v, q)$.
+where $\ten K$ is symmetric and positive definite ($ k_1|\vec x|^2 \leq \vec x\cdot \ten K^{-1}\vec x \leq k_2 |\vec x|^2$), $f$ is in $\vec H'$ and $g$ is in $Q'$. We omit details regarding continuity as it is a simply application of the Cauchy-Schwartz inequality. The bilinear forms to be studied here are $a(\vec u, \vec v) = (\ten K^{-1}\vec u, \vec v)$ and $b(\vec v, q) = (\dive \vec v, q)$.
     \begin{itemize}
         \item First, we need to show that $\Pi A|_V$ is invertible. To better understand this operator, we recall that $\Pi$ is the orthogonal projector of $\vec H$ into $\vec V = \ker B$, so let's look into all the pieces to make sense out of it. First, $B:H\to Q$ is the operator given by 
         $$ (B\vec v, q) = (\dive \vec v, q),$$
-        and thus, as $L^2$ can be identified with its dual, we have that simply $B = \dive$ and thus $\vec V = \{\vec v \in \vec H: \dive \vec v = 0\}$,i.e. the space of solenoidal functions in $H(\dive;\Omega)$ with null normal component on the boundary. Second, the projection $\Pi$ is surjective, and thus 
+        and thus, as $L^2$ can be identified with its dual, we have that simply $B = \dive$ and thus $\vec V = \{\vec v \in \vec H: \dive \vec v = 0\}$, i.e. the space of solenoidal functions in $H(\dive;\Omega)$ with null normal component on the boundary. Second, the projection $\Pi$ is surjective, and thus 
             \[ \langle \Pi A|_V \vec u, \vec v\rangle \]
         which is defined for all $\vec u, \vec v$ in $\vec H$, can be written analogously as 
             \[ \langle \Pi A \vec u, \vec v\rangle \]
         for $\vec u$ in $\vec V$ and $\vec v$ in $\vec H$, where $A\vec u$ belongs to $\vec H$. Finally, $\Pi:\vec H\to\vec V$ is an orthogonal projector, meaning that if we denote $\vec H = \vec V \oplus \vec V^\perp$ and $\vec v = \vec v_0 + \vec v^\perp$, we obtain
             \[  \langle A \vec u, \vec v_0\rangle \]
         with $\vec u$ in $\vec V$ and $\vec v_0$ in $\vec V$. In other words, the operator $\Pi A|_V$ is simply the restricted bilinear form $a: \vec V\times \vec V \to \R$, given by
-        \[ a(\vec u, \vec v) = (\ten K^{-1}\vec u, \vec v). \]
+        \[ a(\vec u, \vec v) = (\ten K^{-1}\vec u, \vec v) \qquad\forall \vec u, \vec v \in \vec V. \]
         In such a space, the form $a$ is elliptic: 
         \[ a(\vec u, \vec u) = (\ten K^{-1}\vec u, \vec u) \geq k_1 \| \vec u \|_0^2 = k_1 \| \vec u\|_{\dive}^2 \qquad\forall \vec u \in \vec V,\]
         where the term $\|\dive \vec u\|$ can be trivially added as $\dive \vec u = 0$ for $\vec u$ in $\vec V$. This shows that $\Pi A|_V$ is invertible using the Lax-Milgram lemma.
@@ -977,7 +977,7 @@ where $\ten K$ is symmetric and positive definite ($ k_1|\vec x|^2 \leq \vec x\c
             - \Delta z &= q && \Omega \\
             \grad z\cdot \vec n &= 0 &&\partial\Omega,
         \end{aligned} \]
-        which we have already shown to be invertible. Thus, it holds that the function $\tilde{\vec u} = -\grad z$ is such that it belongs to $\vec H$ and it satisfies that $\|\tilde{\vec u}\|_0 \leq C \| q\|_0$, which comes from the a-priori estimate. Also, as $\dive \tilde{\vec u} = q$, we have $\|\tilde{\vec u}\|_{\dive} \leq (C+1)\|q\|$. Going back to the original problem, we want to show that there exists $\beta>0$ such that
+        which we have already shown to be invertible in the subspace of $H^1$ that is orthogonal to the constants. Thus, it holds that the function $\tilde{\vec u} = -\grad z$ is such that it belongs to $\vec H$ and satisfies that $\|\tilde{\vec u}\|_0 \leq C \| q\|_0$, which comes from the \emph{a-priori} (or stability) estimate. Also, as $\dive \tilde{\vec u} = q$, we have $\|\tilde{\vec u}\|_{\dive} \leq (C+1)\|q\|$. Going back to the original problem, we want to show that there exists $\beta>0$ such that
         \[ \sup_{\vec v\in \vec H}\frac{b(\vec v, q)}{\|\vec v\|} \geq \beta \|q\|_0 \qquad \forall q \in Q.\]
         Using our previously constructed solution, we obtain
         \[ \sup_{\vec v\in \vec H}\frac{b(\vec v, q)}{\|\vec v\|} \geq \frac{(\dive \tilde{\vec u}, q)}{\|\tilde{\vec u}\|_{\dive}}\geq \frac{\|q\|_0^2}{(C+1)\|q\|} = \tilde\beta \|q\|, \]
@@ -1009,7 +1009,7 @@ From this result, it is easy to see that the Galerkin projection $G_h: H\times Q
         b(\Pi_H \circ G_h(u,p), q_h) &= b(u, q_h) && \forall q_h \in Q_h,
     \end{aligned}\]
 where $\Pi_H$ and $\Pi_Q$ are simply component projections, i.e. $\Pi_H(u,p) = u$ and $\Pi_Q(u,p) = p$. One can further prove a Céa estimate: 
-    \[ \| u - u_h\| \leq C_1 \|inf_{\zeta_h \in H_h}\| u -\zeta_h \|_H + C_2\inf_{w_h\in Q_h}\| p -w_h\|\]
+    \[ \| u - u_h\| \leq C_1 \|\inf_{\zeta_h \in H_h}\| u -\zeta_h \|_H + C_2\inf_{w_h\in Q_h}\| p -w_h\|\]
     \[ \|p - p_h\| \leq C_3 \|inf_{\zeta_h \in H_h}\| u -\zeta_h \|_H + C_4\inf_{w_h\in Q_h}\| p -w_h\|.\]
 Note that the discrete inf-sup condition \emph{does not} follow from the continuous one, so it is typically an additional difficulty during the analysis. Still, there is a classical lemma that allows to infer the discrete inf-sup in some conditions. 
 
