@@ -389,7 +389,7 @@ for given functions $f$ in $V_0'$ and $g$ in $(\gamma_D V_0)'$. Note the followi
 
 
 
-\subsection{Poincarè inequalities and Lax-Milgram}
+\subsection{Poincaré inequalities and Lax-Milgram}
 
 
 Using all of the previous definitions, we can finally look at actual problems and some first well-posedness results. For all of them, the Poincaré inequality will be fundamental.
@@ -810,7 +810,7 @@ which is a Céa estimate for sufficiently small $h$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Saddle point problems}
 
-In this sectino we will study the well-posedness theory of saddle point problems. The presentation has been taken, mostly verbatim, from \cite{gatica2014simple}. A saddle point problem has the form:
+In this section we will study the well-posedness theory of saddle point problems. The presentation has been taken, mostly verbatim, from \cite{gatica2014simple}. A saddle point problem has the form:
 \begin{displaymath}
     \begin{bmatrix}
         A & B^{T}\\ 
@@ -916,7 +916,7 @@ as the \emph{Ladyzhenskaya-Babu\v{s}hka-Brezzi Theory}, typically denoted as LBB
 
 \begin{theorem}
     Consider the problem
-    \begin{equation}\label{mixed}
+    \begin{equation*}\label{mixed}
         \begin{bmatrix}
             A & B^{T}\\ 
             B & 0
@@ -928,7 +928,7 @@ as the \emph{Ladyzhenskaya-Babu\v{s}hka-Brezzi Theory}, typically denoted as LBB
         \begin{bmatrix}
             f \\ g
         \end{bmatrix}
-    \end{equation}
+    \end{equation*}
     Let \(V = \ker B\) and \(\Pi\colon H\to V\) the orthogonal
     projector. Suppose that
     \begin{itemize}
@@ -940,11 +940,11 @@ as the \emph{Ladyzhenskaya-Babu\v{s}hka-Brezzi Theory}, typically denoted as LBB
     a unique pair \((u,p)\in H\times Q\) such that~\eqref{mixed}
     holds. Moreover, there is a positive constant
     \(C=C(\|A\|, \| (\Pi A)^{-1}\|, \beta)\) such that
-    \begin{equation}
+    \begin{equation*}
         \| (u,p) \|
         \le
         C \left( \|f\| + \|g\| \right) 
-    \end{equation}
+    \end{equation*}
 \end{theorem}
 \begin{proof}
     Exercise :)
@@ -1010,7 +1010,7 @@ From this result, it is easy to see that the Galerkin projection $G_h: H\times Q
     \end{aligned}\]
 where $\Pi_H$ and $\Pi_Q$ are simply component projections, i.e. $\Pi_H(u,p) = u$ and $\Pi_Q(u,p) = p$. One can further prove a Céa estimate: 
     \[ \| u - u_h\| \leq C_1 \|\inf_{\zeta_h \in H_h}\| u -\zeta_h \|_H + C_2\inf_{w_h\in Q_h}\| p -w_h\|\]
-    \[ \|p - p_h\| \leq C_3 \|inf_{\zeta_h \in H_h}\| u -\zeta_h \|_H + C_4\inf_{w_h\in Q_h}\| p -w_h\|.\]
+    \[ \|p - p_h\| \leq C_3 \|\inf_{\zeta_h \in H_h}\| u -\zeta_h \|_H + C_4\inf_{w_h\in Q_h}\| p -w_h\|.\]
 Note that the discrete inf-sup condition \emph{does not} follow from the continuous one, so it is typically an additional difficulty during the analysis. Still, there is a classical lemma that allows to infer the discrete inf-sup in some conditions. 
 
 \begin{lemma}[Fortin's Lemma]
@@ -1024,7 +1024,129 @@ then the discrete inf-sup of $b:H_h\to Q_h$ holds with $\tilde \beta = \beta / \
 \section{Beyond linearity}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+We will now cover the notion of differentiability in Banach spaces. 
+\begin{definition}
+    Set $u\in U \subset X$ with $U$ an open set, and $F:U\to Y$. We say $F$ is Fréchet differentiable at $u$ if there exists a linear operator $A\in\mathcal{L}(X,Y)$ such that
+    \begin{equation*}
+        F(u+h)=F(u)+A(h)+o(\|h\|),
+    \end{equation*}
+    where we denote $\mathcal{L}(X,Y)$ as the set of linear operators from $X$ to $Y$, and the residual term $o(h)$ corresponds to a function $f(h)$ such that $\|f(h)\|/\|h\| \to 0$ when $h\to 0$. We denote the Fréchet derivative at $u$ in the direction $h$ as $dF(u)[h] := A(h)$.
+\end{definition}
+This construction yields two properties about Fréchet differentiability:
+\begin{enumerate}
+    \item For a given $F:U\to Y$, $dF(u)$ is unique. To prove this, assume $A\neq B$ are two Fréchet derivatives of $F$, that is, 
+    \begin{align*}
+        F(x+h) &= F(x) + Ah + o(\|h\|) \\
+        F(x+h) &= F(x) + Bh + o(\|h\|).
+    \end{align*}
+    Subtracting these equations, we have $Ah - Bh = o(\|h\|)$. Since $A\neq B$, there exists a direction $h^*$ such that $Ah^* \neq Bh^*$. Setting $h=th^*$, with $t\in \mathbb{R}$, we note that
+    \begin{equation*}
+        \frac{\|Ah-Bh\|}{\|h\|} = \frac{t\|Ah^*-Bh^*\|}{t\|h^*\|} = \text{const.} \nrightarrow 0,
+    \end{equation*}
+    since it does not depend on $\|h\|$, and thus $Ah - Bh \neq o(\|h\|)$, which is a contradiction. 
+    \item If $F:U\to Y$ is Fréchet differentiable, then $F$ is continuous.
+\end{enumerate}
 
+Furthermore, we recover some classical properties of differentiation:
+\begin{enumerate}
+    \item (Linear combination) If $F$ and $G$ are Fréchet differentiable, then for any $a,b\in\mathbb{R}$, $aF+bG$ is Fréchet differentiable.
+    \item (Chain rule) Let $F:U\to Y$ and $G:V\to Z$, with $U\subset X$ an open set and $F(U)\subset V\subset Y$. Then, if $F$ is Fréchet differentiable at $u\in U$ and $G$ is Fréchet differentiable at $F(u)\in V$, then the composition $G\circ F:U\to Z$ is Fréchet differentiable at $u$, and we have
+        \begin{equation*}
+            dG\circ F(u)[h] = dG(F(u))[dF(u)[h]].
+        \end{equation*}
+\end{enumerate}
+
+We now define the Fréchet derivative map.
+\begin{definition}
+    Let $F:U\to Y$ be a Fréchet differentiable function in $U$ (i.e. Fréchet differentiable at every point $u\in U$). The map
+    \begin{align*}
+        F':U&\to \mathcal{L}(X,Y)\\
+        u&\mapsto dF(u)
+    \end{align*}
+    is called the Fréchet derivative of $F$. If $F'$ is continuous, we say that $F\in C^1$ and write $F\in C^1(U,Y)$.
+\end{definition}
+
+We note that the definition of the Fréchet derivative gives no hints to actually compute it from a given $F$. We begin by defining a different notion of differentiability.
+\begin{definition}
+    We define the Gâteaux derivative of $F:U\to Y$ at a fixed $u\in U$ as
+    \begin{equation*}
+        d_G F(u)[h] := \lim_{\varepsilon\to 0} \frac{F(u+\varepsilon h)-F(u)}{\varepsilon} = \frac{d}{d\varepsilon}\left.\left(F(u+\varepsilon h)\right)\right|_{\varepsilon = 0}.
+    \end{equation*}
+    This corresponds to the directional derivative of $F$ in the direction $h$.
+\end{definition}
+In order to show the equivalence between Fréchet and Gâteaux derivatives, we require the mean value theorem. 
+
+\begin{theorem}[Mean value]
+Let $F:U\to Y$ be a function that is Gâteaux differentiable in $U$ (i.e. at every point $u\in U$). Define the function interval (convex combination)
+\begin{equation*}
+    [u,v] := \{tu+(1-t)v, t\in[0,1]\}.
+\end{equation*}
+Then, we have
+\begin{equation*}
+    \|F(u)-F(v)\| \leq \left(\sup_{w\in[u,v]} \|d_G F(w)\|\right) \|u-v\|. 
+\end{equation*}
+\end{theorem}
+\begin{proof}
+    Assume that $F(u)-F(v)\neq 0$. We build the norm using the Hahn-Banach theorem: there exists $\psi \in Y^*$ with $\|\psi\|=1$ such that 
+    \begin{equation*}
+        \langle \psi, F(u)-F(v)\rangle = \|F(u)-F(v)\|. 
+    \end{equation*}    
+    Define $\gamma(t) = tu + (1-t)v$, with $t\in [0,1]$, and $h(t)=\langle \psi, F(\gamma(t))\rangle$. Then, by linearity, 
+    \begin{equation*}
+        \frac{h(t+\tau) - h(t)}{\tau} = \langle \psi, \frac{F(\gamma(t) + \tau(u-v)) - F(\gamma(t))}{\tau} \rangle.
+    \end{equation*}
+    By definition of the Gâteaux derivative, we have
+    \begin{equation*}
+        \lim_{\tau\to 0} \frac{h(t+\tau) - h(t)}{\tau} = h'(t) = \langle \psi, d_G F(\gamma(t)) [u-v]\rangle, 
+    \end{equation*}
+    and the scalar mean-value yields $h(1)-h(0) = h'(\theta)$ for some $\theta\in(0,1)$. Computing all the terms, we get
+    \begin{equation*}
+        h(1)-h(0) = \langle \psi, F(u)-F(v)\rangle = \|F(u)-F(v)\|,
+    \end{equation*}
+    and 
+    \begin{equation*}
+        h'(\theta) = \langle \psi, d_G F(\gamma(\theta))[u,v]\rangle \leq \underbrace{\|\psi\|}_{=1} \|d_G F(\gamma(\theta))\| \|u-v\|,
+    \end{equation*}
+    where we used the Cauchy-Schwarz inequality followed by the continuity of $d_G F(\gamma(\theta))$. Taking $\sup$ over $\theta$ completes the proof. 
+\end{proof}
+\begin{theorem}[Equivalence of Gâteaux and Fréchet derivatives]
+    If the Gâteaux derivative $d_G F$ of a function $F:X\to Y$ is continuous at $u^*\in X$, then $F$ is Fréchet differentiable at $u^*$, and they coincide, i.e. $dF(u^*) = d_G F(u^*)$.
+\end{theorem}
+\begin{proof}
+    Because of uniqueness, we simply need to verify that the Gâteaux derivative is indeed the Fréchet one. Fix $u\in U$ and define $R(h) = F(u+h) - F(u) - d_G F(u)[h]$. We now need to prove $R(h)=o(\|h\|)$, so that $Ah=d_G F(u)[h]$ in the definition of the Fréchet derivative. The Gâteaux derivative of $R$ at $h$ in the direction $k$ is
+    \begin{align*}
+        d_G R(h)[k] &= \left.\frac{d}{d\varepsilon}\right|_{\varepsilon = 0} R(h+\varepsilon k) \\
+        & = \left.\frac{d}{d\varepsilon}\right|_{\varepsilon = 0} F(u+h+\varepsilon k) - F(u) - d_G F(u)[h + \varepsilon k] \\
+        & = d_G F(u+h)[k] - d_G F(u)[k].
+    \end{align*}    
+    Thus, by the mean value theorem, we get
+    \begin{align*}
+        \|R(h)\| &\leq \sup_{w\in [0,h]} \|d_G(R(w))\| \|h\|\\
+        &=    \sup_{t\in [0,1]} \|d_G R(th)\| \|h\|\\
+        &=    \sup_{w\in [0,h]} \|d_G F(u+h)[k] - d_G F(u)[k]\| \|h\|,
+    \end{align*}
+    and thus dividing by $\|h\|$ and taking the limit $\|h\|\to 0$ yields
+    \begin{equation*}
+        \lim_{\|h\|\to 0} \frac{\|R(h)\|}{\|h\|} \leq \lim_{\|h\|\to 0} \|d_G F(u+th) - d_G F(u)\| = 0,
+    \end{equation*}    
+    because of the continuity of $d_G F$.
+\end{proof}
+Typically, one computes the Gâteaux derivative and hope it is continuous.
+
+
+For higher order derivatives, we start from the Fréchet derivative $F'(u) := dF(u)\in \mathcal{L}(X,Y)$, where $F:U\to Y$. Repeating the calculation, we have
+\begin{equation*}
+    d^2 F(u) = dF'(u), 
+\end{equation*} 
+where $F': U\to \mathcal{L}(X,Y)$, and so $dF'(u) \in \mathcal{L}(X, \mathcal{L}(X,Y))$. Notably, the space $\mathcal{L}(X, \mathcal{L}(X,Y))$ is isometric to $\mathcal{L}(X\times X,Y)$ through the isometry
+\begin{equation*}
+    \Psi_A(u_1,u_2) = [A(u_1)](u_2),
+\end{equation*} 
+for $A\in \mathcal{L}(X,\mathcal{L}(X,Y))$. For this reason, most people write the second derivative as $d^2 F(u) [h_1,h_2]$, instead of $(d^2 F(u)[h_1])[h_2]$. In calculus of variations, it is common to study the second varition of a functional. This is simply $d^2 \Pi(u)[h,h]$, as seen in the second order term of the Taylor series
+\begin{equation*}
+    f(x+h)\approx f(x) + \nabla f(x) \cdot h + \frac{1}{2} h^\top (Hf)(x) h,
+\end{equation*} 
+where we wrote $d^2 f = Hf$ as the Hessian of $f$ at $x$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local analysis}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
