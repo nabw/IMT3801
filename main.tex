@@ -1147,8 +1147,70 @@ for $A\in \mathcal{L}(X,\mathcal{L}(X,Y))$. For this reason, most people write t
     f(x+h)\approx f(x) + \nabla f(x) \cdot h + \frac{1}{2} h^\top (Hf)(x) h,
 \end{equation*} 
 where we wrote $d^2 f = Hf$ as the Hessian of $f$ at $x$.
+
+Let us list some useful properties:
+\begin{itemize}
+    \item Set $F$ twice differentiable and define $F_h(u)=dF(u)[h]$. Then,
+    \[ dF_h(u)[k] = F''(u)[h,k] \] 
+    We can then compute the second derivative by fixing $h$ in the first derivative and differentiating like we've done in respect to $u$ for a direction $k$.
+    \item If $F$ is twice differentiable, then $F''(u)\in\mathcal{L}(X\times X, Y)$ is symmetric.
+    \item Partial derivatives are defined using projections, i.e. if $F: U\times V \to Y$, set $\sigma_v(u)=(u,v)$. Then, the partial derivatives w.r.t. $u$ is
+    \[ d(F\circ \sigma_v)(u)[h], \]
+    denoted simply $d_u F(u^*,v^*)$. Notably, one obtains
+    \[ d_u F(u^*,v^*)[h] = d_G(F\circ \sigma_v)(u)[h] = \left.\frac{d}{d\varepsilon}\right|_{\varepsilon = 0} F(u+\varepsilon h, v) \]
+\end{itemize}
+
+\example{
+    Let $\psi(u)=\frac{1}{p}\int_\Omega u^p dx$, defined in $L^p$.
+
+    \begin{align*}
+        d\psi(u)[v] &= \frac{1}{p}\frac{d}{d\varepsilon} |_{\varepsilon=0} \int_\Omega (u+\varepsilon v)^p dx \\
+        &= \frac{1}{p} \int_\Omega p(u+\varepsilon v)^{p-1}v dx|_{\varepsilon=0} \\
+        &= \int_\Omega u^{p-1}v dx
+    \end{align*}
+
+    \begin{align*}
+        d^2\psi(u)[v_1,v_2] &= d(d F_{v_1}(u))[v_2] \\
+        &= \frac{d}{d\varepsilon}|_{\varepsilon=0}\int_\Omega(u+\varepsilon v_2)^{p-1} v_1 dx\\
+        &= (p-1)\int_\Omega u^{p-2}v_1 v_2 dx
+    \end{align*}
+}
+
+In calculus of variations $d^2 F(u)[h] = d^2 F(u)[h,h]$ is used for checking properties of a problem.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local analysis}
+Consider the set 
+\[ \text{Inv}(X,Y) = \left\{ A\in \mathcal{L}(X,Y): A \text{ is invertible} \right\} \]
+
+Then, we have the following local inversion
+
+\begin{theorem}
+    Consider $F\in C^1(X,Y)$, $F'(u^*)\in\text{Inv}(X,Y)$. Then, $F$ is locally invertible at $u^*$ with $F^{-1}\in C^1$. In fact,
+    \[ dF^{-1}(v) = (F'(u))^{-1}, \quad u=F^{-1}(v) \]
+\end{theorem}
+
+\example{
+    \[
+    \left\{
+    \begin{array}{rc}
+        -\Delta u + u^p  = h, &\Omega,\\
+        u=0, &\partial\Omega,
+    \end{array}\right.
+    \]
+    where $p>1$, $h\in H^{-1}(\Omega)$, so $F:X\to Y$ with $X\coloneq H_0^1(\Omega)$ and $Y\coloneq H^{-1}(\Omega)$. We compute
+    \[ dF(u)[w] = -\Delta w + p u^{p-1} w \]
+    We want to show that $dF(u)\in\text{Inv}(X,Y)$. That is, for a given $g\in Y$, we need to prove that there exists a $w\in X$ that solves
+    \[ 
+    a(w,v) = (\nabla w, \nabla v) + p(u^{p-1}w,v) = \langle g,v \rangle \quad \forall v\in X
+    \]
+    We've proven many times before the bound for the first term, so let us focus in the second:
+    \[ 
+    |(u^{p-1}w,v)|\leq \|u^{p-1} \|_{L^\infty} \|w\|_{0} \|v \|_{0} 
+    \]
+    Note that if $u\geq 0$, then $a$ is elliptic. Then, if $u\in X\cap L^\infty \cap \{u\geq 0\}$ we have that $dF(u)\in\text{Inv}(X,Y)$ and we can use the theorem.
+
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
