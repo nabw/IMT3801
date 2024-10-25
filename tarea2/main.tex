@@ -40,7 +40,7 @@
 \begin{itemize}
     \item Modifique la demostración de existencia y unicidad para problemas de punto silla para verificar el siguiente resultado: Sean $H_i, Q_i$ espacios de Hilbert sobre $\R$ con $i\in\{1,2\}$, y considere las formas bilineales acotadas $a:H_1\times H_2\to \R$ y $b_i:H_i\times Q_i\to \R$ para $i\in\{1,2\}$ con operadores inducidos $\mat A\in L(H_1, H_2)$ y $B_i\in L(H_i,Q_i)$ respectivamente. Definimos como $K_i$ el espacio nulo de $B_i$, y $\Pi_2$ el proyector ortogonal de $H_2$ en $K_2$. Suponga que:
         \begin{itemize}
-            \item $\Pi_2\mat A:K_1\times K_2$ es un isomorfismo
+            \item $\Pi_2\mat A:K_1\to K_2$ es un isomorfismo
             \item existen dos constantes $\beta_i$ positivas tales que
                 $$ \sup_{v\in H_i} \frac{b_i(v,q)}{\|v\|_{H_i}} \geq \beta_i \| q \|_{Q_i} \qquad \forall q \in Q_i, \quad i \in \{1,2\}. $$
         \end{itemize}
@@ -49,7 +49,7 @@
         $$ M = \begin{bmatrix} A & B^T \\ B & 0 \end{bmatrix} $$
             satisface todas las hipótesis de la teoría de Babuska-Brezzi, con formas bilineales $a$ y $b$. Defina precisamente el operador asociado a la siguiente forma bilineal:
             $$ l( (u,p), (v,q)) = a(u,v) + b(u,q) + b(v,p) $$
-            junto a sus espacios funcionales, y demuestre que se satisfacen las condiciones inf-sup de sobreyectividad e inyectividad para $\mathcal A$.
+            junto a sus espacios funcionales, y demuestre que se satisfacen las condiciones inf-sup de sobreyectividad e inyectividad para $\mathcal L$,el operador inducido por $l$ .
     \item En clases vimos la formulación primal-mixta del Laplaciano. Demuestre usando la teoría de formulaciones de punto silla la existencia y unicidad de soluciones. Busque además espacios discretos que satisfagan la condición inf-sup discreta para proponer un esquema de Galerkin que sea estable y convergente.
 
     \item Dada una solución analítica, calcule las tasas numéricas de convergencia del par inf-sup estable $\mathbb{RT_k}\times \P_k$ para el problema de Darcy, y luego repita el ejercicio con el espacio de \emph{Taylor-Hood} $[\P_{k+1}]^d\times \P_k$. Muestre cómo cambia la convergencia si considera un par de espacios que no sean inf-sup estables, como por ejemplo $[\P_k]^d\times \P_k$, y grafique las soluciones para ver la diferencia entre ellas.
