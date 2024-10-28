@@ -1161,7 +1161,7 @@ Let us list some useful properties:
 \end{itemize}
 
 \example{
-    Let $\psi(u)=\frac{1}{p}\int_\Omega u^p dx$, defined in $L^p$.
+    Let $\psi(u)=\frac{1}{p}\int_\Omega u^p dx$, defined in $L^p(\Omega)$.
 
     \begin{align*}
         d\psi(u)[v] &= \frac{1}{p}\frac{d}{d\varepsilon} |_{\varepsilon=0} \int_\Omega (u+\varepsilon v)^p dx \\
@@ -1176,14 +1176,14 @@ Let us list some useful properties:
     \end{align*}
 }
 
-In calculus of variations $d^2 F(u)[h] = d^2 F(u)[h,h]$ is used for checking properties of a problem.
+In calculus of variations $d^2 F(u)[h] = d^2 F(u)[h,h]$ is used for checking the properties of a problem.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local analysis}
 Consider the set 
 \[ \text{Inv}(X,Y) = \left\{ A\in \mathcal{L}(X,Y): A \text{ is invertible} \right\} \]
 
-Then, we have the following local inversion
+Then, we have the following local inversion result
 
 \begin{theorem}
     Consider $F\in C^1(X,Y)$, $F'(u^*)\in\text{Inv}(X,Y)$. Then, $F$ is locally invertible at $u^*$ with $F^{-1}\in C^1$. In fact,
