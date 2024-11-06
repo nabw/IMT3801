@@ -835,11 +835,11 @@ operators with closed range.
     of \(T\) shows that \(Tu_k\) converges to \(Tu\) and thus the range of 
     \(T\) is closed. 
 
-    Now, let assume \(T\) is injective and it's range is closed. Then, because 
+    Now, assume \(T\) is injective and its range is closed. Then, because 
     \(R(T)\) is a closed subspace of a Banach space, it is also Banach. As 
     \( T\) is injective, \(T^{-1}\) is well defined on \(R(T)\), i.e., 
     \(T:U\to R(T)\subset V\) is invertible. In addition, Open Mapping Theorem 
-    show that \(T^{-1}\) is continuous. Then
+    shows that \(T^{-1}\) is continuous. Then
     \begin{displaymath}
         \lVert u \rVert = \lVert T^{-1}(Tu) \rVert 
         \le \lVert T^{-1} \rVert \lVert Tu \rVert 
@@ -922,18 +922,18 @@ We also can characterize the injectivity of the operator.
 \begin{proof}
     Suppose that \(T\) is injective. If \(u\neq 0\), then \(Tu \neq 0\), and so, 
     for some \(v'\in V'\), we have that \(\langle Tu, v'\rangle_{V\times V'} 
-    \neq 0\). Which implies the right part of the equivalence.
+    \neq 0\). Which implies the right side of the equivalence.
 
-    Now, lets assume the right part of the equivalence. By contradiction, if \(T\)
+    Now, assume the right side of the equivalence. By contradiction, if \(T\)
     is non injective, there exists \(u\in U \) with \(u\neq 0\) such that \(Tu = 0\), 
     which contradicts the hypothesis.
 \end{proof}
 
 We can now postulate a general Lax-Milgram Theorem. We write it in Hilbert Spaces.
 
-\begin{theorem}(Gen. Lax-Milgram)
-    Consider \(H_1\), \(H_2\) hilbert spaces and a bounded bilinear form 
-    \(B:H_1\to H_2\). Then, there exists a unique \(u\in H_1\) for each 
+\begin{theorem}(Generalized Lax-Milgram)
+    Consider \(H_1\), \(H_2\) Hilbert spaces and a bounded bilinear form 
+    \(B:H_1\times H_2 \to \mathbb{R}\). Then, there exists a unique \(u\in H_1\) for each 
     \(F\in H_2'\) such that \[B(u,v) = F(v),\quad \forall v \in H_2\] if and only if 
     \begin{enumerate}
         \item \(\exists \alpha > 0\) such that \[\sup_{v\in H_2}
