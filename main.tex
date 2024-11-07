@@ -1425,11 +1425,11 @@ The fundamental difference between parabolic and hyperbolic systems is the behav
 
 We now study the parabolic initial value problem 
 \begin{equation*}
-    \begin{align*}
+    \begin{aligned}
         \partial_t + \mathcal{L}u &= f &&\quad \text{in }\Omega_T := (0,T) \times \Omega\\
         \hfill Bu &= g &&\quad \text{in }\Sigma_T := (0,T) \times \partial\Omega\\
         \hfill u(0,x)&= u_0(x) &&\quad \text{in }\Omega,
-    \end{align*}
+    \end{aligned}
 \end{equation*}
 with $f,g:\Omega_T\to \R$ and $u_0:\Omega\to\R$. Let us analyze how to deal with the time dependence of our system by introducing the Bochner integral.
 
@@ -1489,6 +1489,7 @@ We now state an embedding theorem for Bochner spaces.
         L^2(0,T;H^s(\Omega))\cap H^r(0,T;L^2(\Omega)) \longrightarrow H^{r_1}(0,T;H^{s_1}(\Omega))\cap C^0(0,T;H^{\sigma_1}(\Omega)),
     \end{equation*}
     for any $s_1\geq 0$, $0\leq r_1 < r(1-s_1/s)$ and $0\leq \sigma_1 < \sigma$.
+\end{theorem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Faedo-Galerkin and the method of lines}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
