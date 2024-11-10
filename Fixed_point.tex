@@ -1,0 +1,53 @@
+The main idea is that certain non-linearities would be less terrible if we could fix one of the functions, as an example:
+\begin{align}
+    -\Delta u = \sin (u)
+\end{align}
+is non-linear, but given $\omega \text{ s.t } -\Delta u = sin(\omega)$ we get a linear problem. It also induces a mapping $\omega \mapsto T(\omega) = u$ such that, \underline{if it has a fixed point}, this fixed point $T(u)$ would solve the initial problem. \\
+
+
+\textbf{Definition:} A Lipschitz function $f:X\to X$
+\begin{align*}
+    ||f(x)-f(y)||\leq L||x-y||
+\end{align*}
+is said to be:
+\begin{itemize}
+    \item $L = 1\to$ Non-expansive
+    \item $L<1 \to$ A contraction
+\end{itemize}\\
+
+\textbf{Theorem: (Banach Fixed Point):} Let $X$ be a complete metric space and $f$ a contraction of constant $\lambda$. Then $f$ has a unique fixed point.\\
+
+ 
+
+\textbf{Proof:} Set $\overbrace{x^{n+1}=f(x^n)}^{\text{Picard Iteration}}$ for some $x^0\in X$. By induction we get that
+\begin{align*}
+    \cdot ||x^{n+1}-x^n|| &\leq \lambda ||x^n-x^{n-1}||\leq \underbrace{...}_\text{induction} \lambda^n||x¹-x⁰||\\
+    \cdot || x^{n+m}-x^n|| &\leq ||x^{n+m}-x^{n+m-1}||+ ... ||x^{n+1}-x^n||\\
+    &\leq (\lambda ^{n+m-1}+...+\lambda^n)||x^1-x^0||\\
+    &=\lambda^n\left(\displaystyle\sum_{j=0}^m\lambda^j\right)||x^1-x^0||\\
+    &\leq\lambda^n\left(\displaystyle\sum_{j=0}^\infty\lambda^j\right)||x^1-x^0||\\
+    &=\lambda^n\dfrac{1}{1-\lambda}||x^1-x^0||
+\end{align*}
+which implies that $\{x_n\}_n$ is Cauchy, and since $X$ is complete, yields $x_n\to \bar{x}$. Finally, since $f$ is continuous, $f(\bar{x}) = \lim_{n\to \infty}f(x_n) = \lim_{x\to\infty}x_{n+1}=\bar{x}$.
+
+\textbf{Observation:} If $X$ is compact, then this theorem can be extended to \textit{weak} contractions, ie $||f(x)-f(y)||< ||x-y||$.\\
+
+\textbf{Theorem (Brower):} Set $K$ a non-empty, compact and convex subset of a finite-dimensional Banach space. Then every continuous $f:K\to K$ has a fixed point.
+
+In the previous example, consider the Galerkin approximation:
+\begin{align*}
+    (\nabla u_h,\nabla v_h)=(\sin(w_h),v_h) \text{   } \forall v_h \in V_h
+\end{align*}
+where $dim(V_h)<\infty$. Then, from the a-priori bound we have 
+\begin{align*}
+    ||u||_{H^1}\leq C||\sin (w_h)||< C_2
+\end{align*}
+using that $|\sin (x)|\leq 1$. This implies that $u_h$ is contained in a finite-dimensional ball $\mathcal{B}(0,r), r=C_2$. So $T_h:\mathcal{B}(0,r)\to \mathcal{B}(0,r)$ has at least one fixed point and we only used BDD.\\
+
+From the previous result we can extend to $h\to 0$ through compactness. This can be generalized to another fixed point theorem as Schauder. It has 2 forms.
+
+\textbf{Theorem (Schauder Fixed Point):}
+\begin{enumerate}[label = \alph*]
+    \item Set $K$ a compact, convex subset of $X$ normed space, and $f:K\to K$ a continuous mapping. Then $f$ has at least one fixed point.
+    \item Let $\mathcal{C}$ a closed, convex subset of a Banach space $X$, and $f:\mathcal{C}\to \mathcal{C}$ continuous s.t. $\bar{f(\mathcal{C})}$ is compact. Then $f$ has at least one fixed point.
+\end{enumerate}
