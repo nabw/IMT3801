@@ -936,11 +936,11 @@ We can now postulate a general Lax-Milgram Theorem. We write it in Hilbert Space
     \(B:H_1\times H_2 \to \mathbb{R}\). Then, there exists a unique \(u\in H_1\) for each 
     \(F\in H_2'\) such that \[B(u,v) = F(v),\quad \forall v \in H_2\] if and only if 
     \begin{enumerate}
-        \item \(\exists \alpha > 0\) such that \[\sup_{v\in H_2}
-        \frac{B(u,v)}{\lVert v \rVert_{H_2}} \ge \alpha \lVert u \rVert_{H_1}
-        \quad \forall u\in H_1\quad \text{ (surjective) }\]
-        \item \[\sup_{u\in H_1} B(u,v) > 0 
-        \quad \forall v\in H_2,\,\, v\neq 0
+        \item \(\exists \alpha > 0\) such that \[\sup_{u\in H_1,u\neq 0}
+        \frac{B(u,v)}{\lVert u \rVert_{H_1}} \ge \alpha \lVert v \rVert_{H_2}
+        \quad \forall v\in H_2\quad \text{ (surjective) }\]
+        \item \[\sup_{v\in H_2} B(u,v) > 0 
+        \quad \forall u\in H_1,\,\, u\neq 0
         \quad \text{ (injective) }\]
     \end{enumerate}
 \end{theorem}
