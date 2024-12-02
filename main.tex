@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amsthm, amssymb, mathpazo, isomath, mathtools}
 \usepackage{subcaption,graphicx,pgfplots}
-%\usepackage{fullpage}
+\usepackage{fullpage}
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{algorithm, algorithmic}
@@ -1355,8 +1355,95 @@ Then, we have the following local inversion result
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Fixed point theorems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{Fixed_point.tex}
+The main idea is that certain non-linearities would be less terrible if we could fix one of the functions. For example, consider the problem of finding a function $u$ such that
+\begin{equation}
+\begin{aligned}
+    -\Delta u &= \sin (u) &&\qquad \text{in $\Omega$}, 
+    u &= 0 && \qquad \text{on $\partial\Omega$}.
+\end{aligned}
+\end{equation}
+This problem is non-linear, but given $w$, finding $u$ such that
+\begin{equation}\label{eq:fixed-point:lap u sin u}
+     -\Delta u = sin(w)
+\end{equation}
+is linear on $u$. It also induces a mapping $w \mapsto T(w) = u$ such that, \emph{if it has a fixed point} $u=T(u)$, this fixed point solves the initial problem. For this section, we follow \cite{ciarlet2013linear,pata2019fixed}.
 
+
+\textbf{Definition:} A Lipschitz function $f:X\to X$
+\begin{align*}
+    ||f(x)-f(y)||\leq L||x-y||
+\end{align*}
+is said to be:
+\begin{itemize}
+    \item $L = 1:$ Non-expansive.
+    \item $L<1:$ A contraction.
+\end{itemize}
+
+\begin{theorem}[Banach Fixed Point]
+ Let $X$ be a complete metric space and $f$ a contraction of constant $\lambda<1$. Then $f$ has a unique fixed point.
+
+\begin{proof} Set $x^{n+1}=f(x^n)$, which we typically refer to as a \emph{Picard iteration}, and consider some initial $x^0\in X$. By induction we get that
+\begin{align*}
+     \|x^{n+1}-x^n\| &\leq \lambda \|x^n-x^{n-1}\|\leq \underbrace{...}_\text{induction} \lambda^n\|x^1-x^0\|\\
+    \Rightarrow  \| x^{n+m}-x^n\| &\leq \|x^{n+m}-x^{n+m-1}\|+ ... \|x^{n+1}-x^n\|\\
+    &\leq (\lambda ^{n+m-1}+...+\lambda^n)\|x^1-x^0\|\\
+    &=\lambda^n\left(\displaystyle\sum_{j=0}^m\lambda^j\right)\|x^1-x^0\|\\
+    &\leq\lambda^n\left(\displaystyle\sum_{j=0}^\infty\lambda^j\right)\|x^1-x^0\|\\
+    &=\lambda^n\dfrac{1}{1-\lambda}\|x^1-x^0\|
+\end{align*}
+which implies that $\{x_n\}_n$ is Cauchy, and since $X$ is complete, this gives $x_n\to \bar{x}$. Finally, since $f$ is continuous, $f(\bar{x}) = \lim_{n\to \infty}f(x_n) = \lim_{x\to\infty}x_{n+1}=\bar{x}$.
+\end{proof}
+\end{theorem}
+
+We note that if $X$ is compact, then this theorem can be extended to \textit{weak} contractions, ie $\|f(x)-f(y)\|< \|x-y\|$.
+
+\example{Consider problem \eqref{eq:fixed-point:lap u sin u}, where we note that Lax-Milgram immediately yeilds the existence of a unique solution $u$ for each $w$. From the mean value theorem one has that differentiable functions satisfy $f(x) - f(y) = f'(\xi)(x-y)$ for some $\xi$ in $(x,y)$. This in particular shows that $\sin$ is a Lipschitz function as $\sup_{\xi\in \R}\sin(\xi) = 1$. Using this fact we can compute the following for some given $w_1, w_2$:  
+    $$ -\Delta(T(w_1)-T(w_2))= \sin(w_1)-\sin(w_2),$$ 
+    and the \emph{a-priori} estimate gives
+    $$\|T(w_1)-T(w_2)\|\leq C\|\sin(w_1)-\sin(w_2)\|\leq C \|w_1-w_2\|.$$
+Then, if $C<1$ there exists $\bar u$ such that $T(\bar u)= \bar u$. }
+
+\begin{theorem}[Brower Fixed Point] Set $K$ a non-empty, compact and convex subset of a finite-dimensional Banach space. Then every continuous $f:K\to K$ has a fixed point.
+\end{theorem}
+
+\example{
+Let's go back to \eqref{eq:fixed-point:lap u sin u}, and consider its Galerkin approximation for some given $w_h$:
+\begin{align*}
+    (\grad u_h,\grad v_h)=(\sin(w_h),v_h) \qquad \forall v_h \in V_h
+\end{align*}
+where $dim(V_h)<\infty$. Then, from the \emph{a-priori} bound we have 
+\begin{align*}
+    \|u_h\|_{1}\leq C||\sin (w_h)||< C
+\end{align*}
+using that $|\sin (x)|\leq 1$. This implies that $u_h$ is contained in a finite-dimensional ball of $V_h$, $\mathcal{B}(0,r), r=C$. To show that it is continuous, we consider two functions $w_1,w_2$ in $V_h$, and obtain the difference equation setting $u_i=T(w_i)$: 
+    $$(\grad [u_1 - u_2], \grad v_h) = (\sin(w_1) - \sin(w_2), v_h) \qquad \forall v_h \in V_h. $$
+Again, using the \emph{a-priori} bound we use $\sin' = \cos \leq 1$ to obtain 
+    $$ \| u_1 - u_2\|_1 \leq \|w_1 - w_2\|_0.$$
+This yields that $T_h:\mathcal{B}(0,r)\to \mathcal{B}(0,r)$ is continuous and thus has at least one fixed point.
+}
+
+From the previous result we can extend to $h\to 0$ through compactness. This can be generalized to another fixed point theorem known as Schauder's fixed point theorem, which has 2 forms.
+
+\begin{theorem}[Schauder Fixed Point]
+The following statements hold. 
+\begin{enumerate}
+    \item Set $K$ a compact, convex subset of $X$ normed space, and $f:K\to K$ a continuous mapping. Then $f$ has at least one fixed point.
+    \item Let $\mathcal{C}$ a closed, convex subset of a Banach space $X$, and $f:\mathcal{C}\to \mathcal{C}$ continuous s.t. $\overline{f(\mathcal{C})}$ is compact. Then $f$ has at least one fixed point.
+\end{enumerate}
+\end{theorem}
+
+
+\example{ 
+Consider again \eqref{eq:fixed-point:lap u sin u}, with its induced Picard mapping $w \mapsto u\coloneqq T(w)$ given by 
+\begin{align*}
+    -\Delta u &= \sin(w) \text{ on }\Omega,\\
+    u&=0\text{ on }\partial\Omega,
+\end{align*}
+whose solution is guaranteed by Lax-Milgram's Lemma, with $u$ in $H_0^1(\Omega)$.  From the \emph{a-priori} bound $\|u||\leq\dfrac{1}{\alpha}\|f\|$ we get $\|u\|_1\leq C\|\sin(w)\|_0\leq C|\Omega|=:r_0$. Our candidate set will be $\mathcal C = \bar{B}(0,r_0)\subset L^2(\Omega)$ which is closed, convex and contained in both $L^2(\Omega)$ and $H_0^1(\Omega)$. Now we are only missing that $\overline{T(\mathcal C)}$ is compact. 
+
+Consider a sequence $(w_k)_{k>1}$ in $\mathcal C$, which yields $(v_k)_{k>1}=(T(w_k))_{k>1}$ in $\mathcal C$ and additionally $v_k\in H_0^1(\Omega)$ for all $k$. Now, we note that we have a sequence in $H^1$, and as the unit ball is weakly compact, we obtain that is has some weakly convergent sequence in $H^1$. The final detail is that, if we consider $\mathcal C$ to be a ball in $L^2$, then the mapping $T$ can be written additionally as $T\circ i$, where $i:L^2(\Omega)\to H^1(\Omega)$ is the compact embedding of $H^1$ into $L^2$. We thus have that $T\circ i$ is the composition of a continuous and a compact mapping, and thus a compact map. This in particular implies that our sequence $(v_k)$ has a strongly convergent subsequence in $L^2$. This concludes that $T:L^2(\Omega)\to L^2(\Omega)$ is compact, and thus we can use Schauder's fixed point theorem to show the existence of a fixed point $\bar u = T(\bar u)$ in $L^2(\Omega)$. Naturally, the equation itself reveals that actually $\bar u$ belongs to $H_0^1(\Omega)$, so we have some additional regularity on the fixed point we just found.
+}
+    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Monotone operators}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1367,7 +1454,7 @@ Then, we have the following local inversion result
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We now study time-dependent problems, where the solutions are functions $V\ni u:[0,T]\times \Omega\to \R$. In this section, we consider $\mathcal{L}:V\to V'$ an elliptic operator. 
+We now study time-dependent problems, where the solutions are functions $V\ni u:[0,T]\times \Omega\to \R$. In this section, we consider $\mathcal{L}:V\to V'$ an elliptic operator, and follow the presentations from \cite{thomee2007galerkin,quarteroni2008numerical}.
 
 \begin{definition}[Parabolic and hyperbolic generic operators]
     Let $\partial_t$ and $\partial_{tt}$ represent the first and second order time derivative operators, respectively. Then, we say that
@@ -1422,8 +1509,7 @@ The fundamental difference between parabolic and hyperbolic systems is the behav
     \end{equation*}
     Now, setting the energy as $E(t) := \int_\Omega \left[u(t)^2 + (Bu(t))^2\right]$, we conclude that $E(t) = E(0)$. Thus, hyperbolic systems are \textit{conservative}.
 \end{enumerate}
-
-We now study the parabolic initial value problem 
+The parabolic initial value problem is given by:
 \begin{equation*}
     \begin{aligned}
         \partial_t + \mathcal{L}u &= f &&\quad \text{in }\Omega_T := (0,T) \times \Omega\\
@@ -1494,26 +1580,49 @@ We now state an embedding theorem for Bochner spaces.
 \subsection{Faedo-Galerkin and the method of lines}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Space and time discretization}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+As usual, we consider an approximation space $V_h\subset V$  and compute first the semi-discrete problem: 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Poroelasticity}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{equation}\label{eq:semi-discrete in time}
+    \begin{aligned}
+        (\dot u_h(t), v_h) + a(u_h(t), v_h) &= (f(t),v_h) &&\qquad \forall v_h\in V_h, t \in(0,T)  \\
+                                u_h(0)&= \Pi_h(u_0), 
+    \end{aligned}
+\end{equation}
+where $\Pi_h:V\to V_h$ is an orthogonal projector. In what follows, for any given bilinear form $a:V\times V\to \R$ we well denote the \textbf{Ritz projector} as the operator $R_h:V\to V_h$ such that 
+    $$ a(R_h z, v_h) = a(z, v_h) \qquad \forall v_h \in V_h. $$
+In particular, the \emph{a-priori} bound yields $\|R_h z \| \leq \| z \|$.  We first prove the following convergence result for the semi-discrete problem: 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Equilibrium equations}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Constitutive modeling}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Darcy and Biot equations}
+\begin{theorem}
+In problem \eqref{eq:semi-discrete in time}, if both $u(t)$ and $\dot u(t)$ belong to $H^1(\Omega)$ for all $t$ in $(0,T)$, then 
+    $$ \| u(t) - u_h(t) \|_V \leq \|u_0 - \Pi_h(u_0)\|_v + Ch^r\left(\|u_0\|_r+\int_0^t\|\dot u(s)\|_r\,ds\right). $$
+\begin{proof}
+The methodology consists in separating the error into \emph{projection} and \emph{consistency} errors: 
+    $$ e_h \coloneqq u - u_h = \underbrace{u - \Pi_h u}_{\xi_h} + \underbrace{\Pi_h u - u_h}_{\eta_h} = \xi_h + \eta_h. $$
+We now consider the error equation: 
+    $$ (\dot e_h, v_h) + a(e_h, v_h) = 0 \qquad \forall v_h\in V_h, $$
+and we consider as the projector the Ritz projector, i.e. $\Pi_h=R_h$, which gives
+    $$ (\dot \xi_h + \dot \eta_h, v_h) + a(\eta_h, v_h) = 0 \qquad \forall v_h\in V_h. $$
+Setting $v_h = \eta_h$, we obtain 
+    $$ \frac 1 2 \partial_t(\|\eta_h\|^2_0)+a(\eta_h,\eta_h) = -(\dot \xi_h, v_h). $$
+Note that 
+    $$ \frac 1 2 \partial_t(\|\eta_h\|_0^2) = \|\eta_h\|_0 \partial_t(\|\eta_h\|_0), $$
+and thus using the ellipticity of $a$ we obtain the following: 
+    $$ \|\eta_h\|\partial_t(\|\eta_h\|_0) \leq \partial_t(\|\eta\|_0^2) + a(\eta_h, \eta_h) \leq \|\dot \eta_h\|_0 \|v_h\|_0, $$
+which after dividing by $\|v_h\|_0$ and integrating yields
+    $$ \| \eta_h(t)\|_0 \leq \|\eta_h(0)\|_0 + \int_0^t \| \dot \eta_h(s) \|_0\,ds. $$
+Bounding each of the terms appearing gives the remaining estimates: 
+    \begin{align*}
+        \| \eta_h(0) \|_0 &= \|\Pi_h u_0 - R_h u_0 \|_0 \leq \|u_0 - \Pi_h\|_0 + \| u_0 - R_h u_0\|, 
+        \| \dot \xi_h \|_0 &= \| \dot u - \R_h \dot u \|.
+    \end{align*}
+The resulting estimate comes from the convergence rate obtained from the Ritz projector. Another common choice is the Scott-Zhang projector. Another common way for deriving this type of estimate is using the Gronwall inequality.
+\end{proof}
+\end{theorem}
+We finally derive a convergence estimate for the fully-discrete problem. [TODO]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \bibliography{main}
