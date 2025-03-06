@@ -80,6 +80,88 @@ All other properties (or at least most of them anyway) are ways to guarantee tha
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Finite differences}
+Probably the simplest (and oldest) idea for approximating equations stems from the use of Taylor's theorem:
+
+\begin{theorem}\label{thm:taylor}
+    Consider a function $f$ in $C^n((a,b), \R)$, i.e. $n$ times differentiable whose derivatives are well-defined in $a$. Then, there is some $\xi$ in $(a,b)$ such that
+    $$ f(b) = \sum_{k=0}^{n-1}\frac{f^{(k)}(a)}{k!}(b-a)^k + \frac{f^{(n)}(\xi)}{n!}(b-a)^n. $$
+\end{theorem}
+Naturally, this is the mean value theorem when $n=1$. From now on we consider our setting to be in $\R$. For any continuous function $f:(a,b)\to \R$, we can define its associated \emph{grid function} given by its evaluation in a finite set of points. We sometimes refer to this as \emph{collocation}. Set $a<b$, and define the points $a=x_1<\hdots<x_N=b$ with $h_i=x_{i}-x_{i-1}$, such that we have $N$ points, and define the grid function as the vector
+    $$ R_hf = (f_1, \hdots, f_N) \coloneqq (f(x_1), \hdots, f(x_N)) \in \R^N,$$
+    where we have defined the $R_h$ operator such that $R_hf:\R^N \to \R^N$ and $R_h:C((a,b),\R)\to [\R^N]'$.  We can then define the following difference operators: 
+    \begin{itemize}
+        \item Forward difference: 
+            $$ D^+f(x_i) \coloneqq \frac{f_{i+1} - f_i}{h_{i+1}} $$
+        \item Backward difference: 
+            $$ D^-f(x_i) \coloneqq \frac{f_{i} - f_{i-1}}{h_{i}} $$
+        \item Centered difference:
+            $$ Df(x_i) \coloneqq \frac{f_{i+1} - f_{i-1}}{h_{i+1} - h_{i-1}} $$
+
+    \end{itemize}
+A nice simple excercise is to extend these ideas to second order derivatives, which all stem from Taylor's formula. The application we will be interested is in that of approximating the action of a differential operator using these formulas. For this, we will focus on the forward difference formula. At each grid point we will have
+$$ D^+f(x_i) = \frac{f_{i+1} - f_i}{h_{i+1}} = \frac 1{h_{i+1}} [-1\quad 1]\begin{bmatrix}f_i \\ f_{i+1}\end{bmatrix}, $$
+so that defining the matrix
+$$ [D_h^+]_{ij} = \begin{cases} -1 & j=i \\ 1  & j=i+1 \\ 0 & \text{elsewhere} \end{cases} $$
+we obtain an operator which, given a grid function, it yields its discrete derivative. Naturally, care has to be taken at the last point, where we can simply use instead a backwards difference. 
+
+
+Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in Lax's theorem. We will first require other definitions. 
+
+\begin{definition}[Consistency]
+    Consider some differential operator $\mathcal A$. A discrete operator $\mat A_h$ in $\R^{N\times N}$ is said to be \emph{consistent} with $\mathcal A$ of order $k$ if for all sufficiently smooth functions it holds that
+    $$ \max_{i\in\{1,\hdots,N\}}|\mathcal Af(x_i) - [\mat A_hR_hf]_i| =: \|R_h \mathcal Af - \mat A_hR_h f\|_{\infty,h} \leq C h^k, $$
+    where $\|\cdot \|_{\infty,h}$ is the induced infinity norm in $\R^N$ and $C$ is a positive constant independent of $h$. This is sometimes stated more weakly by saying that the norm is $\mathcal O(h^k)$. 
+\end{definition}
+
+\example{The difference operators are all consistent with the first order derivative, which can be seen immediately from Taylor's theorem.}
+\begin{definition}[Stability]
+    A finite difference operator $\mat A_h$ is said to be stable (in the discrete maximum norm) if there is a stability constant $C>0$ that does not depend on the grid size such that
+        $$ \| \vec v_h \|_{\infty,h} \leq C \|\mat A_h \vec v_h \|_{\infty,h}$$
+        for all grid functions $\vec v_h$. 
+\end{definition}
+We finally consider an infinite dimensional problem given by
+    $$ \mathcal A u = f $$
+and its finite difference approximation as
+    $$ \mat A_h \vec u_h = \vec f_h, $$
+    which will allow us to define convergence. 
+
+\begin{definition}[Convergence]
+    The finite differences scheme is said to be convergent of order $k$ in the discrete maximum norm if the discrete solution and the continuous one satisfy that 
+    $$ \| \vec u_h - R_hu \|_{\infty,h} \leq C h^k. $$
+This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \|_{\infty,h}$ is $\mathcal O(h^k)$. 
+\end{definition}
+
+\begin{theorem}
+    Consider the previously defined problem and its finite difference discretization. If the scheme is consistent, then stability and convergence are equivalent. 
+    \begin{proof}
+        We first show that stability implies convergence:
+        \begin{align*}
+            \| \vec u_h - R_h u\|_{\infty,h} &\leq C\|\mat A_h(\vec u_h - R_hu) \|_{\infty,h} && \text{(Stability)} \\
+                                             &=C \| f_h - \mat A_hR_h u \|_{\infty,h} && \\
+                                             &=C \| R_h f - \mat A_hR_h u\|_{\infty,h} &&\\
+                                             &=C \|R_h(\mathcal A u) - \mat A_hR_h u\|_{\infty,h}&& \\
+                                             &\leq Ch^k && \text{(Consistency)}. 
+        \end{align*}
+        Now we proceed analogously to show that convergence implies stability.
+        \begin{align*}
+            \|R_h(\mathcal Au) - \mat A_h R_h u\|_{\infty,h} &= \|R_h f- \mat AR_h u \| && \\
+                    &= \|\vec f_h - \mat A_hR_hu \| \\
+                    &= \| \mat A_h \vec u_h - \mat A_h R_h u \| \\
+                    &= \| \mat A_h(\vec u_h - R_h u) \|.
+        \end{align*}
+        Here we note that 
+        $$ \| \mat A_h\vec u_h \| = \| \vec f_h \| \leq \| f\| + \|f - R_h f\| \leq C $$
+        due to consistency for some generic constant $C$. The uniform boundedness principle then implies that
+        $$ \| \mat A_h \| \leq C. $$
+        From there, we finally have that
+        $$ \| \mat A_h(\vec u_h - R_h u) \| \leq C \|\vec u_h - R_h u\| \leq C_2 h^k$$
+        for some positive and mesh independent constant $C_2$, which concludes the proof. 
+    \end{proof}
+\end{theorem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Analysis preliminaries}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
