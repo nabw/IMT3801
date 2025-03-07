@@ -11,7 +11,7 @@
 
 \newcommand{\example}[1]{\todo[inline,color=green!30!white]{\textbf{Example:} #1}}
 
-\title{Notes for Advanced Topics in Mathematical Engineering}
+\title{Notes for Numerical Analysis of PDEs and related topics}
 %\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
 \author{Nicol\'as A Barnafi}
 %\date{}
@@ -89,7 +89,7 @@ This section has been heavily extracted from some notes from the WIAS in Berlin.
 \end{theorem}
 Naturally, this is the mean value theorem when $n=1$. From now on we consider our setting to be in $\R$. For any continuous function $f:(a,b)\to \R$, we can define its associated \emph{grid function} given by its evaluation in a finite set of points. We sometimes refer to this as \emph{collocation}. Set $a<b$, and define the points $a=x_1<\hdots<x_N=b$ with $h_i=x_{i}-x_{i-1}$, such that we have $N$ points, and define the grid function as the vector
     $$ R_hf = (f_1, \hdots, f_N) \coloneqq (f(x_1), \hdots, f(x_N)) \in \R^N,$$
-    where we have defined the $R_h$ operator such that $R_hf:\R^N \to \R^N$ and $R_h:C((a,b),\R)\to [\R^N]'$.  We can then define the following difference operators: 
+    where we have defined the $R_h$ operator such that $R_hf:\R^N \to \R^N$ and $R_h:C((a,b),\R)\to [\R^N\to\R^N]$.  We can then define the following difference operators: 
     \begin{itemize}
         \item Forward difference: 
             $$ D^+f(x_i) \coloneqq \frac{f_{i+1} - f_i}{h_{i+1}} $$
@@ -101,8 +101,8 @@ Naturally, this is the mean value theorem when $n=1$. From now on we consider ou
     \end{itemize}
 A nice simple excercise is to extend these ideas to second order derivatives, which all stem from Taylor's formula. The application we will be interested is in that of approximating the action of a differential operator using these formulas. For this, we will focus on the forward difference formula. At each grid point we will have
 $$ D^+f(x_i) = \frac{f_{i+1} - f_i}{h_{i+1}} = \frac 1{h_{i+1}} [-1\quad 1]\begin{bmatrix}f_i \\ f_{i+1}\end{bmatrix}, $$
-so that defining the matrix
-$$ [D_h^+]_{ij} = \begin{cases} -1 & j=i \\ 1  & j=i+1 \\ 0 & \text{elsewhere} \end{cases} $$
+so that defining the matrix $\mat D_h^+$ in $\R^{N\times N}$ as
+$$ [\mat D_h^+]_{ij} = \begin{cases} -1 & j=i \\ 1  & j=i+1 \\ 0 & \text{elsewhere} \end{cases} $$
 we obtain an operator which, given a grid function, it yields its discrete derivative. Naturally, care has to be taken at the last point, where we can simply use instead a backwards difference. 
 
 
@@ -159,6 +159,15 @@ This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \
         for some positive and mesh independent constant $C_2$, which concludes the proof. 
     \end{proof}
 \end{theorem}
+\subsection{The empirical convergence rate}
+One issue that is always overviewed is the computation of the \emph{observed} convergence rate, so we will write it here once and for all so that it is never an issue again. Assume that some error $\vec e_h$ converges to zero in some $X$ norm with rate $k$:
+    $$ \|\vec e_h\|_X \leq C h^k.$
+    Then, given a sequence of mesh sizes $h$ and errors as $(h_j, [\vec e_h]_j)$, we would like to estimate $k$ to validate we really obtained the computed rate $k$. For this, we take the logarithm of the error expression:
+    $$ \log \|[\vec e_h]_j\|_X \leq \log C + k \log h_j, $$
+and note that we obtain roughly a line equation if we assume an equality. Because of this, we can estimate now estimate the slope of our line equation using two consecutive points as
+$$ k \approx \frac{\log \|[\vec e_h]_{j+1}\|_X - \log \|[\vec e_h]_j\|_X}{ \log h_{j+1} - \log h_j}, $$
+which yields the classical expression one gets everywhere: 
+    $$ k \approx  \frac{\log \left(\|[\vec e_h]_{j+1}\|_X / \|[\vec e_h]_j\|_X\right)}{ \log \left(h_{j+1} / h_j\right)}. $$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
