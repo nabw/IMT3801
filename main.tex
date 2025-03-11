@@ -161,7 +161,7 @@ This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \
 \end{theorem}
 \subsection{The empirical convergence rate}
 One issue that is always overviewed is the computation of the \emph{observed} convergence rate, so we will write it here once and for all so that it is never an issue again. Assume that some error $\vec e_h$ converges to zero in some $X$ norm with rate $k$:
-    $$ \|\vec e_h\|_X \leq C h^k.$
+    $$ \|\vec e_h\|_X \leq C h^k.$$
     Then, given a sequence of mesh sizes $h$ and errors as $(h_j, [\vec e_h]_j)$, we would like to estimate $k$ to validate we really obtained the computed rate $k$. For this, we take the logarithm of the error expression:
     $$ \log \|[\vec e_h]_j\|_X \leq \log C + k \log h_j, $$
 and note that we obtain roughly a line equation if we assume an equality. Because of this, we can estimate now estimate the slope of our line equation using two consecutive points as
