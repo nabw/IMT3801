@@ -113,15 +113,26 @@ from which we readily obtain that
 
 \subsection{Second order derivatives}
 The standard way of approximating second order derivatives is that of using a finite difference approximation twice. It is given by the following: 
-    $$ f''(x) \approx D^+(f')(x)\frac{}{h}
-[... derive classical formula using $D^+, D^-$, and show they commute. ]
-
-\subsection{Numerical validations}
-[... Show some simple python/julia code for computing D matrices and apply them to different functions. Compare all variants of differentiation.]
-
+$$ \begin{aligned}
+    f''(x) &\approx D^+(f')(x) \\
+           &=\frac{f'(x+h) - f'(x)}{h} \\
+           &\approx\frac{\frac{f(x+h) - f(x)}{h} - \frac{f(x) - f(x-h)}{h}}{h} \\
+           &= \frac{f(x+h) - 2f(x) + f(x-h)}{h^2}.
+    \end{aligned}
+$$
+We note that the intermediate steps show that these computations can be represented as the matrix product $\mat D^+ \mat D^-$, where the order of differentiation can be inverted and thus equivalently $\mat D^- \mat D^+$. 
 \subsection{Order of convergence}
-[... Study theoretically, compute real numbers in section at the end of this section]
+The order of convergence of the previously computed schemes can be derived from Taylor's theorem. For example, we previously showed that backward/forward differences converge linearly (pointwise), and indeed we can do the same for centered differences. For this, consider the following third order expansions:
+    $$
+    \begin{aligned}
+        f(x+h) &= f(x) + hf'(x) + \frac {h^2} 2 f''(x) + \mathcal O(h^3) \\
+        f(x-h) &= f(x) - hf'(x) + \frac {h^2} 2 f''(x) + \mathcal O(h^3),
+    \end{aligned}
+    $$
+and by simply adding both equations it can be shown that the finite difference formula computed converges linearly.
 
+
+\subsection{Convergence Analysis}
 Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in Lax's theorem. We will first require other definitions. 
 
 \begin{definition}[Consistency]
