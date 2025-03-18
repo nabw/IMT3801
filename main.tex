@@ -205,8 +205,79 @@ which yields the classical expression one gets everywhere:
 \subsection{Further discretizations}
 In this section we hint on how to address numerically higher dimensional problems, and also how to include time. The stability of such schemes will be studied further ahead with the von Neumann stability analysis. 
 \subsubsection{Discretization in 2D and 3D}
+In typical 1D examples, one has a domain $(a,b)$ and an associated grid given by some points $\{x_i\}_i^N$ such that each index $i$ corresponds to an order of the domain, and thus naturally a finite difference operator is going to involve something like $i$ and its neighbors. This scenario would be different if, for example, one had a random ordering of the grid points such as
+    $$ x_0 = a, x_7 = a + h, x_12 = a + 2h, \hdots, x_N = b, $$
+so that in such a grid, a forward difference with respect to the point $x_0$ would be given by
+    $$ D^+f(x_0) = \frac 1 h \left( f^7 - f^0 \right). $$
+    Although this is an unnatural way to do things in 1D, it is the natural scenario arising in higher dimensions. For this, and for the sake of simplicity, we will restrict the presentation to meshes given by tensor products of intervales, i.e. $\Omega = (a_x, b_x) \times (a_y, b_y)$ in 2D and $\Omega = (a_x, b_x) \times (a_y, b_y) \times (a_z, b_z)$ in 3D. The main difficulty will be that of creating an ordering of the degrees of freedom.
+
+    Consider now a grid associated to a 2D geometry $\Omega$ as described above, such that the dimensions are discretized as $ a_x = x_0, \hdots, b_x = x_{N_x-1}$ and $a_y = y_0, \hdots, b_y = y_{N_y-1}$. Note that we consider $N_x$ and $N_y$ to be the number of punts in each subdomain, which will simplify some operations further ahead. Then, each grid point will be given by     
+    $$ \vec X_{ij} \coloneqq (x_i, y_j) \qquad \forall i,j \in \{0,\hdots, N_x-1\}\times \{0,\hdots, N_y-1\}, $$
+and analogously we can define a grid function associated to some continuous function $f:\Omega\to \R$ as 
+$$ \vec f^{ij} \coloneqq f(\vec X_{ij}) = f(x_i, y_j). $$
+We can flatten these matrices to obtain a vector of unknowns computed by the maps $I: \{0,\hdots, N_x-1\} \times \{0, \hdots, N_y-1\}\to \{0,\hdots, N_xN_y-1\}$ given by 
+    $$ I \coloneqq I(i,j) = i + j N_x.$$
+Fortunately, this map can be inverted as
+    $$ I \mapsto (i(I), j(I)) \coloneqq (I\mod Nx, \lfloor I/Nx \rfloor), $$
+so that if one has a grid with $N_x=3$ and $N_y=2$, one would have the following index maps: 
+    \begin{table}[ht!]
+        \centering
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+        \begin{tabular}{c c | c}
+            \toprule $i$ & $j$ & $I(i,j)$ \\ \midrule
+            0 & 0 & 0 \\
+            1 & 0 & 1 \\
+            2 & 0 & 2 \\
+            0 & 1 & 3 \\
+            1 & 1 & 4 \\
+            2 & 1 & 5 \\ \bottomrule
+        \end{tabular}
+        \caption{Forward map}
+        \end{subfigure}
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+        \begin{tabular}{c | c c}
+            \toprule $I$ & $i(I)$ & $j(I)$ \\ \midrule
+            0 & 0 & 0 \\
+            1 & 1 & 0 \\
+            2 & 2 & 0 \\
+            3 & 0 & 1 \\
+            4 & 1 & 1 \\
+            5 & 2 & 1 \\ \bottomrule
+        \end{tabular}
+        \caption{Backward map}
+        \end{subfigure}
+        \caption{Forward and inverse index maps for a 2D example.}
+    \end{table}
+Using these maps, we define a forward difference in $x$ and $y$ directions as $D^+_xf(\vec X)$ and $D^+_yf(\vec X)$ and note that they are given by
+    \begin{align*}
+        D^+_x f(\vec X_{ij}) = \frac 1{h_x} \left(\vec f^{(i+1)j} - \vec f^{ij}\right)= \frac 1 {h_x} \left( \vec f^{I[i+1,j]} - \vec f^{I[i,j]}\right), \\
+        D^+_y f(\vec X_{ij}) = \frac 1{h_y} \left(\vec f^{i(j+1)} - \vec f^{ij}\right) = \frac 1{h_y} \left(\vec f^{I[i,j+1]} - \vec f^{I[i,j]}\right),
+    \end{align*}
+    where we have used a slight abuse of notation by denoting both the 2D vector and 1D vectors as $\vec f^{ij}$ and $\vec f^I$ respectively. 
+    
 \subsubsection{Time discretization}
+Time discretization is an enormous topic, so here we provide simple strategies and ways to think about them. We will dedicate an entire section to their analysis using the von Neumann stability analysis. To avoid messing with Bochner spaces, we will refrain from considering a precise functional setting, and leave this for further ahead in the notes. Consider a differential operator $\mathcal L$ and its associated discrete matrix $\mat L_h$ which includes the problems boundary conditions. The continuous differential equation, for some initial condition $x(0) = x_0$, is given by 
+    $$ \dot x + \mathcal L x = f, $$
+    which we can discretize in space to obtain the system of differential equations
+    $$ \dot x_h + \mat L_h \vec x_h = \vec f_h. $$
+    Instead of considering a Taylor approximation of the time derivative, we will use a quadrature rule to obtain different strategies. For this, integrating in the interval $(t^n, t^{n+1})$ and using the notation $\vec x(t^n) \approx \vec x^{n}$, yields
+    $$ \vec x^{n+1} - \vec x^n = \int_{t^n}^{t^{n+1}} \mat L_h \vec x_h(s) \,ds = \int_{t^n}^{t^{n+1}} \vec f_h(s)\,ds. $$
+    We present three different schemes depending on three different quadrature rules: 
+    \begin{itemize}
+        \item Left-sided rule (Explicit):
+                $$ \int \mat L_h \vec x_h(s)\,ds \approx \Delta t \mat L_h\vec x_h^n. $$
+        \item  Right-sided rule (Implicit): 
+            $$ \int \mat L_h \vec x_h(s)\,ds \approx \Delta t\mat L_h\vec x_h^{n+1}. $$
+        \item  Trapezoidal rule (Mid-point): 
+            $$ \int \mat L_h \vec x_h(s)\,ds \approx \frac{\Delta t}{2}\left(\mat L_h\vec x_h^{n+1}+ \mat L_h \vec x_h^n\right). $$
+    \end{itemize}
+    The commonly acknowledged relevant points here are: The explicit scheme yields a system that is easy to solve but unstable, the implicit scheme is harder to solve but more (usually unconditionally) stable, and the mid-point or \emph{Crank-Nicholson} scheme is also stable, with better accuracy but involves more computations and possible numerical saturation at small timesteps. 
+
+    [TODO: ADD RUNGE KUTTA AND THETA METHOD]
 \subsection{Von Neumann stability analysis}
+[TODO]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
