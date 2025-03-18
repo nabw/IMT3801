@@ -162,28 +162,34 @@ This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \
 \begin{theorem}
     Consider the previously defined problem and its finite difference discretization. If the scheme is consistent, then stability and convergence are equivalent. 
     \begin{proof}
-        We first show that stability implies convergence:
+        The stability to convergence part is taken directly from the aforementionted notes. The convergence to stability is instead partly inspired by the notes by Long Chen on abstract convergence analysis \cite{chen2009unified}. 
+        {\bf Step 1, Stability implies convergence:}
+
+        We proceed directly through inequalities:
         \begin{align*}
             \| \vec u_h - R_h u\|_{\infty,h} &\leq C\|\mat A_h(\vec u_h - R_hu) \|_{\infty,h} && \text{(Stability)} \\
                                              &=C \| f_h - \mat A_hR_h u \|_{\infty,h} && \\
                                              &=C \| R_h f - \mat A_hR_h u\|_{\infty,h} &&\\
                                              &=C \|R_h(\mathcal A u) - \mat A_hR_h u\|_{\infty,h}&& \\
-                                             &\leq Ch^k && \text{(Consistency)}. 
+                                             &\leq Ch^k && \text{(Consistency)}.
         \end{align*}
-        Now we proceed analogously to show that convergence implies stability.
-        \begin{align*}
-            \|R_h(\mathcal Au) - \mat A_h R_h u\|_{\infty,h} &= \|R_h f- \mat AR_h u \| && \\
-                    &= \|\vec f_h - \mat A_hR_hu \| \\
-                    &= \| \mat A_h \vec u_h - \mat A_h R_h u \| \\
-                    &= \| \mat A_h(\vec u_h - R_h u) \|.
-        \end{align*}
-        Here we note that 
-        $$ \| \mat A_h\vec u_h \| = \| \vec f_h \| \leq \| f\| + \|f - R_h f\| \leq C $$
-        due to consistency for some generic constant $C$. The uniform boundedness principle then implies that
-        $$ \| \mat A_h \| \leq C. $$
-        From there, we finally have that
-        $$ \| \mat A_h(\vec u_h - R_h u) \| \leq C \|\vec u_h - R_h u\| \leq C_2 h^k$$
-        for some positive and mesh independent constant $C_2$, which concludes the proof. 
+
+        {\bf Step 2, Convergence implies stability:}
+
+        We note that stability can be read, by taking inverses, as 
+        $$ \| \mat A_h^{-1}\vec f_h \|_{\infty, h} \leq C \|\vec f_h\|_{\infty, h}. $$
+        which is simply the continuity of the inverse map $\mat A_h^{-1}$. Consider an arbitrary grid vector $\vec f_h$, and we denote the associated problem solution as $\vec u_h$, where $\mat A_h \vec u_h = \vec f_h$. Using this, we have that
+        $$ 
+        \begin{aligned} 
+            \|\mat A_h^{-1}\vec f_h\|_{\infty,h} &= \| \vec u_h \|_{\infty, h} \leq \| \vec u_h - R_h u \|_{\infty, h} + \| R_h u \|_{\infty, h} && \text{(Convergence)}\\
+                                                 &\leq C h^k + \| R_h \mathcal A^{-1} f \|_{\infty, h}. 
+        \end{aligned}
+        $$
+        To bound this last term, we note that $R_h$ yields pointwise evaluations, so for any continuous function $\eta$ it will hold that
+        $$ \| R_h \eta \|_{\infty,h} \leq \| \eta \|_0, $$
+        where $\| \eta \|_0$ is the supremum norm. Finally, we use that $\mathcal A$ is a continuous bijection, and thus from the open mapping theorem it holds that $\|\mathcal A^{-1}\|$ is bounded by some constant $C_2$. Using this fact, the previous estimate becomes 
+        $$ \| \mat A_h^{-1} \vec f_h \|_{\infty,h} \leq Ch^k + \| \mathcal A f \|_0 \leq C h^k + C_2 \| f \|_0<\infty, $$
+        which in particular shows that $ \| \mat A_h^{-1} \vec f_h \|$ is bounded for all $\vec f_h$. The uniform boundedness principle them yields that $\mat A_h^{-1}$ is bounded, which concludes the proof.
     \end{proof}
 \end{theorem}
 \subsection{The empirical convergence rate}
@@ -195,6 +201,12 @@ and note that we obtain roughly a line equation if we assume an equality. Becaus
 $$ k \approx \frac{\log \|[\vec e_h]_{j+1}\|_X - \log \|[\vec e_h]_j\|_X}{ \log h_{j+1} - \log h_j}, $$
 which yields the classical expression one gets everywhere: 
     $$ k \approx  \frac{\log \left(\|[\vec e_h]_{j+1}\|_X / \|[\vec e_h]_j\|_X\right)}{ \log \left(h_{j+1} / h_j\right)}. $$
+
+\subsection{Further discretizations}
+In this section we hint on how to address numerically higher dimensional problems, and also how to include time. The stability of such schemes will be studied further ahead with the von Neumann stability analysis. 
+\subsubsection{Discretization in 2D and 3D}
+\subsubsection{Time discretization}
+\subsection{Von Neumann stability analysis}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
