@@ -188,7 +188,7 @@ This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \
         To bound this last term, we note that $R_h$ yields pointwise evaluations, so for any continuous function $\eta$ it will hold that
         $$ \| R_h \eta \|_{\infty,h} \leq \| \eta \|_0, $$
         where $\| \eta \|_0$ is the supremum norm. Finally, we use that $\mathcal A$ is a continuous bijection, and thus from the open mapping theorem it holds that $\|\mathcal A^{-1}\|$ is bounded by some constant $C_2$. Using this fact, the previous estimate becomes 
-        $$ \| \mat A_h^{-1} \vec f_h \|_{\infty,h} \leq Ch^k + \| \mathcal A f \|_0 \leq C h^k + C_2 \| f \|_0<\infty, $$
+        $$ \| \mat A_h^{-1} \vec f_h \|_{\infty,h} \leq Ch^k + \| \mathcal A f \|_0 \leq C h^k + C_2 \| \vec f_h \|_0<\infty, $$
         which in particular shows that $ \| \mat A_h^{-1} \vec f_h \|$ is bounded for all $\vec f_h$. The uniform boundedness principle them yields that $\mat A_h^{-1}$ is bounded, which concludes the proof.
     \end{proof}
 \end{theorem}
