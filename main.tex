@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amsthm, amssymb, mathpazo, isomath, mathtools}
-\usepackage{subcaption,graphicx,pgfplots}
+\usepackage{subcaption,graphicx}
 \usepackage{fullpage}
 \usepackage{booktabs}
 \usepackage{hyperref}
@@ -102,7 +102,7 @@ Naturally, this is the mean value theorem when $n=1$. From now on we consider ou
 A nice simple excercise is to extend these ideas to second order derivatives, which all stem from Taylor's formula. The application we will be interested is in that of approximating the action of a differential operator using these formulas. For this, we will focus on the forward difference formula. At each grid point we will have
 $$ D^+f(x_i) = \frac{f_{i+1} - f_i}{h_{i+1}} = \frac 1{h_{i+1}} [-1\quad 1]\begin{bmatrix}f_i \\ f_{i+1}\end{bmatrix}, $$
 so that defining the matrix $\mat D_h^+$ in $\R^{N\times N}$ as
-$$ [\mat D_h^+]_{ij} = \begin{cases} -1 & j=i \\ 1  & j=i+1 \\ 0 & \text{elsewhere} \end{cases} $$
+$$ [\mat D_h^+]_{ij} = \begin{cases} -1/h_{i+1} & j=i \\ 1/h_i  & j=i+1 \\ 0 & \text{elsewhere} \end{cases} $$
 we obtain an operator which, given a grid function, it yields its discrete derivative. Naturally, care has to be taken at the last point, where we can simply use instead a backwards difference. 
 
 Finite difference approximations can be easily seen to be convergent for sufficiently smooth functions. To see this, consider Taylor's theorem to obtain for $h>0$:
@@ -110,6 +110,8 @@ Finite difference approximations can be easily seen to be convergent for suffici
 from which we readily obtain that 
     $$ | D^+f(x) - f'(x) | = O(h), $$
     so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. 
+
+    [TODO: ADD FIGURE FOR CONVERGENCE OF ALL THREE UNTIL SATURATION OF 2ND ORDER]
 
 \subsection{Second order derivatives}
 The standard way of approximating second order derivatives is that of using a finite difference approximation twice. It is given by the following: 
