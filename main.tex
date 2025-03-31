@@ -24,13 +24,14 @@
 \DeclareMathOperator{\curl}{\text{curl}}
 \newtheorem{remark}{Remark}
 \newtheorem{definition}{Definition}
+\newtheorem{note}{Note}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\D}{\mathcal{D}}
 \newcommand{\T}{\mathcal{T}}
 \renewcommand{\P}{\mathcal{P}}
 
-\newcommand{\tin}{\text{in}}
-\newcommand{\ton}{\text{on}}
+\newcommand{\tin}{\text{in }}
+\newcommand{\ton}{\text{on }}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
@@ -111,7 +112,11 @@ from which we readily obtain that
     $$ | D^+f(x) - f'(x) | = O(h), $$
     so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. 
 
-    [TODO: ADD FIGURE FOR CONVERGENCE OF ALL THREE UNTIL SATURATION OF 2ND ORDER]
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figuras/fdm_convergence.png}
+    \caption{Forward, centered and backward difference schemes for calculating the first derivative. Retrieved from \href{https://pythonnumericalmethods.studentorg.berkeley.edu/notebooks/chapter20.02-Finite-Difference-Approximating-Derivatives.html}{this website}, which shows a simple implementation of the forward scheme using NumPy.}
+\end{figure}
 
 \subsection{Second order derivatives}
 The standard way of approximating second order derivatives is that of using a finite difference approximation twice. It is given by the following: 
@@ -164,7 +169,8 @@ This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \
 \begin{theorem}
     Consider the previously defined problem and its finite difference discretization. If the scheme is consistent, then stability and convergence are equivalent. 
     \begin{proof}
-        The stability to convergence part is taken directly from the aforementionted notes. The convergence to stability is instead partly inspired by the notes by Long Chen on abstract convergence analysis \cite{chen2009unified}. 
+        The stability to convergence part is taken directly from the aforementionted notes. The convergence to stability is instead partly inspired by the notes by Long Chen on abstract convergence analysis \cite{chenLFDM}.
+        
         {\bf Step 1, Stability implies convergence:}
 
         We proceed directly through inequalities:
@@ -275,11 +281,174 @@ Time discretization is an enormous topic, so here we provide simple strategies a
         \item  Trapezoidal rule (Mid-point): 
             $$ \int \mat L_h \vec x_h(s)\,ds \approx \frac{\Delta t}{2}\left(\mat L_h\vec x_h^{n+1}+ \mat L_h \vec x_h^n\right). $$
     \end{itemize}
-    The commonly acknowledged relevant points here are: The explicit scheme yields a system that is easy to solve but unstable, the implicit scheme is harder to solve but more (usually unconditionally) stable, and the mid-point or \emph{Crank-Nicholson} scheme is also stable, with better accuracy but involves more computations and possible numerical saturation at small timesteps. 
+    The commonly acknowledged relevant points here are: 
+    \begin{itemize}
+        \item The explicit scheme yields a system that is easy to solve but unstable.
+        \item The implicit scheme is harder to solve but more (usually unconditionally) stable.
+        \item The mid-point or \emph{Crank-Nicholson} scheme is also stable, with better accuracy but involves more computations and possible numerical saturation at small timesteps.
+    \end{itemize}
+    
+    [TODO: ADD RUNGE KUTTA]
 
-    [TODO: ADD RUNGE KUTTA AND THETA METHOD]
+    A natural generalization of these three schemes is the $\theta$-method, which for a fixed parameter $\theta\in[0,1]$, results in the quadrature rule
+    $$\int \mat L_h \vec x_h(s)\,ds \approx \theta\Delta t \mat L_h\vec x_h^{n+1} + (1-\theta)\Delta t \mat L_h \vec x_h^n. $$
+    We note that $\theta=1$ corresponds to the explicit scheme, $\theta=0$ to the implicit scheme, and $\theta=1/2$ to the mid-point scheme. 
+    
 \subsection{Von Neumann stability analysis}
-[TODO]
+Energy methods for stability analysis can quickly become untractable, so in order to get easier bounds, we can perform this analysis after moving the equation to the frequency domain. This is the so-called \emph{von Neumann stability analysis}, which is a very powerful tool for analyzing the stability of finite difference schemes. The idea is to assume that the solution can be expressed as a Fourier series, and then analyze the growth of the Fourier modes over time.
+
+For this analysis, we will use the Fourier transform, which is comfortable for this task as it yields simple eigenfunctions of the derivatives. 
+
+\begin{definition}[Fourier transform]
+    Let $v\in L^2(\Omega)$. Then, its Fourier transform $\mathcal{F}(v) := \hat{v}$ is defined as
+    $$ \mathcal{F}(v)(\xi) := \hat{v}(\xi) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty} v(x)e^{-i\xi x}dx, $$
+    where $\xi$ is the frequency variable and $i=\sqrt{-1}$. This transform satisfies the Parseval identity:
+    $$ \| v\|_{L^2} = \| \hat{v}\|_{L^2}, $$
+    and the inverse transform is defined as
+    $$ v(x) = \mathcal{F}^{-1}(\hat{v})(x) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty} \hat{v}(\xi)e^{i\xi x}d\xi. $$
+    The most important identity we will use is the Fourier transform of the derivative, which is given by
+    $$ \mathcal{F}(v')(x) = i\xi \hat{v}(\xi). $$
+    This definition is mostly relevant for differential operators over $\R$, so it will only give guidelines for actual problems.
+\end{definition}
+Let us consider a basis function $e^{i\xi x}$ for a given wave number $\xi$, and for some finite difference scheme, its grid function
+$$W_j = e^{i\xi (jh)}.$$
+This function will be an eigenfunction of all translation-invariant finite difference operators. Set $x_j = jh$, then
+$$D^+ W(x_j) = \frac{1}{h}\left(e^{i\xi (j+1)h} - e^{i\xi j h}\right) = \frac{1}{h}\left(e^{i\xi h} - 1\right)e^{i\xi j h} = \frac{e^{i\xi h} - 1}{h}W_j.$$
+This helps in decoupling the degrees of freedom, and by the Parseval identity, we can again try to get a bound of the form
+$$\|\hat{u}^{n+1}\|\leq |g(\xi)| \|\hat{u}^{n}\|$$
+where $g(\xi)$ is defined as an amplification factor. 
+
+Let us now illustrate the application on the heat equation. Consider the boundary value problem
+$$ \begin{aligned}
+    \dot{u}(x,t) - u_{xx}(x,t) &= 0, &\quad (x,t) &\in \Omega \times (0,T), \\
+    u(x,0)                  &= u^0(x), &\quad x &\in \Omega, \\
+    u(x,t)                  &= f(x,t), &\quad (x,t) &\in \partial\Omega \times (0,T).
+\end{aligned} $$
+With the finite finite difference scheme we get
+$$ \frac{u^{n+1}_j - u^n_j}{\Delta t} + \frac{1}{h^2} (-u^n_{j+1} +2u^n_j - u^n_{j-1}) = 0.$$
+Here we set $u_j^n = e^{i\xi (jh)}$, and set the ansatz $u_j^{n+1} = g(\xi) u_j^n = g(\xi) e^{i\xi (jh)}$. Inserting this into the scheme we get
+\begin{align*}
+g(\xi) e^{i\xi j h} &= e^{i\xi (jh)} - \frac{\Delta t}{h^2}\left(-e^{i\xi (j-1) h} + 2e^{i\xi (jh)} - e^{i\xi (j+1) h}\right)\\
+&= \left(1 + \frac{\Delta t}{h^2}\left(e^{-i\xi h} - 2 + e^{i\xi h}\right)\right)e^{i\xi(jh)}.
+\end{align*}
+We thus have
+\begin{align*}
+g(\xi) &= 1 + \frac{\Delta t}{h^2}\left(e^{-i\xi h} + e^{i\xi h}- 2 \right) \\
+&= 1 + \frac{\Delta t}{h^2}\left(2\cos(\xi h) - 2\right) \tag{$e^{-i\xi h} + e^{i\xi h} = 2\cos(\xi h)$} \\
+&= 1 - \frac{2\Delta t}{h^2}\left(1 - \cos(\xi h)\right).
+\end{align*}
+With this form, we can use the fact that $\cos(\xi h) \in (-1,1)$, which yield the following two bounds:
+\begin{align*}
+    g(\xi) &\leq 1 + \frac{2\Delta t}{h^2}(1-1) = 1 \\
+    g(\xi) \geq 1 + 2\frac{\Delta t}{h^2}(-1-1)  = 1 - \frac{4\Delta t}{h^2},
+\end{align*}
+where the second inequality results in
+\begin{align*}
+    1-4\frac{\Delta t}{h^2} \geq -1 &\iff 2\geq 4\frac{\Delta t}{h^2}\\
+    &\iff \Delta t \leq \frac{h^2}{2}.
+\end{align*}
+Inequalities of this kind are studied more thoroughly in \cite{LeVeque2007}.
+
+\begin{note}[Discretizing and solving nonlinear problems]
+    Consider the nonlinear problem
+    $$ \dot{u} - u_{xx} + f(u) = 0$$
+    with appropriate boundary and initial conditions. How could we discretize this problem in time? We can choose an explicit scheme, i.e.
+    $$\frac{1}{\Delta t} (u^{n+1}-u^n) - \Delta_h u^n + f(u^n) = 0,$$
+    which could be unstable. We can also choose an implicit scheme, i.e.
+    $$\frac{1}{\Delta t} (u^{n+1}-u^n) - \Delta_h u^{n+1} + f(u^{n+1}) = 0,$$
+    which is a nonlinear problem in $u^{n+1}$. This problem could be solved by using a Newton method and would require computing the derivative of $f$ in each step. Alternatively, there exists a semi-implicit method (IMEX), where we can treat explicitly only the terms that are hard to compute, i.e.
+    $$\frac{1}{\Delta t} (u^{n+1}-u^n) - \Delta_h u^{n+1} + f(u^{n}) = 0,$$
+    which could be unstable, but in a much milder way than the explicit method. 
+\end{note}
+
+\subsection{Stability of the discrete Laplacian}
+Let us now study the stability of the discretized Laplacian operator $-\Delta u$, which is given by the finite difference operator
+$$\mat A_h = \frac{1}{h^2} \begin{bmatrix} -2 & 1 & 0 & \cdots & 0 \\ 1 & -2 & 1 & \cdots & 0 \\ 0 & 1 & -2 & \cdots & 0 \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \cdots & -2\end{bmatrix}.$$
+where the approximation is $-\Delta u \approx \mat A_h u_h$. To show stability, we will use that it actually satisfies a discrete maximum principle. 
+\begin{theorem}[Discrete maximum principle, DMP]
+    Let $\mat A_h$ be the finite difference operator defined above. Then, for any grid function $u_h$ such that $\mat A_h u_h \geq 0$, it holds that
+    $$ \max_{x_i\in \Omega_h} u_h \leq \max_{x_i\in \Gamma_h} u_h, $$
+    where $x_i$ is an interior node of $\Omega_h$ and the equality holds if and only if $u_h$ is constant.
+    \begin{proof}
+        We proceed by contradiction, so we assume that $u_h(x_i) = \max_{x\in \Omega_h} u_h > \max_{x\in \Gamma_h} u_h$, where this maximum is achieved at the internal node $x_i\in \Omega_h$. Then, from the centered difference scheme we get
+        $$2u_h(x_i) = u_h(x_{i-1}) + u_h(x_{i+1}) - h^2 \underbrace{A_h u_h(x_i)}_{\geq 0} \leq u_h(x_{i-1}) + u_h(x_{i+1}) \leq 2u_h(x_i),$$
+        which implies that $u_h(x_i) = \frac{1}{2}(u_h(x_{i-1}) + u_h(x_{i+1}))$ for all interior nodes $x_i$. Repeating this argument recursively for $x_{i-1}$ and $x_{i+1}$ until reaching the boundary of the domain, we conclude that $u_h(x_i)$ is constant in $\Omega_h$, which contradicts the assumption. Hence, the discrete maximum principle holds.
+    \end{proof}
+\end{theorem}
+We can apply this principle to show that $A_h$ is stable. 
+\begin{theorem}
+    Let $A_h$ the finite difference approximation of the problem
+    $$\begin{aligned}
+        -\Delta u &= f & \tin \Omega, \\
+        u &= g & \ton \Gamma.
+    \end{aligned}
+    $$
+    Then, if $A_h u_h = f_h$ in $\Omega_h$ and $u_h = g_h$ in $\Gamma_h$, it holds that
+    $$\|u\|_{\infty,h} \leq C\left(\|f\|_{\infty, h} + \|g\|_{\infty, h}\right).$$
+    \begin{proof}
+        We will prove the theorem over $\R$. Using the comparison function $\phi(x) = \frac{c}{2}x^2$ where $c=\|f\|_{\infty, h}$ and consider a constant $M$ such that $\phi(x) \leq cM$ in $\Omega$. Using that $A_h \phi_h = c$ (since $\phi''(x) = c$), we get
+        $$A_h(u_h + \phi_h) = A_h u_h + c = f_h + c \geq 0,$$
+        and using the discrete maximum principle (DMP) we obtain
+        $$\max_{\Omega_h} u_h \leq \max_{\Omega_h} (u_h + \phi_h) \overset{\text{DMP}}{\leq} \max_{\Gamma_h} (u_h + \phi_h) = \|g_h\|_{\infty, \Gamma_h} + cM = \|g_h\|_{\infty, \Gamma_h} + M \|f\|_{\infty, h},$$
+        and repeating the argument for $-u_h$ yields the lower bound for $\|u_h\|_{\infty}$. This shows that $A_h$ is stable, and we also have that it is consistent, so it converges in virtue of the Lax equivalence theorem.
+    \end{proof}
+\end{theorem}
+
+\subsection{Stability in time}
+We now look for stability estimates regarding also time. We first study a forward scheme 
+$$
+\begin{cases}
+    \frac{u^{n+1}-u^n}{\Delta t} &= cu^n\\
+    u^0&= u_{h,0},
+\end{cases}
+$$
+with $c\in \R$. We note that a result such as $\|u^{n+1}\|\leq c\|u^n\|$ for $c\leq 1$ results in $\|u_h\|_{\infty, h} \leq \|u^0\|_{\infty, h}$. This is indeed a stability result, so it will be common tu study equations in the form $u^{n+1} = g(u^n)$. Given that our theory works for linear operators, we will start by studying a simple first-order equation:
+$$
+\begin{cases}
+    u'+cu &= f\\
+    u(0) &= u_0.
+\end{cases}
+$$
+Now we look at the stability of forward and backward Euler and the $\theta$-method. 
+\begin{enumerate}
+    \item \underline{Explicit}: we have $u^{n+1}-u^n + c\Delta t u^n = \Delta t f^n$. Stability is a property of the differential operator, and thus we analyze it with $f\equiv 0$. We note that
+    $$u^{n+1} = (1-c\Delta t)u^n \implies |u^{n+1}|\leq |1-c\Delta t||u^n|,$$
+    and thus this scheme is stable if $|1-c\Delta t|< 1$. We note two cases:
+    \begin{itemize}
+        \item If $c > 0$, then we have $|1-c\Delta t|<1$ if $\Delta t < \frac{2}{c}$. This means that this method is \underline{conditionally stable}. 
+        \item If $c< 0$, then $|1-c\Delta t|\geq 1$, which means that the scheme is \underline{unconditionally unstable}.
+    \end{itemize} 
+    \item \underline{Implicit}: we have $u^{n+1}-u^n + c\Delta tu^{n+1} = \Delta t f^n$. This yields
+    $$(1+c\Delta t) u^{n+1} = u^n \implies |u^{n+1}| \leq \left|\frac{1}{1+c\Delta t}\right| |u^{n}|.$$
+    \begin{itemize}
+        \item If $c > 0$,  we have $1+c\Delta t >1$, which means that the method is \underline{unconditionally stable}. 
+        \item If $c < 0$, then $1+c\Delta t <1$, so the scheme is \underline{unconditionally unstable}.
+    \end{itemize}     
+    It is important to note that if $c<0$, then the solution is just $u(x) = Ce^x$, so a condition such as $|u^{n+1}|<|u^n|$ does not make sense. Thankfully, our analysis reveals that, and we now just assume $c>0$. 
+    \item \underline{$\theta$-method}: we have
+    $$
+    u^{n+1}-u^n + \theta c\Delta t u^{n+1} + (1-\theta)c\Delta t u^n = 0.
+    $$
+    Rearranging this we get
+    $$
+    (1+\theta c\Delta t)u^{n+1} = (1- (1-\theta)c\Delta t) u^n \implies |u^{n+1}| \leq \left|\frac{1-(1-\theta)c\Delta t}{1+\theta c\Delta t}\right| |u^n|.
+    $$
+    We now recognize two cases. 
+    \begin{itemize}
+        \item If $\Delta t$ is so big such that $1-(1-\theta)c\Delta t < 0$, we have
+        \begin{align*}
+            -\frac{1-(1-\theta)c\Delta t}{1+\theta c\Delta t} \leq 1 &\iff -1+(1-\theta)c\Delta t \leq 1+\theta c\Delta t\\
+            &\iff (1-2\theta) c\Delta t \leq 2\\
+            &\iff \left(\frac{1}{2}-\theta\right)c\Delta t\leq 1.
+        \end{align*}
+        So, if $\theta\geq 1/2$, the method is unconditionally stable, and if $\theta <1/2$, the method is \underline{conditionally stable}. 
+        \item If $\Delta t$ is small, such that $1-(1-\theta)c\Delta t < 1 + \theta c \Delta t$, then we get $-c\Delta t < 1$, which is \underline{unconditionally stable}. 
+    \end{itemize}
+\end{enumerate}
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
