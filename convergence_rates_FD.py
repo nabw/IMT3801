@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+import pandas as pd
 
-Ns = [round(10**exp) for exp in np.linspace(1,8,12)]
+Ns = [round(10**exp) for exp in np.linspace(1,8.5,15)]
 
 fig, ax = plt.subplots(figsize=(3,3), dpi=150)
 
@@ -49,3 +50,12 @@ ax.set_xlabel("h")
 plt.legend()
 plt.tight_layout()
 plt.show()
+
+results = {
+    'h': hs,
+    'fd': fderr,
+    'bd': bderr,
+    'cd': cderr
+}
+
+pd.DataFrame(results).to_csv('convergence_rates_FD.csv', index=False)

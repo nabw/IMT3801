@@ -9,6 +9,8 @@
 \usepackage{mathtools}
 \usepackage{todonotes}
 \usepackage{cancel}
+\usepackage{pgfplots}
+\usepackage{filecontents}
 
 \newcommand{\example}[1]{\todo[inline,color=green!30!white]{\textbf{Example:} #1}}
 
@@ -112,11 +114,38 @@ Finite difference approximations can be easily seen to be convergent for suffici
 from which we readily obtain that 
     $$ | D^+f(x) - f'(x) | = O(h), $$
     so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. However, it is noteworthy that although centered differences also start converging linearly, they become unstable for very small $h$, see \ref{fig:fd_convergence}.
-\begin{figure}
-    \label{fig:fd_convergence}
+
+\begin{figure}[ht]
     \centering
-    \includegraphics[width=0.7\linewidth]{figuras/fd_convergence.png}
-    \caption{Convergence of forward, centered and backward difference schemes for calculating the first derivative of $u(x)=\sin(2\pi x)$. Note that the centered difference stops converging at about $h\approx 10^{-6}$.}
+    \begin{tikzpicture}
+        \begin{loglogaxis}[ 
+            xlabel={$h$}, 
+            ylabel={$\|y' - Dy\|_{\infty}$}, 
+            legend style={at={(1.05,0.5)}, anchor=west, column sep=1ex, legend columns=1, align=left}, 
+            grid=major,
+            width=10cm, height=6cm, % Adjust the size if needed
+            ]
+            \addplot[
+                blue, 
+                line width=1pt
+            ] table [x=h, y=fd, col sep=comma] {convergence_rates_FD.csv};
+            
+            \addplot[
+                orange, 
+                dashed, 
+                line width=1pt
+            ] table [x=h, y=bd, col sep=comma] {convergence_rates_FD.csv};
+            
+            \addplot[
+                green, 
+                line width=1pt
+            ] table [x=h, y=cd, col sep=comma] {convergence_rates_FD.csv};
+
+            % Legend
+            \legend{forward, backward, centered}
+        \end{loglogaxis}
+    \end{tikzpicture}
+    \caption{Convergence of forward, centered and backward difference schemes for calculating the first derivative of $u(x)=\sin(2\pi x)$. Note that the centered difference error starts increasing for $h\lesssim 10^{-6}$.}
 \end{figure}
 
 \subsection{Second order derivatives}
@@ -149,7 +178,7 @@ which yields the classical expression one gets everywhere:
     $$ k \approx  \frac{\log \left(\|[\vec e_h]_{j+1}\|_X / \|[\vec e_h]_j\|_X\right)}{ \log \left(h_{j+1} / h_j\right)}. $$
 
 \subsection{Convergence Analysis}
-Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in Lax's theorem. We will first require other definitions. 
+Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in the Lax equivalence theorem. We will first require other definitions. 
 
 \begin{definition}[Consistency]
     Consider some differential operator $\mathcal A$. A discrete operator $\mat A_h$ in $\R^{N\times N}$ is said to be \emph{consistent} with $\mathcal A$ of order $k$ if for all sufficiently smooth functions it holds that
@@ -175,12 +204,12 @@ and its finite difference approximation as
 This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \|_{\infty,h}$ is $\mathcal O(h^k)$. 
 \end{definition}
 
-\begin{theorem}[Lax's (equivalence) theorem]
+\begin{theorem}[Lax equivalence theorem]
     Let $ \mat A_h \vec u_h = \vec f_h$ be the finite difference discretization for the problem $\mathcal A u = f$ as defined above. If $A_h$ is consistent, then stability and convergence are equivalent. 
     \begin{proof}
         The stability to convergence part is taken directly from the aforementionted notes. The convergence to stability is instead partly inspired by the notes by Long Chen on abstract convergence analysis \cite{chenLFDM}.
         
-        {\bf Step 1, Stability implies convergence:}
+        \paragraph{Stability $\implies$ convergence:}
 
         We proceed directly through inequalities:
         \begin{align*}
@@ -191,9 +220,9 @@ This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \
                                              &\leq Ch^k && \text{(Consistency)}.
         \end{align*}
 
-        {\bf Step 2, Convergence implies stability:}
+        \paragraph{Convergence $\implies$ stability:}
 
-        We note that stability can be read, by taking inverses, as 
+        We note that by taking inverses, we can write stability as 
         $$ \| \mat A_h^{-1}\vec f_h \|_{\infty, h} \leq C \|\vec f_h\|_{\infty, h}, $$
         which is simply the continuity of the inverse map $\mat A_h^{-1}$. Consider an arbitrary grid vector $\vec f_h$, and we denote the associated problem solution as $\vec u_h$, where $\mat A_h \vec u_h = \vec f_h$. Using this, we have that
         $$ 
@@ -210,8 +239,8 @@ This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \
     \end{proof}
 \end{theorem}
 
-\subsection{Stability of the discrete Laplacian}
-Let us now study the stability of the discretized Laplacian operator $-\Delta u = -u''$ over the interval $[a,b]$ with $a<b$ and homogeneous boundary conditions $u_h(x_1) = u_h(x_N) = 0$. Let $\Omega_h = \{x_i\}_{i=1}^N$ a grid of $[a,b]$ with $N$ equispaced elements, where $x_1=a$ and $x_{N-1}=b$, and mesh size $h=(b-a)/N$. Recall that the numerical second derivative can be approximated by the three-point approximation derived above, which for a given interior point is given by
+\subsection{Stability of the discrete Laplacian in 1D}
+Let us now study the stability of the discretized Laplacian operator in 1D, $-\Delta u = -u''$, over the interval $[a,b]$ with $a<b$ and homogeneous boundary conditions $u_h(x_1) = u_h(x_N) = 0$. Consider $\Omega_h = \{x_i\}_{i=1}^N$ a grid of $[a,b]$ with $N$ equispaced elements, where $x_1=a$ and $x_{N-1}=b$, and mesh size $h=(b-a)/N$. Recall that the numerical second derivative can be approximated by the three-point approximation derived above, which for a given interior point is given by
 $$-u_h''(x_i) = -\left(\frac{u_h(x_{i-1}) - 2u_h(x_i) + u_h(x_{i+1})}{h^2}\right) = \frac{1}{h^2}(-u_h(x_{i-1}) + 2u_h(x_i) - u_h(x_{i+1})).$$
 We note that in our discretized system we do not need to solve for $u_h(x_1)=u_h(x_N)=0$ because of the boundary condition. This implies that the derivative at $x_2$ and $x_{N-1}$ is
 \begin{align*}
@@ -221,14 +250,14 @@ We note that in our discretized system we do not need to solve for $u_h(x_1)=u_h
 and thus the finite difference operator associated with $-\Delta$ is
 $$\mat A_h = \frac{1}{h^2} \begin{bmatrix} 2 & -1 & 0 & \cdots & 0 \\ -1 & 2 & -1 & \cdots & 0 \\ 0 & -1 & 2 & \cdots & 0 \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \cdots & 2\end{bmatrix}.$$
 where we have $-\Delta u \approx \mat A_h u_h$. To show stability, we will use that it actually satisfies a discrete maximum principle. 
-\begin{theorem}[Discrete maximum principle, DMP]
+\begin{theorem}[Discrete maximum principle (DMP)]
     Let $\mat A_h$ be the finite difference operator defined above. Then, for any grid function $u_h$ such that $\mat A_h u_h \geq 0$, it holds that
     $$ \max_{x_i\in \Omega_h} u_h \leq \max_{x_i\in \Gamma_h} u_h, $$
     where $x_i$ is an interior node of $\Omega_h$ and the equality holds if and only if $u_h$ is constant.
     \begin{proof}
         We proceed by contradiction, so we assume that $u_h(x_i) \overset{(*)}{=} \max_{x\in \Omega_h} u_h > \max_{x\in \Gamma_h} u_h$, where this maximum is achieved at the internal node $x_i\in \Omega_h$. Then, from the centered difference scheme we get
         $$2u_h(x_i) = u_h(x_{i-1}) + u_h(x_{i+1}) - h^2 \underbrace{A_h u_h(x_i)}_{\geq 0} \leq u_h(x_{i-1}) + u_h(x_{i+1}) \overset{(*)}{\leq} 2u_h(x_i),$$
-        which implies that $u_h(x_i)$ is constant for $x_i$. Repeating this argument recursively for all interior points, we conclude that $u_h(x_i)$ is constant in $\Omega_h$, which contradicts the assumption. Hence, the discrete maximum principle holds.
+        which implies that $u_h(x_i)$ is constant in the discrete neighborhood of $x_i$. Repeating this argument recursively for all interior points, we conclude that $u_h(x_i)$ is constant in $\Omega_h$, which contradicts the assumption. Hence, the discrete maximum principle holds.
     \end{proof}
 \end{theorem}
 We can apply this principle to show that $A_h$ is stable. 
@@ -243,11 +272,11 @@ We can apply this principle to show that $A_h$ is stable.
     $$\|u\|_{\infty,h} \leq C\left(\|f\|_{\infty, h} + \|g\|_{\infty, h}\right),$$
     where we write $\|g\|_{\infty, h} = \sup_{x_i\in\Gamma_h}|g(x_i)|$. 
     \begin{proof}
-        We will prove the theorem over $\R$. Using the comparison function $\phi(x) = \frac{c}{2}x^2$ where $c=\|f\|_{\infty, h}$ and consider a constant $M$ such that $\phi(x) \leq cM$ in $\Omega$. Using that $A_h \phi_h = c$ (since $\phi''(x) = c$), we get
+        We will prove the theorem over $\R$. Using the comparison function $\phi(x) = \frac{c}{2}x^2$ where $c=\|f\|_{\infty, h}$ and consider a constant $M$ such that $\phi(x) \leq cM$ in $\Omega$. Using that $A_h \phi_h = c$ (inspired by $\phi''(x) = c$), we get
         $$A_h(u_h + \phi_h) = A_h u_h + c = f_h + c \geq 0,$$
         and using the discrete maximum principle (DMP) we obtain
         $$\max_{\Omega_h} u_h \leq \max_{\Omega_h} (u_h + \phi_h) \overset{\text{DMP}}{\leq} \max_{\Gamma_h} (u_h + \phi_h) = \|g_h\|_{\infty, h} + cM = \|g_h\|_{\infty, h} + M \|f\|_{\infty, h},$$
-        and repeating the argument for $-u_h$ yields the lower bound for $\|u_h\|_{\infty,h}$. This shows that $A_h$ is stable, and we also have that it is consistent, so it converges in virtue of the Lax equivalence theorem.
+        and repeating the argument for $-u_h$ yields the lower bound for $\|u_h\|_{\infty,h}$. This shows that $A_h$ is stable.
     \end{proof}
 \end{theorem}
 
