@@ -113,7 +113,7 @@ Finite difference approximations can be easily seen to be convergent for suffici
     $$ f(x+ h) = f(x) + f'(x)h + O(h^2), $$
 from which we readily obtain that 
     $$ | D^+f(x) - f'(x) | = O(h), $$
-    so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. However, it is noteworthy that although centered differences also start converging linearly, they become unstable for very small $h$, see \ref{fig:fd_convergence}.
+    so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. However, it is noteworthy that although centered differences also start converging linearly, they become unstable for very small $h$, see  Figure~\ref{fig:fd_convergence}.
 
 \begin{figure}[ht]
     \centering
@@ -146,6 +146,7 @@ from which we readily obtain that
         \end{loglogaxis}
     \end{tikzpicture}
     \caption{Convergence of forward, centered and backward difference schemes for calculating the first derivative of $u(x)=\sin(2\pi x)$. Note that the centered difference error starts increasing for $h\lesssim 10^{-6}$.}
+    \label{fig:fd_convergence}
 \end{figure}
 
 \subsection{Second order derivatives}
