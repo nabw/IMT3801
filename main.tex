@@ -8,6 +8,7 @@
 \usepackage{algorithm, algorithmic}
 \usepackage{mathtools}
 \usepackage{todonotes}
+\usepackage{cancel}
 
 \newcommand{\example}[1]{\todo[inline,color=green!30!white]{\textbf{Example:} #1}}
 
@@ -100,7 +101,7 @@ Naturally, this is the mean value theorem when $n=1$. From now on we consider ou
             $$ Df(x_i) \coloneqq \frac{f_{i+1} - f_{i-1}}{h_{i+1} - h_{i-1}} $$
 
     \end{itemize}
-A nice simple excercise is to extend these ideas to second order derivatives, which all stem from Taylor's formula. The application we will be interested is in that of approximating the action of a differential operator using these formulas. For this, we will focus on the forward difference formula. At each grid point we will have
+A nice simple exercise is to extend these ideas to second order derivatives, which all stem from Taylor's formula. The application we will be interested is in that of approximating the action of a differential operator using these formulas. For this, we will focus on the forward difference formula. At each grid point we will have
 $$ D^+f(x_i) = \frac{f_{i+1} - f_i}{h_{i+1}} = \frac 1{h_{i+1}} [-1\quad 1]\begin{bmatrix}f_i \\ f_{i+1}\end{bmatrix}, $$
 so that defining the matrix $\mat D_h^+$ in $\R^{N\times N}$ as
 $$ [\mat D_h^+]_{ij} = \begin{cases} -1/h_{i+1} & j=i \\ 1/h_i  & j=i+1 \\ 0 & \text{elsewhere} \end{cases} $$
@@ -110,12 +111,12 @@ Finite difference approximations can be easily seen to be convergent for suffici
     $$ f(x+ h) = f(x) + f'(x)h + O(h^2), $$
 from which we readily obtain that 
     $$ | D^+f(x) - f'(x) | = O(h), $$
-    so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. 
-
+    so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. However, it is noteworthy that although centered differences also start converging linearly, they become unstable for very small $h$, see \ref{fig:fd_convergence}.
 \begin{figure}
+    \label{fig:fd_convergence}
     \centering
-    \includegraphics[width=\linewidth]{figuras/fdm_convergence.png}
-    \caption{Forward, centered and backward difference schemes for calculating the first derivative. Retrieved from \href{https://pythonnumericalmethods.studentorg.berkeley.edu/notebooks/chapter20.02-Finite-Difference-Approximating-Derivatives.html}{this website}, which shows a simple implementation of the forward scheme using NumPy.}
+    \includegraphics[width=0.7\linewidth]{figuras/fd_convergence.png}
+    \caption{Convergence of forward, centered and backward difference schemes for calculating the first derivative of $u(x)=\sin(2\pi x)$. Note that the centered difference stops converging at about $h\approx 10^{-6}$.}
 \end{figure}
 
 \subsection{Second order derivatives}
@@ -137,7 +138,15 @@ The order of convergence of the previously computed schemes can be derived from 
     \end{aligned}
     $$
 and by simply adding both equations it can be shown that the finite difference formula computed converges linearly.
-
+\subsection{The empirical convergence rate}
+One issue that is always overviewed is the computation of the \emph{observed} convergence rate, so we will write it here once and for all so that it is never an issue again. Assume that some error $\vec e_h$ converges to zero in some $X$ norm with rate $k$:
+    $$ \|\vec e_h\|_X \leq C h^k.$$
+    Then, given a sequence of mesh sizes $h$ and errors as $(h_j, [\vec e_h]_j)$, we would like to estimate $k$ to validate we really obtained the computed rate $k$. For this, we take the logarithm of the error expression:
+    $$ \log \|[\vec e_h]_j\|_X \leq \log C + k \log h_j, $$
+and note that we obtain roughly a line equation if we assume an equality. Because of this, we can estimate now estimate the slope of our line equation using two consecutive points as
+$$ k \approx \frac{\log \|[\vec e_h]_{j+1}\|_X - \log \|[\vec e_h]_j\|_X}{ \log h_{j+1} - \log h_j}, $$
+which yields the classical expression one gets everywhere: 
+    $$ k \approx  \frac{\log \left(\|[\vec e_h]_{j+1}\|_X / \|[\vec e_h]_j\|_X\right)}{ \log \left(h_{j+1} / h_j\right)}. $$
 
 \subsection{Convergence Analysis}
 Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in Lax's theorem. We will first require other definitions. 
@@ -166,8 +175,8 @@ and its finite difference approximation as
 This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \|_{\infty,h}$ is $\mathcal O(h^k)$. 
 \end{definition}
 
-\begin{theorem}
-    Consider the previously defined problem and its finite difference discretization. If the scheme is consistent, then stability and convergence are equivalent. 
+\begin{theorem}[Lax's (equivalence) theorem]
+    Let $ \mat A_h \vec u_h = \vec f_h$ be the finite difference discretization for the problem $\mathcal A u = f$ as defined above. If $A_h$ is consistent, then stability and convergence are equivalent. 
     \begin{proof}
         The stability to convergence part is taken directly from the aforementionted notes. The convergence to stability is instead partly inspired by the notes by Long Chen on abstract convergence analysis \cite{chenLFDM}.
         
@@ -185,7 +194,7 @@ This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \
         {\bf Step 2, Convergence implies stability:}
 
         We note that stability can be read, by taking inverses, as 
-        $$ \| \mat A_h^{-1}\vec f_h \|_{\infty, h} \leq C \|\vec f_h\|_{\infty, h}. $$
+        $$ \| \mat A_h^{-1}\vec f_h \|_{\infty, h} \leq C \|\vec f_h\|_{\infty, h}, $$
         which is simply the continuity of the inverse map $\mat A_h^{-1}$. Consider an arbitrary grid vector $\vec f_h$, and we denote the associated problem solution as $\vec u_h$, where $\mat A_h \vec u_h = \vec f_h$. Using this, we have that
         $$ 
         \begin{aligned} 
@@ -197,24 +206,54 @@ This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \
         $$ \| R_h \eta \|_{\infty,h} \leq \| \eta \|_0, $$
         where $\| \eta \|_0$ is the supremum norm. Finally, we use that $\mathcal A$ is a continuous bijection, and thus from the open mapping theorem it holds that $\|\mathcal A^{-1}\|$ is bounded by some constant $C_2$. Using this fact, the previous estimate becomes 
         $$ \| \mat A_h^{-1} \vec f_h \|_{\infty,h} \leq Ch^k + \| \mathcal A f \|_0 \leq C h^k + C_2 \| \vec f_h \|_0<\infty, $$
-        which in particular shows that $ \| \mat A_h^{-1} \vec f_h \|$ is bounded for all $\vec f_h$. The uniform boundedness principle them yields that $\mat A_h^{-1}$ is bounded, which concludes the proof.
+        which in particular shows that $ \| \mat A_h^{-1} \vec f_h \|$ is bounded for all $\vec f_h$. The uniform boundedness principle them yields that the operator $\mat A_h^{-1}$ is bounded, which concludes the proof.
     \end{proof}
 \end{theorem}
-\subsection{The empirical convergence rate}
-One issue that is always overviewed is the computation of the \emph{observed} convergence rate, so we will write it here once and for all so that it is never an issue again. Assume that some error $\vec e_h$ converges to zero in some $X$ norm with rate $k$:
-    $$ \|\vec e_h\|_X \leq C h^k.$$
-    Then, given a sequence of mesh sizes $h$ and errors as $(h_j, [\vec e_h]_j)$, we would like to estimate $k$ to validate we really obtained the computed rate $k$. For this, we take the logarithm of the error expression:
-    $$ \log \|[\vec e_h]_j\|_X \leq \log C + k \log h_j, $$
-and note that we obtain roughly a line equation if we assume an equality. Because of this, we can estimate now estimate the slope of our line equation using two consecutive points as
-$$ k \approx \frac{\log \|[\vec e_h]_{j+1}\|_X - \log \|[\vec e_h]_j\|_X}{ \log h_{j+1} - \log h_j}, $$
-which yields the classical expression one gets everywhere: 
-    $$ k \approx  \frac{\log \left(\|[\vec e_h]_{j+1}\|_X / \|[\vec e_h]_j\|_X\right)}{ \log \left(h_{j+1} / h_j\right)}. $$
 
-\subsection{Further discretizations}
-In this section we hint on how to address numerically higher dimensional problems, and also how to include time. The stability of such schemes will be studied further ahead with the von Neumann stability analysis. 
-\subsubsection{Discretization in 2D and 3D}
-In typical 1D examples, one has a domain $(a,b)$ and an associated grid given by some points $\{x_i\}_i^N$ such that each index $i$ corresponds to an order of the domain, and thus naturally a finite difference operator is going to involve something like $i$ and its neighbors. This scenario would be different if, for example, one had a random ordering of the grid points such as
-    $$ x_0 = a, x_7 = a + h, x_12 = a + 2h, \hdots, x_N = b, $$
+\subsection{Stability of the discrete Laplacian}
+Let us now study the stability of the discretized Laplacian operator $-\Delta u = -u''$ over the interval $[a,b]$ with $a<b$ and homogeneous boundary conditions $u_h(x_1) = u_h(x_N) = 0$. Let $\Omega_h = \{x_i\}_{i=1}^N$ a grid of $[a,b]$ with $N$ equispaced elements, where $x_1=a$ and $x_{N-1}=b$, and mesh size $h=(b-a)/N$. Recall that the numerical second derivative can be approximated by the three-point approximation derived above, which for a given interior point is given by
+$$-u_h''(x_i) = -\left(\frac{u_h(x_{i-1}) - 2u_h(x_i) + u_h(x_{i+1})}{h^2}\right) = \frac{1}{h^2}(-u_h(x_{i-1}) + 2u_h(x_i) - u_h(x_{i+1})).$$
+We note that in our discretized system we do not need to solve for $u_h(x_1)=u_h(x_N)=0$ because of the boundary condition. This implies that the derivative at $x_2$ and $x_{N-1}$ is
+\begin{align*}
+    -u_h''(x_2) &= \frac{1}{h^2}(\cancel{-u_h(x_{1})} + 2u_h(x_2) - u_h(x_{3})) = \frac{1}{h^2}(2u_h(x_2) - u_h(x_{3}))\\
+    -u_h''(x_{N-1}) &= \frac{1}{h^2}(-u_h(x_{N-2}) + 2u_h(x_{N-1}) - \cancel{u_h(x_{N})}) = \frac{1}{h^2}(-u_h(x_{N-2}) + 2u_h(x_{N-1})),\\
+\end{align*}
+and thus the finite difference operator associated with $-\Delta$ is
+$$\mat A_h = \frac{1}{h^2} \begin{bmatrix} 2 & -1 & 0 & \cdots & 0 \\ -1 & 2 & -1 & \cdots & 0 \\ 0 & -1 & 2 & \cdots & 0 \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \cdots & 2\end{bmatrix}.$$
+where we have $-\Delta u \approx \mat A_h u_h$. To show stability, we will use that it actually satisfies a discrete maximum principle. 
+\begin{theorem}[Discrete maximum principle, DMP]
+    Let $\mat A_h$ be the finite difference operator defined above. Then, for any grid function $u_h$ such that $\mat A_h u_h \geq 0$, it holds that
+    $$ \max_{x_i\in \Omega_h} u_h \leq \max_{x_i\in \Gamma_h} u_h, $$
+    where $x_i$ is an interior node of $\Omega_h$ and the equality holds if and only if $u_h$ is constant.
+    \begin{proof}
+        We proceed by contradiction, so we assume that $u_h(x_i) \overset{(*)}{=} \max_{x\in \Omega_h} u_h > \max_{x\in \Gamma_h} u_h$, where this maximum is achieved at the internal node $x_i\in \Omega_h$. Then, from the centered difference scheme we get
+        $$2u_h(x_i) = u_h(x_{i-1}) + u_h(x_{i+1}) - h^2 \underbrace{A_h u_h(x_i)}_{\geq 0} \leq u_h(x_{i-1}) + u_h(x_{i+1}) \overset{(*)}{\leq} 2u_h(x_i),$$
+        which implies that $u_h(x_i)$ is constant for $x_i$. Repeating this argument recursively for all interior points, we conclude that $u_h(x_i)$ is constant in $\Omega_h$, which contradicts the assumption. Hence, the discrete maximum principle holds.
+    \end{proof}
+\end{theorem}
+We can apply this principle to show that $A_h$ is stable. 
+\begin{theorem}
+    Let $\Omega$ be a domain with boundary $\Gamma$, and $A_h$ the finite difference operator associated to the problem
+    $$\begin{aligned}
+        -\Delta u &= f & \tin \Omega, \\
+        u &= g & \ton \Gamma.
+    \end{aligned}
+    $$
+    Then, if $A_h u_h = f_h$ in $\Omega_h$ and $u_h = g_h$ in $\Gamma_h$, it holds that
+    $$\|u\|_{\infty,h} \leq C\left(\|f\|_{\infty, h} + \|g\|_{\infty, h}\right),$$
+    where we write $\|g\|_{\infty, h} = \sup_{x_i\in\Gamma_h}|g(x_i)|$. 
+    \begin{proof}
+        We will prove the theorem over $\R$. Using the comparison function $\phi(x) = \frac{c}{2}x^2$ where $c=\|f\|_{\infty, h}$ and consider a constant $M$ such that $\phi(x) \leq cM$ in $\Omega$. Using that $A_h \phi_h = c$ (since $\phi''(x) = c$), we get
+        $$A_h(u_h + \phi_h) = A_h u_h + c = f_h + c \geq 0,$$
+        and using the discrete maximum principle (DMP) we obtain
+        $$\max_{\Omega_h} u_h \leq \max_{\Omega_h} (u_h + \phi_h) \overset{\text{DMP}}{\leq} \max_{\Gamma_h} (u_h + \phi_h) = \|g_h\|_{\infty, h} + cM = \|g_h\|_{\infty, h} + M \|f\|_{\infty, h},$$
+        and repeating the argument for $-u_h$ yields the lower bound for $\|u_h\|_{\infty,h}$. This shows that $A_h$ is stable, and we also have that it is consistent, so it converges in virtue of the Lax equivalence theorem.
+    \end{proof}
+\end{theorem}
+
+\subsection{Discretization in 2D and 3D}
+In this section we hint on how to address numerically higher dimensional problems, and also how to include time. The stability of such schemes will be studied further ahead with the von Neumann stability analysis. In typical 1D examples, one has a domain $(a,b)$ and an associated grid given by some points $\{x_i\}_i^N$ such that each index $i$ corresponds to an order of the domain, and thus naturally a finite difference operator is going to involve something like $i$ and its neighbors. This scenario would be different if, for example, one had a random ordering of the grid points such as
+    $$ x_0 = a,\; x_7 = a + h,\; x_{12} = a + 2h,\; \hdots, x_N = b, $$
 so that in such a grid, a forward difference with respect to the point $x_0$ would be given by
     $$ D^+f(x_0) = \frac 1 h \left( f^7 - f^0 \right). $$
     Although this is an unnatural way to do things in 1D, it is the natural scenario arising in higher dimensions. For this, and for the sake of simplicity, we will restrict the presentation to meshes given by tensor products of intervales, i.e. $\Omega = (a_x, b_x) \times (a_y, b_y)$ in 2D and $\Omega = (a_x, b_x) \times (a_y, b_y) \times (a_z, b_z)$ in 3D. The main difficulty will be that of creating an ordering of the degrees of freedom.
@@ -287,8 +326,6 @@ Time discretization is an enormous topic, so here we provide simple strategies a
         \item The implicit scheme is harder to solve but more (usually unconditionally) stable.
         \item The mid-point or \emph{Crank-Nicholson} scheme is also stable, with better accuracy but involves more computations and possible numerical saturation at small timesteps.
     \end{itemize}
-    
-    [TODO: ADD RUNGE KUTTA]
 
     A natural generalization of these three schemes is the $\theta$-method, which for a fixed parameter $\theta\in[0,1]$, results in the quadrature rule
     $$\int \mat L_h \vec x_h(s)\,ds \approx \theta\Delta t \mat L_h\vec x_h^{n+1} + (1-\theta)\Delta t \mat L_h \vec x_h^n. $$
@@ -315,8 +352,8 @@ $$W_j = e^{i\xi (jh)}.$$
 This function will be an eigenfunction of all translation-invariant finite difference operators. Set $x_j = jh$, then
 $$D^+ W(x_j) = \frac{1}{h}\left(e^{i\xi (j+1)h} - e^{i\xi j h}\right) = \frac{1}{h}\left(e^{i\xi h} - 1\right)e^{i\xi j h} = \frac{e^{i\xi h} - 1}{h}W_j.$$
 This helps in decoupling the degrees of freedom, and by the Parseval identity, we can again try to get a bound of the form
-$$\|\hat{u}^{n+1}\|\leq |g(\xi)| \|\hat{u}^{n}\|$$
-where $g(\xi)$ is defined as an amplification factor. 
+$$\|u^{n+1}\| = \|\hat{u}^{n+1}\|\leq |g(\xi)| \|\hat{u}^{n}\| = |g(\xi)| \|u^n\|,$$
+where $g(\xi)$ is defined as an amplification factor. This scheme will be stable when $|g(\xi)|\leq 1$.
 
 Let us now illustrate the application on the heat equation. Consider the boundary value problem
 $$ \begin{aligned}
@@ -340,14 +377,14 @@ g(\xi) &= 1 + \frac{\Delta t}{h^2}\left(e^{-i\xi h} + e^{i\xi h}- 2 \right) \\
 With this form, we can use the fact that $\cos(\xi h) \in (-1,1)$, which yield the following two bounds:
 \begin{align*}
     g(\xi) &\leq 1 + \frac{2\Delta t}{h^2}(1-1) = 1 \\
-    g(\xi) \geq 1 + 2\frac{\Delta t}{h^2}(-1-1)  = 1 - \frac{4\Delta t}{h^2},
+    g(\xi) &\geq 1 + 2\frac{\Delta t}{h^2}(-1-1)  = 1 - \frac{4\Delta t}{h^2}.
 \end{align*}
-where the second inequality results in
+We note that the first inequality yields $g(\xi)\leq 1$, and from the second inequality we seek $-1\leq g(\xi)$. Bounding by below, we get
 \begin{align*}
     1-4\frac{\Delta t}{h^2} \geq -1 &\iff 2\geq 4\frac{\Delta t}{h^2}\\
-    &\iff \Delta t \leq \frac{h^2}{2}.
+    &\iff \Delta t \leq \frac{h^2}{2},
 \end{align*}
-Inequalities of this kind are studied more thoroughly in \cite{LeVeque2007}.
+which yields an upper bound for the time step $\Delta t$ to ensure stability of the finite difference scheme. Inequalities of this kind are studied more thoroughly in \cite{LeVeque2007}.
 
 \begin{note}[Discretizing and solving nonlinear problems]
     Consider the nonlinear problem
@@ -360,39 +397,6 @@ Inequalities of this kind are studied more thoroughly in \cite{LeVeque2007}.
     $$\frac{1}{\Delta t} (u^{n+1}-u^n) - \Delta_h u^{n+1} + f(u^{n}) = 0,$$
     which could be unstable, but in a much milder way than the explicit method. 
 \end{note}
-
-\subsection{Stability of the discrete Laplacian}
-Let us now study the stability of the discretized Laplacian operator $-\Delta u$, which is given by the finite difference operator
-$$\mat A_h = \frac{1}{h^2} \begin{bmatrix} -2 & 1 & 0 & \cdots & 0 \\ 1 & -2 & 1 & \cdots & 0 \\ 0 & 1 & -2 & \cdots & 0 \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \cdots & -2\end{bmatrix}.$$
-where the approximation is $-\Delta u \approx \mat A_h u_h$. To show stability, we will use that it actually satisfies a discrete maximum principle. 
-\begin{theorem}[Discrete maximum principle, DMP]
-    Let $\mat A_h$ be the finite difference operator defined above. Then, for any grid function $u_h$ such that $\mat A_h u_h \geq 0$, it holds that
-    $$ \max_{x_i\in \Omega_h} u_h \leq \max_{x_i\in \Gamma_h} u_h, $$
-    where $x_i$ is an interior node of $\Omega_h$ and the equality holds if and only if $u_h$ is constant.
-    \begin{proof}
-        We proceed by contradiction, so we assume that $u_h(x_i) = \max_{x\in \Omega_h} u_h > \max_{x\in \Gamma_h} u_h$, where this maximum is achieved at the internal node $x_i\in \Omega_h$. Then, from the centered difference scheme we get
-        $$2u_h(x_i) = u_h(x_{i-1}) + u_h(x_{i+1}) - h^2 \underbrace{A_h u_h(x_i)}_{\geq 0} \leq u_h(x_{i-1}) + u_h(x_{i+1}) \leq 2u_h(x_i),$$
-        which implies that $u_h(x_i) = \frac{1}{2}(u_h(x_{i-1}) + u_h(x_{i+1}))$ for all interior nodes $x_i$. Repeating this argument recursively for $x_{i-1}$ and $x_{i+1}$ until reaching the boundary of the domain, we conclude that $u_h(x_i)$ is constant in $\Omega_h$, which contradicts the assumption. Hence, the discrete maximum principle holds.
-    \end{proof}
-\end{theorem}
-We can apply this principle to show that $A_h$ is stable. 
-\begin{theorem}
-    Let $A_h$ the finite difference approximation of the problem
-    $$\begin{aligned}
-        -\Delta u &= f & \tin \Omega, \\
-        u &= g & \ton \Gamma.
-    \end{aligned}
-    $$
-    Then, if $A_h u_h = f_h$ in $\Omega_h$ and $u_h = g_h$ in $\Gamma_h$, it holds that
-    $$\|u\|_{\infty,h} \leq C\left(\|f\|_{\infty, h} + \|g\|_{\infty, h}\right).$$
-    \begin{proof}
-        We will prove the theorem over $\R$. Using the comparison function $\phi(x) = \frac{c}{2}x^2$ where $c=\|f\|_{\infty, h}$ and consider a constant $M$ such that $\phi(x) \leq cM$ in $\Omega$. Using that $A_h \phi_h = c$ (since $\phi''(x) = c$), we get
-        $$A_h(u_h + \phi_h) = A_h u_h + c = f_h + c \geq 0,$$
-        and using the discrete maximum principle (DMP) we obtain
-        $$\max_{\Omega_h} u_h \leq \max_{\Omega_h} (u_h + \phi_h) \overset{\text{DMP}}{\leq} \max_{\Gamma_h} (u_h + \phi_h) = \|g_h\|_{\infty, \Gamma_h} + cM = \|g_h\|_{\infty, \Gamma_h} + M \|f\|_{\infty, h},$$
-        and repeating the argument for $-u_h$ yields the lower bound for $\|u_h\|_{\infty}$. This shows that $A_h$ is stable, and we also have that it is consistent, so it converges in virtue of the Lax equivalence theorem.
-    \end{proof}
-\end{theorem}
 
 \subsection{Stability in time}
 We now look for stability estimates regarding also time. We first study a forward scheme 
@@ -445,10 +449,6 @@ Now we look at the stability of forward and backward Euler and the $\theta$-meth
         \item If $\Delta t$ is small, such that $1-(1-\theta)c\Delta t < 1 + \theta c \Delta t$, then we get $-c\Delta t < 1$, which is \underline{unconditionally stable}. 
     \end{itemize}
 \end{enumerate}
-
-
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1769,13 +1769,13 @@ which implies that $\{x_n\}_n$ is Cauchy, and since $X$ is complete, this gives 
 
 We note that if $X$ is compact, then this theorem can be extended to \textit{weak} contractions, ie $\|f(x)-f(y)\|< \|x-y\|$.
 
-\example{Consider problem \eqref{eq:fixed-point:lap u sin u}, where we note that Lax-Milgram immediately yeilds the existence of a unique solution $u$ for each $w$. From the mean value theorem one has that differentiable functions satisfy $f(x) - f(y) = f'(\xi)(x-y)$ for some $\xi$ in $(x,y)$. This in particular shows that $\sin$ is a Lipschitz function as $\sup_{\xi\in \R}\sin(\xi) = 1$. Using this fact we can compute the following for some given $w_1, w_2$:  
+\example{Consider problem \eqref{eq:fixed-point:lap u sin u}, where we note that Lax-Milgram immediately yields the existence of a unique solution $u$ for each $w$. From the mean value theorem one has that differentiable functions satisfy $f(x) - f(y) = f'(\xi)(x-y)$ for some $\xi$ in $(x,y)$. This in particular shows that $\sin$ is a Lipschitz function as $\sup_{\xi\in \R}\sin(\xi) = 1$. Using this fact we can compute the following for some given $w_1, w_2$:  
     $$ -\Delta(T(w_1)-T(w_2))= \sin(w_1)-\sin(w_2),$$ 
     and the \emph{a-priori} estimate gives
     $$\|T(w_1)-T(w_2)\|\leq C\|\sin(w_1)-\sin(w_2)\|\leq C \|w_1-w_2\|.$$
 Then, if $C<1$ there exists $\bar u$ such that $T(\bar u)= \bar u$. }
 
-\begin{theorem}[Brower Fixed Point] Set $K$ a non-empty, compact and convex subset of a finite-dimensional Banach space. Then every continuous $f:K\to K$ has a fixed point.
+\begin{theorem}[Brouwer Fixed Point] Set $K$ a non-empty, compact and convex subset of a finite-dimensional Banach space. Then every continuous $f:K\to K$ has a fixed point.
 \end{theorem}
 
 \example{
