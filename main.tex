@@ -10,7 +10,7 @@
 \usepackage{todonotes}
 \usepackage{cancel}
 \usepackage{pgfplots}
-\usepackage{filecontents}
+\pgfplotsset{compat=1.18}
 
 \newcommand{\example}[1]{\todo[inline,color=green!30!white]{\textbf{Example:} #1}}
 
@@ -70,7 +70,9 @@
 \begin{document}
 
 \maketitle
+\newpage
 \tableofcontents
+\newpage
 
 \section*{Context}
 
