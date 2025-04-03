@@ -181,6 +181,19 @@ $$ k \approx \frac{\log \|[\vec e_h]_{j+1}\|_X - \log \|[\vec e_h]_j\|_X}{ \log 
 which yields the classical expression one gets everywhere: 
     $$ k \approx  \frac{\log \left(\|[\vec e_h]_{j+1}\|_X / \|[\vec e_h]_j\|_X\right)}{ \log \left(h_{j+1} / h_j\right)}. $$
 
+\subsection{Method of manufactured solutions}
+A typical problem is that one wants to estimate the convergence of some discrete solution
+    $$ \mat L_h \vec u_h = 0, $$
+which approximates a differential equation
+    $$ \mathcal L u = 0 $$
+    in which one typically does not know the analytical solution. This method allows to compute a modified problem in which we know the analytic solution. Indeed, consider an arbitrary analytic function (that we know) $u_{ex}$. The main idea here is that we can define a right hand side 
+    $$ f_{ex} \coloneqq \mathcal L u_{ex}, $$
+such that the solution of the modified problem 
+    $$ \mathcal L u = f \quad ( = \mathcal L u_{ex}) $$
+    is, if uniqueness holds, $u = u_{ex}$. To obtain the discrete problem, we consider the associated grid function $R_h u_{ex}$ and set the discrete right hand side $\vec f_h = R_h \mathcal L u_{ex}$ such that the solution of the discrete problem 
+    $$ \mat L_h \vec u_h = \vec f_h \quad (=R_h \mathcal L u_{ex}) $$
+converges to the continuous solution $u_{ex}$ by construction. 
+
 \subsection{Convergence Analysis}
 Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in the Lax equivalence theorem. We will first require other definitions. 
 
