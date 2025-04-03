@@ -12,7 +12,7 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 
-\newcommand{\example}[1]{\todo[inline,color=green!30!white]{\textbf{Example:} #1}}
+\newcommand{\example}[1]{\todo[inline,color=orange!30!white]{\textbf{Example:} #1}}
 
 \title{Notes for Numerical Analysis of PDEs and related topics}
 %\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
@@ -460,19 +460,19 @@ Now we look at the stability of forward and backward Euler and the $\theta$-meth
     $$
     We now recognize two cases. 
     \begin{itemize}
-        \item If $\Delta t$ is so big such that $1-(1-\theta)c\Delta t < 0$, we have
+        \item If $\Delta t$ is big and such that $1-(1-\theta)c\Delta t < 0$, we have
         \begin{align*}
             -\frac{1-(1-\theta)c\Delta t}{1+\theta c\Delta t} \leq 1 &\iff -1+(1-\theta)c\Delta t \leq 1+\theta c\Delta t\\
             &\iff (1-2\theta) c\Delta t \leq 2\\
             &\iff \left(\frac{1}{2}-\theta\right)c\Delta t\leq 1.
         \end{align*}
-        So, if $\theta\geq 1/2$, the method is unconditionally stable, and if $\theta <1/2$, the method is \underline{conditionally stable}. 
-        \item If $\Delta t$ is small, such that $1-(1-\theta)c\Delta t < 1 + \theta c \Delta t$, then we get $-c\Delta t < 1$, which is \underline{unconditionally stable}. 
+        So, if $\theta\geq 1/2$, the method is unconditionally stable, and if $\theta <1/2$, the method is \emph{conditionally stable}. 
+        \item If $\Delta t$ is small, such that $1-(1-\theta)c\Delta t < 1 + \theta c \Delta t$, then we get $-c\Delta t < 1$, which is \emph{unconditionally stable}. 
     \end{itemize}
 \end{enumerate}
 
 \subsection{Unavoidable nonlinearities}
-Sometimes, specially in stationary models, we cannot avoid having to solve a nonlinear problem. Two common ways to obtain an approximate solution to a nonlinear problem are 1) fixed point methods (usually of first order), and 2) Newton-Raphson methods. To analyze them, consider the domain $\Omega=[a,b]$ and the example problem
+Sometimes, specially in stationary models, we cannot avoid having to solve a nonlinear problem. Two common ways to obtain an approximate solution to a nonlinear problem are 1) fixed point methods (usually of first order), and 2) Newton-Raphson methods. To analyze them, consider the domain $\Omega=(a,b)$ and the example problem
 $$
 \begin{cases}
     -u'' + \sin(u) &= 0\\
@@ -569,7 +569,7 @@ In this section we will review some important properties of functional spaces an
         $$ \| T\| =  \sup_{x\in X}\frac{|Tx|_Y}{|x|_X}. $$
         We denote the space of continuous linear operators from $X$ to $Y$ as $L(X,Y)$. 
         \item Banach spaces are complete metric spaces. For a given Banach space $X$, its (topological) dual is the space $X'$ of functions $X\mapsto \R$, which is always Banach. The norm in $X'$ is referred to as the dual norm, and for $T\in X'$ it is defined as 
-        $$\|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|.$$
+            $$\|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|= \sup_{x\in X}\frac{|T(x)|}{\|x\|_X}.$$
         The action of an element of the dual space is sometimes denoted as $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. In general, one can identify a part of the bidual space $X'' = (X')'$ through the evaluation operator $T_f:X'\mapsto \R$ in $X''$ defined as $T_f(L) = L(f)$. This immersion is not surjective. 
         \item Hilbert spaces are Banach spaces with respect to the distance induced by a dot (inner) product, i.e. a bilinear form $(\cdot, \cdot ): X\times X\mapsto \R $ such that: 
             \begin{itemize}
@@ -614,6 +614,14 @@ A simple way to remember this is to split a function as $f = I_{|f|\leq 1}f + I_
 
 \paragraph{Distributions and derivatives} To formulate differential equations in Banach/Hilbert spaces, it will be important to be able to define derivatives in such spaces. This is done through the language of distributions, invented (discovered) by L Schwartz. For this, we require the notion of 'test functions', i.e. functions on which we can discharge derivatives of abstract objects through integration by parts. Consider then a function $f$ in $C_0^\infty(\R^d)$, the space of infinitely differentiable scalar functions with compact support in $\R^d$, then a distribution is simply an element $T$ in the dual space $(C_0^\infty(\R^d))'$, whose action can be written as $\langle T, f\rangle_{(C_0^\infty)'\times C_0^\infty}$, or sometimes simply as $\langle T, f\rangle$, if it is clear by context. The idea is to generalize the notion of action through integration, so that for sufficiently smooth functions $f$, their induced distribution is $Tf$ given by
     $$ \langle Tf, g \rangle = \int_{\R^d} fg\,dx. $$
+
+\example{All classical (or strong) derivatives coincide with the weak derivatives, as seen from the integration by parts formulas. Also, consider the Dirac delta distribution given by
+    $$ \langle \delta_x, f\rangle = f(x), $$
+sometimes written as $\delta_x(f)$, or also simply as $\int_\Omega \delta_x f\,dx$ (with a \emph{not too mild} abuse of notation).
+Then, its derivative is given by 
+    $$ \langle \delta', f \rangle = -\langle \delta_x, f'\rangle = - f'(x).$$
+}
+
 This integral approach, when thinking about integration by parts formulas, allows us to define distribution derivatives as
     $$ \langle \partial_i T, f\rangle \coloneqq -\langle T, \partial_i f\rangle, $$
 as given by integration by parts. This is known as a \emph{weak derivative}. Arbitrary order differential operators can be defined analogously, most importantly $\grad, \dive, \curl$, given by 
@@ -621,12 +629,6 @@ as given by integration by parts. This is known as a \emph{weak derivative}. Arb
         \langle \dive T, f\rangle &\coloneqq -\langle T, \grad f\rangle \\
         \langle \curl T, f\rangle &\coloneqq \langle T, \curl f\rangle.
     \end{align*}
-\example{All classical (or strong) derivatives coincide with the weak derivatives, as seen from the integration by parts formulas. Also, consider the Dirac delta distribution given by
-    $$ \langle \delta_x, f\rangle = f(x), $$
-sometimes written as $\delta_x(f)$, or also simply as $\int_\Omega \delta_x f\,dx$ (with a \emph{not too mild} abuse of notation).
-Then, its derivative is given by 
-    $$ \langle \delta', f \rangle = -\langle \delta_x, f'\rangle = - f'(x).$$
-}
 Naturally, weak derivatives and the common ones coincide under differentiability assumptions. The notion of weak derivatives allows us to define differentiable Hilbert spaces, given by 
     $$ W^{1,p}(\Omega) \coloneqq \{ f\in L^p(\Omega): \grad f \in L^p(\Omega)\}. $$
 These are Banach spaces with norm
@@ -638,7 +640,7 @@ This is the graph norm of the $\nabla$ operator, and it can be further seen as t
         \item $\| x \|_{H^1(\Omega)} = \|x\|_{1,\Omega}$.
     \end{itemize}
 The space $H^1(\Omega)$ is very important, as it is a Hilbert space with inner product
-    $$ \langle x,y\rangle_{H^1(\Omega)} \coloneqq \langle x,y\rangle_{L^2(\Omega)} + \langle \grad x, \grad y\rangle_{L^2(\Omega)}. $$
+    $$ (x,y)_{H^1(\Omega)} \coloneqq (x,y)_{L^2(\Omega)} + (\grad x, \grad y)_{L^2(\Omega)}. $$
 Analogously, we can define the spaces
     $$ H(\dive; \Omega) = \left\{f\in L^2(\Omega): \dive f \in L^2(\Omega)\right\} $$
 and    
@@ -663,7 +665,7 @@ Consider $\Omega$ a bounded Lipschitz domain in $\R^d$, $m\geq 1$ integer, $j\ge
         \item If $mp \leq d$  then for $q$ in $[1, \frac{dp}{d - mp})$:
             $$ W^{j+m, p}(\Omega) \hookrightarrow W^{j,q}(\Omega). $$
         \item If $mp > d$, then 
-            $$ W^{j+m, p}(\Omega \hookrightarrow C^j(\bar\Omega). $$
+            $$ W^{j+m, p}(\Omega) \hookrightarrow C^j(\bar\Omega). $$
     \end{enumerate}
 These inclusions hold also if the arrival domain is an arbitrary subdomain of $\Omega$. 
 \end{theorem}
