@@ -419,18 +419,6 @@ We note that the first inequality yields $g(\xi)\leq 1$, and from the second ine
 \end{align*}
 which yields an upper bound for the time step $\Delta t$ to ensure stability of the finite difference scheme. Inequalities of this kind are studied more thoroughly in \cite{LeVeque2007}.
 
-\begin{note}[Discretizing and solving nonlinear problems]
-    Consider the nonlinear problem
-    $$ \dot{u} - u_{xx} + f(u) = 0$$
-    with appropriate boundary and initial conditions. How could we discretize this problem in time? We can choose an explicit scheme, i.e.
-    $$\frac{1}{\Delta t} (u^{n+1}-u^n) - \Delta_h u^n + f(u^n) = 0,$$
-    which could be unstable. We can also choose an implicit scheme, i.e.
-    $$\frac{1}{\Delta t} (u^{n+1}-u^n) - \Delta_h u^{n+1} + f(u^{n+1}) = 0,$$
-    which is a nonlinear problem in $u^{n+1}$. This problem could be solved by using a Newton method and would require computing the derivative of $f$ in each step. Alternatively, there exists a semi-implicit method (IMEX), where we can treat explicitly only the terms that are hard to compute, i.e.
-    $$\frac{1}{\Delta t} (u^{n+1}-u^n) - \Delta_h u^{n+1} + f(u^{n}) = 0,$$
-    which could be unstable, but in a much milder way than the explicit method. 
-\end{note}
-
 \subsection{Stability in time}
 We now look for stability estimates regarding also time. We first study a forward scheme 
 $$
@@ -483,6 +471,88 @@ Now we look at the stability of forward and backward Euler and the $\theta$-meth
     \end{itemize}
 \end{enumerate}
 
+\subsection{Unavoidable nonlinearities}
+Sometimes, specially in stationary models, we cannot avoid having to solve a nonlinear problem. Two common ways to obtain an approximate solution to a nonlinear problem are 1) fixed point methods (usually of first order), and 2) Newton-Raphson methods. To analyze them, consider the domain $\Omega=[a,b]$ and the example problem
+$$
+\begin{cases}
+    -u'' + \sin(u) &= 0\\
+    u(a) &= u^a\\
+    u(b) &= u^b.
+\end{cases}
+$$
+As usual, we set a discrete grid of $N$ equispaced interior points $a=x_1<\cdots<x_N=b$. Thus, at each non-boundary node $x_i$ we have the equation
+$$
+-\frac{1}{h^2}(u^{i+1}-2u^i+u^{i-1}) + \sin(u^i) = 0.
+$$
+We write $g(\vec u_h) = \{g(u^i)\}$ for the vector of evaluations of $g$ at the non-boundary nodes. This allows us to write more compactly the root-finding problem
+$$F(\vec u_h):= \mat A_h \vec u_h + \sin(\vec u_h) = 0.$$
+Let us analyze both methods for solving this problem.
+\begin{enumerate}
+    \item \underline{Newton-Raphson}: we look for solutions of a linearized problems and iterate. Abstractly, we solve the equation $F(\vec x)=0$ by considering an initial point $\vec x^0$ and then using Taylor's theorem for linearizing $F(\vec x^{k+1})$ (unknown) around the previous iteration result $\vec x^k$ (known):
+    $$
+    F(\vec x^{k+1}) \approx F(\vec x^k) + \nabla F(\vec x^k)\cdot \underbrace{\vec{\delta x}^{k+1}}_{\vec x^{k+1} - \vec{x}^k}.
+    $$
+    We can now solve a system for $\vec{\delta x}^{k+1}$ such that $F(\vec x^{k+1}) = 0$, that is,
+    $$\underbrace{[\nabla F(\vec x^k)]}_{\text{matrix}} \underbrace{\vec{\delta x}^{k+1}}_{\text{vector}} = \underbrace{-F(\vec x^k)}_{\text{vector}},$$
+    along with the update step
+    $$\vec x^{k+1} = \vec{x}^k + \vec{\delta x}^{k+1}.$$
+    We call such a system a \textit{Newton iteration} or \textit{tangent system}. Also, $\vec{\delta x}^{k}$ must have homogeneous (zero) boundary conditions, so that all $\{\vec x^{k}\}_k$ satisfy the original ones. 
+    
+    In our problem, the $i$-th component of $F(\vec u_h)$ is given by
+    $$
+    [F(\vec u_h)]^i = -\frac{1}{h^2}(u^{i-1}-2u^i+u^{i+1}) + \sin(u^i),
+    $$
+    which we differentiate to get
+    $$
+    [\nabla F(\vec u_h)]_{ij} = \frac{\partial [F(\vec u_h)]^i}{\partial u^j} = \begin{cases}
+        -\frac{1}{h^2} &j\in\{i-1,i+1\}\\
+        \frac{2}{h^2} + \cos(u^i) &j=i\\
+        0 &\text{elsewhere.}
+    \end{cases}
+    $$
+    We can write more compactly this gradient as
+    $$
+    \nabla F(\vec u_h) = \mat A_h + \textbf{diag}(\cos(\vec u_h)),
+    $$
+    which allows us to write the tangent system as
+    $$
+    \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} = -\left(\mat A_h \vec{u}^k + \textbf{diag}(\sin(\vec u^k))\right).
+    $$
+    \item \underline{Fixed point}: similarly to the time-dependent case, we can \textit{delay} the evaluation of a nonlinearity. We do this by choosing a starting point $\vec u^0$ and evaluating the nonlinear part in the previous iteration $\vec u^k$. This yields
+    $$
+    -\nabla \vec u^{k+1} + \sin(\vec u^k) = 0.
+    $$
+    Note that we can enforce this equality at the discrete level as well, i.e. 
+    $$
+    -\nabla \vec u_h^{k+1} + \sin(\vec u_h^k) = 0,
+    $$
+    where $\vec u_h^k$ is the discrete vector $\vec u_h$ at the $k$-th iteration. In such cases, we can sometimes prove the convergence of the scheme. For that, we consider the discrete iterates $\vec u_h^k$ given by
+    \begin{align*}
+        \mat A_h \vec u_h^{k+1} + \sin(\vec u_h^k) &= 0
+        \mat A_h \vec u_h^{k} + \sin(\vec u_h^{k-1}) &= 0,
+    \end{align*}
+    which subtracted give the equation
+    $$
+    \mat A_h(\vec u_h^{k+1} - \vec u_h^{k}) = -(\sin(\vec u_h^k) - \sin(\vec u_h^{k-1})).
+    $$
+    We typically call this equation an \textit{error equation}. Finally, we can use the fact that $\mat A_h$ is stable, so we can bound the error norm as
+    \begin{align*}
+        \|\vec u_h^{k+1} - \vec u_h^{k}\|_{\infty, h} &\leq C\|\mat A_h (\vec u_h^{k+1} - \vec u_h^{k})\|_{\infty, h} \tag{Stability}\\
+        &= C\|-(\sin(\vec u_h^k) - \sin(\vec u_h^{k-1}))\|_{\infty, h}\tag{Error equation}\\
+        &\leq C\|\vec u_h^{k+1} - \vec u_h^{k}\|_{\infty, h},\tag{$\sin$ is $1$-Lipschitz}
+    \end{align*}
+    thus the scheme is convergent if $C<1$. Otherwise, the scheme \underline{can converge}, but we have no theoretical guarantee from this analysis. Still, each fixed point iteration
+    $$
+    \mat A_h \vec u_h^{k+1} = - \sin(\vec u_h^k)
+    $$
+    is much simpler than a Newton iteration
+    \begin{align*}
+        \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} &= -\left(\mat A_h \vec{u}^k + \textbf{diag}(\sin(\vec u^k))\right)\\
+        \vec u_h^{k+1} &= \vec{u}^k_h + \vec{\delta u}_h^{k+1}.
+    \end{align*}
+\end{enumerate}
+Both fixed point and Newton-Raphson methods are commonly used strategies, and in general there is no universally better choice. We study nonlinear problems more thoroughly in section \ref{sec:nonlinear}.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Analysis preliminaries}
@@ -495,20 +565,22 @@ In this section we will review some important properties of functional spaces an
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Banach and Hilbert spaces} Throughout the entire manuscript, we will rely on Banach spaces, Hilbert spaces, and their duals. Despite the existence of a flexible theory of Banach space formulations, we will mostly rely on Hilbert spaces because of their many nice properties. For now, let's simply review some relevant properties: 
     \begin{itemize}
-        \item Banach spaces are complete metric spaces. For a given Banach space $X$, its (topological) dual is the space $X'$ of functions $X\mapsto \R$. The action of an element in the dual space is sometimes denoted as $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. In general, one can identify a part of the bidual space $X''$ through the evaluation operator $T_f:X'\mapsto \R$ in $X''$ defined as $T_f(L) = L(f)$. This immersion is not surjective. 
-        \item Continuous linear operators acting on Banach spaces have an induced norm: If $T: X\mapsto Y$, then 
-            $$ \| T\| =  \sup_{x\in X}\frac{|Tx|_Y}{|x|_X}. $$
-        Some people write this space as $L(X,Y)$. 
-        \item Hilbert spaces are Banach spaces with respect to the distance induced by a dot (inner) product, i.e. a bilinear form $\langle\cdot, \cdot \rangle: X\times X\mapsto \R $ such that: 
+        \item Continuous linear operators acting on Banach spaces have an induced operator norm: if $T: X\mapsto Y$, then 
+        $$ \| T\| =  \sup_{x\in X}\frac{|Tx|_Y}{|x|_X}. $$
+        We denote the space of continuous linear operators from $X$ to $Y$ as $L(X,Y)$. 
+        \item Banach spaces are complete metric spaces. For a given Banach space $X$, its (topological) dual is the space $X'$ of functions $X\mapsto \R$, which is always Banach. The norm in $X'$ is referred to as the dual norm, and for $T\in X'$ it is defined as 
+        $$\|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|.$$
+        The action of an element of the dual space is sometimes denoted as $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. In general, one can identify a part of the bidual space $X'' = (X')'$ through the evaluation operator $T_f:X'\mapsto \R$ in $X''$ defined as $T_f(L) = L(f)$. This immersion is not surjective. 
+        \item Hilbert spaces are Banach spaces with respect to the distance induced by a dot (inner) product, i.e. a bilinear form $(\cdot, \cdot ): X\times X\mapsto \R $ such that: 
             \begin{itemize}
-                \item It is symmetric: $\langle x,y\rangle = \langle y, x\rangle$
-                \item It is linear in its first argument: $\langle \alpha x_1 + \beta x_2, y\rangle=\alpha\langle x_1, y\rangle + \beta\langle x_2, y\rangle$
-                \item It is positive definite: $\langle x,x\rangle \geq 0$, where it is 0 only if $x=0$.
+                \item It is symmetric: $( x,y) = ( y, x)$
+                \item It is linear in its first argument: $(\alpha x_1 + \beta x_2, y)=\alpha( x_1, y) + \beta( x_2, y)$
+                \item It is positive definite: $(x,x)\geq 0$, where it is 0 only if $x=0$.
             \end{itemize}
-        \item The inner product yields the fantastic Riesz map, which is actually an isometry. This is given as follows: Consider a Hilbert space $H$ with inner product $\langle\cdot, \cdot\rangle_H$, then a Riesz map is an operator $R_H: H\mapsto H'$ such that for any $x,y$ in $H$ it holds that $\langle R_H(x), y\rangle_{H'\times H} = \langle x, y\rangle_H$. Notably, $\|R_H(x)\|_{H'} = \| x \|_H$. 
         \item Inner products are mostly used as projections. This means that, in the same way that we can orthogonalize a vector $x$ with respect to $y$, we can also do this in the Hilbert space setting analogously as 
-            $$ x_\perp \coloneqq x - \langle x, y\rangle_H y. $$
-        It can be quickly verified that the function $x_\perp$ is indeed perpendicular to $y$ in the sense that $\langle x_\perp, y\rangle_H=0$. 
+            $$ x_\perp \coloneqq x - (x, y)_H y. $$
+        It can be quickly verified that the function $x_\perp$ is indeed perpendicular to $y$ in the sense that $(x_\perp, y)_H=0$. 
+        \item The inner product yields the fantastic Riesz map, which is actually an isometry. This is given as follows: consider a Hilbert space $H$ with inner product $(\cdot, \cdot)_H$, then a Riesz map is an operator $R_H: H\mapsto H'$ such that for any $x,y$ in $H$ it holds that $\langle R_H(x), y\rangle_{H'\times H} = (x, y)_H$. Notably, $\|R_H(x)\|_{H'} = \| x \|_H$. 
     \end{itemize}
 One fundamental aspect of Hilbert spaces is that they provide some intuitive properties related to projections, which we recall through the following results: 
 \begin{theorem}{Best approximation}
@@ -528,8 +600,10 @@ Some common and/or simple examples: Helmholtz decomposition, zero average functi
     $$ f = h + c, $$
   with $h\perp U$. Noting that a function $x$ satisfies $x\perp U$ iff $(x,1)_H = 0$, then we can use the previous expression to obtain 
     $$ (f,1)_H = (c,1) = c(1,1)_H, $$ 
-  which gives
-    $$ c = \frac{(f,1)_H}{(1,1)_H}. $$
+  which yields
+    $$ c = \frac{(f,1)_H}{(1,1)_H}, $$
+  and
+    $$h = f - c = f -  \frac{(f,1)_H}{(1,1)_H}f.$$
 }
 
 The most important spaces for us will be the Lebesgue spaces $L^p(\Omega;\R^d)$ given by measurable functions $f:\Omega \mapsto \R^d$ such that
@@ -1565,7 +1639,7 @@ then the discrete inf-sup of $b:H_h\to Q_h$ holds with $\tilde \beta = \beta / \
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Beyond linearity}
+\section{Beyond linearity}\label{sec:nonlinear}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 We will now cover the notion of differentiability in Banach spaces. The presentation closely follows that of \cite{ambrosetti1995primer}, with substantially less detail.
