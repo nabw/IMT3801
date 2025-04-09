@@ -551,19 +551,33 @@ Both fixed point and Newton-Raphson methods are commonly used strategies, and in
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Analysis preliminaries}
+\section{Functional analysis}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In this section we will review some important properties of functional spaces and operators. These things should be deemed as 'review' material. Intrinsically new things will start appearing in Section~\ref{section:beyond-ellipticity}. Most, if not all, results will be coming from the amazing book \emph{Linear and nonlinear functional analysis} by PG Ciarlet.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Functional spaces}
+\subsection{Weak derivatives and Sobolev spaces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Banach and Hilbert spaces} Throughout the entire manuscript, we will rely on Banach spaces, Hilbert spaces, and their duals. Despite the existence of a flexible theory of Banach space formulations, we will mostly rely on Hilbert spaces because of their many nice properties. For now, let's simply review some relevant properties: 
     \begin{itemize}
         \item Continuous linear operators acting on Banach spaces have an induced operator norm: if $T: X\mapsto Y$, then 
         $$ \| T\| =  \sup_{x\in X}\frac{|Tx|_Y}{|x|_X}. $$
         We denote the space of continuous linear operators from $X$ to $Y$ as $L(X,Y)$. 
+        \item Given a Banach space $X$ and a linear operator $T:X\to Y$, where $Y$ is a normed space, we can define the norm induced by $T$ in the space $W=\text{Dom}(T)\subseteq X$ as
+        $$ \|x\|_{W} := \|x\|_X + \|Tx\|_Y. $$
+        This will be important when constructing Sobolev spaces and their norms. We can show this is indeed a norm: taking $x,y\in W$ and $\alpha\in \R$ we get
+        \begin{itemize}
+            \item Triangle inequality:
+            \begin{align*}
+                \|x+y\|_W &= \|x+y\|_X + \|T(x+y)\|_Y \\
+                &\leq \|x\|_X + \|y\|_X + \|Tx\|_Y + \|Ty\|_Y \tag{$\|\cdot\|_X$ and $\|\cdot\|_Y$ are norms}\\
+                &= \|x\|_W + \|y\|_W.
+            \end{align*}
+            \item Homogeneity: since $T$ is linear, we get 
+            $$\|\alpha x\|_W = \|\alpha x\|_X + \|T(\alpha x)\|_Y = |\alpha|\|x\|_X + |\alpha|\|Tx\|_Y = |\alpha|\|x\|_W.$$
+            \item Positive-definiteness: we note that $0=\|x\|_W\geq \|x\|_X\geq 0$, which implies $x=0$.
+        \end{itemize}
         \item Banach spaces are complete metric spaces. For a given Banach space $X$, its (topological) dual is the space $X'$ of functions $X\mapsto \R$, which is always Banach. The norm in $X'$ is referred to as the dual norm, and for $T\in X'$ it is defined as 
         $$\|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|.$$
         The action of an element of the dual space is sometimes denoted as $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. In general, one can identify a part of the bidual space $X'' = (X')'$ through the evaluation operator $T_f:X'\mapsto \R$ in $X''$ defined as $T_f(L) = L(f)$. This immersion is not surjective. 
@@ -623,14 +637,16 @@ sometimes written as $\delta_x(f)$, or also simply as $\int_\Omega \delta_x f\,d
 Then, its derivative is given by 
     $$ \langle \delta', f \rangle = -\langle \delta_x, f'\rangle = - f'(x).$$
 }
-Naturally, weak derivatives and the common ones coincide under differentiability assumptions. The notion of weak derivatives allows us to define differentiable Hilbert spaces, given by 
+Naturally, weak derivatives and the common ones coincide under differentiability assumptions.
+
+\paragraph{Sobolev spaces} The notion of weak derivatives allows us to define differentiable Hilbert spaces, given by 
     $$ W^{1,p}(\Omega) \coloneqq \{ f\in L^p(\Omega): \grad f \in L^p(\Omega)\}. $$
 These are Banach spaces with norm
     $$ \| x \|_{W^{1,p}(\Omega)} \coloneqq \| x \|_{L^p(\Omega)} + \| \grad x \|_{L^p(\Omega)}. $$
 This is the graph norm of the $\nabla$ operator, and it can be further seen as the $\ell^1$ norm of the two-dimensional vector $(\|x\|_{L^p(\Omega)}, \|\grad x\|_{L^p(\Omega)})$, and thus all vector norms for such a vector induce equivalent norms for Sobolev spaces. It is very common to use the following notations:   
     \begin{itemize}
         \item $H^1(\Omega) = W^{1,2}(\Omega)$.
-        \item $\| x \|_{L^2(\Omega)} = \| x \|_{0,\Omega}$, or even simply $ \| x\|_0$, depending on the laziness of the person writing. 
+        \item $\| x \|_{L^2(\Omega)} = \| x \|_{0,\Omega}$, or even simply $ \| x\|_0$, depending on the laziness of the person writing.
         \item $\| x \|_{H^1(\Omega)} = \|x\|_{1,\Omega}$.
     \end{itemize}
 The space $H^1(\Omega)$ is very important, as it is a Hilbert space with inner product
@@ -665,6 +681,17 @@ These inclusions hold also if the arrival domain is an arbitrary subdomain of $\
 \end{theorem}
 These theorems hold in greater generality, and are typically used together with the weak-compactness of the unit ball to show the existence of certain strongly convergent subsequence. We will see examples of this further ahead. One fundamental consequence is that $H^1$ is compactly embedded in $L^2$.
 
+It is important to note that the embeddings are done through the identity map, and the main difference lies in the norms. In this sense, one immediately sees that, for example, the embedding $I:W^{1,p}(\Omega)\to L^p(\Omega)$ is continuous. In fact, it is defined by $Ix=x$, and we get
+$$
+\|Ix\|_{L^p(\Omega)} = \|x\|_{L^p(\Omega)} \leq \|x\|_{L^p(\Omega)} + \|\nabla x\|_{L^p(\Omega)} = \|x\|_{W^{1,p}(\Omega)},
+$$
+which shows that the map $I$ is continuous with norm 
+$$\|I\|_{L(W^{1,p}(\Omega), L^p(\Omega))}\leq 1.$$
+Also, we can see in $\R$ how this can be non-trivial and unexpected. Consider $f:I\to \R$ with $I=(a,b)$ and $f'\in L^2(I)$. Then, the fundamental theorem of calculus gives
+$$f(x+h) = f(x) + \int_x^{x+h}f'(s)\mathrm{d}s,$$
+and thus we can bound
+$$|f(x+h)-f(x)|\leq \left|\int_x^{x+h}f'(s)\mathrm{d}s\right|\leq \int_x^{x+h}|f'(s)|\mathrm{d}s \overset{\text{C-S}}{\leq} \|f'\|_{L^2((x,x+h))}h \leq \|f'\|_{L^2(I)}h \quad \forall x\in I. $$
+This shows that if $f'\in L^2(I)$, then $f$ is uniformly continuous. In particular, we have the injection $H^1(I)\to C^0(\overline{I})$. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Traces}%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
