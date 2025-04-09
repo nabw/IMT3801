@@ -9,7 +9,7 @@
 \usepackage{mathtools}
 \usepackage{todonotes}
 
-\title{Tarea 1}
+\title{Tarea 2}
 %\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
 %\author{Nicol\'as A Barnafi}
 \date{}
@@ -70,6 +70,14 @@
             \item\pts{1}Demuestre que no existe ninguna función $f$ en $L^1$ tal que $T_f = \delta_0$. 
             \item\pts{2} Sabemos que dada una función vectorial $F:\Omega \to \R^d$, su divergencia está dada por $\dive F=\sum_i \partial_{x_i}F$. Para extender esta noción a distribuciones, demuestre dado un dominio $\Omega$ los espacios $(\mathcal D(\Omega, \R^d))'$ y $[(\mathcal D(\Omega))']^d$ son homeomorfos\footnote{$X^3 = X\times X\times X$} y con ello construya una definición de divergencia en $(\mathcal D(\Omega, \R^d))'$. Hint: $\int_\Omega (\dive F)\varphi = \int_{\partial\Omega} \varphi F\cdot \vec n - \int_\Omega F\cdot \grad \varphi$. 
             \item\pts{2} Extienda la construcción de la pregunta anterior para definir un $\curl$ distribucional.
+            \item\pts{2} Sea $\vec e_j$ el $j$-ésimo vector canónico en $\R^d$. Definimos el operador de diferencias finitas parciales de paso $h$ como
+                $$ D_j^hf(\vec x) \coloneqq \frac{f(x+h\vec e_j) - f(x)}{h}. $$
+                Demuestre que para cada $f$ en $\mathcal D(\R^d)$, se tiene que $D_j^hf $ converge a $\frac{\partial f}{\partial x_j}$ en la topología de $\mathcal D(\R^d)$ cuando $h$ va a 0.  
+            \item\pts{2} Considere la función $\Phi:\R^3\to \mathbb C$ dada por
+                    $$ \Phi(x) = \frac{1}{4\pi|x|} e^{-ik |x|}. $$
+                Muestre que se tiene la siguiente igualdad en $\mathcal D'(\R^3)$:
+                        $$ \Delta \Phi + k^2 \Phi = \delta_0, $$
+                i.e. en el sentido de las distribuciones, donde $\delta_0$ es la delta de Dirac en $x=0$. 
         \end{enumerate}
 \end{enumerate}
 
