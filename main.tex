@@ -352,7 +352,7 @@ Using these maps, we define a forward difference in $x$ and $y$ directions as $D
     \end{align*}
     where we have used a slight abuse of notation by denoting both the 2D vector and 1D vectors as $\vec f^{ij}$ and $\vec f^I$ respectively. 
     
-\subsubsection{Time discretization}
+\subsection{Time discretization}
 Time discretization is an enormous topic, so here we provide simple strategies and ways to think about them. We will dedicate an entire section to their analysis using the von Neumann stability analysis. To avoid messing with Bochner spaces, we will refrain from considering a precise functional setting, and leave this for further ahead in the notes. Consider a differential operator $\mathcal L$ and its associated discrete matrix $\mat L_h$ which includes the problems boundary conditions. The continuous differential equation, for some initial condition $x(0) = x_0$, is given by 
     $$ \dot x + \mathcal L x = f, $$
     which we can discretize in space to obtain the system of differential equations
