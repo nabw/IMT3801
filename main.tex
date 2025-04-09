@@ -10,9 +10,9 @@
 \usepackage{todonotes}
 \usepackage{cancel}
 \usepackage{pgfplots}
-\usepackage{filecontents}
+\pgfplotsset{compat=1.18}
 
-\newcommand{\example}[1]{\todo[inline,color=green!30!white]{\textbf{Example:} #1}}
+\newcommand{\example}[1]{\todo[inline,color=orange!30!white]{\textbf{Example:} #1}}
 
 \title{Notes for Numerical Analysis of PDEs and related topics}
 %\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
@@ -70,6 +70,9 @@
 \begin{document}
 
 \maketitle
+\newpage
+\tableofcontents
+\newpage
 
 \section*{Context}
 
@@ -113,7 +116,7 @@ Finite difference approximations can be easily seen to be convergent for suffici
     $$ f(x+ h) = f(x) + f'(x)h + O(h^2), $$
 from which we readily obtain that 
     $$ | D^+f(x) - f'(x) | = O(h), $$
-    so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. However, it is noteworthy that although centered differences also start converging linearly, they become unstable for very small $h$, see \ref{fig:fd_convergence}.
+    so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. However, it is noteworthy that although centered differences also start converging linearly, they become unstable for very small $h$, see  Figure~\ref{fig:fd_convergence}.
 
 \begin{figure}[ht]
     \centering
@@ -146,6 +149,7 @@ from which we readily obtain that
         \end{loglogaxis}
     \end{tikzpicture}
     \caption{Convergence of forward, centered and backward difference schemes for calculating the first derivative of $u(x)=\sin(2\pi x)$. Note that the centered difference error starts increasing for $h\lesssim 10^{-6}$.}
+    \label{fig:fd_convergence}
 \end{figure}
 
 \subsection{Second order derivatives}
@@ -176,6 +180,21 @@ and note that we obtain roughly a line equation if we assume an equality. Becaus
 $$ k \approx \frac{\log \|[\vec e_h]_{j+1}\|_X - \log \|[\vec e_h]_j\|_X}{ \log h_{j+1} - \log h_j}, $$
 which yields the classical expression one gets everywhere: 
     $$ k \approx  \frac{\log \left(\|[\vec e_h]_{j+1}\|_X / \|[\vec e_h]_j\|_X\right)}{ \log \left(h_{j+1} / h_j\right)}. $$
+
+    This is also referred to sometimes as \emph{numerical convergence rate}. 
+
+\subsection{Method of manufactured solutions}
+A typical problem is that one wants to estimate the convergence of some discrete solution
+    $$ \mat L_h \vec u_h = 0, $$
+which approximates a differential equation
+    $$ \mathcal L u = 0 $$
+    in which one typically does not know the analytical solution. This method allows to compute a modified problem in which we know the analytic solution. Indeed, consider an arbitrary analytic function (that we know) $u_{ex}$. The main idea here is that we can define a right hand side 
+    $$ f_{ex} \coloneqq \mathcal L u_{ex}, $$
+such that the solution of the modified problem 
+    $$ \mathcal L u = f \quad ( = \mathcal L u_{ex}) $$
+    is, if uniqueness holds, $u = u_{ex}$. To obtain the discrete problem, we consider the associated grid function $R_h u_{ex}$ and set the discrete right hand side $\vec f_h = R_h \mathcal L u_{ex}$ such that the solution of the discrete problem 
+    $$ \mat L_h \vec u_h = \vec f_h \quad (=R_h \mathcal L u_{ex}) $$
+converges to the continuous solution $u_{ex}$ by construction. 
 
 \subsection{Convergence Analysis}
 Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in the Lax equivalence theorem. We will first require other definitions. 
@@ -333,7 +352,7 @@ Using these maps, we define a forward difference in $x$ and $y$ directions as $D
     \end{align*}
     where we have used a slight abuse of notation by denoting both the 2D vector and 1D vectors as $\vec f^{ij}$ and $\vec f^I$ respectively. 
     
-\subsubsection{Time discretization}
+\subsection{Time discretization}
 Time discretization is an enormous topic, so here we provide simple strategies and ways to think about them. We will dedicate an entire section to their analysis using the von Neumann stability analysis. To avoid messing with Bochner spaces, we will refrain from considering a precise functional setting, and leave this for further ahead in the notes. Consider a differential operator $\mathcal L$ and its associated discrete matrix $\mat L_h$ which includes the problems boundary conditions. The continuous differential equation, for some initial condition $x(0) = x_0$, is given by 
     $$ \dot x + \mathcal L x = f, $$
     which we can discretize in space to obtain the system of differential equations
@@ -456,19 +475,19 @@ Now we look at the stability of forward and backward Euler and the $\theta$-meth
     $$
     We now recognize two cases. 
     \begin{itemize}
-        \item If $\Delta t$ is so big such that $1-(1-\theta)c\Delta t < 0$, we have
+        \item If $\Delta t$ is big and such that $1-(1-\theta)c\Delta t < 0$, we have
         \begin{align*}
             -\frac{1-(1-\theta)c\Delta t}{1+\theta c\Delta t} \leq 1 &\iff -1+(1-\theta)c\Delta t \leq 1+\theta c\Delta t\\
             &\iff (1-2\theta) c\Delta t \leq 2\\
             &\iff \left(\frac{1}{2}-\theta\right)c\Delta t\leq 1.
         \end{align*}
-        So, if $\theta\geq 1/2$, the method is unconditionally stable, and if $\theta <1/2$, the method is \underline{conditionally stable}. 
-        \item If $\Delta t$ is small, such that $1-(1-\theta)c\Delta t < 1 + \theta c \Delta t$, then we get $-c\Delta t < 1$, which is \underline{unconditionally stable}. 
+        So, if $\theta\geq 1/2$, the method is unconditionally stable, and if $\theta <1/2$, the method is \emph{conditionally stable}. 
+        \item If $\Delta t$ is small, such that $1-(1-\theta)c\Delta t < 1 + \theta c \Delta t$, then we get $-c\Delta t < 1$, which is \emph{unconditionally stable}. 
     \end{itemize}
 \end{enumerate}
 
 \subsection{Unavoidable nonlinearities}
-Sometimes, specially in stationary models, we cannot avoid having to solve a nonlinear problem. Two common ways to obtain an approximate solution to a nonlinear problem are 1) fixed point methods (usually of first order), and 2) Newton-Raphson methods. To analyze them, consider the domain $\Omega=[a,b]$ and the example problem
+Sometimes, specially in stationary models, we cannot avoid having to solve a nonlinear problem. Two common ways to obtain an approximate solution to a nonlinear problem are 1) fixed point methods (usually of first order), and 2) Newton-Raphson methods. To analyze them, consider the domain $\Omega=(a,b)$ and the example problem
 $$
 \begin{cases}
     -u'' + \sin(u) &= 0\\
@@ -579,7 +598,7 @@ In this section we will review some important properties of functional spaces an
             \item Positive-definiteness: we note that $0=\|x\|_W\geq \|x\|_X\geq 0$, which implies $x=0$.
         \end{itemize}
         \item Banach spaces are complete metric spaces. For a given Banach space $X$, its (topological) dual is the space $X'$ of functions $X\mapsto \R$, which is always Banach. The norm in $X'$ is referred to as the dual norm, and for $T\in X'$ it is defined as 
-        $$\|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|.$$
+            $$\|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|= \sup_{x\in X}\frac{|T(x)|}{\|x\|_X}.$$
         The action of an element of the dual space is sometimes denoted as $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. In general, one can identify a part of the bidual space $X'' = (X')'$ through the evaluation operator $T_f:X'\mapsto \R$ in $X''$ defined as $T_f(L) = L(f)$. This immersion is not surjective. 
         \item Hilbert spaces are Banach spaces with respect to the distance induced by a dot (inner) product, i.e. a bilinear form $(\cdot, \cdot ): X\times X\mapsto \R $ such that: 
             \begin{itemize}
@@ -624,6 +643,14 @@ A simple way to remember this is to split a function as $f = I_{|f|\leq 1}f + I_
 
 \paragraph{Distributions and derivatives} To formulate differential equations in Banach/Hilbert spaces, it will be important to be able to define derivatives in such spaces. This is done through the language of distributions, invented (discovered) by L Schwartz. For this, we require the notion of 'test functions', i.e. functions on which we can discharge derivatives of abstract objects through integration by parts. Consider then a function $f$ in $C_0^\infty(\R^d)$, the space of infinitely differentiable scalar functions with compact support in $\R^d$, then a distribution is simply an element $T$ in the dual space $(C_0^\infty(\R^d))'$, whose action can be written as $\langle T, f\rangle_{(C_0^\infty)'\times C_0^\infty}$, or sometimes simply as $\langle T, f\rangle$, if it is clear by context. The idea is to generalize the notion of action through integration, so that for sufficiently smooth functions $f$, their induced distribution is $Tf$ given by
     $$ \langle Tf, g \rangle = \int_{\R^d} fg\,dx. $$
+
+\example{All classical (or strong) derivatives coincide with the weak derivatives, as seen from the integration by parts formulas. Also, consider the Dirac delta distribution given by
+    $$ \langle \delta_x, f\rangle = f(x), $$
+sometimes written as $\delta_x(f)$, or also simply as $\int_\Omega \delta_x f\,dx$ (with a \emph{not too mild} abuse of notation).
+Then, its derivative is given by 
+    $$ \langle \delta', f \rangle = -\langle \delta_x, f'\rangle = - f'(x).$$
+}
+
 This integral approach, when thinking about integration by parts formulas, allows us to define distribution derivatives as
     $$ \langle \partial_i T, f\rangle \coloneqq -\langle T, \partial_i f\rangle, $$
 as given by integration by parts. This is known as a \emph{weak derivative}. Arbitrary order differential operators can be defined analogously, most importantly $\grad, \dive, \curl$, given by 
@@ -631,12 +658,6 @@ as given by integration by parts. This is known as a \emph{weak derivative}. Arb
         \langle \dive T, f\rangle &\coloneqq -\langle T, \grad f\rangle \\
         \langle \curl T, f\rangle &\coloneqq \langle T, \curl f\rangle.
     \end{align*}
-\example{All classical (or strong) derivatives coincide with the weak derivatives, as seen from the integration by parts formulas. Also, consider the Dirac delta distribution given by
-    $$ \langle \delta_x, f\rangle = f(x), $$
-sometimes written as $\delta_x(f)$, or also simply as $\int_\Omega \delta_x f\,dx$ (with a \emph{not too mild} abuse of notation).
-Then, its derivative is given by 
-    $$ \langle \delta', f \rangle = -\langle \delta_x, f'\rangle = - f'(x).$$
-}
 Naturally, weak derivatives and the common ones coincide under differentiability assumptions.
 
 \paragraph{Sobolev spaces} The notion of weak derivatives allows us to define differentiable Hilbert spaces, given by 
@@ -650,7 +671,7 @@ This is the graph norm of the $\nabla$ operator, and it can be further seen as t
         \item $\| x \|_{H^1(\Omega)} = \|x\|_{1,\Omega}$.
     \end{itemize}
 The space $H^1(\Omega)$ is very important, as it is a Hilbert space with inner product
-    $$ \langle x,y\rangle_{H^1(\Omega)} \coloneqq \langle x,y\rangle_{L^2(\Omega)} + \langle \grad x, \grad y\rangle_{L^2(\Omega)}. $$
+    $$ (x,y)_{H^1(\Omega)} \coloneqq (x,y)_{L^2(\Omega)} + (\grad x, \grad y)_{L^2(\Omega)}. $$
 Analogously, we can define the spaces
     $$ H(\dive; \Omega) = \left\{f\in L^2(\Omega): \dive f \in L^2(\Omega)\right\} $$
 and    
@@ -675,7 +696,7 @@ Consider $\Omega$ a bounded Lipschitz domain in $\R^d$, $m\geq 1$ integer, $j\ge
         \item If $mp \leq d$  then for $q$ in $[1, \frac{dp}{d - mp})$:
             $$ W^{j+m, p}(\Omega) \hookrightarrow W^{j,q}(\Omega). $$
         \item If $mp > d$, then 
-            $$ W^{j+m, p}(\Omega \hookrightarrow C^j(\bar\Omega). $$
+            $$ W^{j+m, p}(\Omega) \hookrightarrow C^j(\bar\Omega). $$
     \end{enumerate}
 These inclusions hold also if the arrival domain is an arbitrary subdomain of $\Omega$. 
 \end{theorem}
@@ -877,7 +898,7 @@ for given functions $f$ in $V_0'$ and $g$ in $(\gamma_D V_0)'$. Note the followi
     \end{itemize}
 
 \example{
-    We encourage the reader to try to compute the weak formulation of the Poisson problem in mixed form. To do this, one must define the auxiliary variable $\vec \sigma \coloneqq \vec u$, so that the strong form of the problem now becomes
+    We encourage the reader to try to compute the weak formulation of the Poisson problem in mixed form. To do this, one must define the auxiliary variable $\vec \sigma \coloneqq \grad u$, so that the strong form of the problem now becomes
         $$
             \begin{aligned}
                 -\dive \vec\sigma &= f &&\text{ in $\Omega$}, \\
