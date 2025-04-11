@@ -641,7 +641,15 @@ It will be important to know that if $|\Omega|<\infty$, then these spaces form a
     $$ L^\infty(\Omega) \subset L^p(\Omega) \subset ... \subset L^1(\Omega). $$
 A simple way to remember this is to split a function as $f = I_{|f|\leq 1}f + I_{|f|\geq 1}f$ and note that $|x|^p < |x|^{p+\epsilon}$ for $\epsilon > 0$. 
 
-\paragraph{Distributions and derivatives} To formulate differential equations in Banach/Hilbert spaces, it will be important to be able to define derivatives in such spaces. This is done through the language of distributions, invented (discovered) by L Schwartz. For this, we require the notion of 'test functions', i.e. functions on which we can discharge derivatives of abstract objects through integration by parts. Consider then a function $f$ in $C_0^\infty(\R^d)$, the space of infinitely differentiable scalar functions with compact support in $\R^d$, then a distribution is simply an element $T$ in the dual space $(C_0^\infty(\R^d))'$, whose action can be written as $\langle T, f\rangle_{(C_0^\infty)'\times C_0^\infty}$, or sometimes simply as $\langle T, f\rangle$, if it is clear by context. The idea is to generalize the notion of action through integration, so that for sufficiently smooth functions $f$, their induced distribution is $Tf$ given by
+\paragraph{Distributions and derivatives} To formulate differential equations in Banach/Hilbert spaces, it will be important to be able to define derivatives in such spaces. This is done through the language of distributions, invented (discovered) by L Schwartz. For this, we require the notion of 'test functions', i.e. functions on which we can discharge derivatives of abstract objects through integration by parts. Consider then a function $f$ in $C_0^\infty(\R^d)$, the space of infinitely differentiable scalar functions with compact support in $\R^d$, then a distribution is simply an element $T$ in the dual space $(C_0^\infty(\R^d))'$, whose action can be written as $\langle T, f\rangle_{(C_0^\infty)'\times C_0^\infty}$, or sometimes simply as $\langle T, f\rangle$, if it is clear by context. 
+
+The topology we consider in each space is the usual one, meaning the ones induced by the norms. In $\mathcal D(\R^d)\coloneqq C_0^\infty(\R^d)$, the norm is the supremum over all derivatives:
+$$ \| f \|_{\mathcal D(\R^d)} \coloneqq \sup_{k} \sup_{|\alpha|} \|D^\alpha f\|_\infty, $$
+where $\alpha$ is a multi-index. This means that $\alpha=(\alpha_1, \hdots, \alpha_N)$, and $|\alpha| = \sum_i \alpha_i$. For example, when $k=2$, the possible multiindices in $\R^2$ are $(2,0)$, $(1,1)$, and $(0,2)$, and the differential operator is given by 
+$$D^\alpha \coloneqq \frac{\partial^{|\alpha|}}{\partial^{\alpha_1}\hdots \partial^{\alpha_N}}. $$
+Using that, the norm of a distribution is simply given by the operator norm. 
+
+The idea is to generalize the notion of action through integration, so that for sufficiently smooth functions $f$, their induced distribution is $Tf$ given by
     $$ \langle Tf, g \rangle = \int_{\R^d} fg\,dx. $$
 
 \example{All classical (or strong) derivatives coincide with the weak derivatives, as seen from the integration by parts formulas. Also, consider the Dirac delta distribution given by
