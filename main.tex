@@ -612,7 +612,7 @@ In this section we will review some important properties of functional spaces an
         \item The inner product yields the fantastic Riesz map, which is actually an isometry. This is given as follows: consider a Hilbert space $H$ with inner product $(\cdot, \cdot)_H$, then a Riesz map is an operator $R_H: H\mapsto H'$ such that for any $x,y$ in $H$ it holds that $\langle R_H(x), y\rangle_{H'\times H} = (x, y)_H$. Notably, $\|R_H(x)\|_{H'} = \| x \|_H$. 
     \end{itemize}
 One fundamental aspect of Hilbert spaces is that they provide some intuitive properties related to projections, which we recall through the following results: 
-\begin{theorem}{Best approximation}
+\begin{theorem}[Best approximation]
     Set $U\subset H$ a closed subspace of a Hilbert space $H$ and set $f$ in $H$. Then there exists a unique $g$ in $U$ such that
         $$ \|f - g \|_H = \inf_{u\in U} \| f - u\|_H. $$
 \end{theorem}
@@ -641,7 +641,7 @@ It will be important to know that if $|\Omega|<\infty$, then these spaces form a
     $$ L^\infty(\Omega) \subset L^p(\Omega) \subset ... \subset L^1(\Omega). $$
 A simple way to remember this is to split a function as $f = I_{|f|\leq 1}f + I_{|f|\geq 1}f$ and note that $|x|^p < |x|^{p+\epsilon}$ for $\epsilon > 0$. 
 
-\paragraph{Distributions and derivatives} To formulate differential equations in Banach/Hilbert spaces, it will be important to be able to define derivatives in such spaces. This is done through the language of distributions, invented (discovered) by L Schwartz. For this, we require the notion of 'test functions', i.e. functions on which we can discharge derivatives of abstract objects through integration by parts. Consider then a function $f$ in $C_0^\infty(\R^d)$, the space of infinitely differentiable scalar functions with compact support in $\R^d$, then a distribution is simply an element $T$ in the dual space $(C_0^\infty(\R^d))'$, whose action can be written as $\langle T, f\rangle_{(C_0^\infty)'\times C_0^\infty}$, or sometimes simply as $\langle T, f\rangle$, if it is clear by context. The idea is to generalize the notion of action through integration, so that for sufficiently smooth functions $f$, their induced distribution is $Tf$ given by
+\subsection{Derivatives of operators in Banach spaces} To formulate differential equations in Banach/Hilbert spaces, it will be important to be able to define derivatives in such spaces. This is done through the language of distributions, invented (discovered) by L Schwartz. For this, we require the notion of 'test functions', i.e. functions on which we can discharge derivatives of abstract objects through integration by parts. Consider then a function $f$ in $C_0^\infty(\R^d)$, the space of infinitely differentiable scalar functions with compact support in $\R^d$, then a distribution is simply an element $T$ in the dual space $(C_0^\infty(\R^d))'$, whose action can be written as $\langle T, f\rangle_{(C_0^\infty)'\times C_0^\infty}$, or sometimes simply as $\langle T, f\rangle$, if it is clear by context. The idea is to generalize the notion of action through integration, so that for sufficiently smooth functions $f$, their induced distribution is $Tf$ given by
     $$ \langle Tf, g \rangle = \int_{\R^d} fg\,dx. $$
 
 \example{All classical (or strong) derivatives coincide with the weak derivatives, as seen from the integration by parts formulas. Also, consider the Dirac delta distribution given by
@@ -658,7 +658,6 @@ as given by integration by parts. This is known as a \emph{weak derivative}. Arb
         \langle \dive T, f\rangle &\coloneqq -\langle T, \grad f\rangle \\
         \langle \curl T, f\rangle &\coloneqq \langle T, \curl f\rangle.
     \end{align*}
-Naturally, weak derivatives and the common ones coincide under differentiability assumptions.
 
 \paragraph{Sobolev spaces} The notion of weak derivatives allows us to define differentiable Hilbert spaces, given by 
     $$ W^{1,p}(\Omega) \coloneqq \{ f\in L^p(\Omega): \grad f \in L^p(\Omega)\}. $$
@@ -714,7 +713,7 @@ and thus we can bound
 $$|f(x+h)-f(x)|\leq \left|\int_x^{x+h}f'(s)\mathrm{d}s\right|\leq \int_x^{x+h}|f'(s)|\mathrm{d}s \overset{\text{C-S}}{\leq} \|f'\|_{L^2((x,x+h))}h \leq \|f'\|_{L^2(I)}h \quad \forall x\in I. $$
 This shows that if $f'\in L^2(I)$, then $f$ is uniformly continuous. In particular, we have the injection $H^1(I)\to C^0(\overline{I})$. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Traces}%
+\subsection{Traces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Traces or trace operators are the ones that restrict a function in $\R^d$ to some set in $\R^{d-1}$, most commonly the boundary of a domain. They are fundamental to adequately define boundary conditions. For the presentation of this section, we follow \cite{gatica2014simple} and \cite{monk2003finite}. Some details about Sobolev spaces are drawn from \cite{adams2003sobolev}. The fundamental difficulty of defining trace operators is that the domain where the boundary condition is defined has measure 0 in the measure of the starting domain, so some regularity of the function is required to guarantee that this operation makes sense. We will not enter the details of how a Lipschitz boundary is defined, see \cite{monk2003finite} for further details.
@@ -910,11 +909,7 @@ for given functions $f$ in $V_0'$ and $g$ in $(\gamma_D V_0)'$. Note the followi
     This problem will be studied in detail further ahead. 
 }
 
-
-
 \subsection{Poincaré inequalities and Lax-Milgram}
-
-
 Using all of the previous definitions, we can finally look at actual problems and some first well-posedness results. For all of them, the Poincaré inequality will be fundamental.
 
 \begin{lemma}[Generalized Poincaré inequality] There exists a positive constant $C$ such that for a non-empty portion of the subdomain $\Gamma \subseteq \partial\Omega$ it holds that
@@ -996,11 +991,11 @@ and thus the orthogonality is being considered with respect to the natural space
     $$ (\grad u, \grad v) = \langle f, v\rangle \qquad \forall v\in V. $$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Galerkin schemes for elliptic problems}
+\section{Galerkin schemes for elliptic problems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The idea here is that, instead of discretizing the differential operator as one would do in the case of finite differences to obtain discrete derivatives, one considers discrete functional spaces, with the idea that the discrete space somehow converges to the continuous space. This is known as a Galerkin scheme. The schemes here will be conforming in the sense that the discrete space $V_h$ is a subset of $V$, but this is not necessary, and indeed all Discontinuous Galerkin (DG) formulations are basically non-conforming schemes. 
-
+\subsection{Galerkin schemes}
 Consider thus an abstract differential problem given by finding $u$ in $V$ such that
     $$ a(u, v) = L(v) \qquad \forall v \in V, $$
 such that the hypotheses of Lax-Milgram hold. In this case, we can consider a discrete space $V_h$ in $V$, and thus define the following discrete problem: 
@@ -1019,9 +1014,7 @@ Taking the infimum over $z_h$ one obtains the celebrated \emph{Ceà estimate}:
     $$ \| u - u_h \|_V \leq \frac C \alpha \inf_{v_h\in V_h} \|u - v_h\|_{V_h}. $$
 This inequality can reveal many things. For example, if the number $C/\alpha$ is very big, it can hint on a very wide gap between the optimal solution (i.e. the projection) and the discrete one computed from the space $V_h$. A more precise characterization of the approximation properties of a space can be given by the Kolmogorov width, which has been studied in \cite{evans2009n}.
 
-
-
-\subsection{Finite elements} 
+\subsection{Finite elements in $H^1$} 
 
 The idea, for this course, of studying specifically finite elements will be that of having more significative ways of expressing the projection error present in Ceà's estimate: 
     $$ \inf_{v_h\in V_h} \| u - v_h\|_V. $$
@@ -1052,7 +1045,7 @@ This space is said to be \emph{conforming} in $V$ if $X_h^k$ belongs to $V$. Nat
 \end{lemma}
 
 We now simply show the fundamental FEM bases and the related interpolation operators that we will use to recover most convergence estimates. We follow the presentation given in \cite{monk2003finite}, but similar results can be found in \cite{ern2004theory}.
-
+\subsection{Finite elements in $H(\dive)$ and $H(\curl)$}
 \paragraph{$H(\dive)$:} Here we consider the local polynomial in $\R^d$ given by
     $$ D_k = [\P_{k-1}]^d \oplus \widetilde{\P_{k-1}} \vec x, $$
 where $\vec x$ is the identity map, and $\widetilde{\P_k}$ is the set of homogeneous\footnote{A homogeneous polynomial is one whose non-zero terms all have the same degree, such as $x^2 + xy$.} polynomials of degree exactly $k$. If $k=1$, this space will have $d+1$ degrees of freedom, characterized in a triangle/tetrahedron by degrees of freedom defined through the normal component of the polynomial on its facets. These elements are known as Raviart-Thomas elements. Thus, given a triangulation of the geometry $\T_h$, this allows us to define the space
@@ -1114,7 +1107,7 @@ There is an intrinsic relationship between this structure and inf-sup conditions
     $$ \vec r_h \grad = \grad \pi_h, $$
 which further relates the interpolation results. 
 
-\subsection{Inverse inequalities}
+\subsection{Inverse inequalities and non-conforming schemes}
 
 All of the discrete spaces considered are finite dimensional, which means that all their norms are equivalent. Of course, these relationships don't hold in the continuous setting, so there is bound to be some dependence of these constants on $h$. The great thing about inverse inequalities is that in the discrete settings we can sometimes get away with operations that would be otherwise not feasible, but using adequate bounds can yield convergence anyway. We provide a general result first and then show some important consequences. For details, see \cite{ern2004theory}. We will require the following definition: we say that a family of affine meshes in $\R^d$ is \emph{shape regular} if there exists $\sigma_0$ such that 
     $$ \forall h: \sigma_K\coloneqq \frac{h_K}{\rho_K} \leq \sigma_0 \quad\forall K\in \T_h, $$
@@ -1133,199 +1126,14 @@ One can also obtain the following local estimate in 2D for simplices \cite{warbu
     $$ \| \vec v_h \|_{0,F} \leq C h_K^{-1/2} \| \vec v_h \|_{0,K}, $$
 where $F$ is a facet (line or triangle) and $K$ is the element (triangle or tetrahedron).
 
-
+% To add: Laplacian with weakly-imposed boundary conditions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Beyond ellipticity}\label{section:beyond-ellipticity}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In the previous section we have thorougly studied elliptic problems and many approximation propoerties. Still, one might rightfully notice that ellipticity can be quickly broken. For example, the operator $-\Delta: H_0^1(\Omega)\to H^{-1}(\Omega)$ is elliptic, but if we remove the minus sign, it loses that property. As this case is linear, it is possible to remap the unknown with $u\mapsto -u$, but it still feels unsatisfactory that the property is so fragile. Because of this, in this section we review two important theories that go beyond ellipticity: the theory of Fredholm operators and the inf-sup theory.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Fredholm operators}
-
-Most of the forms in which we present our problems comes from the fantastic notes from Andrea Moiola on time-harmonic acoustic waves \cite{moiola2021scattering}. Our reference problem will be the Helmholtz equation, given by the following strong form:
-
-\[
-\left\{
-\begin{array}{rc}
-    -\Delta u -k^2 u = f, &\Omega,\\
-    u=0, &\partial\Omega,
-\end{array}\right.
-\]
-
-for some $f\in H^{-1}(\Omega)$ and some boundary condition. This equation can be recoverred in the following way: consider the wave equation
-    $$ \ddot u - \Delta u = 0, $$
-and consider a variable separation procedure with $u(t,x) = V(t)U(x)$. This is a common technique, and it results in 
-    $$ \frac{\Delta U}{U} = k^2.$$
-multiplying by $U$ gives the desired result. Regarding well-posedness, let's first explore what we can conclude with Lax-Milgram. We will assume $u$ in $H_0^1(\Omega)$ for simplicity, which yields the following weak form: Find $u$ in $H_0^1(\Omega)$ such that
-
-\[
-a(u,v) = (\nabla u, \nabla v) - k^2(u,v) = \langle f, v\rangle, \quad \forall v\in H_0^1.
-\]
-
-Using $H_0^1(\Omega)$ with the norm induced by the seminorm $|v|_1 = \|\nabla v\|_0$, Poincaré inequality gives us $\|u\|_0\leq C_{\Omega}\|\nabla u\|_0$, and so the Lax-Milgram hypotheses look as follows: 
-
-\begin{itemize}
-    \item Boundedness: 
-    \begin{align*}
-        a(u,v) &\leq \|\nabla u\|_0\|\nabla v\|_0 + k^2\|u\|_0\|v\|_0,\\ 
-        &\leq (1+k^2C_\Omega^2)|u|_1|v|_1.
-    \end{align*}
-
-    \item Coercivity: 
-    \begin{equation*}
-        a(v,v) = \|\nabla v\|^2_{0,\Omega} - k^2\|v\|^2_{0,\Omega}.
-    \end{equation*}
-
-    We note that, by Poincaré inequality,
-
-    \[ k^2\|v\|^2_0 \leq k^2 C^2_{\Omega}\|\nabla v\|^2_0, \]
-
-    and thus,
-
-    \begin{align*}
-        a(v,v) &\geq \|\nabla v\|^2_0 - k^2C_\Omega^2\|\nabla v\|^2_0 \\
-        &= (1- k^2 C_\Omega^2)\|\nabla v\|^2_{0,\Omega}.
-    \end{align*}
-
-    In other words, the problem is well-possed if 
-    $$1-k^2C_\Omega^2 > 0 \iff k^2 < \frac{1}{C_\Omega^2}$$
-\end{itemize}
-
-This is a very limited answer, so we will now answer what happens for arbitrary $k\in\R$.
-
-\begin{definition}
-    A linear operator $K:H_1 \to H_1$ is \textbf{compact} if the image of a bounded sequence admits a converging subsequence.
-\end{definition}
-\begin{definition}
-    A bounded linear operator is a \textbf{Fredholm operator} if it is the sum of an invertible and a compact operator. 
-\end{definition}
-
-\begin{theorem}[Fredholm alternative]
-    A Fredholm operator is injective if and only if it is surjective. In such case, it has a bounded inverse.
-\end{theorem}
-
-A simpler way of showing that an operator is Fredholm, is through a Gårding inequality.
-
-\begin{definition}
-    Consider $H\subset V$ Hilbert spaces with a continuous embedding $H\hookrightarrow V$. 
-    A bilinear form $a:H\times H\to \R$ satisfies a \textbf{Gårding inequality} if there exist two positive constants $\alpha$, $C_V$ subject to, 
-    
-    \[a(v,v) \geq \alpha \|v\|^2_H - C_V\|v\|^2_V,\quad \forall v\in H.\]
-\end{definition}
-
-\textbf{Proposition:}
- If the inclusion $H\hookrightarrow V$ is compact, then the operator $A: H\to H^*$ associated to $a:H\times H\to \R$, i.e,
- \[\langle Ax,y\rangle = a(x,y),\]
-
- is such that if $a$ satisfies Gårding then $A$ is Fredholm. 
-
-\begin{proof}
-    We note that, by definition of Gårding,  \(a(u,v) + C_V(u,v)_V\) is invertible because of Lax-Milgram. 
-    We now try to write the equation in operator form. The form $(u,v)_V$ is handled as follows: set $T:V\to H^*$ as
-
-    \[\langle Tv, w\rangle_{H^*\times H} = "(v,w)_V"\equiv (v,iw)_V,\]
-
-    where $i: H\to V$ is the compact embedding. $T$ is clearly bounded:
-
-    \begin{align*}
-        \|Tv\|_{H^*} &= \sup_{w\in H}\frac{(v,iw)_V}{\|w\|_H},\\
-        &\leq \sup_{w\in H}\frac{\|v\|_V\|iw\|_V}{\|w\|_H},\\
-        &\leq \sup_{w\in H}\frac{\|v\|_V\|i\|\|w\|_H}{\|w\|_H},\\
-        &\leq \|i\|\|v\|.
-    \end{align*}
-
-    Then, the operator associated to the problem is $B :=A + C_V T\circ i$, where:
-    \begin{itemize}
-        \item $B$ is invertible,
-        \item $T$ is continuous,
-        \item $i$ is compact. 
-    \end{itemize}
-
-    The last two impliy that $T\circ i$ is compact, as the composition of continuous and compact operators is compact. 
-    It follows that $A = B - C_V T\circ i$ is Fredholm.
-\end{proof}
-
-
-
-\subsection{Galerkin Stability}
-
-We have seen that elliptic problems have the following a-priori stability estimate
-
-\[\alpha \|u\|_H \leq \|f\|_{H^*}\quad\text{ for }\quad a(u,v) = \langle f, v\rangle, \quad \forall v\in H.\]
-
-which carries naturally to the discrete problem:
-
-\[\alpha \|u_h\|_H \leq \|f\|_{H^*}\quad\text{ for }\quad a(u_h,v_h) = \langle f, v\rangle, \quad \forall v_h\in H_h.\]
-
-This can be rewritten as follows: denote the orthogonal projection $\Pi_h: H\to H^*$, and $R_H:H\to H^*$ the Riesz map.
-
-Then:
-
-\begin{align*}
-    &a(u,v) = \langle f, v\rangle_{H^*\times H}\quad \forall v\in H,\\
-    \iff &\langle Au, v\rangle_{H'\times H} = \langle f, v\rangle_{H'\times H}\quad \forall v\in H,\\
-    \iff &Au = f \quad\text{ in $H'$ and }(R^{-1}\circ A)u = R^{-1}f\quad\text{in }H.
-\end{align*}
-
-Also:
-
-\begin{align*}
-    &a(u_h,v_h) = \langle f, v_h\rangle\quad\forall v_h\in H_h,\\
-    \iff &(R^{-1}\circ A u_h,v_h)_H = (R^{-1}f,v_h)_H\quad\forall v_h\in H_h,\\
-    \iff &\Pi_h\mathbb{A}u_h = \Pi_h\mathbb{F},
-\end{align*}
-
-where $\mathbb{A} = R^-1\circ A$ and $\mathbb{F} = R^{-1}f$. The stability estimate gives, 
-
-\[\|u_h\| \leq\frac{1}{\alpha}\|\Pi_h\mathbb{F}\| = \frac{1}{\alpha}\|\Pi_h\mathbb{A} u_h\|.\]
-
-Finally, by duality, we get
-
-\begin{align*}
-    \|u_h\| &\leq \frac{1}{\alpha}\|\Pi_h\mathbb{A}u_h\| = \frac{1}{\alpha}\sup_{v_h}\frac{(\Pi_h\mathbb{A}u_h,v_h)}{\|v_h\|}
-    =\frac{1}{\alpha}\sup_{v_h}\frac{\langle Au_h,v_h\rangle_{H'\times H}}{\|v_h\|} = \frac{1}{\alpha}\sup_{v_h}\frac{a(u_h,v_h)}{\|v_h\|}.
-\end{align*}
-
-We call this result,
-
-\[\|u_h\| \leq C\sup_{v_h\in V_h}\frac{a(u_h,v_h)}{\|v_h\|},\qquad \forall u_h\in H_h,\]
-
-an \textbf{inf-sup condition}, which we will later use to prove \textbf{surjectivity} and \textbf{injectivity} separately. One may readily see that this condition implies (discrete) injectivity as $Au_h$ implies $u_h = 0$.
-
-We will require the following Lemma regarding discrete stability of Fredholm operators. Details are provided in \cite{sayas2019variational}.
-\begin{lemma}
-Consider a bilinear form $a:H\times H\to \R$ associated to an injective Fredholm operator $A+K$. Then, there exists $C, h_0>0$ such that
-
-\[\|u_h\|_H\leq C\sup_{v_h}\frac{a(u_h,v_h)}{\|v_h\|},\quad \forall u_h\in H_h, \quad h\leq h_0.\]
-In other words, discrete stability holds only for sufficiently fine meshes. 
-\end{lemma}
-
-Consider the discrete problem
-\[a(u_h,v_h) + b(u_h,v_h) = \langle f, v_h\rangle\]
-
-where $a$ and $b$ are the bilinear forms associated to an elliptic and a compact operator respectively, and consider the Galerkin projection $G_h: H\to H_h$
-
-\[a(G_hu, v_h) + b(G_hu, v_h) = a(u, v_h) + b(u,v_h).\]
-
-Under the previous hypothesis, for $h\leq h_0$ we have, 
-
-\[\|G_hu\|\leq C\sup_{v_h}\frac{a(G_hu, v_h) + b(G_hu, v_h)}{\|v_h\|}\leq C\|A+K\|\|u\|.\]
-
-Then $G_h$ is bounded. We observe that, as $G_h$ is a porjection, it holds that $G_h\Pi_h = \Pi_h$, and thus:
-\begin{align*}
-    \|u - G_hu\|&\leq \|u-\Pi_hu\| + \|\Pi_hu - G_hu\|,\\
-    &= \|u-\Pi_hu\| + \|G_h(\Pi_hu - u)\|,\\
-    &\leq (1+C\|A+K\|)\|u - \Pi_h u\|,
-\end{align*}
-
-which implies
-
-\[\|u-u_h\|\leq (1+C\|A+K\|)\inf_{v_h\in H_h}\|u-v_h\|,\] 
-
-which is a Céa estimate for sufficiently small $h$.
+In the previous section we have thorougly studied elliptic problems and many approximation propoerties. Still, one might rightfully notice that ellipticity can be quickly broken. For example, the operator $-\Delta: H_0^1(\Omega)\to H^{-1}(\Omega)$ is elliptic, but if we remove the minus sign, it loses that property. As this case is linear, it is possible to remap the unknown with $u\mapsto -u$, but it still feels unsatisfactory that the property is so fragile. Because of this, in this section we review two important theories that go beyond ellipticity: the inf-sup theory and the theory of Fredholm operators.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Inf-sup conditions}
 
@@ -1467,7 +1275,191 @@ We can now postulate a general Lax-Milgram Theorem. We write it in Hilbert Space
         \quad \text{ (injective) }\]
     \end{enumerate}
 \end{theorem}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Fredholm operators}
+
+Most of the forms in which we present our problems comes from the fantastic notes from Andrea Moiola on time-harmonic acoustic waves \cite{moiola2021scattering}. Our reference problem will be the Helmholtz equation, given by the following strong form:
+
+\[
+\left\{
+\begin{array}{rc}
+    -\Delta u -k^2 u = f, &\Omega,\\
+    u=0, &\partial\Omega,
+\end{array}\right.
+\]
+
+for some $f\in H^{-1}(\Omega)$ and some boundary condition. This equation can be recoverred in the following way: consider the wave equation
+    $$ \ddot u - \Delta u = 0, $$
+and consider a variable separation procedure with $u(t,x) = V(t)U(x)$. This is a common technique, and it results in 
+    $$ \frac{\Delta U}{U} = k^2.$$
+multiplying by $U$ gives the desired result. Regarding well-posedness, let's first explore what we can conclude with Lax-Milgram. We will assume $u$ in $H_0^1(\Omega)$ for simplicity, which yields the following weak form: Find $u$ in $H_0^1(\Omega)$ such that
+
+\[
+a(u,v) = (\nabla u, \nabla v) - k^2(u,v) = \langle f, v\rangle, \quad \forall v\in H_0^1.
+\]
+
+Using $H_0^1(\Omega)$ with the norm induced by the seminorm $|v|_1 = \|\nabla v\|_0$, Poincaré inequality gives us $\|u\|_0\leq C_{\Omega}\|\nabla u\|_0$, and so the Lax-Milgram hypotheses look as follows: 
+
+\begin{itemize}
+    \item Boundedness: 
+    \begin{align*}
+        a(u,v) &\leq \|\nabla u\|_0\|\nabla v\|_0 + k^2\|u\|_0\|v\|_0,\\ 
+        &\leq (1+k^2C_\Omega^2)|u|_1|v|_1.
+    \end{align*}
+
+    \item Coercivity: 
+    \begin{equation*}
+        a(v,v) = \|\nabla v\|^2_{0,\Omega} - k^2\|v\|^2_{0,\Omega}.
+    \end{equation*}
+
+    We note that, by Poincaré inequality,
+
+    \[ k^2\|v\|^2_0 \leq k^2 C^2_{\Omega}\|\nabla v\|^2_0, \]
+
+    and thus,
+
+    \begin{align*}
+        a(v,v) &\geq \|\nabla v\|^2_0 - k^2C_\Omega^2\|\nabla v\|^2_0 \\
+        &= (1- k^2 C_\Omega^2)\|\nabla v\|^2_{0,\Omega}.
+    \end{align*}
+
+    In other words, the problem is well-possed if 
+    $$1-k^2C_\Omega^2 > 0 \iff k^2 < \frac{1}{C_\Omega^2}$$
+\end{itemize}
+
+This is a very limited answer, so we will now answer what happens for arbitrary $k\in\R$.
+
+\begin{definition}
+    A linear operator $K:H_1 \to H_1$ is \textbf{compact} if the image of a bounded sequence admits a converging subsequence.
+\end{definition}
+\begin{definition}
+    A bounded linear operator is a \textbf{Fredholm operator} if it is the sum of an invertible and a compact operator. 
+\end{definition}
+
+\begin{theorem}[Fredholm alternative]
+    A Fredholm operator is injective if and only if it is surjective. In such case, it has a bounded inverse.
+\end{theorem}
+
+A simpler way of showing that an operator is Fredholm, is through a Gårding inequality.
+
+\begin{definition}
+    Consider $H\subset V$ Hilbert spaces with a continuous embedding $H\hookrightarrow V$. 
+    A bilinear form $a:H\times H\to \R$ satisfies a \textbf{Gårding inequality} if there exist two positive constants $\alpha$, $C_V$ subject to, 
+    
+    \[a(v,v) \geq \alpha \|v\|^2_H - C_V\|v\|^2_V,\quad \forall v\in H.\]
+\end{definition}
+
+\textbf{Proposition:}
+ If the inclusion $H\hookrightarrow V$ is compact, then the operator $A: H\to H^*$ associated to $a:H\times H\to \R$, i.e,
+ \[\langle Ax,y\rangle = a(x,y),\]
+
+ is such that if $a$ satisfies Gårding then $A$ is Fredholm. 
+
+\begin{proof}
+    We note that, by definition of Gårding,  \(a(u,v) + C_V(u,v)_V\) is invertible because of Lax-Milgram. 
+    We now try to write the equation in operator form. The form $(u,v)_V$ is handled as follows: set $T:V\to H^*$ as
+
+    \[\langle Tv, w\rangle_{H^*\times H} = "(v,w)_V"\equiv (v,iw)_V,\]
+
+    where $i: H\to V$ is the compact embedding. $T$ is clearly bounded:
+
+    \begin{align*}
+        \|Tv\|_{H^*} &= \sup_{w\in H}\frac{(v,iw)_V}{\|w\|_H},\\
+        &\leq \sup_{w\in H}\frac{\|v\|_V\|iw\|_V}{\|w\|_H},\\
+        &\leq \sup_{w\in H}\frac{\|v\|_V\|i\|\|w\|_H}{\|w\|_H},\\
+        &\leq \|i\|\|v\|.
+    \end{align*}
+
+    Then, the operator associated to the problem is $B :=A + C_V T\circ i$, where:
+    \begin{itemize}
+        \item $B$ is invertible,
+        \item $T$ is continuous,
+        \item $i$ is compact. 
+    \end{itemize}
+
+    The last two impliy that $T\circ i$ is compact, as the composition of continuous and compact operators is compact. 
+    It follows that $A = B - C_V T\circ i$ is Fredholm.
+\end{proof}
+
+
+
+\subsection{Galerkin stability}
+
+We have seen that elliptic problems have the following a-priori stability estimate
+
+\[\alpha \|u\|_H \leq \|f\|_{H^*}\quad\text{ for }\quad a(u,v) = \langle f, v\rangle, \quad \forall v\in H.\]
+
+which carries naturally to the discrete problem:
+
+\[\alpha \|u_h\|_H \leq \|f\|_{H^*}\quad\text{ for }\quad a(u_h,v_h) = \langle f, v\rangle, \quad \forall v_h\in H_h.\]
+
+This can be rewritten as follows: denote the orthogonal projection $\Pi_h: H\to H^*$, and $R_H:H\to H^*$ the Riesz map.
+
+Then:
+
+\begin{align*}
+    &a(u,v) = \langle f, v\rangle_{H^*\times H}\quad \forall v\in H,\\
+    \iff &\langle Au, v\rangle_{H'\times H} = \langle f, v\rangle_{H'\times H}\quad \forall v\in H,\\
+    \iff &Au = f \quad\text{ in $H'$ and }(R^{-1}\circ A)u = R^{-1}f\quad\text{in }H.
+\end{align*}
+
+Also:
+
+\begin{align*}
+    &a(u_h,v_h) = \langle f, v_h\rangle\quad\forall v_h\in H_h,\\
+    \iff &(R^{-1}\circ A u_h,v_h)_H = (R^{-1}f,v_h)_H\quad\forall v_h\in H_h,\\
+    \iff &\Pi_h\mathbb{A}u_h = \Pi_h\mathbb{F},
+\end{align*}
+
+where $\mathbb{A} = R^-1\circ A$ and $\mathbb{F} = R^{-1}f$. The stability estimate gives, 
+
+\[\|u_h\| \leq\frac{1}{\alpha}\|\Pi_h\mathbb{F}\| = \frac{1}{\alpha}\|\Pi_h\mathbb{A} u_h\|.\]
+
+Finally, by duality, we get
+
+\begin{align*}
+    \|u_h\| &\leq \frac{1}{\alpha}\|\Pi_h\mathbb{A}u_h\| = \frac{1}{\alpha}\sup_{v_h}\frac{(\Pi_h\mathbb{A}u_h,v_h)}{\|v_h\|}
+    =\frac{1}{\alpha}\sup_{v_h}\frac{\langle Au_h,v_h\rangle_{H'\times H}}{\|v_h\|} = \frac{1}{\alpha}\sup_{v_h}\frac{a(u_h,v_h)}{\|v_h\|}.
+\end{align*}
+
+We call this result,
+
+\[\|u_h\| \leq C\sup_{v_h\in V_h}\frac{a(u_h,v_h)}{\|v_h\|},\qquad \forall u_h\in H_h,\]
+
+an \textbf{inf-sup condition}, which we will later use to prove \textbf{surjectivity} and \textbf{injectivity} separately. One may readily see that this condition implies (discrete) injectivity as $Au_h$ implies $u_h = 0$.
+
+We will require the following Lemma regarding discrete stability of Fredholm operators. Details are provided in \cite{sayas2019variational}.
+\begin{lemma}
+Consider a bilinear form $a:H\times H\to \R$ associated to an injective Fredholm operator $A+K$. Then, there exists $C, h_0>0$ such that
+
+\[\|u_h\|_H\leq C\sup_{v_h}\frac{a(u_h,v_h)}{\|v_h\|},\quad \forall u_h\in H_h, \quad h\leq h_0.\]
+In other words, discrete stability holds only for sufficiently fine meshes. 
+\end{lemma}
+
+Consider the discrete problem
+\[a(u_h,v_h) + b(u_h,v_h) = \langle f, v_h\rangle\]
+
+where $a$ and $b$ are the bilinear forms associated to an elliptic and a compact operator respectively, and consider the Galerkin projection $G_h: H\to H_h$
+
+\[a(G_hu, v_h) + b(G_hu, v_h) = a(u, v_h) + b(u,v_h).\]
+
+Under the previous hypothesis, for $h\leq h_0$ we have, 
+
+\[\|G_hu\|\leq C\sup_{v_h}\frac{a(G_hu, v_h) + b(G_hu, v_h)}{\|v_h\|}\leq C\|A+K\|\|u\|.\]
+
+Then $G_h$ is bounded. We observe that, as $G_h$ is a porjection, it holds that $G_h\Pi_h = \Pi_h$, and thus:
+\begin{align*}
+    \|u - G_hu\|&\leq \|u-\Pi_hu\| + \|\Pi_hu - G_hu\|,\\
+    &= \|u-\Pi_hu\| + \|G_h(\Pi_hu - u)\|,\\
+    &\leq (1+C\|A+K\|)\|u - \Pi_h u\|,
+\end{align*}
+
+which implies
+
+\[\|u-u_h\|\leq (1+C\|A+K\|)\inf_{v_h\in H_h}\|u-v_h\|,\] 
+
+which is a Céa estimate for sufficiently small $h$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Saddle point problems}
@@ -1926,7 +1918,7 @@ We note that if $X$ is compact, then this theorem can be extended to \textit{wea
     $$\|T(w_1)-T(w_2)\|\leq C\|\sin(w_1)-\sin(w_2)\|\leq C \|w_1-w_2\|.$$
 Then, if $C<1$ there exists $\bar u$ such that $T(\bar u)= \bar u$. }
 
-\begin{theorem}[Brouwer Fixed Point] Set $K$ a non-empty, compact and convex subset of a finite-dimensional Banach space. Then every continuous $f:K\to K$ has a fixed point.
+\begin{theorem}[Brouwer fixed point] Set $K$ a non-empty, compact and convex subset of a finite-dimensional Banach space. Then every continuous $f:K\to K$ has a fixed point.
 \end{theorem}
 
 \example{
@@ -1947,7 +1939,7 @@ This yields that $T_h:\mathcal{B}(0,r)\to \mathcal{B}(0,r)$ is continuous and th
 
 From the previous result we can extend to $h\to 0$ through compactness. This can be generalized to another fixed point theorem known as Schauder's fixed point theorem, which has 2 forms.
 
-\begin{theorem}[Schauder Fixed Point]
+\begin{theorem}[Schauder fixed point]
 The following statements hold. 
 \begin{enumerate}
     \item Set $K$ a compact, convex subset of $X$ normed space, and $f:K\to K$ a continuous mapping. Then $f$ has at least one fixed point.
@@ -1966,11 +1958,125 @@ whose solution is guaranteed by Lax-Milgram's Lemma, with $u$ in $H_0^1(\Omega)$
 
 Consider a sequence $(w_k)_{k>1}$ in $\mathcal C$, which yields $(v_k)_{k>1}=(T(w_k))_{k>1}$ in $\mathcal C$ and additionally $v_k\in H_0^1(\Omega)$ for all $k$. Now, we note that we have a sequence in $H^1$, and as the unit ball is weakly compact, we obtain that is has some weakly convergent sequence in $H^1$. The final detail is that, if we consider $\mathcal C$ to be a ball in $L^2$, then the mapping $T$ can be written additionally as $T\circ i$, where $i:L^2(\Omega)\to H^1(\Omega)$ is the compact embedding of $H^1$ into $L^2$. We thus have that $T\circ i$ is the composition of a continuous and a compact mapping, and thus a compact map. This in particular implies that our sequence $(v_k)$ has a strongly convergent subsequence in $L^2$. This concludes that $T:L^2(\Omega)\to L^2(\Omega)$ is compact, and thus we can use Schauder's fixed point theorem to show the existence of a fixed point $\bar u = T(\bar u)$ in $L^2(\Omega)$. Naturally, the equation itself reveals that actually $\bar u$ belongs to $H_0^1(\Omega)$, so we have some additional regularity on the fixed point we just found.
 }
+A consequence of the Schauder fixed point theorem is the Schaefer fixed point theorem. We state it for completeness without proof.
+\begin{theorem}[Schaefer fixed point]
+    Let $X$ be a Banach space and $f:X\to X$ a compact operator. If 
+    \begin{equation*}
+        \{x\in X: \sigma f(x)=x,\sigma\in[0,1]\}\subset B(0,r)
+    \end{equation*}
+    for some $r>0$, then there exists a fixed point of $f$.
+\end{theorem}
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Monotone operators}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Among nonlinear operators, there is a class of operators that provide efficient means to prove existence and uniqueness of solutions. These operators are called \textit{monotone}, and they have been extensively studied. We follow this section closely from \cite{ciarlet2013linear}.
+\begin{definition}[Monotone operator]
+    Let $V$ be a normed vector space and $\langle\cdot,\cdot\rangle$ its duality pairing. An operator $A:V\to V'$ is called monotone if
+    \begin{equation*}
+        \langle A(v)-A(u),v-u\rangle \geq 0 \qquad \forall u,v\in V,
+    \end{equation*}
+    and strictly monotone if the previous inequality is strict for $u\neq v$.
+\end{definition}
+We note that if $f:X\to \R$ is a convex and differentiable function, then $\nabla f$ is a monotone operator. Indeed, from convexity applied to $x,y\in X$ and adding we get
+\begin{align*}
+    f(x) &\geq f(y) + \langle \nabla f(y), x-y\rangle\\
+    f(y) &\geq f(x) + \langle \nabla f(x), y-x\rangle\\
+    \implies 0 &\geq \langle \nabla f(y)-\nabla f(x),x-y\rangle \\
+    \implies 0&\leq \langle \nabla f(x)-\nabla f(y),x-y\rangle.
+\end{align*}
+We can also build monotone operators from an elliptic operator. If $A:V\to V'$ is an operator such that $a(u,v) = \langle A(u),v\rangle$ is continuous (linear) and elliptic, then $A$ is strictly monotone:
+\begin{align*}
+    \langle A(u)-A(v),u-v\rangle &= \langle A(u-v), u-v\rangle\\
+    &= a(u-v,u-v)\\
+    &\geq \alpha \|u-v\|^2 \geq 0,
+\end{align*}
+and the inequality is strict for $u\neq v$ since $\|\cdot\|$ is a norm. 
 
+A very useful property can be derived from the monotonicity in the case that $V$ is complete.
+\begin{theorem}
+    If $V$ is a real Banach space and $A:V\to V'$ is monotone, then $A$ is locally bounded, i.e. for any $u\in V$ there exists $r=r(u)>0$ and $\rho=\rho(u)>0$ such that
+    \begin{equation*}
+        \|u-v\|\leq r \implies \|A(u)-A(v)\|\leq \rho,
+    \end{equation*}
+    which similar to a Lipschitz property. Moreover, if $A$ is linear, then $A$ is continuous.
+\end{theorem}
+We now introduce the notion of coercive ($\neq$ elliptic) and hemicontinuous operators.
+\begin{definition}
+    An operator $A:V\to V'$ is coercive if 
+    \begin{equation*}
+        \lim_{\|v\|\to \infty} \frac{\langle A(v),v\rangle}{\|v\|} = +\infty.
+    \end{equation*}
+\end{definition}
+\begin{definition}
+    An operator $A:V\to V'$ is hemicontinuous if for every $u,v,w\in V$ there exists $t_0=t_0(u,v,w)>0$ such that the map 
+    \begin{align*}
+        \varphi:(-t_0,t_0)&\to \R\\
+        t&\mapsto \langle A(u+tv),w\rangle
+    \end{align*}
+    at $t=0$. 
+\end{definition}
+Hemicontinuity is a weaker property than continuity, as we shall prove in the following theorem.
+\begin{theorem}
+    If $A:V\to V'$ is continuous, then it is hemicontinuous.
+    \begin{proof}
+        Let $\varphi(t)=\langle A(u+tv),w\rangle$. Then, we get
+        \begin{align*}
+            |\varphi(t)-\varphi(0)| &= |\langle A(u+tv),w\rangle - \langle A(u),w\rangle|\\
+            &\leq |\langle A(u+tv)-A(u),w\rangle| \tag{Linearity of $A$}\\
+            &\leq \|A(u+tv)-A(u)\|_{V'} \|w\|_V. \tag{Cauchy-Schwarz}
+        \end{align*}
+        Thus, as $\|(u+tv)-u\|_V=\|tv\|\leq |t|\|u\|_V$, then $u+tv\overset{t\to 0}{\to} u$ in norm, and since $A$ is continuous, we get $A(u+tv)\overset{t\to 0}{\to} A(u)$ in $V'$. Thus, taking limit as $t\to 0$ we immediately conclude that $\varphi$ is continuous at $t=0$.
+    \end{proof}
+\end{theorem}
+Now that we have defined hemicontinuous operators, we are ready to introduce a theorem that gives sufficient conditions that guarantee the surjectivity of a hemicontinuous monotone operator.
+\begin{theorem}[Minty-Browder]
+    Let $V$ a real, separable and reflexive Banach space (e.g. $L^p$ for $p>1$), and $A:V\to V'$ a coercive and hemicontinuous monotone operator. Then, $A$ is surjective, i.e. given any $f\in V'$ there exists $u\in V$ such that $A(u)=f$. Moreover, if $A$ is strictly monotone, then $A$ is also injective, and thus there exists a unique solution for $A(u)=f$.
+\end{theorem}
+A common example of an operator that can be analyzed via the Minty-Browder theorem is the p-Laplacian $-\Delta_p$, which for $p\geq 1$ is defined as the map
+\begin{align*}
+    -\Delta_p : W_0^{1,p}(\Omega)&\to W^{-1,q}(\Omega) = (W_0^{1,p}(\Omega))'\\
+    v&\mapsto -\Delta_p v = -\nabla\cdot(|\nabla v|^{p-2}\nabla v),
+\end{align*}
+where $q$ is the conjugate exponent of $p$, such that $1/p + 1/q = 1$. Note that for arbitrary $u,v\in W_0^{1,p}(\Omega)$ the duality is given by 
+\begin{equation*}
+    \langle \Delta_p u, v\rangle = \langle \nabla\cdot (|\nabla u|^{p-2}\nabla u), v\rangle = -\langle |\nabla u|^{p-2}\nabla u, \nabla v\rangle = -\int_\Omega |\nabla u|^{p-2}\nabla u\cdot\nabla v dx,
+\end{equation*}
+which is well-defined by Hölder's inequality:
+\begin{equation*}
+    \left|\int_\Omega |\nabla u|^{p-2}\nabla u\cdot\nabla v dx\right| \leq \|\nabla u\|^{p-1}_{W_0^{1,p}(\Omega)}\|\nabla v\|_{W_0^{1,p}(\Omega)},
+\end{equation*}
+and noting that $w\mapsto \|\nabla w\|_{W_0^{1,p}(\Omega)}$ is a norm on $W_0^{1,p}(\Omega)$. We define now the functional
+\begin{align*}
+    \Psi:W_0^{1,p}(\Omega)&\to \R\\
+    u&\mapsto \Psi(u):= \frac{1}{p}\int_\Omega |\nabla u|^p dx.
+\end{align*}
+This functional is Gâteaux-differentiable, and we explicitly calculate its the Gâteaux derivative for $u,v\in W_0^{1,p}(\Omega)$:
+\begin{align*}
+    d\Psi(u)[v] &= \left.\frac{d}{d\varepsilon}\right|_{\varepsilon=0} \Psi(u+\varepsilon v)\\
+    &= \left.\frac{d}{d\varepsilon}\right|_{\varepsilon=0} \frac{1}{p}\int_\Omega \underbrace{|\nabla (u+\varepsilon v)|^p}_{|\nabla(u+\varepsilon v)\cdot \nabla(u+\varepsilon v)|^{p/2}} dx\\
+    &= \left.\frac{1}{p}\int_\Omega \frac{p}{2} |\nabla (u+\varepsilon v)\cdot\nabla(u+\varepsilon v)|^{p/2-1}\cdot 2(\nabla u\cdot\nabla v) dx\right|_{\varepsilon = 0}\\
+    &= \int_\Omega |\nabla u\cdot\nabla u|^{\frac{p-2}{2}}\nabla u\cdot\nabla v dx\\
+    &= \int_\Omega |\nabla u|^{p-2}(\nabla u\cdot\nabla v) dx\\
+    &= \langle -\Delta_p u, v\rangle,
+\end{align*}
+and thus $d\Psi = -\Delta_p$. This operator is hemicontinuous: take $t\in \R$ and $u,v,w\in W_0^{1,p}(\Omega)$, and define $\varphi(t) = \langle A(u+tv),w\rangle$. With this, we have
+\begin{align*}
+    |\varphi(t)-\varphi(0)| &= \left|\int_\Omega \left(|\nabla (u+tv)|^{p-2}\nabla (u+tv) - |\nabla u|^{p-2}\nabla u\right)\cdot \nabla w dx \right|\\
+    &= \left|\int_\Omega \left((|\nabla u + t\nabla v|^{p-2} - |\nabla u|^{p-2})\nabla u \cdot \nabla w + t|\nabla u + t\nabla v|^{p-2} \nabla v\cdot \nabla w \right) dx\right|\\
+    &\leq \int_\Omega \left(|\nabla u + t\nabla v|^{p-2} - |\nabla u|^{p-2}\right)|\nabla u||\nabla w| dx + |t|\int_\Omega |\nabla u + t\nabla v|^{p-2}|\nabla v||\nabla w| dx,
+\end{align*}
+and taking the limit $t\to 0$ we conclude that $-\Delta_p$ is hemicontinuous. Moreover, since $\Psi$ is strictly convex, we obtain that for all $u\neq v \in W_0^{1,p}(\Omega)$, it holds that
+\begin{equation*}
+    \langle \Delta_p u - \Delta_p v, u-v\rangle < 0 \implies \langle -\Delta_p u - (-\Delta_p v), u-v\rangle > 0,
+\end{equation*}
+which implies that $-\Delta_p$ is strictly monotone. To prove coercivity, we take a nonzero $u\in W_0^{1,p}(\Omega)$ and get
+\begin{align*}
+    \frac{\langle A(u),u\rangle}{\|u\|_{W_0^{1,p}(\Omega)}} &= \frac{1}{\|u\|_{W_0^{1,p}(\Omega)}}\int_\Omega \underbrace{|\nabla u|^{p-2}(\nabla u\cdot\nabla u)}_{|\nabla u|^p} dx\\
+    &= \frac{1}{\|u\|_{W_0^{1,p}(\Omega)}}\|u\|_{W_0^{1,p}(\Omega)}^p\\
+    &= \|u\|_{W_0^{1,p}(\Omega)}^{p-1}\xlongrightarrow{\|u\|_{W_0^{1,p}(\Omega)}\to\infty}\infty,
+\end{align*}
+since $p>1$, which proves that $-\Delta_p$ is coercive. Since $W_0^{1,p}(\Omega)$ is separable and reflexive for $p>1$, the conditions of the Minty-Browder theorem are satisfied, and thus we conclude that $-\Delta_p$ is bijective, i.e. for any $f\in W^{-1,q}(\Omega)$ there exists a unique $u\in W_0^{1,p}(\Omega)$ such that $-\Delta_p u = f$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Time dependent problems}
