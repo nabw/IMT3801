@@ -562,7 +562,7 @@ Let us analyze both methods for solving this problem.
     $$
     is much simpler than a Newton iteration
     \begin{align*}
-        \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} &= -\left(\mat A_h \vec{u}^k + \textbf{diag}(\sin(\vec u^k))\right)\\
+        \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} &= -\left(\mat A_h \vec{u}^k + \sin(\vec u^k)\right)\\
         \vec u_h^{k+1} &= \vec{u}^k_h + \vec{\delta u}_h^{k+1}.
     \end{align*}
 \end{enumerate}
