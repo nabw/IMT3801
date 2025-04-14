@@ -979,7 +979,7 @@ for given functions $f$ in $V_0'$ and $g$ in $(\gamma_D V_0)'$. Note the followi
     This problem will be studied in detail further ahead. 
 }
 
-\subsection{Poincaré inequalities and Lax-Milgram}
+\subsection{Poincaré inequalities}
 Using all of the previous definitions, we can finally look at actual problems and some first well-posedness results. For all of them, the Poincaré inequality will be fundamental.
 
 \begin{lemma}[Generalized Poincaré inequality] There exists a positive constant $C$ such that for a non-empty portion of the subdomain $\Gamma \subseteq \partial\Omega$ it holds that
@@ -1016,19 +1016,23 @@ The case in which $u$ is restricted to be in $H_0^1(\Omega)$ is the well-known P
     \end{proof}
 \end{lemma}
 
-Probably the most important consequence of this is that the semi-norm given by $| x | \coloneqq \|\grad x\|_{0,\Omega}$, sometimes referred to as the $H_0^1$ semi-norm, is equivalent to the $H^1$ norm in the following cases: (i) homogeneous Dirichlet boundary conditions, (ii) homogeneous Neumann boundary conditions, and (iii) mixed homogeneous Dirichlet and Neumann boundary conditions. Verifying this is a simple but fundamental exercise. A fundamental property to be verified is the following: a bilinear form $a(\cdot, \cdot)$ defined on a Hilbert space $X$ is said to be elliptic if there exists a constant $\alpha$ such that
-        $$ a(x, x) \geq \alpha \| x \|^2_X \qquad \forall x\in X. $$
+Probably the most important consequence of this is that the semi-norm given by $| x | \coloneqq \|\grad x\|_{0,\Omega}$, sometimes referred to as the $H_0^1$ semi-norm, is equivalent to the $H^1$ norm in the following cases: (i) homogeneous Dirichlet boundary conditions, (ii) homogeneous Neumann boundary conditions, and (iii) mixed homogeneous Dirichlet and Neumann boundary conditions. Verifying this is a simple but fundamental exercise.
 
+\subsection{Elliptic problems and Lax-Milgram}
+One of the easiest classes of PDEs where we can prove existence and uniqueness of solutions are \textit{elliptic} problems. 
+\begin{definition}[Elliptic forms]
+    A bilinear form $a(\cdot, \cdot)$ defined on a Hilbert space $X$ is said to be elliptic if there exists a constant $\alpha$ such that
+        $$ a(x, x) \geq \alpha \| x \|^2_X \qquad \forall x\in X. $$
+\end{definition}
+This property is t he basis of the Lax-Milgram lemma, which gives sufficient conditions for the existence and uniqueness of solutions. 
 \begin{lemma}[Lax-Milgram] Consider a bounded bilinear form $a: H\times H\to \R$ defined on a Hilbert space $H$ that is elliptic with constants $C$ and $\alpha$ respectively, and a linear functional $f$ in $H'$. Then, there exists a unique $u$ in $H$ such that 
     $$ a(u, v) = f(v) \qquad \forall v \in H. $$
 This solution is continuous with respect to the data, in the sense that there exists a positive constant $C$ such that 
     $$ \| u\|_H \leq \frac C \alpha \| f \|_{H'} .$$
 This is typically referred to as the \emph{a priori} estimate. 
 \end{lemma}
-
-
-
-\paragraph{The Poisson problem} Consider $f$ in $H^{-1}(\Omega)$ and $g$ in $H^{1/2}(\Gamma)$ with $\Gamma\coloneqq \partial\Omega$. The Poisson problem in strong form is given as the following PDE: 
+Let us now illustrate how we apply this lemma in practice.
+\paragraph{The Poisson problem} Consider $f$ in $H^{-1}(\Omega)$ and $g$ in $H^{1/2}(\Gamma)$ with $\Gamma\coloneqq \partial\Omega$. The Poisson problem in strong form is given as the following boundary value problem: 
     \begin{align*}
         -\Delta u  &= f \qquad \tin\quad\Omega\\
         \gamma_0 u &= g \qquad \ton\quad \Gamma.
