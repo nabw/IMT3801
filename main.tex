@@ -962,12 +962,37 @@ The case in which $u$ is restricted to be in $H_0^1(\Omega)$ is the well-known P
 Probably the most important consequence of this is that the semi-norm given by $| x | \coloneqq \|\grad x\|_{0,\Omega}$, sometimes referred to as the $H_0^1$ semi-norm, is equivalent to the $H^1$ norm in the following cases: (i) homogeneous Dirichlet boundary conditions, (ii) homogeneous Neumann boundary conditions, and (iii) mixed homogeneous Dirichlet and Neumann boundary conditions. Verifying this is a simple but fundamental exercise. A fundamental property to be verified is the following: a bilinear form $a(\cdot, \cdot)$ defined on a Hilbert space $X$ is said to be elliptic if there exists a constant $\alpha$ such that
         $$ a(x, x) \geq \alpha \| x \|^2_X \qquad \forall x\in X. $$
 
+Before providing a proof, we note that every continuous bilinear form $a:H\times H\to \R$ induces an operator $A:H\to H'$ given by
+    $$ (Au)[v] = a(u,v), $$
+which one could also write as $Au = a(u, \cdot)$. Naturally, the bilinear form $a$ is bounded if and only if the operator $A$ is bounded. 
+
+
 \begin{lemma}[Lax-Milgram] Consider a bounded bilinear form $a: H\times H\to \R$ defined on a Hilbert space $H$ that is elliptic with constants $C$ and $\alpha$ respectively, and a linear functional $f$ in $H'$. Then, there exists a unique $u$ in $H$ such that 
     $$ a(u, v) = f(v) \qquad \forall v \in H. $$
 This solution is continuous with respect to the data, in the sense that there exists a positive constant $C$ such that 
     $$ \| u\|_H \leq \frac C \alpha \| f \|_{H'} .$$
 This is typically referred to as the \emph{a priori} estimate. 
 \end{lemma}
+\begin{proof}
+    It will be seen further ahead that this can be easily proved using the inf-sup condition. Still, we present a more elementary proof that uses only the properties of the bilinear form and a fixed point argument. Consider $\rho>0$ and the fixed-point map $T:H\to H$ given by 
+    $$ T(u) = u - \rho \mathcal R^{-1}\circ (Au - F), $$
+    where it can be seen that $T$ is linear, and $\mathcal R$ is the Riesz map between $H$ and $H'$. Now, we look for $\rho$ such that $T$ is a contraction, which we do simply by hand. Consider thus two functions $u,V$ in $H$, then: 
+    \begin{align*}
+        \| T(u) - T(v)\|_H &= \|T(u - v) \|_H \\
+                           &= (u-v, u-v)_H - 2\rho(u-v, \mathcal R^{-1}\circ A(u-v))_H + \rho^2(\mathcal R^{-1}\circ A(u-v), \mathcal R^{-1}\circ A(u-v))_H \\
+                           &= \|u-v\|_H^2 - 2\rho\langle A(u-v), u-v\rangle_{H'\times H} + \rho^2 \| \mathcal R^{-1} \circ A(u-v)\|_H^2.
+    \end{align*}
+    We bound the second and third terms as follows: 
+    $$ \langle A(u-v), u-v\rangle =^\text{by definition of $A$} a(u-v, u-v) \geq^\text{ellipticity} \alpha \| u-v\|_H^2, $$ 
+        and 
+        $$ \| \mathcal R^{-1} \circ A(u-v) \|_H =^\text{Riesz isometry} \| A(u-v) \|_{H'} =^\text{continuity} C \| u-v \|_H^2. $$
+    Plugging this into our previous estimate we get
+    $$ \| Tu - Tv \|_H \leq (1 - 2\rho \alpha + \rho^2 C^2)\| u-v \|_H^2 , $$
+    which shows that $T$ is a contraction whenever $\rho\in (0,\frac{2\alpha}{C^2})$. Stability follows naturally from the properties of $a$:
+    $$ \alpha \| u \|^2 \leq^\text{ellipticity} a(u,u) = F(u) \leq \| F \|_{H'} \|u \|_H, $$
+    which shows the desired stability estimate: 
+        $$ \| u \|_H \leq \frac{1}{\alpha} \| F \|_{H'}. $$
+\end{proof}
 
 
 
