@@ -267,10 +267,10 @@ We note that in our discretized system we do not need to solve for $u_h(x_1)=u_h
     -u_h''(x_{N-1}) &= \frac{1}{h^2}(-u_h(x_{N-2}) + 2u_h(x_{N-1}) - \cancel{u_h(x_{N})}) = \frac{1}{h^2}(-u_h(x_{N-2}) + 2u_h(x_{N-1})),\\
 \end{align*}
 and thus the finite difference operator associated with $-\Delta$ is
-$$\mat A_h = \frac{1}{h^2} \begin{bmatrix} 2 & -1 & 0 & \cdots & 0 \\ -1 & 2 & -1 & \cdots & 0 \\ 0 & -1 & 2 & \cdots & 0 \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \cdots & 2\end{bmatrix}.$$
-where we have $-\Delta u \approx \mat A_h u_h$. To show stability, we will use that it actually satisfies a discrete maximum principle. 
+$$A_h = \frac{1}{h^2} \begin{bmatrix} 2 & -1 & 0 & \cdots & 0 \\ -1 & 2 & -1 & \cdots & 0 \\ 0 & -1 & 2 & \cdots & 0 \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & 0 & \cdots & 2\end{bmatrix}.$$
+where we have $-\Delta u \approx A_h u_h$. To show stability, we will use that it actually satisfies a discrete maximum principle. 
 \begin{theorem}[Discrete maximum principle (DMP)]
-    Let $\mat A_h$ be the finite difference operator defined above. Then, for any grid function $u_h$ such that $\mat A_h u_h \geq 0$, it holds that
+    Let $A_h$ be the finite difference operator defined above. Then, for any grid function $u_h$ such that $A_h u_h \geq 0$, it holds that
     $$ \max_{x_i\in \Omega_h} u_h \leq \max_{x_i\in \Gamma_h} u_h, $$
     where $x_i$ is an interior node of $\Omega_h$ and the equality holds if and only if $u_h$ is constant.
     \begin{proof}
@@ -304,17 +304,19 @@ In this section we hint on how to address numerically higher dimensional problem
     $$ x_0 = a,\; x_7 = a + h,\; x_{12} = a + 2h,\; \hdots, x_N = b, $$
 so that in such a grid, a forward difference with respect to the point $x_0$ would be given by
     $$ D^+f(x_0) = \frac 1 h \left( f^7 - f^0 \right). $$
-    Although this is an unnatural way to do things in 1D, it is the natural scenario arising in higher dimensions. For this, and for the sake of simplicity, we will restrict the presentation to meshes given by tensor products of intervales, i.e. $\Omega = (a_x, b_x) \times (a_y, b_y)$ in 2D and $\Omega = (a_x, b_x) \times (a_y, b_y) \times (a_z, b_z)$ in 3D. The main difficulty will be that of creating an ordering of the degrees of freedom.
+Although this is an unnatural way to do things in 1D, it is the natural scenario arising in higher dimensions. For this, and for the sake of simplicity, we will restrict the presentation to meshes given by tensor products of intervals, i.e. $\Omega = (a_x, b_x) \times (a_y, b_y)$ in 2D and $\Omega = (a_x, b_x) \times (a_y, b_y) \times (a_z, b_z)$ in 3D. The main difficulty will be that of creating an ordering of the degrees of freedom.
 
-    Consider now a grid associated to a 2D geometry $\Omega$ as described above, such that the dimensions are discretized as $ a_x = x_0, \hdots, b_x = x_{N_x-1}$ and $a_y = y_0, \hdots, b_y = y_{N_y-1}$. Note that we consider $N_x$ and $N_y$ to be the number of punts in each subdomain, which will simplify some operations further ahead. Then, each grid point will be given by     
+Let us now consider the 2D case. Consider $\Omega = (a_x, b_x) \times (a_y, b_y)$ and an equispaced discrete grid $\Omega_h$ with $ a_x = x_0, \hdots, x_{N_x-1} = b_x$ and $a_y = y_0, \hdots, b_y = y_{N_y-1}$, where $N_x$ and $N_y$ are number of points in each subdomain. Then, each grid point will be given by     
     $$ \vec X_{ij} \coloneqq (x_i, y_j) \qquad \forall i,j \in \{0,\hdots, N_x-1\}\times \{0,\hdots, N_y-1\}, $$
-and analogously we can define a grid function associated to some continuous function $f:\Omega\to \R$ as 
-$$ \vec f^{ij} \coloneqq f(\vec X_{ij}) = f(x_i, y_j). $$
-We can flatten these matrices to obtain a vector of unknowns computed by the maps $I: \{0,\hdots, N_x-1\} \times \{0, \hdots, N_y-1\}\to \{0,\hdots, N_xN_y-1\}$ given by 
+and analogously we can define a (matrix) grid function associated to some continuous function $f:\Omega\to \R$ as 
+$$ \vec f^{ij} \coloneqq f(\vec X_{ij}) = f(x_i, y_j) \in \R^{N_x}\times \R^{N_y} $$
+We can flatten 2D matrices to obtain 1D vectors through the definition of an \textit{index map} $I: \{0,\hdots, N_x-1\} \times \{0, \hdots, N_y-1\}\to \{0,\hdots, N_xN_y-1\}$ given by 
     $$ I \coloneqq I(i,j) = i + j N_x.$$
 Fortunately, this map can be inverted as
-    $$ I \mapsto (i(I), j(I)) \coloneqq (I\mod Nx, \lfloor I/Nx \rfloor), $$
-so that if one has a grid with $N_x=3$ and $N_y=2$, one would have the following index maps: 
+    $$ I \mapsto (i(I), j(I)) \coloneqq (I\mod N_x, \lfloor I/N_x \rfloor), $$
+and so we can uniquely define the 1D vector $\vec f^I$ as the vector of all grid points in $\Omega$ as
+    $$ \vec f^I \coloneqq \vec f^{i(I)j(I)} = f(\vec X_{i(I)j(I)}) \in \R^{N_xN_y}. $$
+For example, if one has a grid with $N_x=3$ and $N_y=2$, then the forward and inverse index maps are as follows:
     \begin{table}[ht!]
         \centering
         \begin{subfigure}{0.45\textwidth}
@@ -345,13 +347,81 @@ so that if one has a grid with $N_x=3$ and $N_y=2$, one would have the following
         \end{subfigure}
         \caption{Forward and inverse index maps for a 2D example.}
     \end{table}
+
 Using these maps, we define a forward difference in $x$ and $y$ directions as $D^+_xf(\vec X)$ and $D^+_yf(\vec X)$ and note that they are given by
     \begin{align*}
         D^+_x f(\vec X_{ij}) = \frac 1{h_x} \left(\vec f^{(i+1)j} - \vec f^{ij}\right)= \frac 1 {h_x} \left( \vec f^{I[i+1,j]} - \vec f^{I[i,j]}\right), \\
         D^+_y f(\vec X_{ij}) = \frac 1{h_y} \left(\vec f^{i(j+1)} - \vec f^{ij}\right) = \frac 1{h_y} \left(\vec f^{I[i,j+1]} - \vec f^{I[i,j]}\right),
     \end{align*}
-    where we have used a slight abuse of notation by denoting both the 2D vector and 1D vectors as $\vec f^{ij}$ and $\vec f^I$ respectively. 
-    
+where we have used a slight abuse of notation by denoting both the 2D vector and 1D vectors as $\vec f^{ij}$ and $\vec f^I$ respectively. Further, the second derivative operators can be defined as 
+\begin{align*}
+    D_{xx} f(\vec X_{ij}) &= \frac{-1}{h_x^2} \left( -\vec f^{(i+1)j} + 2\vec f^{ij} - \vec f^{(i-1)j}\right) = \frac{-1}{h_x^2} \left( -\vec f^{I[i+1,j]} + 2\vec f^{I[i,j]} - \vec f^{I[i-1,j]}\right) = A_h f(\vec X_{ij}), \\
+    D_{yy} f(\vec X_{ij}) &= \frac{-1}{h_y^2} \left( -\vec f^{i(j+1)} + 2\vec f^{ij} - \vec f^{i(j-1)}\right) = \frac{-1}{h_y^2} \left( -\vec f^{I[i,j+1]} + 2\vec f^{I[i,j]} - \vec f^{I[i,j-1]}\right) = f(\vec X_{ij})A_h^\top,
+\end{align*}
+where $A_h$ is the discrete second derivative matrix. Let us now apply this for the Laplace equation with zero boundary conditions, that is,
+$$\begin{aligned}
+    -\Delta u &= f & \tin \Omega, \\
+    u &= 0 & \ton \partial\Omega.
+\end{aligned}$$
+Here, the corresponding discrete equation is
+\begin{equation*}
+    -\Delta u(\vec X_{ij}) = - \frac{\partial^2}{\partial x^2}\vec u(X_{ij}) - \frac{\partial^2}{\partial y^2} u(\vec X_{ij}) \approx A_h u(\vec X_{ij}) + u(\vec X_{ij})A_h^\top  = f(\vec X_{ij}),
+\end{equation*}
+which is a matrix equation since $u(\vec X_{ij})$ is a grid function. We define a suitable index map $I$, which allows us to write the 1D vectors $u^I$ and $f^I$, and now it remains to define the operator matrix for these 1D vectors. For this, we use the Kronecker product $\otimes$ defined by
+$$
+\begin{aligned}
+    \otimes : \R^{m\times n} \times \R^{p\times q} &\to \R^{mp\times nq}, \\
+    (A,B) &\mapsto A\otimes B \coloneqq \begin{bmatrix}
+        A_{11}B & A_{12}B & \cdots & A_{1n}B \\
+        A_{21}B & A_{22}B & \cdots & A_{2n}B \\
+        \vdots & \vdots & \ddots & \vdots \\
+        A_{m1}B & A_{m2}B & \cdots & A_{mn}B
+    \end{bmatrix}. \\
+\end{aligned}
+$$
+This operation is needed to correctly define the operator matrix. For this, we need a brief lemma to calculate this matrix. 
+\begin{lemma}
+    Let $A\in R^{m\times n}$, $B\in \R^{p\times q}$ and $X\in \R^{q\times n}$. Denote the vector form of a matrix (in our case, a grid function) $A$ as $\vec A^I$, $A_i\in \R^n$ the rows of $A$ and $X_i\in \R^q$ the columns of $X$. Then, 
+    $$(BXA^\top)^I = (A\otimes B)\vec X^I$$.
+    \begin{proof}
+        We expand from the right hand side:
+        \begin{align*}
+            (A\otimes B)\vec x^I &= \begin{bmatrix}
+                A_{11}B & A_{12}B & \cdots & A_{1n}B \\
+                A_{21}B & A_{22}B & \cdots & A_{2n}B \\
+                \vdots & \vdots & \ddots & \vdots \\
+                A_{m1}B & A_{m2}B & \cdots & A_{mn}B
+            \end{bmatrix} \begin{bmatrix}
+                X_1^\top \\
+                X_2^\top \\
+                \vdots \\
+                X_n^\top
+            \end{bmatrix} \\
+            &= \begin{bmatrix}
+                \sum_{i=1}^n A_{1i} B X_i\\
+                \sum_{i=1}^n A_{2i} B X_i\\
+                \vdots \\
+                \sum_{i=1}^n A_{mi} B X_i
+            \end{bmatrix}\\
+            &= \begin{bmatrix}
+                BXA_1^\top\\
+                BXA_2^\top\\
+                \vdots \\
+                BXA_m^\top\\
+            \end{bmatrix}\\
+            &= (BXA^\top)^I.
+        \end{align*}
+    \end{proof}
+\end{lemma}
+Now, we take the 1D vector form of the discrete Laplace equation and invoke the above lemma with $A=I$ the identity matrix:
+\begin{align*}
+    \vec f^I &= (A_h u(\vec X_{ij}) + u(\vec X_{ij})A_h^\top)^I\\
+    &= (A_h u(\vec X_{ij}) I)^I + (I u(\vec X_{ij})A_h^\top)^I\\
+    &= (I\otimes A_h)\vec u^I + (A_h^\top \otimes I)\vec u^I\\
+    &= (A_h\otimes I + I\otimes A_h)\vec u^I \tag{$A_h$ symmetric}.
+\end{align*}
+Thus, our new operator is now $D^2_h = A_h\otimes I + I\otimes A_h$, and then the discrete Laplace equation is reduced to the linear system $D^2_h \vec u^I = \vec f^I$, where $D^2_h$ is sparse by construction. We can use the same methods as before to prove the stability of the scheme.  
+
 \subsection{Time discretization}
 Time discretization is an enormous topic, so here we provide simple strategies and ways to think about them. We will dedicate an entire section to their analysis using the von Neumann stability analysis. To avoid messing with Bochner spaces, we will refrain from considering a precise functional setting, and leave this for further ahead in the notes. Consider a differential operator $\mathcal L$ and its associated discrete matrix $\mat L_h$ which includes the problems boundary conditions. The continuous differential equation, for some initial condition $x(0) = x_0$, is given by 
     $$ \dot x + \mathcal L x = f, $$
@@ -994,7 +1064,7 @@ and thus the orthogonality is being considered with respect to the natural space
 \section{Galerkin schemes for elliptic problems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The idea here is that, instead of discretizing the differential operator as one would do in the case of finite differences to obtain discrete derivatives, one considers discrete functional spaces, with the idea that the discrete space somehow converges to the continuous space. This is known as a Galerkin scheme. The schemes here will be conforming in the sense that the discrete space $V_h$ is a subset of $V$, but this is not necessary, and indeed all Discontinuous Galerkin (DG) formulations are basically non-conforming schemes. 
+The idea here is that, instead of discretizing the differential operator as one would do in the case of finite differences to obtain discrete derivatives, one considers discrete functional spaces, with the idea that the discrete space somehow converges to the continuous space. This is known as a Galerkin scheme. The schemes here will be \textit{conforming}, which means that the discrete space $V_h$ is a subset of $V$. This is not strictly necessary, as for example all discontinuous Galerkin (DG) formulations are non-conforming schemes. 
 \subsection{Galerkin schemes}
 Consider thus an abstract differential problem given by finding $u$ in $V$ such that
     $$ a(u, v) = L(v) \qquad \forall v \in V, $$
@@ -1126,8 +1196,22 @@ One can also obtain the following local estimate in 2D for simplices \cite{warbu
     $$ \| \vec v_h \|_{0,F} \leq C h_K^{-1/2} \| \vec v_h \|_{0,K}, $$
 where $F$ is a facet (line or triangle) and $K$ is the element (triangle or tetrahedron).
 
-% To add: Laplacian with weakly-imposed boundary conditions.
-
+\paragraph{Non-conforming schemes} As we have discussed, one must be careful when dealing with boundary conditions as in the Poisson equation 
+$$
+\begin{aligned}
+    -\Delta u &= f & \tin \Omega \\
+    \gamma_0 u &= g & \ton \partial\Omega.
+\end{aligned}
+$$
+A strategy that is often robust to incorporate Dirichlet boundary conditions is by imposing them weakly. There exist several ways to do this, for example, the penalty method and the Nitsche method. The penalty method consists of adding a term to the weak formulation that penalizes the difference between the solution and the boundary condition. More precisely, we seek to find $u_h^\varepsilon\in V_h\subset V = H^1(\Omega)$ such that
+$$
+(\nabla u_h^\varepsilon, \nabla v_h)_{L^2(\Omega)} - ((\nabla u_h^\varepsilon, \vec n), v_h)_{L^2(\partial\Omega)} + \frac{1}{\varepsilon}(u_h^\varepsilon - g, v_h)_{L^2(\partial\Omega)} = (f, v_h)_{L^2(\Omega)} \qquad \forall v_h\in V_h,
+$$
+and rearranging we get a bilinear form on $u_h^\varepsilon$ and $v_h$ on the left, and a linear form on $v_h$ on the right, i.e.
+$$
+(\nabla u_h^\varepsilon, \nabla v_h)_{L^2(\Omega)} - ((\nabla u_h^\varepsilon, \vec n), v_h)_{L^2(\partial\Omega)} + \frac{1}{\varepsilon}(u_h, v_h)_{L^2(\partial\Omega)} = (f, v_h)_{L^2(\Omega)} + \frac{1}{\varepsilon}(g,v_h)_{L^2(\partial\Omega)} \qquad \forall v_h\in V_h.
+$$
+This problem is now parameterized by $\varepsilon$, which is often defined as $\varepsilon = \varepsilon_0 h^\lambda$ where $h$ is the mesh size and $\lambda\leq 1$ is constant.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Beyond ellipticity}\label{section:beyond-ellipticity}
