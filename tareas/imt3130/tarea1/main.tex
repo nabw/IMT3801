@@ -54,13 +54,13 @@
             \begin{itemize}
                 \item\pts{1} Muestre la ecuación correspondiente al nodo $i$ de la malla para (i) diferencias hacia adelante para $u'$ y (ii) diferencias centradas para $u'$. 
                 \item\pts{2} En cada una de las dos discretizaciones del punto anterior, muestre que la discretización obtenida es consistente y calcule el orden de consistencia.
-                \item\pts{2} Calcule las tasas de convergencia numérica para las discretizaciones mencionadas y analice sus resultados con respecto a lo que dice la teoría.
                 \item\pts{1} Grafique el condicionamiento de la matriz $\mat L_h$ con respecto a los siguientes valores: $h \in \{2^{-n}\}_{n=2}^8$, $b \in \{0.01,0.1,1,10,100\}$, y $c \in \{0.01,0.1,1,10,100\}$. Hágalo solo para el esquema donde $u'$ es tratada con diferencias centradas.
                 \item\pts{2} Demuestre teóricamente que la solución discreta obtenida con la matriz $\mat L_h$ converge a la solución continua si $b=0$. 
                 \item\pts{2} Usando el método de las soluciones manufacturadas, muestre que la tasa de convergencia numérica a una solución analítica es la esperada por la teoría. 
             \end{itemize}
     \item Considere la ecuación del calor en $\Omega = (0,1)^2$ con condiciones de borde homogéneas ($u=0$ en todo instante) y una condición inicial $u(0)=u_0$:
-            $$ \dot u - \mu \Delta u = 0 . $$
+            $$ \dot u - \mu \Delta u = 0 , $$
+            donde $\mu$ es una constante real positiva.
             \begin{itemize}
                 \item\pts{1} Considere una discretización temporal de paso $\tau$ y espacial de paso $h$. Muestre cómo se discretiza la ecuación del calor usando (i) un esquema explícito en tiempo y (ii) uno implícito en tiempo, ambos con diferencias finitas en espacio.
                 \item\pts{2} Verifique que ambas discretizaciones son consistentes. 
