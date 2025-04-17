@@ -1246,13 +1246,14 @@ $$
 which we rewrite in weak form as follows: find $u\in H^1(\Omega)$ such that $u|_{\partial\Omega} = g$ and
 $$a(u,v) = (f,v) \qquad \forall v\in H_0^1(\Omega),$$
 where as usual we denote $a(u,v)=(\nabla u,\nabla v)$. Let $K^h$ be a discretization of $\Omega$ with mesh size $h$, which we assume is sufficiently regular. There exist several ways to enforce the Dirichlet boundary condition, such as the penalty method and the Nitsche method. We outline both methods below.
-\paragraph{The penalty method} We introduce the penalty parameter $\varepsilon>0$. At the continuous level, this method can be formulated as follows: find $u^\varepsilon\in H^1(\Omega)$ such that 
-$$a(u^\varepsilon, v) + \frac{1}{\varepsilon} (u^\varepsilon, v)_{\partial\Omega} = (f,v) + \frac{1}{\varepsilon} (g,v)_{\partial\Omega} \qquad \forall v\in H^1(\Omega).$$
-When going back to the strong form, we verify that $u^\varepsilon$ satisfies the Poisson equation $-\Delta u^\varepsilon = f$ and the Robin boundary condition 
+\begin{itemize}
+    \item The penalty method: at the continuous level, this method can be formulated as follows: find $u^\varepsilon\in H^1(\Omega)$ such that 
+$$a(u^\varepsilon, v) + \frac{1}{\varepsilon} (u^\varepsilon, v)_{\partial\Omega} = (f,v) + \frac{1}{\varepsilon} (g,v)_{\partial\Omega} \qquad \forall v\in H^1(\Omega),$$
+where we introduced the penalty parameter $\varepsilon>0$. When going back to the strong form, we verify that $u^\varepsilon$ satisfies the Poisson equation $-\Delta u^\varepsilon = f$ and the Robin boundary condition 
 $$\nabla u^\varepsilon \cdot\vec n = -\frac{1}{\varepsilon}(u^\varepsilon - g) \implies \varepsilon (\nabla u^\varepsilon) \cdot \vec n = -(u^\varepsilon - g),$$
 which for $\varepsilon$ small enough approximates the nonhomogeneous Dirichlet boundary condition. By the Friedrich inequality, we can show that the bilinear form in the left hand side is elliptic on $H^1(\Omega)$ and thus the problem is well-posed by the Lax-Milgram lemma. In a discrete setting, we consider $\varepsilon = \varepsilon_0 h^\lambda$ for some $\varepsilon_0 > 0$ and $\lambda\geq 0$, both independent of the mesh, and we can prove that this discrete problem is well-posed and convergent. Often, the user has to manually tune the values of $\varepsilon_0$ and $\lambda$ to achieve good convergence rates. The critical choice lies in the value of $\varepsilon_0$: if the value is too small, the conditioning of the global stiffness matrix deteriorates, since its conditioning is $\mathcal{O}(\varepsilon_0^{-1}h^{-1-\lambda})$, and if the value is too large, the Dirichlet condition is approximated poorly. 
 
-\paragraph{The Nitsche method} Let $\gamma > 0$ be a positive function on $\partial\Omega$ and $\theta\in\mathbb{R}$ a fixed parameter. Integrating by parts the weak form of the Poisson problem we first get 
+\item The Nitsche method: let $\gamma > 0$ be a positive function on $\partial\Omega$ and $\theta\in\mathbb{R}$ a fixed parameter. Integrating by parts the weak form of the Poisson problem we first get 
 $$a(u,v) - (\nabla u\cdot \vec n, v)_{\partial\Omega} = (f,v),$$
 and from the Dirichlet condition we can write 
 $$(u,\gamma u -\theta\nabla v\cdot \vec n)_{\partial\Omega} = (g,\gamma v - \theta \nabla v \cdot n)_{\partial\Omega}.$$
@@ -1265,6 +1266,7 @@ $$\frac{(1+\theta)^2 c_T}{\gamma_0}\leq 1.$$
 Moreover, this method is convergent in the $H^1$ norm for large enough $\gamma_0$. In the case that we expect more regularity, for $u\in H^s(\Omega)$ with $3/2<s<1+k$ (where $k$ is the degree of the polynomial approximation space), we get
 $$\|u-u_h\| + \|\nabla u\cdot \vec n - \nabla u_h\cdot \vec n\|_{-1/2,\partial\Omega} \leq Ch^s\|u\|_{s,\Omega}.$$
 Remarkably, and in contrast to the penalty method, the constant $C>0$ does not depend on $\gamma_00$ provided that it is large enough, but does depend on the regularity of the mesh and on the polynomial order $k$. As expected, the value of $\gamma_0$ influences the condition number of the global stiffness matrix associated to the left hand side of this problem, and thus it must not be taken too large, but the impact of the value of $\gamma_0$ on the approximation of the Dirichlet boundary condition is much smaller than in the penalty method. 
+\end{itemize}
 
 In practice, the penalty method is much simpler to understand and to implement, but its accuracy in some specific problems may not always be satisfactory. The Nitsche method is still simple to implement, and it constitutes a better alternative to the penalty method, where one has to tune only one numerical parameter. There exist more variants to these methods, such as the penalty-free Nitsche method and methods with Lagrange multipliers. The interested reader is referred to \cite{Chouly2024} for more details.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
