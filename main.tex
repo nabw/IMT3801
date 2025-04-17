@@ -974,6 +974,28 @@ for given functions $f$ in $V_0'$ and $g$ in $(\gamma_D V_0)'$. Note the followi
         \item We note that the Laplacian is now being interpreted as a \emph{distribution}, and thus the strong problem (including the boundary conditions) yields the definition of the \emph{action} of the distribution. In particular, this means that the action of the distribution naturally changes with the boundary conditions. This observation is fundamental to understand Discontinuous Galerkin methods, or other formulations defined on broken spaces (i.e. spaces that allow for discontinuities). 
     \end{itemize}
 
+To conclude this section, we wanted to establish that if the solution is sufficiently regular, then the weak form is equivalent to the strong form. The main tool for this is the Fundamental Lemma of the Calculus of Variations: 
+
+\begin{lemma}[Fundamental Lemma of Calc. of Var.]\label{lemma:lema-calvar}
+    Consider $\Omega\subset \R^d$ bounded and set $f\in L^1(\Omega)$ such that
+        $$ \int_\Omega f\varphi\,dx = 0 \qquad \forall \varphi \in C_0^\infty(\Omega). $$
+    Then, $f=0$ almost everywhere.
+\end{lemma}
+
+Consider now the weak formulation of the Poisson problem: Find $u$ in $V_0$ such that 
+    $$ (\grad u, \grad v) = (f, v) - (grad u_g, \grad v) + \langle t, v\rangle_{-1/2, 1/2},$$
+    where $f$ and $\vec t$ are integrable. Then, integrating by parts one obtains
+    $$ (-\Delta (u+u_g) - f, v)+\langle \grad u \cdot \vec n, v\rangle = \langle t, v\rangle_{-1/2,1/2}. $$
+    If we consider test functions $v$ in $C_0^\infty(\Omega)$, then 
+    $$ (-\Delta (u+u_g) - f, v) = 0, $$
+    and if $u$ and the lifting function $u_g$ are integrable, then Lemma~\ref{lemma:lema-calvar} yields
+    $$ -\Delta \tilde u = f, $$
+    which is the strong form for the combined solution $\tilde u= u + u_g$. Given this, the weak form now yields
+    $$ \langle \grad u \cdot \vec n, v\rangle = \langle t, v\rangle $$
+    Using again Lemma~\ref{lemma:lema-calvar} on the subspace topology of $C_0^\infty(\Gamma_N)$, then
+    $$ \grad u\cdot \vec n = t $$
+    holds strongly. 
+
 \example{
     We encourage the reader to try to compute the weak formulation of the Poisson problem in mixed form. To do this, one must define the auxiliary variable $\vec \sigma \coloneqq \grad u$, so that the strong form of the problem now becomes
         $$
