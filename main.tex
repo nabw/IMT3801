@@ -1035,9 +1035,9 @@ Using all of the previous definitions, we can finally look at actual problems an
         $$\|\nabla v_n\|_{0,\Omega} < \frac{1}{n} \qquad \forall n\in \mathbb{N}.$$
         Then, as $(v_n)_n$ is bounded in the reflexive space $H^1(\Omega)$, there exists a weakly convergent subsequence $(v_{n_k})_k$ to some $v\in H^1(\Omega)$, which converges strongly in $L^2(\Omega)$ by the Rellich-Kondrachov theorem, and in particular, it converges in norm, that is,
         $$\|v\|_{0,\Omega} = \lim_{k\to\infty} \underbrace{\|v_{n_k}\|_{0,\Omega}}_{=1} = 1.$$
-        Given a vector field $\vec\phi = (\phi_1,\dots,\phi_d)\in (C_0^\infty(\Omega))^d$, we can show that
-        $$|(u,\nabla\cdot\vec\phi)| = |-(\nabla u, \vec\phi)| \leq \|\nabla u\|_{0,\Omega}\|\vec\phi\|_{0,\Omega} \leq \|u\|_{1,\Omega}\|\vec\phi\|_{0,\Omega},$$
-        and thus the functional $\varphi_{\boldmath{\phi}}:H^1(\Omega)\to \mathbb{R}$, $\varphi_{\boldmath{\phi}}(u) = (u,\nabla\cdot\vec\phi)$ is bounded and continuous, that is, $\varphi_{\boldmath{\phi}} \in (H^1(\Omega))'$. We note that for the subsequence $(v_{n_k})_k$ and for any $\vec\phi \in (C_0^\infty(\Omega))^d$ we have 
+        Given a vector field $\vec\phi = (\phi_1,\dots,\phi_d)\in (C_0^\infty(\Omega))^d$, we can show that for $w$ in $H_0^1$, 
+        $$|(w,\nabla\cdot\vec\phi)| = |-(\nabla w, \vec\phi)| \leq \|\nabla w\|_{0,\Omega}\|\vec\phi\|_{0,\Omega} \leq \|w\|_{1,\Omega}\|\vec\phi\|_{0,\Omega},$$
+        and thus the functional $\varphi_{\boldmath{\phi}}:H^1(\Omega)\to \mathbb{R}$, $\varphi_{\boldmath{\phi}}(w) = (w,\nabla\cdot\vec\phi)$ is bounded and continuous, that is, $\varphi_{\boldmath{\phi}} \in (H^1(\Omega))'$. We note that for the subsequence $(v_{n_k})_k$ and for any $\vec\phi \in (C_0^\infty(\Omega))^d$ we have 
         $$|(v_{n_k},\nabla\cdot\vec\phi)| \leq \|\nabla v_{n_k}\|_{0,\Omega}\|\vec\phi\|_{0,\Omega} < \frac{1}{n_k}\|\vec\phi\|_{0,\Omega}\overset{k\to\infty}{\longrightarrow} 0. $$
         Since $v_{n_k} \rightharpoonup v$ weakly in $H^1(\Omega)$, we have that for any $\vec\phi \in (C_0^\infty(\Omega))^d$ it holds that
         \begin{align*}
