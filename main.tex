@@ -1035,33 +1035,29 @@ Using all of the previous definitions, we can finally look at actual problems an
         $$\|\nabla v_n\|_{0,\Omega} < \frac{1}{n} \qquad \forall n\in \mathbb{N}.$$
         Then, as $(v_n)_n$ is bounded in the reflexive space $H^1(\Omega)$, there exists a weakly convergent subsequence $(v_{n_k})_k$ to some $v\in H^1(\Omega)$, which converges strongly in $L^2(\Omega)$ by the Rellich-Kondrachov theorem, and in particular, it converges in norm, that is,
         $$\|v\|_{0,\Omega} = \lim_{k\to\infty} \underbrace{\|v_{n_k}\|_{0,\Omega}}_{=1} = 1.$$
-        Given a vector field $\vec\phi = (\phi_1,\dots,\phi_d)\in (C_0^\infty(\Omega))^d$, we can show that for $w$ in $H_0^1$, 
+        Given a vector field $\vec\phi = (\phi_1,\dots,\phi_d)\in (C_0^\infty(\Omega))^d$, we can show that for $w$ in $H_0^1$ the map $\varphi_{\vec{\phi}}:H^1(\Omega)\to\R$ given by $\varphi_{\vec{\phi}}(w) = (w, \nabla\cdot \vec \phi)$ is continuous:
         $$|(w,\nabla\cdot\vec\phi)| = |-(\nabla w, \vec\phi)| \leq \|\nabla w\|_{0,\Omega}\|\vec\phi\|_{0,\Omega} \leq \|w\|_{1,\Omega}\|\vec\phi\|_{0,\Omega},$$
-        and thus the functional $\varphi_{\boldmath{\phi}}:H^1(\Omega)\to \mathbb{R}$, $\varphi_{\boldmath{\phi}}(w) = (w,\nabla\cdot\vec\phi)$ is bounded and continuous, that is, $\varphi_{\boldmath{\phi}} \in (H^1(\Omega))'$. We note that for the subsequence $(v_{n_k})_k$ and for any $\vec\phi \in (C_0^\infty(\Omega))^d$ we have 
+        that is, $\varphi_{\vec{\phi}} \in (H^1(\Omega))'$. We note that for the subsequence $(v_{n_k})_k$ and for any $\vec\phi \in [C_0^\infty(\Omega)]^d$ we have 
         $$|(v_{n_k},\nabla\cdot\vec\phi)| \leq \|\nabla v_{n_k}\|_{0,\Omega}\|\vec\phi\|_{0,\Omega} < \frac{1}{n_k}\|\vec\phi\|_{0,\Omega}\overset{k\to\infty}{\longrightarrow} 0. $$
         Since $v_{n_k} \rightharpoonup v$ weakly in $H^1(\Omega)$, we have that for any $\vec\phi \in (C_0^\infty(\Omega))^d$ it holds that
         \begin{align*}
-            (\nabla v,\vec\phi) &= -(v,\nabla\cdot\vec\phi)\\
-            &= -\varphi_{\boldmath{\phi}}(v)\\
-            &= \lim_{k\to\infty} \varphi_{\boldmath{\phi}}(v_{n_k})\\
-            &= \lim_{k\to\infty} (v_{n_k},\nabla\cdot\vec\phi)\\
-            &= 0,
+            (\nabla v,\vec\phi) = -(v,\nabla\cdot\vec\phi) = -\varphi_{\vec{\phi}}(v) = \lim_{k\to\infty} \varphi_{\vec{\phi}}(v_{n_k}) = \lim_{k\to\infty} (v_{n_k},\nabla\cdot\vec\phi) = 0,
         \end{align*}
-        and thus $\nabla v = 0$. Since $\Omega$ is Lipschitz, it is connected, and by the generalized mean value theorem we can prove that $\nabla v = 0$ implies that $v=c$ almost everywhere for $c\in \mathbb{R}$. Now, consider the functional $\psi_{\boldmath{\phi}}:H^1(\Omega)\to \mathbb{R}$, such that 
-        $$\psi_{\boldmath{\phi}}(u) = \int_{\partial\Omega} u \vec\phi\cdot\vec n \mathrm{d}S,$$
-        which is linear and continuous. The weak convergence implies
-        $$\psi_{\boldmath{\phi}}(v) = \lim_{k\to\infty} \psi_{\boldmath{\phi}}(v_{n_k}) = \lim_{k\to\infty} \int_{\partial\Omega} v_{n_k} \vec\phi\cdot\vec n \mathrm{d}S = 0,$$
-        since $\vec\phi$ is compactly supported in $\Omega$, i.e. $v_{n_k}|_{\partial\Omega} = 0$. Now replacing $v=c$ we get
-        $$0 = \psi_{\boldmath{\phi}}(v) = \int_{\partial\Omega} v\vec\phi \cdot\vec n\mathrm{d}S = c\int_{\partial\Omega} \vec\phi\cdot\vec n \mathrm{d}S \qquad \forall \vec\phi \in (C_0^\infty(\Omega))^d,$$
+        and thus $\nabla v = 0$. Since $\Omega$ is Lipschitz, it is connected, and by the generalized mean value theorem we can prove that $\nabla v = 0$ implies that $v=c$ almost everywhere for $c\in \mathbb{R}$. Now, consider $\vec\phi$ in $[C^\infty(\overline{\Omega})]^d$ and the functional $\psi_{\vec{\phi}}:H^1(\Omega)\to \mathbb{R}$ such that 
+        $$\psi_{\vec{\phi}}(u) = \int_{\partial\Omega} \gamma_D u \vec\phi\cdot\vec n \mathrm{d}S,$$
+        which is linear and continuous due to the trace inequality. Weak convergence implies
+        $$\psi_{\vec{\phi}}(v) = \lim_{k\to\infty} \psi_{\vec{\phi}}(v_{n_k}) = \lim_{k\to\infty} \int_{\partial\Omega} v_{n_k} \vec\phi\cdot\vec n \mathrm{d}S = 0,$$
+        since  $v_{n_k}|_{\partial\Omega} = 0$. Now replacing $v=c$ we get
+        $$0 = \psi_{\vec{\phi}}(v) = \int_{\partial\Omega} v\vec\phi \cdot\vec n\mathrm{d}S = c\int_{\partial\Omega} \vec\phi\cdot\vec n \mathrm{d}S \qquad \forall \vec\phi \in [C^\infty(\overline\Omega)]^d,$$
         and thus $c=0$, which is a contradiction since we assumed that $\|v\|_{0,\Omega}=1$. 
     \end{proof}
 \end{lemma}
 
-We can generalize this inequality for $u\in H^1(\Omega)$, which is helpful when we have Dirichlet boundary conditions only in a portion of the boundary. 
+This proof can be modified to accomodate for boundary conditions holding only in some portion of the boundary $|\Gamma_D|>0$. We can further generalize this inequality for $u\in H^1(\Omega)$.
 
 \begin{lemma}[Generalized Poincaré inequality] Let $\Omega\subset\mathbb{R}^d$ be a bounded Lipschitz domain. Then, there exists $C>0$ such that for a non-empty portion of the boundary $\Gamma \subseteq \partial\Omega$ it holds that
         $$ \| u \|_{0,\Omega} \leq C\left(| u |_{1,\Omega} + \left|\int_\Gamma u\,ds\right| \right) \qquad \forall u \in H^1(\Omega). $$
-The result also holds in $L^p$ and $W_0^{1,p}$. 
+The result also holds in $L^p$ and $W^{1,p}$. 
 \end{lemma}
 
 We provide an incomplete proof to show some of the related techniques used to prove this result. Most developments come from \cite{brenner2008mathematical}.
