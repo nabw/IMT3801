@@ -42,10 +42,6 @@
 \todo[inline,color=white!90!black]{\textbf{Instrucciones: } La tarea debe ser entregada de manera individual en un informe en formato .pdf a través del buzón habilitado en la plataforma Canvas, donde deben mostrar también el código desarrollado. Para su conveniencia, pueden entregar las tareas en un Jupyter Notebook, de modo que sea más cómodo mostrar el código. La política de atrasos será: se calculará un factor lineal que vale 1 a la hora de entrega y 0 48 horas después. Esto multiplicará su puntaje obtenido. Pueden usar ChatGPT u otros modelos solo a conciencia. El uso de salidas de GPT sin su debida comprensión será severamente sancionado. }
 
 \begin{enumerate}
-    \item Consideremos un dominio Lipschitz acotado $\Omega \subset \R^d$, y la traza normal dada para un campo vectorial por $\gamma_N \vec u = \vec u \cdot \vec n$. Usando que el espacio $[C_0^\infty(\Omega)]^d$ es denso en $H(\dive;\Omega)$ (en la norma natural de $H(\dive;\Omega)$, dada por $\|\cdot\|_{\dive,\Omega} = \|\cdot \|_0 + \| \dive \cdot \|_0$), muestre la identidad de Green:
-        $$ \langle \gamma_N \vec u, \gamma_0 v\rangle \coloneqq \int_\Omega \vec u\cdot \grad v\,dx + \int_\Omega \dive \vec u v\,dx, \qquad \forall \vec u \in H(\dive;\Omega), v \in H^1(\Omega). $$
-
-        \emph{Indicación: Considere la fórmula de Green para funciones suaves, y luego extienda por densidad.}
 
     \item Considere $\Omega\subset \R^d$ Lipschitz y acotado, una función $K:\Omega \to \R^d$ en $L^\infty(\Omega)$ tal que es simétrica, continua y definida positiva en casi todo punto ($\exists c, C: c|\vec x|^2 \leq \vec x^T\ten K\vec x \leq C|\vec x|^2$ c.t.p), una función $\vec b$ tal que $\dive \vec b=0$ y $b\in H(\dive, \Omega)$, una función escalar positiva $a>0$ en $L^\infty(\Omega)$, y un elemento $f$ de $[H^1(\Omega)]'$. En este contexto, considere el problema de Advección-Difusión-Reacción
             $$ 
@@ -60,20 +56,9 @@
                 \item Encuentre una formulación débil de este problema, definiendo claramente el espacio de soluciones, el espacio de las funciones test y las formas lineales/bilineales involucradas. Para ello, solo debe integrar por partes el operador diferencial de segundo orden. Notar que integrar en término de primer orden generaría nuevos términos de frontera que serían más difíciles de trabajar.
                 \item Demuestre que la formulación débil encontrada tiene una solución única usando el Lema de Lax-Milgram. Le será útil demostrar la siguiente identidad:
                    $$ \int_{\partial\Omega} u^2 (\vec b\cdot n)\,dS = \int_\Omega \dive (u\vec b) u\,dx + \int_\Omega (u\vec b)\cdot \grad u\,dx = \int_\Omega (\vec b\cdot \grad u + u \dive \vec b) u\,dx + \int_\Omega u\vec b\cdot \grad u\,dx $$
+                   Indique claramente dónde se usan las hipótesis sobre los parámetros.
             \end{enumerate}
 
-       \item Considere el problema de Difusión-Reacción con condiciones de Neumann:
-            $$ 
-            \begin{aligned}
-                -\Delta u + cu &= f &&\text{en $\Omega$},\\
-                \grad u\cdot \vec n &= 0 &&\text{en $\partial\Omega$}.
-            \end{aligned}
-            $$
-            \begin{enumerate}
-                \item Encuentre la formulación débil de este problema y muestre claramente cuales son los espacios funcionales involucrados.
-                \item Muestre usando el Lema de Lax-Milgram que el problema tiene solución única. 
-                \item Explique por qué este problema, pese a tener condición de borde completa de Neumann, tiene garantía de unicidad.
-            \end{enumerate}
         \item Considere $\Omega\subset \R^d$ Lipschitz acotado, y el siguiente problema: Hallar $u_1, u_2:\Omega \to \R$  tales que
             $$ 
             \begin{aligned}
@@ -89,6 +74,34 @@
                        Escriba la formulación débil del problema, escribiendo claramente cuales son los espacios involucrados, y la regularidad requerida para las funciones $f_1, f_2$. Para esto, le servirá notar que el espacio de soluciones de su problema puede estar dado por $V_0 = H_0^1(\Omega)\times H_0^1(\Omega)$. 
                    \item Demuestre que el problema tiene una única solución y escriba la cota a-priori de estabilidad que muestra la continuidad de la inversa. 
             \end{enumerate}
+
+        \item Considere $\mu,\lambda>0$ (parámetros de Lamé), $\Omega\subset\R^2$ Lipschitz acotado. Dado un campo vectorial $\vec u:\Omega\to \R^2$, que llamaremos desplazamiento, definimos su gradiente simétrico como
+            $$ \ten \varepsilon (\vec u) \coloneqq \frac 1 2\left(\grad \vec u + [\grad \vec u]^T\right), $$
+            donde la matriz $\grad \vec u$ está dada puntualmente por $[\grad \vec u]_{ij} = \frac{\partial u_i}{\partial x^j}$. Se define además el tensor de Hooke como el siguiente operador: 
+            $$ \ten \sigma (\vec u) \coloneqq 2 \mu \ten \varepsilon(\vec u) + \lambda \dive \vec u \ten I. $$
+            Dadas estas definiciones, una fuerza de volumen $\vec f:\Omega\to \R$, y una condición de borde $\vec u_D$, se define el problema de \emph{elasticidad lineal} con condiciones de Dirichlet como
+                $$ \begin{aligned}
+                    -\dive \ten \sigma (\vec u) &= f &&\text{ en $\Omega$},  \\
+                    \vec u &= \vec u_d &&\text{en $\Gamma_D$},  \\
+                    \ten \sigma \vec n &= \vec t &&\text{en $\Gamma_N$}. 
+                \end{aligned} $$
+                \begin{enumerate}
+                    \item Demuestre que dada una matriz $A$ simétrica y una matriz $B$ antisimétrica, se tiene que 
+                            $$ A : B = 0, $$
+                            donde $:$ es la contracción de matrices o producto de Frobenius, dado por $X:X=\sum_{i,j} X_{ij}^2$. 
+                    \item Demuestre que la fórmula de integración por partes en forma matricial está dada por
+                        $$ \int_{\partial\Omega} \vec v\cdot (\ten \tau \vec n)\,dS = \int_\Omega \dive\ten \tau \cdot \vec v\,dx + \int_\Omega \ten\tau : \grad \vec v\,dx, $$
+                        donde $\ten \tau:\Omega \to \R^{d\times d}$ pertenece a $\ten H(\dive; \Omega)\coloneqq[H(\dive;\Omega)]^d$, y $\vec v:\Omega \to \R^d$ pertenece a $\vec H^1(\Omega)\coloneqq [H^1(\Omega)]^d$. 
+                    \item Use los dos resultados anteriores para mostrar que la formulación débil del problema de elasticidad está dada por: Encontrar $\vec u$ en $\vec V_g$ tal que 
+                        $$ \int_\Omega \ten \sigma(\vec u):\ten\varepsilon(\vec v)\,dx = \langle \vec f, \vec v\rangle_{[\vec H^1_{\Gamma_D}(\Omega)]', \vec H^1_{\Gamma_D}(\Omega)} + \langle \vec t, \vec v\rangle_{[H^{1/2}(\Gamma_D)]', H^{1/2}(\Gamma_D)} \qquad \forall \vec v \in \vec V_0,$$
+                        donde 
+                        $$ \vec V_g = \{ \vec v \in \vec H^1(\Omega): \vec v = \vec u_D \text{ en $\Gamma_D$}\} $$
+                        y
+                        $$ \vec V_0 = \{ \vec v \in \vec H^1(\Omega): \vec v = \vec 0 \text{ en $\Gamma_D$}\}, $$
+                        con las igualdades entendidas en el sentido de las trazas. 
+                    \item Korn
+                    \item Demustrar EyU
+                \end{enumerate}
 \end{enumerate}
 
 \todo[inline,color=white!90!black]{\textbf{Nota: } Abriremos un foro en Canvas para revisar cualquier typo y/o error que haya en el enunciado.}
