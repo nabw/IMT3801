@@ -1657,30 +1657,29 @@ $$ LM = \begin{bmatrix}
 2 & 3 & 4 & \cdots & N_{el}+1
 \end{bmatrix} $$
 In this specific 1D illustration, $LM(1, e) = e$ maps local node 1 of element $e$ to global node $e$, and $LM(2, e) = e+1$ maps local node 2 of element $e$ to global node $e+1$. The full mapping to degrees of freedom in the presence of general boundary conditions is captured by the $ID(IEN(a,e))$ relation, which is the index ultimately used to locate the correct row and column in the global system during assembly. The pseudocode below details the assembly algorithm using this mapping to add the contributions from the element matrices $\ten k^e$ and vectors $\vec f^e$ to the global system $\ten K$ and $\vec F$.
-\begin{algorithmic}[1] 
+\begin{algorithmic}[1]
     \State Initialize global stiffness matrix $\ten K$ and force vector $\vec{F}$ to zero.
-    \For{each element $e = 1, \dots, N_{el}$} \Comment{Element loop}
-        \State Compute element stiffness matrix $\ten k^e$ ($n_v \times n_v$) and force vector $\vec f^e$ ($n_v \times 1$).
-        \For{each local node $a = 1, \dots, n_v$} \Comment{Loop local rows}
-            \State Get global DOF row index $I = LM(a, e)$.
-            \If{$I > 0$} \Comment{If DOF is unknown}
-                \For{each local node $b = 1, \dots, n_v$} \Comment{Loop local columns}
-                    \State Get global DOF column index $J = LM(b, e)$.
-                    \If{$J > 0$} \Comment{If DOF is unknown}
-                        \State $K_{I,J} \gets  K_{I,J} +  k^e_{ab}$.
-                    \Else \Comment{If DOF is prescribed}
-                        \If{$J == 0$} \Comment{Handle $J=0$ contribution}
-                            \State $F_I \gets F_I - g_L \times  k^e_{ab}$. \Comment{Dirichlet BC}
-                        \EndIf
-                    \EndIf
-                \EndFor \Comment{End loop local columns}
-                \State $F_I \gets F_I + f^e_a$. \Comment{Add local force}
-                \If{$I == N$} \Comment{Handle DOF N}
-                    \State $F_I \gets F_I + q_R$. \Comment{Neumann BC}
+    \For{each element $e = 1, \dots, N_{el}$}
+        \State Compute element stiffness matrix $k^e$ ($n_v \times n_v$) and force vector $f^e$ ($n_v \times 1$).
+        \For{each local node $a = 1, \dots, n_v$}
+            \State $i = LM(a, e)$.
+            \For{each local node $b = 1, \dots, n_v$}
+                \State $j = LM(b, e)$.
+                \If{$i \neq 0$ and $j \neq 0$}
+                    \State $K_{i,j} \gets K_{i,j} + k^e_{ab}$.
                 \EndIf
-            \EndIf \Comment{End if DOF is unknown}
-        \EndFor \Comment{End loop local rows}
-    \EndFor \Comment{End element loop}
+                \If{$i \neq 0$ and $j == 0$}
+                    \State $F_i \gets F_i - g_L  k^e_{ab}$.
+                \EndIf
+            \EndFor
+            \If{$i \neq 0$}
+                \State $F_i \gets F_i + f^e_a$.
+            \EndIf
+            \If{$i == N$}
+                \State $F_i \gets F_i + q_R$.
+            \EndIf
+        \EndFor
+        \EndFor
     \end{algorithmic}
 This element-by-element assembly ensures that only non-zero contributions are added to the global system, efficiently building the sparse matrix $\ten K$.
 
