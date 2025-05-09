@@ -1261,7 +1261,7 @@ The idea of studying specifically finite elements will be that of having more si
     $$ \inf_{v_h\in V_h} \| u - v_h\|_V. $$
 A typical use of this inequality will be that of bounding the projection error through a finite element interpolant, such that one gets inequalities such as
     $$ \inf_{v_h\in V_h} \| u - v_h\|_V \leq \| u - I_h u \|_V \leq h^s \|u \|_W, $$
-where $W$ is some space of higher regularity, $s$ is some (hopefully positive) exponent and $I_h:V \to V_h$ is an interpolation operator. Our idea is that of producing FEM spaces for all of our relevant Hilbert spaces: $L^2$, $H^1$, $H(\dive)$, and $H(\curl)$. We will introduce finite elements by following an almost verbatim copy the first chapter of \cite{ern2004theory}. 
+    where $W$ is some space of higher regularity, $s$ is some (hopefully positive) exponent and $I_h:V \to V_h$ is an interpolation operator. Our idea is that of producing FEM spaces for all of our relevant Hilbert spaces: $L^2$, $H^1$, $H(\dive)$, and $H(\curl)$. We will start by introducing first order finite elements in $\R$ by following an almost verbatim copy of \cite[Chapter 1]{ern2004theory}. 
 
 \subsection{One-dimensional interpolation} 
 
@@ -1296,8 +1296,8 @@ with obvious modifications if $i = 0$ or $N+1$. Clearly, $\varphi_i \in \mathbb{
     Choose a basis $\{\gamma_0, \dots, \gamma_{N+1}\}$ for $\mathcal{L}(\mathbb{P}_h^1;\mathbb{R})$; henceforth, the linear forms in this basis are called the global degrees of freedom in $\mathbb{P}_h^1$. The functions in the dual basis are called the global shape functions in $\mathbb{P}_h^1$. 
 \end{definition}
 For $i \in \{0, \dots, N+1\}$, choose the linear form
-$$ \gamma_i: C(\bar{\Omega}) \ni v \mapsto \gamma_i(v) = v(x_i) \in \mathbb{R} $$.
-The proof of \ref{hatbasis} shows that a function $v_h \in \mathbb{P}_h^1$ is uniquely defined by the $(N+2)$-uplet $(v_h(x_i))_{0 \le i \le N+1}$, i.e. the values at the nodes. In other words, $\{\gamma_0, \dots, \gamma_{N+1}\}$ is a basis for $\mathcal{L}(\mathbb{P}_h^1; \mathbb{R})$. Choosing the linear forms $\{\gamma_i\}_i$ defined above as the global degrees of freedom in $\mathbb{P}_h^1$, the global shape functions are precisely the hat functions $\{\varphi_0, \dots, \varphi_{N+1}\}$, since $\gamma_i(\varphi_j) = \delta_{ij}$, $0 \le i,j \le N+1$.
+$$ \gamma_i: C(\bar{\Omega}) \ni v \mapsto \gamma_i(v) = v(x_i) \in \mathbb{R}. $$
+The proof of Lemma~\ref{hatbasis} shows that a function $v_h \in \mathbb{P}_h^1$ is uniquely defined by the $(N+2)$-uplet $(v_h(x_i))_{0 \le i \le N+1}$, i.e. the values at the nodes. In other words, $\{\gamma_0, \dots, \gamma_{N+1}\}$ is a basis for $\mathcal{L}(\mathbb{P}_h^1; \mathbb{R})$. Choosing the linear forms $\{\gamma_i\}_i$ defined above as the global degrees of freedom in $\mathbb{P}_h^1$, the global shape functions are precisely the hat functions $\{\varphi_0, \dots, \varphi_{N+1}\}$, since $\gamma_i(\varphi_j) = \delta_{ij}$, $0 \le i,j \le N+1$.
 
 In this space, we define the interpolation operator
 $$ I_h^1: C(\bar{\Omega}) \ni v \mapsto \sum_{i=0}^{N+1} \gamma_i(v) \varphi_i \in \mathbb{P}_h^1.$$
