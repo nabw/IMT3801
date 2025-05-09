@@ -15,7 +15,7 @@
 \newcommand{\RightComment}[1]{\hfill \(\triangleright\) \textit{#1}}
 \newcommand{\example}[1]{\todo[inline,color=orange!30!white]{\textbf{Example:} #1}}
 
-\title{Notes for Numerical Analysis of PDEs and related topics}
+\title{Applications of Functional Analysis and PDEs}
 %\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
 \author{Nicol\'as A Barnafi}
 %\date{}
@@ -1321,7 +1321,9 @@ We can characterize the properties of the interpolation operator.
         |v(y) - v(x)| \le \int_x^y |v'(s)| ds  \le |y-x|^{1/2} |v|_{1,\Omega},
     \end{equation*}
     owing to the Cauchy-Schwarz inequality, which can be justified rigorously by a density argument. Furthermore, taking $x$ to be a point where $|v|$ reaches its minimum over $\overline{\Omega}$, the above inequality implies
-    $$ \|v\|_{L^\infty(\Omega)} \le |b-a|^{-1/2} \|v\|_0 + |b-a|^{1/2}|v|_{1,\Omega},$$
+    \begin{equation}\label{interpolator_continuity_1d}
+        \|v\|_{L^\infty(\Omega)} \le |b-a|^{-1/2} \|v\|_0 + |b-a|^{1/2}|v|_{1,\Omega},
+    \end{equation}
     since $|v(x)| \le |b-a|^{-1/2} \|v\|_{0}$. Therefore, $I_h^1 v$ is well-defined for $v \in H^1(\Omega)$. Moreover, Lemma \ref{approxP1} implies $I_h^1 v \in H^1(\Omega)$; hence, $I_h^1$ maps $H^1(\Omega)$ to $H^1(\Omega)$.
     For the second part, let $I_i \in \mathcal{T}_h$ for $0 \le i \le N$. From the definition of the distributional derivative $w_h$ above, $(I_h^1 v)'|_{I_i} = h_i^{-1}(v(x_{i+1}) - v(x_i))$; hence, using the previous inequality we get the estimate $|I_h^1 v|_{1,I_i} \le |v|_{1,I_i}$. Therefore, $|I_h^1 v|_{1,\Omega} \le |v|_{1,\Omega}$. Moreover, since $\|I_h^1 v\|_{0,\Omega} \le |b-a|^{1/2} \|I_h^1 v\|_{L^\infty(\Omega)}$ and $\|I_h^1 v\|_{L^\infty(\Omega)} \le \|v\|_{L^\infty(\Omega)}$, we deduce that $\|I_h^1 v\|_{0,\Omega} \le c \|v\|_{1,\Omega}$ where $c$ is independent of $h$ (assuming $h$ bounded). The conclusion follows readily.
     \end{proof}
