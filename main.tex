@@ -1219,7 +1219,7 @@ Galerkin schemes are based on discrete approximation spaces, which may or may no
 %     \end{proof}
 % \end{lemma}
 
-In order to have a good approximation, it is not necessary that the scheme is conforming. Some examples of conforming schemes are most finite element methods and spectral element methods, and among non-conforming schemes are discontinuous-Galerkin (DG) finite element methods, and methods that impose boundary conditions weakly. We will study several conforming finite element methods in Section \ref{sec:fem}. 
+In order to have a good approximation, it is not necessary that the scheme is conforming. Some examples of conforming schemes are most finite element methods and spectral element methods, and among non-conforming schemes are discontinuous-Galerkin (DG) finite element methods, and methods that impose boundary conditions weakly. We will study several conforming finite element methods in Section~\ref{sec:fem}. 
 
 Although conforming spaces have some nice properties, there exist some applications where the mesh and the domain boundaries may not match, or where traditional finite elements may not apply, forcing one to use other schemes such as spline-based methods, where the degrees of freedom are control points of the splines, rather than actual nodes. In these cases, we can use a non-conforming scheme. The following presentation is based on \cite{Chouly2024}. Consider the Poisson problem with a nonhomogeneous Dirichlet boundary condition: find $u:\Omega\to \mathbb{R}$ such that
 $$
@@ -1281,33 +1281,33 @@ In what follows, the intervals $I_i$ are also called elements (or cells) and the
 
 \subsubsection{The $\mathbb{P}_1$ Lagrange finite element}
 One of the simplest methods to approximate functions over $\Omega$ is to define piecewise-linear functions. We denote the vector space of continuous, piecewise-linear functions
-$$ \mathbb{P}_h^1 = \{ v_h \in C(\bar{\Omega}): \forall i \in \{0, \dots, N\}, v_h|_{I_i} \in \mathbb{P}_1 \},$$
-where $\mathbb{P}_d$ is the vector space of polynomials of degree $d$. This space can be used in conjunction with Galerkin methods to approximate one-dimensional PDEs, and for this reason, $\mathbb{P}_h^1$ is called an approximation space.
+$$ P_h^1 = \{ v_h \in C(\bar{\Omega}): \forall i \in \{0, \dots, N\}, v_h|_{I_i} \in \mathbb{P}_1 \}.$$
+This space can be used in conjunction with Galerkin methods to approximate one-dimensional PDEs, and for this reason, $P_h^1$ is called an approximation space.
 We introduce the functions $\{\varphi_0, \dots, \varphi_{N+1}\}$ defined elementwise as follows: for $i \in \{0, \dots, N+1\}$, set
 $$ \varphi_i(x) = \begin{cases} \frac{x - x_{i-1}}{h_{i-1}} & \text{if } x \in I_{i-1}, \\ \frac{x_{i+1} - x}{h_i} & \text{if } x \in I_i, \\ 0 & \text{otherwise}, \end{cases} $$
-with obvious modifications if $i = 0$ or $N+1$. Clearly, $\varphi_i \in \mathbb{P}_h^1$. These functions are often called ''hat functions'' in reference to the shape of their graph.
+with obvious modifications if $i = 0$ or $N+1$. Clearly, $\varphi_i \in P_h^1$. These functions are often called ''hat functions'' in reference to the shape of their graph.
 \begin{lemma} \label{hatbasis}
-    The set $\{\varphi_0, \dots, \varphi_{N+1}\}$ is a basis for $\mathbb{P}_h^1$.
+    The set $\{\varphi_0, \dots, \varphi_{N+1}\}$ is a basis for $P_h^1$.
     \begin{proof}
-        The proof relies on the fact that $\varphi_i(x_j) = \delta_{ij}$ where $\delta$ is the Kronecker delta, for $0 \le i,j \le N+1$. Let $(a_0, \dots, a_{N+1})^\top \in \mathbb{R}^{N+2}$ and assume that the continuous function $w = \sum_{i=0}^{N+1} a_i \varphi_i$ vanishes identically in $\bar{\Omega}$. Then, for $0 \le i \le N+1$, $a_i = w(x_i) = 0$; hence, the set $\{\varphi_0, \dots, \varphi_{N+1}\}$ is linearly independent. Furthermore, for all $v_h \in \mathbb{P}_h^1$, it is clear that $v_h = \sum_{i=0}^{N+1} v_h(x_i) \varphi_i$ since, on each element $I_i$, the functions $v_h$ and $\sum_{i=0}^{N+1} v_h(x_i) \varphi_i$ are affine and coincide at two points, namely $x_i$ and $x_{i+1}$.
+        The proof relies on the fact that $\varphi_i(x_j) = \delta_{ij}$ where $\delta$ is the Kronecker delta, for $0 \le i,j \le N+1$. Let $(a_0, \dots, a_{N+1})^\top \in \mathbb{R}^{N+2}$ and assume that the continuous function $w = \sum_{i=0}^{N+1} a_i \varphi_i$ vanishes identically in $\bar{\Omega}$. Then, for $0 \le i \le N+1$, $a_i = w(x_i) = 0$; hence, the set $\{\varphi_0, \dots, \varphi_{N+1}\}$ is linearly independent. Furthermore, for all $v_h \in P_h^1$, it is clear that $v_h = \sum_{i=0}^{N+1} v_h(x_i) \varphi_i$ since, on each element $I_i$, the functions $v_h$ and $\sum_{i=0}^{N+1} v_h(x_i) \varphi_i$ are affine and coincide at two points, namely $x_i$ and $x_{i+1}$.
     \end{proof}
 \end{lemma}
 \begin{definition}
-    Choose a basis $\{\gamma_0, \dots, \gamma_{N+1}\}$ for $\mathcal{L}(\mathbb{P}_h^1;\mathbb{R})$; henceforth, the linear forms in this basis are called the global degrees of freedom in $\mathbb{P}_h^1$. The functions in the dual basis are called the global shape functions in $\mathbb{P}_h^1$. 
+    Choose a basis $\{\gamma_0, \dots, \gamma_{N+1}\}$ for $\mathcal{L}(P_h^1;\mathbb{R})$; henceforth, the linear forms in this basis are called the global degrees of freedom in $P_h^1$. The functions in the dual basis are called the global shape functions in $P_h^1$. 
 \end{definition}
 For $i \in \{0, \dots, N+1\}$, choose the linear form
-$$ \gamma_i: C(\bar{\Omega}) \ni v \mapsto \gamma_i(v) = v(x_i) \in \mathbb{R} $$.
-The proof of \ref{hatbasis} shows that a function $v_h \in \mathbb{P}_h^1$ is uniquely defined by the $(N+2)$-uplet $(v_h(x_i))_{0 \le i \le N+1}$, i.e. the values at the nodes. In other words, $\{\gamma_0, \dots, \gamma_{N+1}\}$ is a basis for $\mathcal{L}(\mathbb{P}_h^1; \mathbb{R})$. Choosing the linear forms $\{\gamma_i\}_i$ defined above as the global degrees of freedom in $\mathbb{P}_h^1$, the global shape functions are precisely the hat functions $\{\varphi_0, \dots, \varphi_{N+1}\}$, since $\gamma_i(\varphi_j) = \delta_{ij}$, $0 \le i,j \le N+1$.
+$$ \gamma_i: C(\bar{\Omega}) \ni v \mapsto \gamma_i(v) = v(x_i) \in \mathbb{R}.$$
+The proof of Lemma~\ref{hatbasis} shows that a function $v_h \in P_h^1$ is uniquely defined by the $(N+2)$-uplet $(v_h(x_i))_{0 \le i \le N+1}$, i.e. the values at the nodes. In other words, $\{\gamma_0, \dots, \gamma_{N+1}\}$ is a basis for $\mathcal{L}(P_h^1; \mathbb{R})$. Choosing the linear forms $\{\gamma_i\}_i$ defined above as the global degrees of freedom in $P_h^1$, the global shape functions are precisely the hat functions $\{\varphi_0, \dots, \varphi_{N+1}\}$, since $\gamma_i(\varphi_j) = \delta_{ij}$, $0 \le i,j \le N+1$.
 
 In this space, we define the interpolation operator
-$$ I_h^1: C(\bar{\Omega}) \ni v \mapsto \sum_{i=0}^{N+1} \gamma_i(v) \varphi_i \in \mathbb{P}_h^1.$$
-For a function $v \in C^0(\bar{\Omega})$, $I_h^1 v$ is the unique continuous, piecewise linear function that takes the same value as $v$ at all the mesh vertices. The function $I_h^1 v$ is called the Lagrange interpolant of $v$ of degree 1. Note that the approximation space $\mathbb{P}_h^1$ is the codomain of $I_h^1$. 
+$$ I_h^1: C(\bar{\Omega}) \ni v \mapsto \sum_{i=0}^{N+1} \gamma_i(v) \varphi_i \in P_h^1.$$
+For a function $v \in C^0(\bar{\Omega})$, $I_h^1 v$ is the unique continuous, piecewise linear function that takes the same value as $v$ at all the mesh vertices. The function $I_h^1 v$ is called the Lagrange interpolant of $v$ of degree 1. Note that the approximation space $P_h^1$ is the codomain of $I_h^1$. 
 
 Now we connect the polynomial approximation space we just defined with the Sobolev space $H^1(\Omega)$, to ensure that our method is conforming. 
 \begin{lemma}\label{approxP1}
-    It holds that $\mathbb{P}_h^1 \subset H^1(\Omega)$.
+    It holds that $P_h^1 \subset H^1(\Omega)$.
     \begin{proof}
-    Let $v_h \in \mathbb{P}_h^1$. Clearly, $v_h \in L^2(\Omega)$. Furthermore, owing to the continuity of $v_h$, its first-order distributional derivative is the piecewise constant function $w_h$ such that
+    Let $v_h \in P_h^1$. Clearly, $v_h \in L^2(\Omega)$. Furthermore, owing to the continuity of $v_h$, its first-order distributional derivative is the piecewise constant function $w_h$ such that
     $$\forall I_i \in \mathcal{T}_h,\quad  w_h|_{I_i} = \frac{v_h(x_{i+1}) - v_h(x_i)}{h_i}.$$
     It is clear that $w_h\in L^2(\Omega)$, and thus by definition we conclude $v_h\in H^1(\Omega)$.
     \end{proof}
@@ -1321,8 +1321,10 @@ We can characterize the properties of the interpolation operator.
         |v(y) - v(x)| \le \int_x^y |v'(s)| ds  \le |y-x|^{1/2} |v|_{1,\Omega},
     \end{equation*}
     owing to the Cauchy-Schwarz inequality, which can be justified rigorously by a density argument. Furthermore, taking $x$ to be a point where $|v|$ reaches its minimum over $\overline{\Omega}$, the above inequality implies
-    $$ \|v\|_{L^\infty(\Omega)} \le |b-a|^{-1/2} \|v\|_0 + |b-a|^{1/2}|v|_{1,\Omega},$$
-    since $|v(x)| \le |b-a|^{-1/2} \|v\|_{0}$. Therefore, $I_h^1 v$ is well-defined for $v \in H^1(\Omega)$. Moreover, Lemma \ref{approxP1} implies $I_h^1 v \in H^1(\Omega)$; hence, $I_h^1$ maps $H^1(\Omega)$ to $H^1(\Omega)$.
+    \begin{equation*}\label{eq:supnorm_p1}
+        \|v\|_{L^\infty(\Omega)} \le |b-a|^{-1/2} \|v\|_0 + |b-a|^{1/2}|v|_{1,\Omega},
+    \end{equation*}
+    since $|v(x)| \le |b-a|^{-1/2} \|v\|_{0}$. Therefore, $I_h^1 v$ is well-defined for $v \in H^1(\Omega)$. Moreover, Lemma~\ref{approxP1} implies $I_h^1 v \in H^1(\Omega)$; hence, $I_h^1$ maps $H^1(\Omega)$ to $H^1(\Omega)$.
     For the second part, let $I_i \in \mathcal{T}_h$ for $0 \le i \le N$. From the definition of the distributional derivative $w_h$ above, $(I_h^1 v)'|_{I_i} = h_i^{-1}(v(x_{i+1}) - v(x_i))$; hence, using the previous inequality we get the estimate $|I_h^1 v|_{1,I_i} \le |v|_{1,I_i}$. Therefore, $|I_h^1 v|_{1,\Omega} \le |v|_{1,\Omega}$. Moreover, since $\|I_h^1 v\|_{0,\Omega} \le |b-a|^{1/2} \|I_h^1 v\|_{L^\infty(\Omega)}$ and $\|I_h^1 v\|_{L^\infty(\Omega)} \le \|v\|_{L^\infty(\Omega)}$, we deduce that $\|I_h^1 v\|_{0,\Omega} \le c \|v\|_{1,\Omega}$ where $c$ is independent of $h$ (assuming $h$ bounded). The conclusion follows readily.
     \end{proof}
 \end{lemma}
@@ -1331,7 +1333,7 @@ We can explicitly control the interpolation error via the mesh size.
     For all $h$ and $v \in H^2(\Omega)$,
     $$ \|v - I_h^1 v\|_{0,\Omega} \le h^2 \|v''\|_{0,\Omega},\qquad  |v - I_h^1 v|_{1,\Omega} \le h \|v''\|_{0,\Omega}. $$
 \begin{proof}
-    Consider an interval $I_i \in \mathcal{T}_h$. Let $w \in H^1(I_i)$ be such that $w$ vanishes at some point $\xi$ in $I_i$. Then, owing to \ref{interpolator_continuity_1d}, we infer $\|w\|_{0,I_i} \le h_i |w|_{1,I_i}$.
+    Consider an interval $I_i \in \mathcal{T}_h$. Let $w \in H^1(I_i)$ be such that $w$ vanishes at some point $\xi$ in $I_i$. Then, owing to inequality~\ref{eq:interpolator_continuity_1d}, we infer $\|w\|_{0,I_i} \le h_i |w|_{1,I_i}$.
     Let $v \in H^2(\Omega)$, let $i \in \{0, \dots, N\}$, and set $w_i = (v - I_h^1 v)'|_{I_i}$. Note that $w_i \in H^1(I_i)$ and that $w_i$ vanishes at some point $\xi$ in $I_i$ owing to the mean-value theorem. Applying the estimate derived above to $w_i$ and using the fact that $(I_h^1 v)''$ vanishes identically on $I_i$ yields $|v - I_h^1 v|_{1,I_i} \le h_i |v''|_{0,I_i}$. The second estimate is then obtained by summing over the mesh intervals. To prove the first estimate, observe that the result above can also be applied to $(v - I_h^1 v)|_{I_i}$ yielding
     $$ \|v - I_h^1 v\|_{0,I_i} \le h_i |v - I_h^1 v|_{1,I_i} \le h_i^2 |v''|_{0,I_i}. $$
     Conclude by summing over the mesh intervals.
@@ -1353,8 +1355,8 @@ $$ \|v - \mathcal{I}_{I_i}^1 v\|_{0,I_i} \le h_i^2 |v|_{2,I_i},\qquad|\mathcal{I
 
 \subsubsection{The $\mathbb{P}_k$ Lagrange finite elements}
 The interpolation technique presented for the piecewise-linear case (polynomial degree $1$) generalizes to higher-degree polynomials. Consider the mesh $\mathcal{T}_h = \{I_i\}_{0 \le i \le N}$ introduced previously. Let
-$$ \mathbb{P}_h^k = \{ v_h \in C(\bar{\Omega}): \forall i \in \{0, \dots, N\}, v_h|_{I_i} \in \mathbb{P}_k \}. $$
-To investigate the properties of the approximation space $\mathbb{P}_h^k$ and to construct an interpolation operator with codomain $\mathbb{P}_h^k$, it is convenient to consider Lagrange polynomials. Recall the following:
+$$ P_h^k = \{ v_h \in C(\bar{\Omega}): \forall i \in \{0, \dots, N\}, v_h|_{I_i} \in \mathbb{P}_k \}. $$
+To investigate the properties of the approximation space $P_h^k$ and to construct an interpolation operator with codomain $P_h^k$, it is convenient to consider Lagrange polynomials. Recall the following:
 
 \begin{definition}[Lagrange polynomials]\label{def:lagrangepolynomials}
     Let $k \ge 1$ and let $\{s_0, \dots, s_k\}$ be $(k+1)$ distinct numbers. The Lagrange polynomials $\{\mathcal{L}_0^k, \dots, \mathcal{L}_k^k\}$ associated with the nodes $\{s_0, \dots, s_k\}$ are defined to be
@@ -1368,31 +1370,31 @@ and for $m=0$,
 $$ \varphi_{ki}(x) = \begin{cases} \mathcal{L}_{i-1,k}^k(x) & \text{if } x \in I_{i-1}, \\ \mathcal{L}_{i,0}^k(x) & \text{if } x \in I_i, \\ 0 & \text{otherwise}, \end{cases} $$
 with obvious modifications if $i = 0$ or $N+1$.
 \begin{lemma}\label{basis_functions_Pk}
-    The construction above results in degree $k$ polynomials, i.e. $\varphi_j \in \mathbb{P}_h^k$.
+    The construction above results in degree $k$ polynomials, i.e. $\varphi_j \in P_h^k$.
 \begin{proof}
-    Let $j \in \{0, \dots, k(N+1)\}$ with $j = ki + m.$ If $1 \le m \le k-1$, $\varphi_j(x_i) = \varphi_j(x_{i+1}) = 0$; hence, $\varphi_j \in C(\bar{\Omega})$. Moreover, the restrictions of $\varphi_j$ to the mesh intervals are in $\mathbb{P}_k$ by construction. Therefore, $\varphi_j \in \mathbb{P}_h^k$. Now, assume $m = 0$ (i.e., $j=ki$) and $0 < i < N+1$. Clearly, $\varphi_{ki}$ is continuous at $x_i$ by construction and $\varphi_{ki}(x_{i-1}) = \varphi_{ki}(x_{i+1}) = 0$; hence, $\varphi_{ki} \in \mathbb{P}_h^k$. The cases $i = 0$ and $i = N+1$ are treated similarly.
+    Let $j \in \{0, \dots, k(N+1)\}$ with $j = ki + m.$ If $1 \le m \le k-1$, $\varphi_j(x_i) = \varphi_j(x_{i+1}) = 0$; hence, $\varphi_j \in C(\bar{\Omega})$. Moreover, the restrictions of $\varphi_j$ to the mesh intervals are in $\mathbb{P}_k$ by construction. Therefore, $\varphi_j \in P_h^k$. Now, assume $m = 0$ (i.e., $j=ki$) and $0 < i < N+1$. Clearly, $\varphi_{ki}$ is continuous at $x_i$ by construction and $\varphi_{ki}(x_{i-1}) = \varphi_{ki}(x_{i+1}) = 0$; hence, $\varphi_{ki} \in P_h^k$. The cases $i = 0$ and $i = N+1$ are treated similarly.
 \end{proof}
 \end{lemma}
 Introduce the set of nodes $\{a_j\}_{0 \le j \le k(N+1)}$ such that $a_j = \xi_{i,m}$ where $j = ik + m$. For $j \in \{0, \dots, k(N+1)\}$, consider the linear form
 $$ \gamma_j: C(\bar{\Omega}) \ni v \mapsto \gamma_j(v) = v(a_j). $$
 
 \begin{lemma}
-    $\{\varphi_0, \dots, \varphi_{k(N+1)}\}$ is a basis for $\mathbb{P}_h^k$, and $\{\gamma_0, \dots, \gamma_{k(N+1)}\}$ is a basis for $\mathcal{L}(\mathbb{P}_h^k; \mathbb{R})$.
+    $\{\varphi_0, \dots, \varphi_{k(N+1)}\}$ is a basis for $P_h^k$, and $\{\gamma_0, \dots, \gamma_{k(N+1)}\}$ is a basis for $\mathcal{L}(P_h^k; \mathbb{R})$.
 
 \begin{proof}
-    Similar to that of Lemma \ref{hatbasis}, since $\gamma_j(\varphi_{j'}) = \delta_{jj'}$ for $0 \le j,j' \le k(N+1)$.
+    Similar to that of Lemma~\ref{hatbasis}, since $\gamma_j(\varphi_{j'}) = \delta_{jj'}$ for $0 \le j,j' \le k(N+1)$.
 \end{proof}
 \end{lemma}
-The global degrees of freedom in $\mathbb{P}_h^k$ are chosen to be the $(k(N+1)+1)$ linear forms $\gamma_j$ defined above; hence, the global shape functions in $\mathbb{P}_h^k$ are the functions $\{\varphi_0, \dots, \varphi_{k(N+1)}\}$.
+The global degrees of freedom in $P_h^k$ are chosen to be the $(k(N+1)+1)$ linear forms $\gamma_j$ defined above; hence, the global shape functions in $P_h^k$ are the functions $\{\varphi_0, \dots, \varphi_{k(N+1)}\}$.
 
 The main advantage of using high-degree polynomials is that smooth functions can be interpolated to high-order accuracy. Define the interpolation operator $I_h^k$ to be
-$$ I_h^k: C(\bar{\Omega}) \ni v \mapsto \sum_{j=0}^{k(N+1)} \gamma_j(v) \varphi_j \in \mathbb{P}_h^k. $$
-$I_h^k v$ is called the Lagrange interpolant of $v$ of degree $k$. Clearly, $I_h^k$ is a linear operator, and $I_h^k v$ is the unique function in $\mathbb{P}_h^k$ that takes the same value as $v$ at all the mesh nodes. The approximation space $\mathbb{P}_h^k$ is the codomain of $I_h^k$. 
+$$ I_h^k: C(\bar{\Omega}) \ni v \mapsto \sum_{j=0}^{k(N+1)} \gamma_j(v) \varphi_j \in P_h^k. $$
+$I_h^k v$ is called the Lagrange interpolant of $v$ of degree $k$. Clearly, $I_h^k$ is a linear operator, and $I_h^k v$ is the unique function in $P_h^k$ that takes the same value as $v$ at all the mesh nodes. The approximation space $P_h^k$ is the codomain of $I_h^k$. 
 
 \begin{lemma}
-    The approximation space $\mathbb{P}_h^k$ constructed above satisfies $\mathbb{P}_h^k \subset H^1(\Omega)$.
+    The approximation space $P_h^k$ constructed above satisfies $P_h^k \subset H^1(\Omega)$.
 \begin{proof}
-    Similar to that of Lemma \ref{approxP1}.
+    Similar to that of Lemma~\ref{approxP1}.
 \end{proof}
 \end{lemma}
 To investigate the properties of $I_h^k$, it is convenient to introduce a family of local interpolation operators. On $I_i = [x_i, x_{i+1}] \in \mathcal{T}_h$ choose the local degrees of freedom to be the $(k+1)$ linear forms $\{\sigma_{i,0}, \dots, \sigma_{i,k}\}$ defined as follows:
@@ -1416,20 +1418,20 @@ Since $T_i(\hat{K}) = I_i$, the mesh $\mathcal{T}_h$ can be constructed by apply
 \end{align*}
 and thus we infer
 $$ \forall v \in C(I_i), \quad \mathcal{I}_{I_i}^k(v) \circ T_i = \mathcal{I}_{\hat{K}}^k(v \circ T_i). $$
-In other words, the family $\{\mathcal{I}_{I_i}^k\}_{I_i \in \mathcal{T}_h}$ is entirely generated by the transformations $\{T_i\}_{I_i \in \mathcal{T}_h}$ and the reference interpolation operator $\mathcal{I}_{\hat{K}}^k$. The property above plays a key role when estimating the interpolation error; see the proof of Lemma \ref{interpolationerrPk} below.
+In other words, the family $\{\mathcal{I}_{I_i}^k\}_{I_i \in \mathcal{T}_h}$ is entirely generated by the transformations $\{T_i\}_{I_i \in \mathcal{T}_h}$ and the reference interpolation operator $\mathcal{I}_{\hat{K}}^k$. The property above plays a key role when estimating the interpolation error; see the proof of Lemma~\ref{interpolationerrPk} below.
 
 As well as with the one-dimensional case, we can characterize the interpolation operators.
 \begin{lemma}
     $I_h^k$ is a linear continuous mapping from $H^1(\Omega)$ to $H^1(\Omega)$, and $\|I_h^k\|_{\mathcal{L}(H^1(\Omega);H^1(\Omega))}$ is uniformly bounded with respect to $h$.
 \begin{proof}
-    To prove that $I_h^k$ maps $H^1(\Omega)$ to $H^1(\Omega)$, use the same argument as in the proof of Lemma \ref{cont1D}.
+    To prove that $I_h^k$ maps $H^1(\Omega)$ to $H^1(\Omega)$, use the same argument as in the proof of Lemma~\ref{cont1D}.
     Let $v \in H^1(\Omega)$ and $I_i \in \mathcal{T}_h$. Since $\sum_{m=0}^k \theta_{i,m}' = 0$,
     $$ (\mathcal{I}_{I_i}^k v)' = \sum_{m=0}^k [v(\xi_{i,m}) - v(x_i)] \theta_{i,m}'. $$
-    Inequality \ref{eq:interpolator_continuity_1d} yields $|v(\xi_{i,m}) - v(x_i)| \le h_i^{1/2} |v|_{1,I_i}$ for $0 \le m \le k$. Furthermore, changing variables in the integral, it is clear that $|\theta_{i,m}|_{1,I_i} = h_i^{-1/2} |\hat{\theta}_m|_{1,\hat{K}}$. Set $c_k = \max_{0 \le m \le k} |\hat{\theta}_m|_{1,\hat{K}}$ and observe that this quantity is mesh-independent. A straightforward calculation yields
+    Inequality~\ref{eq:interpolator_continuity_1d} yields $|v(\xi_{i,m}) - v(x_i)| \le h_i^{1/2} |v|_{1,I_i}$ for $0 \le m \le k$. Furthermore, changing variables in the integral, it is clear that $|\theta_{i,m}|_{1,I_i} = h_i^{-1/2} |\hat{\theta}_m|_{1,\hat{K}}$. Set $c_k = \max_{0 \le m \le k} |\hat{\theta}_m|_{1,\hat{K}}$ and observe that this quantity is mesh-independent. A straightforward calculation yields
     $$ |\mathcal{I}_{I_i}^k v|_{1,I_i} \le (k+1) c_k |v|_{1,I_i}, $$
     showing that $|\mathcal{I}_h^k v|_{1,\Omega}$ is controlled by $|v|_{1,\Omega}$ uniformly with respect to $h$. In addition, since $\sum_{m=0}^k \theta_{i,m} = 1$,
     $$ \mathcal{I}_{I_i}^k v - v(x_i) = \sum_{m=0}^k [v(\xi_{i,m}) - v(x_i)] \theta_{i,m}, $$
-    implying, for $x \in I_i$, $|\mathcal{I}_{I_i}^k v(x)| \le \|v\|_{L^\infty(\Omega)} + (k+1) d_k h_i^{1/2} |v|_{1,I_i}$ with the mesh-independent constant $d_k = \max_{0 \le m \le k} \|\hat{\theta}_m\|_{L^\infty(\hat{K})}$. Then, from \ref{interpolationerrPk} we get that $\|\mathcal{I}_h^k v\|_{L^\infty(\Omega)}$ is controlled by $\|v\|_{1,\Omega}$ uniformly with respect to $h$. To conclude, use the fact that $\|\mathcal{I}_h^k v\|_{0,\Omega} \le |b-a|^{1/2} \|\mathcal{I}_h^k v\|_{L^\infty(\Omega)}$.
+    implying, for $x \in I_i$, $|\mathcal{I}_{I_i}^k v(x)| \le \|v\|_{L^\infty(\Omega)} + (k+1) d_k h_i^{1/2} |v|_{1,I_i}$ with the mesh-independent constant $d_k = \max_{0 \le m \le k} \|\hat{\theta}_m\|_{L^\infty(\hat{K})}$. Then, from inequality~\ref{eq:supnorm_p1} we get that $\|\mathcal{I}_h^k v\|_{L^\infty(\Omega)}$ is controlled by $\|v\|_{1,\Omega}$ uniformly with respect to $h$. To conclude, use the fact that $\|\mathcal{I}_h^k v\|_{0,\Omega} \le |b-a|^{1/2} \|\mathcal{I}_h^k v\|_{L^\infty(\Omega)}$.
 \end{proof}
 \end{lemma}
 \begin{lemma}\label{interpolationerrPk}
@@ -1445,7 +1447,7 @@ As well as with the one-dimensional case, we can characterize the interpolation 
     Similarly, $|\hat{v}|_{l+1,\hat{K}} = h_i^{l+1/2} |v|_{l+1,I_i}$. 
     Consider the linear mapping
     $$ \mathcal{F}: H^{l+1}(\hat{K}) \ni \hat{v} \mapsto \hat{v} - \mathcal{I}_{\hat{K}}^k \hat{v} \in H^m(\hat{K}). $$
-    Note that $\mathcal{I}_{\hat{K}}^k \hat{v}$ is meaningful since in one dimension, $\hat{v} \in H^{l+1}(\hat{K})$ with $l \ge 0$ implies $\hat{v} \in C(\hat{K})$. Moreover, $\mathcal{F}$ is continuous from $H^{l+1}(\hat{K})$ to $H^m(\hat{K})$. Indeed, one can easily adapt the proof of Lemma \ref{cont1D} to prove that $\mathcal{I}_{\hat{K}}^k$ is continuous from $H^1(\hat{K})$ to $H^s(\hat{K})$ for all $s \ge 1$. Furthermore, it is clear that $\mathbb{P}_k$ is invariant under $\mathcal{F}$ since, for all $\hat{p} \in \mathbb{P}_k$ with $\hat{p} = \sum_{n=0}^k \alpha_n \hat{\theta}_n$
+    Note that $\mathcal{I}_{\hat{K}}^k \hat{v}$ is meaningful since in one dimension, $\hat{v} \in H^{l+1}(\hat{K})$ with $l \ge 0$ implies $\hat{v} \in C(\hat{K})$. Moreover, $\mathcal{F}$ is continuous from $H^{l+1}(\hat{K})$ to $H^m(\hat{K})$. Indeed, one can easily adapt the proof of Lemma~\ref{cont1D} to prove that $\mathcal{I}_{\hat{K}}^k$ is continuous from $H^1(\hat{K})$ to $H^s(\hat{K})$ for all $s \ge 1$. Furthermore, it is clear that $\mathbb{P}_k$ is invariant under $\mathcal{F}$ since, for all $\hat{p} \in \mathbb{P}_k$ with $\hat{p} = \sum_{n=0}^k \alpha_n \hat{\theta}_n$
     $$ \mathcal{I}_{\hat{K}} \hat{p} = \sum_{m,n=0}^k \alpha_n \hat{\sigma}_m(\hat{\theta}_n) \hat{\theta}_m = \sum_{m,n=0}^k \alpha_n \delta_{mn} \hat{\theta}_m = \sum_{n=0}^k \alpha_n \hat{\theta}_n = \hat{p}. $$
     Since $l \le k$, $\mathbb{P}_l$ is invariant under $\mathcal{F}$. As a result,
     \begin{align*}
@@ -1455,7 +1457,7 @@ As well as with the one-dimensional case, we can characterize the interpolation 
     \end{align*}
     the last estimate resulting from the Deny-Lions Lemma; see Lemma B.67 in \cite{ern2004theory}. The identities derived in step 1 yield
     $$ |v - \mathcal{I}_{I_i}^k v|_{m,I_i} = h_i^{-m+1/2} |\hat{v} - \mathcal{I}_{\hat{K}}^k \hat{v}|_{m,\hat{K}} \le h_i^{-m+1/2} c |\hat{v}|_{l+1,\hat{K}} = h_i^{-m+1/2} c h_i^{l+1/2} |v|_{l+1,I_i} = c h_i^{l+1-m} |v|_{l+1,I_i}. $$
-    To derive the desired, sum over the mesh intervals. When $m = 0$ or 1, global norms over $\Omega$ can be used since $\mathbb{P}_k \subset H^1(\Omega)$ owing to the fact that $\mathbb{P}_h^k\subset H^1(\Omega)$.
+    To derive the desired, sum over the mesh intervals. When $m = 0$ or 1, global norms over $\Omega$ can be used since $\mathbb{P}_k \subset H^1(\Omega)$ owing to the fact that $P_h^k\subset H^1(\Omega)$.
 \end{proof}
 \end{lemma}
 Note that the proofs above show that the interpolation properties of $I_h^k$ are local. If the function to be interpolated is smooth enough, say $v \in H^{k+1}(\Omega)$, the interpolation error is of optimal order. In particular, the first error estimate yields
@@ -1493,7 +1495,7 @@ With one-dimensional interpolation already covered, we now present a general def
     $\{\theta_1, \dots, \theta_{n_{sh}}\}$ are called the local shape functions.
 \end{definition}
 
-Note that condition (3) in Definition \ref{def:finiteelements} amounts to proving that
+Note that condition (3) in Definition~\ref{def:finiteelements} amounts to proving that
     $$ \forall(\alpha_1, \dots, \alpha_{n_{sh}}) \in \mathbb{R}^{n_{sh}}, \quad \exists ! p \in P, \quad \sigma_i(p) = \alpha_i \text{ for } 1 \le i \le n_{sh}, $$
     which, in turn, is equivalent to
     $$ \begin{cases} \dim P = |\Sigma| = n_{sh}, \\ \forall p \in P, (\sigma_i(p) = 0, 1 \le i \le n_{sh}) \Rightarrow (p = 0). \end{cases} $$
@@ -1528,7 +1530,7 @@ $V(K)$ is the domain of $\mathcal{I}_K$ and $P$ is its codomain. Note that the t
     i.e., the Lagrange interpolant is constructed by matching the point values at the Lagrange nodes.
 }
 
-At this point, it may seem more appropriate to define a finite element as a quadruplet $\{K, P, \Sigma, V(K)\}$ where the triplet $\{K, P, \Sigma\}$ complies with Definition \ref{def:finiteelements} and $V(K)$ satisfies properties (1)-(2). However, for the sake of simplicity, we hereafter employ the well-established triplet-based definition, and always implicitly assume that there exists a normed vector space $V(K)$ satisfying properties (1)-(2). In many textbooks, $V(K)$ is implicitly assumed to be of the form $C^s(K)$ for some integer $s \ge 0$.
+At this point, it may seem more appropriate to define a finite element as a quadruplet $\{K, P, \Sigma, V(K)\}$ where the triplet $\{K, P, \Sigma\}$ complies with Definition~\ref{def:finiteelements} and $V(K)$ satisfies properties (1)-(2). However, for the sake of simplicity, we hereafter employ the well-established triplet-based definition, and always implicitly assume that there exists a normed vector space $V(K)$ satisfying properties (1)-(2). In many textbooks, $V(K)$ is implicitly assumed to be of the form $C^s(K)$ for some integer $s \ge 0$.
 \subsection{Finite elements in higher dimensions}
 We now extend the above definitions to the higher-dimensional setting, by introducing simplicial and tensor product finite elements.
 \subsubsection{Simplicial Lagrange finite elements}
@@ -1581,7 +1583,7 @@ Note the inclusions $\mathbb{P}_k \subset \mathbb{Q}_k \subset \mathbb{P}_{kd}$.
     $$ \left(\frac{i_1}{k}, \dots, \frac{i_d}{k}\right), \quad 0 \le i_1, \dots, i_d \le k. $$
     Let $\Sigma = \{\sigma_1, \dots, \sigma_{n_{sh}}\}$ be the linear forms such that $\sigma_i(p) = p(a_i)$, $1 \le i \le n_{sh}$. Then, $\{K, P, \Sigma\}$ is a Lagrange finite element.
 \end{lemma}
-For $1 \le i \le d$, set $\xi_{i,l} = c_i + \frac{l}{k}(d_i - c_i)$, $0 \le l \le k$, and let $\{\mathcal{L}_{i,0}^k, \dots, \mathcal{L}_{i,k}^k\}$ be the Lagrange polynomials in the variable $x_i$ associated with the nodes $\{\xi_{i,0}, \dots, \xi_{i,k}\}$; see Definition \ref{def:lagrangepolynomials}. Then, the local shape functions are
+For $1 \le i \le d$, set $\xi_{i,l} = c_i + \frac{l}{k}(d_i - c_i)$, $0 \le l \le k$, and let $\{\mathcal{L}_{i,0}^k, \dots, \mathcal{L}_{i,k}^k\}$ be the Lagrange polynomials in the variable $x_i$ associated with the nodes $\{\xi_{i,0}, \dots, \xi_{i,k}\}$; see Definition~\ref{def:lagrangepolynomials}. Then, the local shape functions are
 $$ \theta_{i_1 \dots i_d}(x) = \mathcal{L}_{1,i_1}^k(x_1) \dots \mathcal{L}_{d,i_d}^k(x_d), \quad 0 \le i_1, \dots, i_d \le k. $$
 
 \subsection{Finite elements in $H(\dive)$ and $H(\curl)$}
@@ -1646,7 +1648,7 @@ There is an intrinsic relationship between this structure and inf-sup conditions
 which further relates the interpolation results. 
 
 \subsection{Finite element assembly}
-Let us now go back to the Galerkin scheme associated to the Poisson equation, which consists in finding $u_h\in U_h$ such that $a(u_h, v_h) = l(v_h)$ for all $v_h\in U_h$, as introduced in \ref{eq:galerkinscheme}. We define the stiffness matrix $\ten K$ and the force vector $\vec F$ as 
+Let us now go back to the Galerkin scheme associated to the Poisson equation, which consists in finding $u_h\in U_h$ such that $a(u_h, v_h) = l(v_h)$ for all $v_h\in U_h$, as introduced in equation~\ref{eq:galerkinscheme}. We define the stiffness matrix $\ten K$ and the force vector $\vec F$ as 
 $$ K_{ij} = a(\varphi_j, \varphi_i) \quad \text{and} \quad F_i = l(\varphi_i), $$
 where $U_h = \text{span}\{\varphi_j\}_{j=1}^N$ is the discrete space spanned by its basis functions. We are solving the discrete system arising from the finite element method, which takes the form of a linear system
 $$ \ten K \vec{\alpha} = \vec{F}, $$
