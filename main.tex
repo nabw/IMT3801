@@ -1317,9 +1317,9 @@ We can characterize the properties of the interpolation operator.
     $I_h^1$ is a linear continuous mapping from $H^1(\Omega)$ to $H^1(\Omega)$, and $\|I_h^1\|_{\mathcal{L}(H^1(\Omega);H^1(\Omega))}$ is uniformly bounded with respect to $h$.
     \begin{proof}
     For the first part, in one dimension, a function in $H^1(\Omega)$ is continuous. Indeed, for $v \in H^1(\Omega)$ and $x,y \in \overline{\Omega}$,
-    \begin{equation*}\label{eq:interpolator_continuity_1d}
+    \begin{equation}\label{eq:interpolator_continuity_1d}
         |v(y) - v(x)| \le \int_x^y |v'(s)| ds  \le |y-x|^{1/2} |v|_{1,\Omega},
-    \end{equation*}
+    \end{equation}
     owing to the Cauchy-Schwarz inequality, which can be justified rigorously by a density argument. Furthermore, taking $x$ to be a point where $|v|$ reaches its minimum over $\overline{\Omega}$, the above inequality implies
     \begin{equation}\label{interpolator_continuity_1d}
         \|v\|_{L^\infty(\Omega)} \le |b-a|^{-1/2} \|v\|_0 + |b-a|^{1/2}|v|_{1,\Omega},
@@ -1333,7 +1333,7 @@ We can explicitly control the interpolation error via the mesh size.
     For all $h$ and $v \in H^2(\Omega)$,
     $$ \|v - I_h^1 v\|_{0,\Omega} \le h^2 \|v''\|_{0,\Omega},\qquad  |v - I_h^1 v|_{1,\Omega} \le h \|v''\|_{0,\Omega}. $$
 \begin{proof}
-    Consider an interval $I_i \in \mathcal{T}_h$. Let $w \in H^1(I_i)$ be such that $w$ vanishes at some point $\xi$ in $I_i$. Then, owing to \ref{interpolator_continuity_1d}, we infer $\|w\|_{0,I_i} \le h_i |w|_{1,I_i}$.
+    Consider an interval $I_i \in \mathcal{T}_h$. Let $w \in H^1(I_i)$ be such that $w$ vanishes at some point $\xi$ in $I_i$. Then, owing to \eqref{eq:interpolator_continuity_1d}, we infer $\|w\|_{0,I_i} \le h_i |w|_{1,I_i}$.
     Let $v \in H^2(\Omega)$, let $i \in \{0, \dots, N\}$, and set $w_i = (v - I_h^1 v)'|_{I_i}$. Note that $w_i \in H^1(I_i)$ and that $w_i$ vanishes at some point $\xi$ in $I_i$ owing to the mean-value theorem. Applying the estimate derived above to $w_i$ and using the fact that $(I_h^1 v)''$ vanishes identically on $I_i$ yields $|v - I_h^1 v|_{1,I_i} \le h_i |v''|_{0,I_i}$. The second estimate is then obtained by summing over the mesh intervals. To prove the first estimate, observe that the result above can also be applied to $(v - I_h^1 v)|_{I_i}$ yielding
     $$ \|v - I_h^1 v\|_{0,I_i} \le h_i |v - I_h^1 v|_{1,I_i} \le h_i^2 |v''|_{0,I_i}. $$
     Conclude by summing over the mesh intervals.
