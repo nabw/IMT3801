@@ -1741,7 +1741,7 @@ In the previous section we have thorougly studied elliptic problems and many app
 
 We are interested in showing first that the inf-sup condition means 
 surjectivity. This will require the use of certain results from 
-functional analysis. For proof and omitted details, see \cite{chen2024infSup} 
+functional analysis. For detailed proofs and omitted details, see \cite{chen2024infSup} 
 and \cite{gatica2014simple}. A first important result is to characterize 
 operators with closed range. 
 
@@ -1757,20 +1757,14 @@ operators with closed range.
 \end{lemma}
 \begin{proof}
     First, we assume \(T\) is bounded below. If \(Tu=0\), the inequality 
-    implies \(u=0\), i.e., \(T\) is injective. Let \(\{Tu_k\}\) be a convergent 
-    sequence in \(V\). By the inequality, we have that
+    implies \(u=0\), i.e., \(T\) is injective. Let \(\{Tu_k\}\) be a convergent sequence in \(V\). By the inequality, we have that
     \begin{displaymath}
         \lVert Tu_k - Tu_m \rVert \ge c\lVert u_k - u_m \rVert
     \end{displaymath}
-    for some \(k,m\). Then, because \(\{Tu_k\}\) is a Cauchy sequence, we 
-    know that \(\{u_k\}\) is also a Cauchy sequence and, because both spaces 
-    are Banach, the sequence then converges to some \(u\in U\). The continuity 
-    of \(T\) shows that \(Tu_k\) converges to \(Tu\) and thus the range of 
-    \(T\) is closed. 
+    for some \(k,m\). Then, because \(\{Tu_k\}\) is a Cauchy sequence, we know that \(\{u_k\}\) is also a Cauchy sequence and, because both spaces are Banach, the sequence then converges to some \(u\in U\). The continuity of \(T\) shows that \(Tu_k\) converges to \(Tu\) and thus the range of \(T\) is closed. 
 
     Now, assume \(T\) is injective and its range is closed. Then, because 
-    \(R(T)\) is a closed subspace of a Banach space, it is also Banach. As 
-    \( T\) is injective, \(T^{-1}\) is well defined on \(R(T)\), i.e., 
+    \(R(T)\) is a closed subspace of a Banach space, it is also Banach. As \( T\) is injective, \(T^{-1}\) is well defined on \(R(T)\), i.e., 
     \(T:U\to R(T)\subset V\) is invertible. In addition, Open Mapping Theorem 
     shows that \(T^{-1}\) is continuous. Then
     \begin{displaymath}
@@ -1800,7 +1794,10 @@ Now, we would like to characterize the surjectivity of the operator using its du
     that \( \langle v', v\rangle = 0\,\,\, \forall v \in V\), which means that 
     \(v' = 0\). Thus, \(N(T') = \{0\}\), so \(T'\) is injective.
 
-    For the proof in the other direction, see \cite{chen2024infSup}. 
+    For the proof in the other direction, we get from Closed Range Theorem that also $R(T)$ is closed. By contradiction, consider $v$in $V$ such that $v\not\in R(T)$. By Hahn-Banach we get that there exists $f$ in $V'$ such that $f(R(T)) = 0$ and $f(v)=1$\footnote{This is an improvement over Urysohn's Lemma, which yields only a possibly nonlinear function}. Then, $T'f$ is such that
+        $$ \langle T'f', u\rangle = \langle f, Tu\rangle = u \qquad \forall u\in U.$$
+    This implies that $f=0$, which contradicts that $f(v)=1$. 
+
 \end{proof}
 
 Combining both lemmas, we can write
@@ -1877,6 +1874,20 @@ We can now postulate a general Lax-Milgram Theorem. We write it in Hilbert Space
         \quad \text{ (injective) }\]
     \end{enumerate}
 \end{theorem}
+We note that injectivity can be equivalently stated as an inf-sup condition simply by inverting the arguments in the surjectivity inf-sup.  The main difficulty in using this theory is that well-posedness of a discrete problem is not inherited from the continuous one. In fact, consider $U_N\subset U$ and $v'_N\in V'_N\subset V$ discrete spaces, then 
+$$ \|T'v_N'\|_{U'} = \sup_{u\in U}\frac{\langle u, T'v_N'\rangle}{\|u\|_U} \geq \sup_{u_N\in U_N}\frac{\langle u_N, T'v_N'\rangle}{\|u_N\|_U}, $$
+which establishes our claim. Despite this, one can still recover convergence as before. To see this, consider $u$ and $u_N$ the continuous and discrete solutions given by the following problems with $a:U\times V \to \R$:
+    $$\begin{aligned}
+        a(u,v) &= f(v) &&\forall v\in V,\\
+        a(u_N, v_N) &= f(v_N) &&\forall v_N\in V_N.
+    \end{aligned}$$
+This bilinear forms make sense as operator equations as they induce an $A:U\to V'$. Both problems are well-posed are both operators are surjective, which implies that 
+    $$ a(u-u_N, v) = 0  \qquad \forall v_N \in V_N. $$
+From the injectivity seen as an inf-sup condition we get that
+$$ \alpha \| u - u_N \|_U \leq \sup_{v_N\in V_N} \frac{a(u-u_N, v_N)}{\|v_N\|} \leq \| a \| \|u - \xi_N \|, $$
+for some $\xi_N$ in $U_N$, as in the Lax-Milgram proof. Taking the infimum in $\xi_N$ and setting $C=\|a\|$ yields that
+    $$ \| u - u_N \| \leq \frac{C}{\alpha}\text{dist}(u, U_N). $$
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Fredholm operators}
