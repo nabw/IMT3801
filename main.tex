@@ -1166,13 +1166,13 @@ Instead of discretizing the differential operator, as one would do in the case o
 \subsection{Galerkin schemes}
 Consider thus an abstract differential problem given by finding $u$ in $V$ such that
     $$ a(u, v) = L(v) \qquad \forall v \in V, $$
-such that the hypotheses of Lax-Milgram hold. In this case, we can consider a discrete space $V_h$ that approximates $V$, and thus define the following discrete problem: 
+such that the hypotheses of Lax-Milgram hold. In this case, we can consider a discrete space $V_h$ that approximates $V$, and define a Galerkin scheme as the following discrete problem: find $u_h \in V_h$ such that 
     \begin{equation*}\label{eq:galerkinscheme}
     a(u_h, v_h) = L(v_h) \qquad \forall v_h \in V_h.
     \end{equation*}
-The most notable aspect of Lax-Milgram is that all of its hypotheses hold also in $V_h$, which implies that the discrete problem is also invertible, and the \emph{a priori} estimate holds as well. The natural question is whether the discrete solution $u_h$ converges to the continuous solution $u$, which is studied through the \emph{error equation}. This is computed by setting the continuous test function $V$ as $V_h$ and then subtracting both problems: 
+The most notable aspect of Lax-Milgram is that all of its hypotheses hold also in $V_h$, which implies that the Falerkin scheme is also invertible, and the \emph{a priori} estimate holds as well. The natural question is whether the discrete solution $u_h$ converges to the continuous solution $u$, which is studied through the \emph{error equation}. This is computed by setting the continuous test function $V$ as $V_h$ and then subtracting both problems: 
     $$ a(e_h, v_h) = 0 \qquad \forall v_h \in V_h, $$
-where $e_h = u - h_h$.  This property is known as the \emph{Galerkin orthogonality}, and it can be used to compute the error estimate by considering an arbitrary function $z_h$ in $V_h$:
+where $e_h = u - u_h$.  This property is known as the \emph{Galerkin orthogonality}, and it can be used to compute the error estimate by considering an arbitrary function $z_h$ in $V_h$:
     $$ \begin{aligned}
         \alpha \| e_h \|_V^2 &\leq a(e_h, e_h) && \\ 
                              &= a(e_h, u - z_h) && \text{(Galerkin orth.)} \\
@@ -1250,7 +1250,7 @@ we can prove that this problem is well-posed provided that
 $$\frac{(1+\theta)^2 c_T}{\gamma_0}\leq 1.$$
 Moreover, this method is convergent in the $H^1$ norm for large enough $\gamma_0$. In the case that we expect more regularity, for $u\in H^s(\Omega)$ with $3/2<s<1+k$ (where $k$ is the degree of the polynomial approximation space), we get
 $$\|u-u_h\| + \|\nabla u\cdot \vec n - \nabla u_h\cdot \vec n\|_{-1/2,\partial\Omega} \leq Ch^s\|u\|_{s,\Omega}.$$
-Remarkably, and in contrast to the penalty method, the constant $C>0$ does not depend on $\gamma_00$ provided that it is large enough, but does depend on the regularity of the mesh and on the polynomial order $k$. As expected, the value of $\gamma_0$ influences the condition number of the global stiffness matrix associated to the left hand side of this problem, and thus it must not be taken too large, but the impact of the value of $\gamma_0$ on the approximation of the Dirichlet boundary condition is much smaller than in the penalty method. 
+Remarkably, and in contrast to the penalty method, the constant $C>0$ does not depend on $\gamma_0$ provided that it is large enough, but does depend on the regularity of the mesh and on the polynomial order $k$. As expected, the value of $\gamma_0$ influences the condition number of the global stiffness matrix associated to the left hand side of this problem, and thus it must not be taken too large, but the impact of the value of $\gamma_0$ on the approximation of the Dirichlet boundary condition is much smaller than in the penalty method. 
 \end{itemize}
 
 In practice, the penalty method is much simpler to understand and to implement, but its accuracy in some specific problems may not always be satisfactory. The Nitsche method is still simple to implement, and it constitutes a better alternative to the penalty method, where one has to tune only one numerical parameter. There exist more variants to these methods, such as the penalty-free Nitsche method and methods with Lagrange multipliers. The interested reader is referred to \cite{Chouly2024} for more details.
@@ -1647,68 +1647,95 @@ There is an intrinsic relationship between this structure and inf-sup conditions
     $$ \vec r_h \grad = \grad \pi_h, $$
 which further relates the interpolation results. 
 
-\subsection{Finite element assembly}
-Let us now go back to the Galerkin scheme associated to the Poisson equation, which consists in finding $u_h\in U_h$ such that $a(u_h, v_h) = l(v_h)$ for all $v_h\in U_h$, as introduced in equation~\ref{eq:galerkinscheme}. We define the stiffness matrix $\ten K$ and the force vector $\vec F$ as 
-$$ K_{ij} = a(\varphi_j, \varphi_i) \quad \text{and} \quad F_i = l(\varphi_i), $$
-where $U_h = \text{span}\{\varphi_j\}_{j=1}^N$ is the discrete space spanned by its basis functions. We are solving the discrete system arising from the finite element method, which takes the form of a linear system
-$$ \ten K \vec{\alpha} = \vec{F}, $$
-where $\vec{\alpha} \in \mathbb{R}^N$ is the vector of unknown coefficients for the basis functions. 
+\subsection{Implementation}
+% 8.1.2 Ern & Guermond
+% C21-23 Federico
+Let us now illustrate how to efficiently approximate the solution a boundary value problem using the finite element method. Given $\Omega\subset \R^d$ with boundary $\partial \Omega = \partial\Omega_D \cup \partial\Omega_N \subset \R^{d-1}$, we define its mesh $\mathcal{T}_h = \{\Omega^e\}_{e=1}^{N_{el}}$ with $N_{el}$ elements, and abusing the notation we write the mesh of the boundary $\partial\Omega$ as 
+$$\partial\mathcal{T}_h = \partial\mathcal{T}_h^D \cup\partial\mathcal{T}_h^N = \{\partial\Omega^e_D\}_{e=1}^{N_{el}^D} \cup \{\partial\Omega^e_N\}_{e=1}^{N_{el}^N}.$$
+Let $U$ be a Banach space of functions defined on $\Omega$. Consider the Poisson problem with mixed Dirichlet and Neumann boundary conditions, which consists in finding $u\in U$ such that
+$$
+\begin{cases}
+    -\Delta u = f & \text{in } \Omega, \\
+    u = g_D & \text{on } \partial\Omega_D, \\
+    \nabla u \cdot n = g_N & \text{on } \partial\Omega_N,
+\end{cases}
+$$
+where $\partial\Omega_D$ and $\partial\Omega_N$ are the non-overlapping Dirichlet and Neumann parts of the boundary. The discrete space $U_h$ associated to $U$ can be constructed from any of the finite element approximation spaces defined above, which is often chosen as a $U$-conforming space, and equipping it with appropriate boundary conditions. To this end, choose for instance $P_h^k$ as our approximation space. We apply a lifting to account for the (possibly) nonhomogeneous Dirichlet condition $u=g_D$ on $\partial\Omega_D$, and thus the suitable approximation space is
+$$U_h = P_h^k \cap U = \{v_h\in P_h^k: v_h = 0 \;\ton \partial\Omega_D\}.$$
+With this, the Galerkin scheme introduced in equation~\ref{eq:galerkinscheme} applied to our boundary value problem consists in finding $u_h \in U_h$ such that 
+$$ a_h(u_h, v_h) = l_h(v_h) \qquad \forall v_h \in U_h, $$
+where $a_h$ and $l_h$ are the discrete approximations of the bilinear form $a(u,v)=(\nabla u, \nabla v)$ and the linear form $l(v) = (f,v) + (g_N, v)_{\partial\Omega_N}$. These approximations are naturally defined by splitting the integrals into its discrete elements, that is, 
 
-\subsubsection{Naive computation and sparsity}
-Directly computing $K_{ij} = a(\varphi_j, \varphi_i)$ by integrating over the entire domain $\Omega$ for all pairs $(i,j)$ is computationally inefficient. This is because the basis functions $\varphi_j$ in finite element methods are typically chosen to have compact support, meaning $\varphi_j(x)$ is non-zero only on a small part of the domain. For basis functions associated with nodes or features of a mesh, the supports of $\varphi_i$ and $\varphi_j$ only overlap for indices $i$ and $j$ corresponding to nearby nodes or elements. Consequently, the integral $a(\varphi_j, \varphi_i) = \int_\Omega \nabla \varphi_j \cdot \nabla \varphi_i \, dx$ is zero whenever the supports of $\varphi_i$ and $\varphi_j$ do not overlap significantly. This results in the stiffness matrix $\ten K$ being sparse, i.e. most of its entries are zero. A naive computation method involving nested loops over all global indices $i$ and $j$ would spend a large amount of time computing these zero entries. 
+$$ a_h(u,v) = \sum_{e=1}^{N_{el}} \int_{\Omega^e} \nabla u \cdot \nabla v \, dx \qquad l(v) = \sum_{e=1}^{N_{el}} \int_{\Omega^e} f v \, dx + \sum_{e \in \mathcal{T}_h^N} \int_{\partial\Omega_N^e} g_N v \, dS. $$
+Since $U_h$ is finite-dimensional, we can expand $u_h$ through the basis functions $\{\varphi_i\}$ as 
+$$u_h = \sum_{i=1}^N \alpha_i \varphi_i,$$ 
+where the coordinate vector $\vec\alpha = (\alpha_1, \dots, \alpha_N)^T$ is to be determined. Since the Galerkin scheme is valid for all $v_h \in U_h$, we can choose $v_h = \varphi_i$ for $i=1,\dots,N_{el}$. For every $i=1,\dots,N_{el}$ we have
+\begin{align*}
+    a_h(u_h, \varphi_i) &= a_h(\sum_{j=1}^{N_{el}}\alpha_j\varphi_j, \varphi_i)\\
+    &= \sum_{j=1}^{N_{el}} \alpha_j a_h(\varphi_j, \varphi_i)\\
+    &= l_h(\varphi_i),
+\end{align*}
+and thus we obtain the linear system of equations 
+$$\ten K \vec \alpha = \vec F,$$
+where we have defined the \textit{stiffness matrix} $\ten K$ and the \textit{force vector} $\vec F$ as
+$$ K_{ij} = a_h(\varphi_j, \varphi_i) \quad \text{and} \quad F_i = l_h(\varphi_i). $$
 
-\paragraph{Assembly from element contributions}
-A far more efficient approach leverages the fact that the integral $a(v,w)$ and $l(v)$ can be broken down into a sum of integrals over each element $\Omega^e$ of the mesh $\mathcal{T}_h = \{\Omega^e\}_{e=1}^{N_{el}}$:
-$$ a(v,w) = \sum_{e=1}^{N_{el}} \int_{\Omega^e} \nabla v \cdot \nabla w \, dx \qquad l(v) = \sum_{e=1}^{N_{el}} \int_{\Omega^e} f v \, dx + \sum_{e \in \mathcal{T}_h^N} \int_{\partial\Omega_N^e} g_N v \, dS, $$
-where $\mathcal{T}_h^N$ is the set of elements with a Neumann boundary segment on $\partial\Omega_N$.
-The global stiffness matrix $\ten K$ and force vector $\vec{F}$ can thus be assembled by summing contributions from each element:
-$$ \ten K = \sum_{e=1}^{N_{el}} \ten K^e \qquad \vec{F} = \sum_{e=1}^{N_{el}} \vec{F}^e. $$
-Here, $K^e$ is the element stiffness matrix and $\vec{F}^e$ is the element force vector (or more precisely, their contribution to the global matrix/vector). The entries of $\ten K^e$ and $\vec{F}^e$ are computed based on the basis functions restricted to the element $\Omega^e$.
+Here, we note that computing $K_{ij} = a(\varphi_j, \varphi_i)$ by integrating over the entire domain $\Omega$ for all pairs $(i,j)$ is computationally inefficient, because the basis functions $\varphi_j$ in finite element methods are typically chosen to have compact support, meaning $\varphi_j(x)$ is non-zero only on a small part of the domain. For basis functions associated with nodes of a mesh, the supports of $\varphi_i$ and $\varphi_j$ only overlap for indices $i$ and $j$ corresponding to neighboring nodes or elements, and thus $a(\varphi_j, \varphi_i)$ will be nonzero only for those neighboring $(i,j)$ pairs. This results in the stiffness matrix $\ten K$ being sparse, i.e. most of its entries are zero, and thus a naïve computation method involving nested loops over all global indices $i$ and $j$ would spend an unnecessary amount of time computing zero entries. 
 
-\paragraph{Local element matrices and vectors}
-Within each element $\Omega^e$, the global basis functions $\varphi_j$ that are non-zero on $\Omega^e$ are those associated with the nodes of that element. Let $n_v$ be the number of vertices (or nodes) per element (e.g., $n_v=2$ for 1D segments, $n_v=3$ for 2D triangles, $n_v=4$ for 2D quadrilaterals or 3D tetrahedra/hexahedra). We define local shape functions $\phi_a^e$, $a=1, \dots, n_v$, which are the restrictions of the global basis functions to the element $\Omega^e$, re-indexed locally from 1 to $n_v$.
-The element stiffness matrix $\ten k^e$ (size $n_v \times n_v$) and element force vector $\vec f^e$ (size $n_v$) are defined by integrals over the element $\Omega^e$ using these local shape functions:
+To put this into practice, let $(\Omega, V_h, \Sigma$ be a finite element. Within each element $\Omega^e$, the global basis functions $\varphi_j$ of $V_h$ that are non-zero on $\Omega^e$ are those associated with the nodes of that element. Let $n_{dof}$ number of degrees of freedom (nodes) of the finite element. We define local shape functions $\phi_a^e$, $a=1, \dots, n_{dof}$, which are the restrictions of the global basis functions to the element $\Omega^e$, re-indexed locally from 1 to $n_{dof}$. We define the \textit{element stiffness matrix} $\ten k^e \in \R^{n_{dof}\times n_{dof}}$ and \textit{element force vector} $\vec f^e \in \R^{n_{dof}}$ as integrals over $\Omega^e$ using these local shape functions, i.e.
 $$ k_{ab}^e = \int_{\Omega^e} \nabla \phi_b^e \cdot \nabla \phi_a^e \, dx \quad \text{and} \quad f_a^e = \int_{\Omega^e} f \phi_a^e \, dx. $$
 If the element $\Omega^e$ has a Neumann boundary segment on $\partial \Omega_N$, there is also a local Neumann boundary force vector $f_{N,a}^e$:
 $$ f_{N,a}^e = \int_{\partial\Omega_N^e} g_N \phi_a^e \, dS. $$
-\paragraph{The assembly algorithm}
-The process of adding the contributions from the local element matrices and vectors into the global system, known as assembly, requires precisely mapping the local effects within each element to their corresponding locations in the global stiffness matrix $\ten K$ and force vector $\vec{F}$. This mapping accounts for both the topological connectivity of the mesh elements and the boundary conditions applied to the domain. We use several arrays to manage this mapping. The element node matrix (IEN) is a connectivity array where $IEN(a, e)$ provides the global node index corresponding to the local node $a$ (ranging from 1 to $n_v$) within element $e$ (ranging from 1 to $N_{el}$). The destination array (ID) then maps each global node index $i$ to its corresponding equation number or global degree of freedom (DOF) index in the assembled linear system. If global node $i$ has a prescribed boundary condition (such as a Dirichlet value), $ID(i)$ is typically set to 0 or a negative value to indicate that this node does not correspond to an unknown degree of freedom in the system. The location matrix (LM) can be viewed as a combined mapping that directly provides the global DOF index for a local node $a$ of element $e$. As shown in the notes, the LM matrix, which has dimensions $n_v \times N_{el}$, can be conceptually defined such that $LM(a, e) = ID(IEN(a, e))$. In simpler cases, like the 1D mesh example shown in the notes with $N_{el}=N$ elements and $n_v=2$ nodes per element, where global node indices run from 1 to $N_{el}+1=N+1$ and elements connect sequentially, the LM might be presented directly as:
-$$ LM = \begin{bmatrix}
-1 & 2 & 3 & \cdots & N_{el} \\
-2 & 3 & 4 & \cdots & N_{el}+1
-\end{bmatrix} $$
-In this specific 1D illustration, $LM(1, e) = e$ maps local node 1 of element $e$ to global node $e$, and $LM(2, e) = e+1$ maps local node 2 of element $e$ to global node $e+1$. The full mapping to degrees of freedom in the presence of general boundary conditions is captured by the $ID(IEN(a,e))$ relation, which is the index ultimately used to locate the correct row and column in the global system during assembly. The pseudocode below details the assembly algorithm using this mapping to add the contributions from the element matrices $\ten k^e$ and vectors $\vec f^e$ to the global system $\ten K$ and $\vec F$.
+The assembly process of adding the contributions from the local element matrices and vectors into the global system requires precisely mapping the local effects within each element to their corresponding locations in the global stiffness matrix $\ten K$ and force vector $\vec{F}$. This mapping accounts for both the topological connectivity of the mesh elements and the boundary conditions applied to the domain. We use several arrays to manage this mapping.
+\begin{enumerate}
+    \item The element node matrix $IEN\in \mathbb{Z}^{n_{el}\times n_{dof}}$ is a connectivity array with terms $IEN[e, a]$, which provides the global node index corresponding to the local node $a$ (ranging from 1 to $n_{dof}$) within element $e$ (ranging from 1 to $N_{el}$). Explicitly, if we have three elements in 1D, whose global node indexes are $(0,1)$, $(1,2)$ and $(2,3)$, respectively, then the $IEN$ matrix is 
+    $$ IEN = \begin{bmatrix}
+    0 & 1 \\
+    1 & 2 \\
+    2 & 3
+    \end{bmatrix} $$
+    \item The destination array $ID\in \mathbb{Z}^{n_{nodes}}$ maps each global node index $i$ to its corresponding equation number or global degree of freedom index in the assembled linear system. If global node $i$ has a prescribed boundary condition (such as a Dirichlet value), $ID(i)$ is typically set to 0 or a negative value to indicate that this node does not correspond to an unknown degree of freedom in the system. For example, if we have $n_{nodes}=4$ nodes in a 1D mesh, where where nodes $1$ and $3$ have Dirichlet boundary conditions, the $ID$ array might look like:
+    $$ ID = \begin{bmatrix}
+    0 \\
+    1 \\
+    0 \\
+    2
+    \end{bmatrix} $$
+    where the nonzero entries correspond to free nodes.
+    \item The location matrix $LM\in \mathbb{Z}^{n_{el}\times n_{dof}}$ corresponds to the composite local-to-global mapping, where for a given element $e$ and a local node $a$, $LM[e,a]$ corresponds to the global degree of freedom index. This allows us to write the important relation 
+    $$LM[e,a] = ID[IEN[e,a]].$$
+\end{enumerate}
+    The full mapping to degrees of freedom in the presence of general boundary conditions is captured by the $ID[IEN[e,a]]$ relation, which is the index ultimately used to locate the correct row and column in the global system during assembly. The pseudocode below details the assembly algorithm using this mapping to add the contributions from the element matrices $\ten k^e$ and vectors $\vec f^e$ to the global system $\ten K$ and $\vec F$.
 \begin{algorithmic}[1]
     \State Initialize global stiffness matrix $\ten K$ and force vector $\vec{F}$ to zero.
     \For{each element $e = 1, \dots, N_{el}$}
-        \State Compute element stiffness matrix $k^e$ ($n_v \times n_v$) and force vector $f^e$ ($n_v \times 1$).
-        \For{each local node $a = 1, \dots, n_v$}
-            \State $i = LM(a, e)$.
-            \For{each local node $b = 1, \dots, n_v$}
-                \State $j = LM(b, e)$.
-                \If{$i \neq 0$ and $j \neq 0$}
+        \State Compute element stiffness matrix $\ten k^e\in\R^{n_{dof} \times n_{dof}}$ and force vector $\vec f^e\in\R^{n_{dof}}$.
+        \For{each local node $a = 1, \dots, n_{dof}$}
+            \State $i = LM[e,a]$.
+            \For{each local node $b = 1, \dots, n_{dof}$}
+                \State $j = LM[e,b]$.
+                \If{$i \neq 0$ and $j \neq 0$} \Comment{Free nodes}
                     \State $K_{i,j} \gets K_{i,j} + k^e_{ab}$.
                 \EndIf
-                \If{$i \neq 0$ and $j == 0$}
-                    \State $F_i \gets F_i - g_L  k^e_{ab}$.
+                \If{$j$-th node is on the Dirichlet boundary $\partial\mathcal{T}_h^D$} \Comment{Dirichlet nodes}
+                    \State $F_i \gets F_i - g_D k^e_{ab}$.
                 \EndIf
             \EndFor
-            \If{$i \neq 0$}
+            \If{$i \neq 0$} \Comment{Non-Dirichlet nodes}
                 \State $F_i \gets F_i + f^e_a$.
             \EndIf
-            \If{$i == N$}
-                \State $F_i \gets F_i + q_R$.
+            \If{$i$-th node is on the Neumann boundary $\partial\mathcal{T}_h^N$} \Comment{Neumann nodes}
+                \State $F_i \gets F_i + f^e_{N,a}$.
             \EndIf
         \EndFor
         \EndFor
     \end{algorithmic}
-This element-by-element assembly ensures that only non-zero contributions are added to the global system, efficiently building the sparse matrix $\ten K$.
 
 \paragraph{Efficient computation of element integrals via the master element}
 Computing the integrals for $\ten k^e$ and $\vec f^e$ directly on each physical element $\Omega^e$ can be complicated due to the varied shapes and sizes of elements in a mesh. The standard technique is to map each physical element $\Omega^e$ to a single, simple reference element, called the master element $\hat{\Omega}$. This master element is always the same (e.g., $[-1,1]$ for 1D segments, a standard triangle or square for 2D, etc.).
 
 Let $\vec{x} = \vec{x}(\vec{\xi})$ be the transformation mapping a point $\vec{\xi}$ in the master element $\hat{\Omega}$ to a point $\vec{x}$ in the physical element $\Omega^e$. This transformation is typically defined using the shape functions:
-$$ \vec{x}(\vec{\xi}) = \sum_{a=1}^{n_v} \vec{x}_a^e \hat{\phi}_a(\vec{\xi}), $$
+$$ \vec{x}(\vec{\xi}) = \sum_{a=1}^{n_{dofs}} \vec{x}_a^e \hat{\phi}_a(\vec{\xi}), $$
 where $\vec{x}_a^e$ are the physical coordinates of the nodes of element $e$, and $\hat{\phi}_a(\vec{\xi})$ are the shape functions defined on the master element. The local shape functions on the physical element are related to the master element shape functions by $\phi_a^e(\vec{x}) = \hat{\phi}_a(\vec{\xi}(\vec{x}))$, where $\vec{\xi}(\vec{x})$ is the inverse transformation.
 
 The change of variables formula for integrals states that
@@ -1720,16 +1747,19 @@ Using these, the element integrals become integrals over the master element:
 $$ k_{ab}^e = \int_{\hat{\Omega}} (J^{-T} \nabla_{\vec{\xi}} \hat{\phi}_b) \cdot (J^{-T} \nabla_{\vec{\xi}} \hat{\phi}_a) |\det J| \, d\hat{\Omega}, $$
 $$ f_a^e = \int_{\hat{\Omega}} f(\vec{x}(\vec{\xi})) \hat{\phi}_a(\vec{\xi}) |\det J| \, d\hat{\Omega}, $$
 $$ f_{N,a}^e = \int_{\partial\hat{\Omega}_N} g_N(\vec{x}(\vec{\xi})) \hat{\phi}_a(\vec{\xi}) |\det J_{\partial}| \, d\hat{\Gamma}, $$
-where $J_\partial$ is the Jacobian of the transformation on the boundary segment. These integrals over the master element can be computed efficiently using numerical integration rules (quadrature). The shape functions $\hat{\phi}_a$ and their gradients on the master element, and the Jacobian and its determinant, only need to be evaluated at the fixed quadrature points on $\hat{\Omega}$.
+where $J_\partial$ is the Jacobian of the transformation on the boundary segment. These integrals over the master element can be computed efficiently using numerical integration rules, known as \textit{quadratures}. The shape functions $\hat{\phi}_a$ and their gradients on the master element, and the Jacobian and its determinant, only need to be evaluated at the fixed quadrature points on $\hat{\Omega}$.
 
-\paragraph{Element types and shape functions}
-The definition of the shape functions $\hat{\phi}_a$ and the specific master element geometry depend on the type of finite element used.
-\begin{itemize}
-    \item \textbf{Simplicial elements:} These are line segments in 1D, triangles in 2D, and tetrahedra in 3D. For these elements, especially linear ones, the shape functions are often closely related to barycentric coordinates. Barycentric coordinates $\{\lambda_a\}_{a=1}^{n_v}$ on a simplex satisfy $\sum_{a=1}^{n_v} \lambda_a(\vec{x}) = 1$ and $\lambda_a(\vec{x}_b^e) = \delta_{ab}$.
-    \item \textbf{Tensor product elements:} These are constructed from products of 1D elements, such as quadrilaterals in 2D (bilinear Q1, biquadratic Q2, etc.) and hexahedra in 3D. The shape functions are tensor products of the 1D shape functions. For example, on the reference square $[-1,1]^2$, the bilinear (Q1) shape functions are products of 1D linear functions: $\hat{\phi}_a(\xi, \eta) = \hat{\phi}_{a_\xi}(\xi) \hat{\phi}_{a_\eta}(\eta)$.
-    \item \textbf{Other element types:} Meshes can also include other element types like prisms and pyramids, particularly in 3D as transition elements between tetrahedral and hexahedral regions. The shape functions for these elements are more complex.
-\end{itemize}
-For higher-order elements (using polynomials of degree $k > 1$), the shape functions are polynomials of degree $k$ on the element. Their definition and the choice of nodes depend on the element type. The transformation to the master element and the assembly process remain analogous.
+\example{In 2D, we can define a triangular (simplicial) element with vertices $\vec{x}_0^e$, $\vec{x}_1^e$, and $\vec{x}_2^e$. The master element is the reference triangle with vertices $(0,0)$, $(1,0)$, and $(0,1)$. In this setting the local shape functions are given by 
+\begin{align*}
+\hat{\phi}_0(\xi_1, \xi_2) &= \xi_1,\\
+\hat{\phi}_1(\xi_1, \xi_2) &= \xi_2, \\
+\hat{\phi}_2(\xi_1, \xi_2) &=  1 - \xi_1 - \xi_2.
+\end{align*}
+Thus, the mapping from the master element with coordinates $\vec\xi = (\xi_1,\xi_2)$ to the physical element with coordinates $\vec x = (x_1, x_2)$ is given by
+$$ \vec{x}(\xi_1, \xi_2) =  \vec{x}_0^e\xi_1  + \vec{x}_1^e \xi_2 + \vec{x}_2^e (1-\xi_1-\xi_2). $$
+}
+\subsubsection{Nonhomogeneous Dirichlet boundary conditions}
+% 8.4 Ern & Guermond
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Beyond ellipticity}\label{section:beyond-ellipticity}
