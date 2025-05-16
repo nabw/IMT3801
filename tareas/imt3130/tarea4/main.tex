@@ -97,7 +97,7 @@
                 \item\pts{2} Repita el punto anterior para el vector local con un lado derecho dado por $f(x) = 1$. 
                 \item\pts{3} A partir de las rutinas anteriores, genere una función \texttt{getProblem(mu,b,c,f)} donde $\mu,b,c$ son escalaes y $f:\R\to\R$ que entregue la matriz $\mat A_h$ que define el problema y el lado derecho $\vec F_h$.
                 \item\pts{2} Explique cómo implementar las condiciones de borde y genere una función que modifique el problema $(\mat A_h, \vec F_h)$ para imponer la condición de Dirichlet dada ($u=1$ en el lado derecho).
-                \item\pts{3} Usando el método de soluciones manufacturadas, muestre que la solución discreta converge a la continua con la tasa esperada. \emph{Hint: Para calcular el error de aproximación $e_h = u - u_h$, use que la norma se puede dividir por elementos $\|e_h\|_0^2 = \int_\Omega e_h^2\,dx = \sum_e \int_e e_h^2\,dx$ y cada elemento se puede calcular con cuadratura en el elemento de referencia.}
+                \item\pts{3} Usando el método de soluciones manufacturadas, muestre que la solución discreta converge a la continua con la tasa esperada. \emph{Hint: Para calcular el error de aproximación $e_h = u - u_h$, use que la norma se puede dividir por elementos $\|e_h\|_0^2 = \int_\Omega e_h^2\,dx = \sum_e \int_e e_h^2\,dx$ y la integral en cada elemento se puede calcular con cuadratura en el elemento de referencia.}
             \end{itemize}
 \end{enumerate}
 
