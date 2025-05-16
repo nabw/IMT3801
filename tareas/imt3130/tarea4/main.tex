@@ -76,14 +76,19 @@
                 \end{aligned}$$
                 satisface una condición inf-sup. 
 
-    \item\pts{2} Considere el problema ADR, dado por encontrar $u$ en $H_0^1(\Omega)$ tal que
+    \item Considere el problema ADR, dado por encontrar $u$ en $H_0^1(\Omega)$ tal que
             $$ -\mu \Delta u + \vec b \cdot \grad u + cu = f, $$
-            para alguna $f$ en $H^{-1}(\Omega)$. Proponga un espacio discreto de elementos finitos que sea conforme en $H^1$, y demuestre que esta elección de espacio genera una aproximación de la solución que es convergente. Muestre además la tasa de convergencia teórica esperada para el esquema discreto propuesto. 
+            para alguna $f$ en $H^{-1}(\Omega)$. 
+            \begin{itemize}
+                \item\pts{1} Proponga un espacio discreto de elementos finitos que sea conforme en $H^1$ y que permita aproximar a la solución continua del problema ADR.
+                \item\pts{1} Demuestre que el problema discreto está bien puesto. 
+                \item\pts{2} Demuestre que esta elección de espacio genera una aproximación de la solución que es convergente a la solución. Muestre además la tasa de convergencia teórica esperada para el esquema discreto propuesto. 
+            \end{itemize}
 
-    \item Considere $\Omega = (0,1)^2$. Implemente un código de elementos finitos que aproxime el problema ADR, puede elegir si aproximar con triángulos o con cuadrados. Para ello: 
+    \item Considere $\Omega = (0,1)^2$. Implemente un código de elementos finitos que aproxime el problema ADR con condición de Dirichlet $u=1$ en el lado derecho y Neumann homogéneo en el resto, puede elegir si aproximar con triángulos o con cuadrados. Para ello: 
             \begin{itemize}
                 \item\pts{1} Dado un número de intervalos por lado, implemente las matrices \texttt{IEN} y \texttt{coords}. Muestre su resultado para un cuadrado con dos elementos por lado, y grafique la geometría discretizada con los elementos enumerados para validar el resultado.
-                \item\pts{3} Considere el elemento de referencia y un elemento global igual al de referencia por simplicidad ($K = \hat K$). Muestre la matriz local asociada a cada uno de los operadores del problema: 
+                \item\pts{3} Considere el elemento de referencia y un elemento global igual al de referencia por simplicidad ($K = \hat K$). Calcule con una regla de cuadratura adecuada la matriz local asociada a cada uno de los operadores del problema y valide los valores numéricos obtenidos con las expresiones analíticas de las integrales: 
                     \begin{itemize}
                         \item $-\Delta u$
                         \item $\vec b \cdot \grad u$
@@ -91,8 +96,8 @@
                     \end{itemize}
                 \item\pts{2} Repita el punto anterior para el vector local con un lado derecho dado por $f(x) = 1$. 
                 \item\pts{3} A partir de las rutinas anteriores, genere una función \texttt{getProblem(mu,b,c,f)} donde $\mu,b,c$ son escalaes y $f:\R\to\R$ que entregue la matriz $\mat A_h$ que define el problema y el lado derecho $\vec F_h$.
-                \item\pts{2} Explique cómo implementar las condiciones de borde y genere una función que modifique el problema $(\mat A_h, \vec F_h)$ para imponer que la solución valga 1 en el lado derecho. 
-                \item\pts{3} Usando el método de soluciones manufacturadas, muestre que la solución discreta converge a la continua con la tasa esperada. 
+                \item\pts{2} Explique cómo implementar las condiciones de borde y genere una función que modifique el problema $(\mat A_h, \vec F_h)$ para imponer la condición de Dirichlet dada ($u=1$ en el lado derecho).
+                \item\pts{3} Usando el método de soluciones manufacturadas, muestre que la solución discreta converge a la continua con la tasa esperada.
             \end{itemize}
 \end{enumerate}
 
