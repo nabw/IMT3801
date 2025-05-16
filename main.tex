@@ -22,7 +22,7 @@
 \newcommand{\RightComment}[1]{\hfill \(\triangleright\) \textit{#1}}
 \newcommand{\example}[1]{\todo[inline,color=orange!30!white]{\textbf{Example:} #1}}
 
-\title{Notes for Numerical Analysis of PDEs and related topics}
+\title{Applications of Functional Analysis and PDEs}
 %\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
 \author{Nicol\'as A Barnafi}
 %\date{}
@@ -1027,7 +1027,7 @@ This property is the basis of the Lax-Milgram lemma, which gives sufficient cond
 \begin{lemma}[Lax-Milgram] Consider a bounded bilinear form $a: H\times H\to \R$ defined on a Hilbert space $H$ that is elliptic with constants $C$ and $\alpha$ respectively, and a linear functional $f$ in $H'$. Then, there exists a unique $u$ in $H$ such that 
     $$ a(u, v) = f(v) \qquad \forall v \in H. $$
 This solution is continuous with respect to the data, in the sense that there exists a positive constant $C$ such that 
-    $$ \| u\|_H \leq \frac C \alpha \| f \|_{H'} .$$
+    $$ \| u\|_H \leq \frac 1 \alpha \| f \|_{H'} .$$
 This is typically referred to as the \emph{a priori} estimate. 
 \end{lemma}
 
@@ -1109,7 +1109,7 @@ which one could also write as $Au = a(u, \cdot)$. Naturally, the bilinear form $
 \begin{lemma}[Lax-Milgram] Consider a bounded bilinear form $a: H\times H\to \R$ defined on a Hilbert space $H$ that is elliptic with constants $C$ and $\alpha$ respectively, and a linear functional $f$ in $H'$. Then, there exists a unique $u$ in $H$ such that 
     $$ a(u, v) = f(v) \qquad \forall v \in H. $$
 This solution is continuous with respect to the data, in the sense that there exists a positive constant $C$ such that 
-    $$ \| u\|_H \leq \frac C \alpha \| f \|_{H'} .$$
+    $$ \| u\|_H \leq \frac 1 \alpha \| f \|_{H'} .$$
 This is typically referred to as the \emph{a priori} estimate. 
 \end{lemma}
 \begin{proof}
@@ -1268,7 +1268,7 @@ The idea of studying specifically finite elements will be that of having more si
     $$ \inf_{v_h\in V_h} \| u - v_h\|_V. $$
 A typical use of this inequality will be that of bounding the projection error through a finite element interpolant, such that one gets inequalities such as
     $$ \inf_{v_h\in V_h} \| u - v_h\|_V \leq \| u - I_h u \|_V \leq h^s \|u \|_W, $$
-where $W$ is some space of higher regularity, $s$ is some (hopefully positive) exponent and $I_h:V \to V_h$ is an interpolation operator. Our idea is that of producing FEM spaces for all of our relevant Hilbert spaces: $L^2$, $H^1$, $H(\dive)$, and $H(\curl)$. We will introduce finite elements by following an almost verbatim copy the first chapter of \cite{ern2004theory}. 
+    where $W$ is some space of higher regularity, $s$ is some (hopefully positive) exponent and $I_h:V \to V_h$ is an interpolation operator. Our idea is that of producing FEM spaces for all of our relevant Hilbert spaces: $L^2$, $H^1$, $H(\dive)$, and $H(\curl)$. We will start by introducing first order finite elements in $\R$ by following an almost verbatim copy of \cite[Chapter 1]{ern2004theory}. 
 
 \subsection{One-dimensional interpolation} 
 
@@ -1303,8 +1303,10 @@ with obvious modifications if $i = 0$ or $N+1$. Clearly, $\varphi_i \in P_h^1$. 
     Choose a basis $\{\gamma_0, \dots, \gamma_{N+1}\}$ for $\mathcal{L}(P_h^1;\mathbb{R})$; henceforth, the linear forms in this basis are called the global degrees of freedom in $P_h^1$. The functions in the dual basis are called the global shape functions in $P_h^1$. 
 \end{definition}
 For $i \in \{0, \dots, N+1\}$, choose the linear form
+
 $$ \gamma_i: C(\bar{\Omega}) \ni v \mapsto \gamma_i(v) = v(x_i) \in \mathbb{R}.$$
-The proof of Lemma~\ref{hatbasis} shows that a function $v_h \in P_h^1$ is uniquely defined by the $(N+2)$-uplet $(v_h(x_i))_{0 \le i \le N+1}$, i.e. the values at the nodes. In other words, $\{\gamma_0, \dots, \gamma_{N+1}\}$ is a basis for $\mathcal{L}(P_h^1; \mathbb{R})$. Choosing the linear forms $\{\gamma_i\}_i$ defined above as the global degrees of freedom in $P_h^1$, the global shape functions are precisely the hat functions $\{\varphi_0, \dots, \varphi_{N+1}\}$, since $\gamma_i(\varphi_j) = \delta_{ij}$, $0 \le i,j \le N+1$.
+The proof of Lemma~\ref{hatbasis} shows that a function $v_h \in P_h^1$ is uniquely defined by the $(N+2)$-tuple $(v_h(x_i))_{0 \le i \le N+1}$, i.e. the values at the nodes. In other words, $\{\gamma_0, \dots, \gamma_{N+1}\}$ is a basis for $\mathcal{L}(P_h^1; \mathbb{R})$. Choosing the linear forms $\{\gamma_i\}_i$ defined above as the global degrees of freedom in $P_h^1$, the global shape functions are precisely the hat functions $\{\varphi_0, \dots, \varphi_{N+1}\}$, since $\gamma_i(\varphi_j) = \delta_{ij}$, $0 \le i,j \le N+1$.
+
 
 In this space, we define the interpolation operator
 $$ I_h^1: C(\bar{\Omega}) \ni v \mapsto \sum_{i=0}^{N+1} \gamma_i(v) \varphi_i \in P_h^1.$$
@@ -1324,14 +1326,15 @@ We can characterize the properties of the interpolation operator.
     $I_h^1$ is a linear continuous mapping from $H^1(\Omega)$ to $H^1(\Omega)$, and $\|I_h^1\|_{\mathcal{L}(H^1(\Omega);H^1(\Omega))}$ is uniformly bounded with respect to $h$.
     \begin{proof}
     For the first part, in one dimension, a function in $H^1(\Omega)$ is continuous. Indeed, for $v \in H^1(\Omega)$ and $x,y \in \overline{\Omega}$,
-    \begin{equation*}\label{eq:interpolator_continuity_1d}
+    \begin{equation}\label{eq:interpolator_continuity_1d}
         |v(y) - v(x)| \le \int_x^y |v'(s)| ds  \le |y-x|^{1/2} |v|_{1,\Omega},
-    \end{equation*}
+    \end{equation}
     owing to the Cauchy-Schwarz inequality, which can be justified rigorously by a density argument. Furthermore, taking $x$ to be a point where $|v|$ reaches its minimum over $\overline{\Omega}$, the above inequality implies
     \begin{equation*}\label{eq:supnorm_p1}
         \|v\|_{L^\infty(\Omega)} \le |b-a|^{-1/2} \|v\|_0 + |b-a|^{1/2}|v|_{1,\Omega},
     \end{equation*}
     since $|v(x)| \le |b-a|^{-1/2} \|v\|_{0}$. Therefore, $I_h^1 v$ is well-defined for $v \in H^1(\Omega)$. Moreover, Lemma~\ref{approxP1} implies $I_h^1 v \in H^1(\Omega)$; hence, $I_h^1$ maps $H^1(\Omega)$ to $H^1(\Omega)$.
+
     For the second part, let $I_i \in \mathcal{T}_h$ for $0 \le i \le N$. From the definition of the distributional derivative $w_h$ above, $(I_h^1 v)'|_{I_i} = h_i^{-1}(v(x_{i+1}) - v(x_i))$; hence, using the previous inequality we get the estimate $|I_h^1 v|_{1,I_i} \le |v|_{1,I_i}$. Therefore, $|I_h^1 v|_{1,\Omega} \le |v|_{1,\Omega}$. Moreover, since $\|I_h^1 v\|_{0,\Omega} \le |b-a|^{1/2} \|I_h^1 v\|_{L^\infty(\Omega)}$ and $\|I_h^1 v\|_{L^\infty(\Omega)} \le \|v\|_{L^\infty(\Omega)}$, we deduce that $\|I_h^1 v\|_{0,\Omega} \le c \|v\|_{1,\Omega}$ where $c$ is independent of $h$ (assuming $h$ bounded). The conclusion follows readily.
     \end{proof}
 \end{lemma}
@@ -1340,8 +1343,9 @@ We can explicitly control the interpolation error via the mesh size.
     For all $h$ and $v \in H^2(\Omega)$,
     $$ \|v - I_h^1 v\|_{0,\Omega} \le h^2 \|v''\|_{0,\Omega},\qquad  |v - I_h^1 v|_{1,\Omega} \le h \|v''\|_{0,\Omega}. $$
 \begin{proof}
+
     Consider an interval $I_i \in \mathcal{T}_h$. Let $w \in H^1(I_i)$ be such that $w$ vanishes at some point $\xi$ in $I_i$. Then, owing to inequality~\ref{eq:interpolator_continuity_1d}, we infer $\|w\|_{0,I_i} \le h_i |w|_{1,I_i}$.
-    Let $v \in H^2(\Omega)$, let $i \in \{0, \dots, N\}$, and set $w_i = (v - I_h^1 v)'|_{I_i}$. Note that $w_i \in H^1(I_i)$ and that $w_i$ vanishes at some point $\xi$ in $I_i$ owing to the mean-value theorem. Applying the estimate derived above to $w_i$ and using the fact that $(I_h^1 v)''$ vanishes identically on $I_i$ yields $|v - I_h^1 v|_{1,I_i} \le h_i |v''|_{0,I_i}$. The second estimate is then obtained by summing over the mesh intervals. To prove the first estimate, observe that the result above can also be applied to $(v - I_h^1 v)|_{I_i}$ yielding
+    Let $v \in H^2(\Omega)$, let $i \in \{0, \dots, N\}$, and set $w_i = (v - Iautomatically_h^1 v)'|_{I_i}$. Note that $w_i \in H^1(I_i)$ and that $w_i$ vanishes at some point $\xi$ in $I_i$ owing to the mean-value theorem. Applying the estimate derived above to $w_i$ and using the fact that $(I_h^1 v)''$ vanishes identically on $I_i$ yields $|v - I_h^1 v|_{1,I_i} \le h_i |v''|_{0,I_i}$. The second estimate is then obtained by summing over the mesh intervals. To prove the first estimate, observe that the result above can also be applied to $(v - I_h^1 v)|_{I_i}$ yielding
     $$ \|v - I_h^1 v\|_{0,I_i} \le h_i |v - I_h^1 v|_{1,I_i} \le h_i^2 |v''|_{0,I_i}. $$
     Conclude by summing over the mesh intervals.
 \end{proof}
@@ -1807,7 +1811,7 @@ In the previous section we have thorougly studied elliptic problems and many app
 
 We are interested in showing first that the inf-sup condition means 
 surjectivity. This will require the use of certain results from 
-functional analysis. For proof and omitted details, see \cite{chen2024infSup} 
+functional analysis. For detailed proofs and omitted details, see \cite{chen2024infSup} 
 and \cite{gatica2014simple}. A first important result is to characterize 
 operators with closed range. 
 
@@ -1823,20 +1827,14 @@ operators with closed range.
 \end{lemma}
 \begin{proof}
     First, we assume \(T\) is bounded below. If \(Tu=0\), the inequality 
-    implies \(u=0\), i.e., \(T\) is injective. Let \(\{Tu_k\}\) be a convergent 
-    sequence in \(V\). By the inequality, we have that
+    implies \(u=0\), i.e., \(T\) is injective. Let \(\{Tu_k\}\) be a convergent sequence in \(V\). By the inequality, we have that
     \begin{displaymath}
         \lVert Tu_k - Tu_m \rVert \ge c\lVert u_k - u_m \rVert
     \end{displaymath}
-    for some \(k,m\). Then, because \(\{Tu_k\}\) is a Cauchy sequence, we 
-    know that \(\{u_k\}\) is also a Cauchy sequence and, because both spaces 
-    are Banach, the sequence then converges to some \(u\in U\). The continuity 
-    of \(T\) shows that \(Tu_k\) converges to \(Tu\) and thus the range of 
-    \(T\) is closed. 
+    for some \(k,m\). Then, because \(\{Tu_k\}\) is a Cauchy sequence, we know that \(\{u_k\}\) is also a Cauchy sequence and, because both spaces are Banach, the sequence then converges to some \(u\in U\). The continuity of \(T\) shows that \(Tu_k\) converges to \(Tu\) and thus the range of \(T\) is closed. 
 
     Now, assume \(T\) is injective and its range is closed. Then, because 
-    \(R(T)\) is a closed subspace of a Banach space, it is also Banach. As 
-    \( T\) is injective, \(T^{-1}\) is well defined on \(R(T)\), i.e., 
+    \(R(T)\) is a closed subspace of a Banach space, it is also Banach. As \( T\) is injective, \(T^{-1}\) is well defined on \(R(T)\), i.e., 
     \(T:U\to R(T)\subset V\) is invertible. In addition, Open Mapping Theorem 
     shows that \(T^{-1}\) is continuous. Then
     \begin{displaymath}
@@ -1866,7 +1864,10 @@ Now, we would like to characterize the surjectivity of the operator using its du
     that \( \langle v', v\rangle = 0\,\,\, \forall v \in V\), which means that 
     \(v' = 0\). Thus, \(N(T') = \{0\}\), so \(T'\) is injective.
 
-    For the proof in the other direction, see \cite{chen2024infSup}. 
+    For the proof in the other direction, we get from Closed Range Theorem that also $R(T)$ is closed. By contradiction, consider $v$in $V$ such that $v\not\in R(T)$. By Hahn-Banach we get that there exists $f$ in $V'$ such that $f(R(T)) = 0$ and $f(v)=1$\footnote{This is an improvement over Urysohn's Lemma, which yields only a possibly nonlinear function}. Then, $T'f$ is such that
+        $$ \langle T'f', u\rangle = \langle f, Tu\rangle = u \qquad \forall u\in U.$$
+    This implies that $f=0$, which contradicts that $f(v)=1$. 
+
 \end{proof}
 
 Combining both lemmas, we can write
@@ -1943,6 +1944,20 @@ We can now postulate a general Lax-Milgram Theorem. We write it in Hilbert Space
         \quad \text{ (injective) }\]
     \end{enumerate}
 \end{theorem}
+We note that injectivity can be equivalently stated as an inf-sup condition simply by inverting the arguments in the surjectivity inf-sup.  The main difficulty in using this theory is that well-posedness of a discrete problem is not inherited from the continuous one. In fact, consider $U_N\subset U$ and $v'_N\in V'_N\subset V$ discrete spaces, then 
+$$ \|T'v_N'\|_{U'} = \sup_{u\in U}\frac{\langle u, T'v_N'\rangle}{\|u\|_U} \geq \sup_{u_N\in U_N}\frac{\langle u_N, T'v_N'\rangle}{\|u_N\|_U}, $$
+which establishes our claim. Despite this, one can still recover convergence as before. To see this, consider $u$ and $u_N$ the continuous and discrete solutions given by the following problems with $a:U\times V \to \R$:
+    $$\begin{aligned}
+        a(u,v) &= f(v) &&\forall v\in V,\\
+        a(u_N, v_N) &= f(v_N) &&\forall v_N\in V_N.
+    \end{aligned}$$
+This bilinear forms make sense as operator equations as they induce an $A:U\to V'$. Both problems are well-posed are both operators are surjective, which implies that 
+    $$ a(u-u_N, v) = 0  \qquad \forall v_N \in V_N. $$
+From the injectivity seen as an inf-sup condition we get that
+$$ \alpha \| u - u_N \|_U \leq \sup_{v_N\in V_N} \frac{a(u-u_N, v_N)}{\|v_N\|} \leq \| a \| \|u - \xi_N \|, $$
+for some $\xi_N$ in $U_N$, as in the Lax-Milgram proof. Taking the infimum in $\xi_N$ and setting $C=\|a\|$ yields that
+    $$ \| u - u_N \| \leq \frac{C}{\alpha}\text{dist}(u, U_N). $$
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Fredholm operators}
