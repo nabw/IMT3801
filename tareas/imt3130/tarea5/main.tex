@@ -42,13 +42,34 @@
 \todo[inline,color=white!90!black]{\textbf{Instrucciones: } La tarea debe ser entregada de manera individual en un informe en formato .pdf a través del buzón habilitado en la plataforma Canvas, donde deben mostrar también el código desarrollado. Para su conveniencia, pueden entregar las tareas en un Jupyter Notebook, de modo que sea más cómodo mostrar el código. En cualquier caso, se debe entregar un único archivo como respuesta a la tarea. La política de atrasos será: se calculará un factor lineal que vale 1 a la hora de entrega y 0 48 horas después. Esto multiplicará su puntaje obtenido. Pueden usar ChatGPT u otros modelos solo a conciencia. El uso de salidas de GPT sin su debida comprensión será severamente sancionado. }
 
 \begin{enumerate}
-    \item Definir una deformación y calcular todos los vectores y tensores relevantes. Graficar en python caso 2D. 
-    \item Demostrar que invariantes son invariantes (Tarea 2 Federico)
-    \item demostrar con Caley Hamilton d J /d F = cof(F)
-    \item Mostrar que si el Piola depende del strain rate, se tiene Navier Stokes
-    \item Definir energía Neo-Hookeana, calcular Piola y escribir ecuación de conservación de momentum
-    \item Construir ecuación ADR desde conservación de masa bajo ciertos supuestos
-    \item Mostrar que linealizar en E da elasticidad lineal. Encontrar parámetros de Lamé. 
+    \item Considere la deformación dada por 
+        \begin{align*}
+            x_1(\vec X, t) &= e^tX_1 - e^{-t} X_2 \\
+            x_2(\vec X, t) &= e^t X_1 + e^{-t}X_2 \\
+            x_3(\vec X, t) &= X_3. 
+        \end{align*}
+    \begin{itemize}
+        \item\pts{1} Calcule el campo de desplazamiento, la velocidad, y la aceleración en coordenadas materiales (de referencia). 
+        \item\pts{1} Calcule el campo de desplazamiento, la velocidad y la aceleración en coordenadas espaciales (deformadas). 
+        \item\pts{1} Calcule los tensores $\ten F$, $\ten C$, y $\ten E$.
+        \item\pts{1} Ignore la tercera componente y considere $\Omega$ un cuadrado unitario. Grafique en Python la configuración inicial ($t=0$), y la configuración deformada en los instantes 0.5, 1.0 y 2.0. 
+        \item\pts{1} En los instantes descritos, grafique la norma de Frobenius de $\ten C$ en configuración de referencia y en la deformada. Comente sus resultados. 
+    \end{itemize}
+    \begin{itemize}
+        \item\pts{1} Dada una matriz $\mat A$ se definen $I_1(\mat A) = \tr \mat A$, $I_2(\mat A) = \tr \left(\det (\mat A) \mat A^{-T}\right) = \frac 1 2 \left([\tr \mat A]^2 - \tr(\mat A^2)\right)$, $I_3(\mat A) = \det A$. Muestre que si se hace un cambio de base a la matriz $\mat A$ en el sentido de reemplazarla por $\mat Q^{-1} \mat A \mat Q$, estas funciones no cambian su valor, i.e. $I_i(\mat A) = I_i(\mat Q^{-1} \mat A\mat Q)$. Por esta razón se les llama \emph{invariantes} de $\mat A$. 
+        \item El Teorema de Caley-Hamilton establece que toda matriz satisface su propia ecuación característica usando las invariantes: 
+                $$ \mat A^3 - I_1(\mat A) \mat A^2 + I_2(\mat A) \mat A - I_3(\mat A) \mat I = 0. $$
+                Derive esta ecuación con respecto a $\mat A$ y desarrolle la ecuación para demostrar que $\parder{\det \mat A}{\mat A} = \det (\mat A) \mat A^{-T}$. 
+    \end{itemize}
+    \item Considere un material hiperelástico Neo-Hookeano, donde la energía hiperelástica está dada por
+            $$ \Psi(\ten F) = \frac C 2(\tr \ten C - 3) + \frac \kappa 2 \left( J -1)\right^2. $$
+                Calcule el tensor de piola y escriba la ecuación explícita de conservación de momentum. 
+    \item Modifique la deducción de la conservación de masa para considerar un flujo de masa dado por su gradiente normal, i.e. considere un término adicional de superficio para todo subdominio $\omega_t\subseteq\Omega_t$: 
+            $$ \int_{\partial \omega_t} \ten K \grad\rho \cdot \vec n \,dS, $$
+            y muestre que si la deformación es incompresible $(\dive_x \vec v=0)$, entonces se recupera una ecuación $ADR$ no estacionaria. 
+    \item Considerar ecuación de momentum lineal de referencia: 
+            $$ \parder{\rho_0\ddot{\vec u}}{t} - \dive_X \ten P(\ten F). $$
+            Cambie de coordenadas en tensor $\ten P$ para que dependa de $\ten E$, y luego linealice con respecto a $\vec u = 0$. Muestre que el problema resultante equivale a uno de elasticidad lineal. 
 
 \end{enumerate}
 
