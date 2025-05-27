@@ -49,13 +49,13 @@
                 -\mu \Delta u + \vec b \cdot \grad u + c u &= f \qquad \Omega \\
                 u &= 0 \qquad \partial\Omega.
             \end{aligned}$$
-            Asumiendo que $\mu,\vec b,c$ son constantes, considere la discretización de este problema en el dominio $\Omega = (0,1)$. 
+            Asumiendo que $\mu,\vec b,c$ son funciones, considere la discretización de este problema en el dominio $\Omega = (0,1)$. 
             \begin{itemize}
-                \item Muestre que, bajo hipótesis adecuadas sobre los parámetros,  este problema tiene una única solución y que además esta es continua.
-                \item Describa cómo aproximar este problema con diferencias finitas y escriba explícitamente la matriz discreta.
-                \item Describa cómo aproximar este problema con elementos finitos (de primer orden) y escriba explícitamente la matriz discreta. 
-                \item Existe algún rango de parámetros donde las discretizaciones resulten en el mismo problema? Y parámetros donde sean diferentes? 
-                \item Explique las garantías teóricas que tienen diferencias finitas y elementos finitos, y compárelas. Qué le parece más conveniente en este caso? 
+                \item\pts{1} Muestre que, bajo hipótesis adecuadas sobre los parámetros,  este problema tiene una única solución débil y que además esta es continua.
+                \item\pts{1}Describa cómo aproximar este problema con diferencias finitas y escriba explícitamente la matriz discreta.
+                \item\pts{1}Describa cómo aproximar este problema con elementos finitos (de primer orden) y escriba explícitamente la matriz discreta. 
+                \item\pts{1}Existe algún rango de parámetros donde las discretizaciones resulten en el mismo problema? Y parámetros donde sean diferentes? 
+                \item\pts{1}Explique las garantías teóricas que tienen diferencias finitas y elementos finitos, y compárelas. Qué le parece más conveniente en este caso? 
             \end{itemize}
 
     \item Considere el problema biarmónico dado por el bilaplaciano:
@@ -63,27 +63,28 @@
             con condición de borde $u = \grad u\cdot \vec n = 0$ en $\partial\Omega$, y considere el espacio funcional 
                 $$ H_0^2(\Omega) = \{v \in H^2(\Omega): v=\grad v \cdot \vec n = 0 \quad \partial\Omega\}. $$
             \begin{itemize}
-                \item Demuestre que $v\mapsto|\Delta v|$ es una norma .
-                \item Demuestre que $v\mapsto|\Delta v|$ es una norma equivalente a la norma natural de $H^2(\Omega)$ en $H_0^2(\Omega)$.
-                \item Encuentre la formulación variacional del problema y diga cuál es la regularidad mínima que requiere para $f$. 
-                \item Demuestre que el problema tiene existencia y unicidad de soluciones. 
+                \item\pts{1} Demuestre que $v\mapsto|\Delta v|$ es una norma .
+                \item\pts{1} Demuestre que $v\mapsto|\Delta v|$ es una norma equivalente a la norma natural de $H^2(\Omega)$ en $H_0^2(\Omega)$.
+                \item\pts{1} Encuentre la formulación variacional del problema y diga cuál es la regularidad mínima que requiere para $f$. 
+                \item\pts{1} Demuestre que el problema tiene existencia y unicidad de soluciones. 
             \end{itemize}
         
     \item Considere la ecuación de conservación de masa con una fuente de masa $\theta$: 
             $$ \parder{\rho}{t} + \dive(\rho \vec v) = \theta. $$
             \begin{itemize}
-                \item Muestre cómo modificaría la deducción de la ley de conservación de masa para considerar el término fuente de masa $\theta$ y obtener la ecuacion descrita. 
-                \item Suponga un material donde la velocidad de masa $\rho\vec v$ está dada por el inverso del gradiente de densidad: 
+                \item\pts{1} Muestre cómo modificaría la deducción de la ley de conservación de masa para considerar el término fuente de masa $\theta$ y obtener la ecuacion descrita. 
+                \item\pts{1} Suponga un material donde la velocidad de masa $\rho\vec v$ está dada por el inverso del gradiente de densidad: 
                         $$ \rho\vec v = - \ten K \grad \rho, $$
-                        donde $\ten K$ es un tensor de segundo orden. Muestre que la ecuación resultante es la ecuación del calor para $\rho$. 
-                \item Considere una discretización por diferencias finitas implicitas en el tiempo, y muestre cuál es el operador diferencial que aparece en el problema de cada instante $t^n$. Muestre que la formulación débil que obtiene para cada instante $t^n$ es encontrar $\rho^n$ en $H_0^1(\Omega)$ (asumiendo condiciones de Dirichlet homogéneas) tal que 
+                        donde $\ten K$ es un tensor de segundo orden. Muestre que la ecuación resultante es la ecuación del calor para $\rho$ y que la formulación débil para condiciones de Dirichlet homogéneas es: Hallar $\rho(t)$\footnote{Los espacios de funciones tales que están en un espacio de Sobolev en cada instante se llaman espacios de Bochner. Puede ignorar esta dificultad técnica y asumir que es sensato escribir una función $\rho$ tal que para cada instante $t$ se tiene que $\rho(t)$ pertenece a un espacio de Sobolev.} en $H_0^1(\Omega)$ dada una condición inicial $\rho_0$ tal que 
+                        $$ \left(\partial_t \rho, v\right) + (\ten K \grad \rho, \grad v) = (\theta, v) \qquad \forall v \in H_0^1(\Omega). $$
+                \item\pts{1} Considere una discretización por diferencias finitas implicitas en el tiempo, y muestre cuál es el operador diferencial que aparece en el problema de cada instante $t^n$. Muestre que la formulación débil que obtiene para cada instante $t^n$ es encontrar $\rho^n$ en $H_0^1(\Omega)$ (asumiendo condiciones de Dirichlet homogéneas) tal que 
                     $$ \left(\frac{\rho^n - \rho^{n-1}}{\Delta t}, v\right) + (\ten K \grad \rho^n, \grad v) = (\theta(t^n), v) \qquad \forall v\in H_0^1(\Omega). $$ 
                     Defina claramente todos los objetos matemáticos usados para que esta aproximación esté rigurosamente justificada. Replique el cálculo para una discretización en tiempo dada por el método $\theta$. A problemas como este donde solo una de las variables está discretizada se les conoce como problemas \emph{semi-discretos}. 
-                \item Estudie la invertibilidad del sistema discreto en cada instante $t^n$ para $\theta=0$, $\theta=1/2$, y $\theta=1$. Use el Lema de Lax-Milgram para justificar su respuesta. 
-                \item La condición inf-sup ayuda a caracterizar la sobreyectividad de un operador. Tomando como motivación el ejercicio anterior, explique si es posible establecer una condición inf-sup para el siguiente problema: Encontrar $u$ en $H_0^1(\Omega)$ tal que 
+                \item\pts{1} Estudie la invertibilidad del sistema discreto en cada instante $t^n$ para $\theta=0$, $\theta=1/2$, y $\theta=1$. Use el Lema de Lax-Milgram para justificar su respuesta. 
+                \item\pts{1} La condición inf-sup ayuda a caracterizar la sobreyectividad de un operador. Tomando como motivación el ejercicio anterior, explique si es posible establecer una condición inf-sup para el siguiente problema: Encontrar $u$ en $H_0^1(\Omega)$ tal que 
                         $$ (u, v)_0 = \langle f, v\rangle_{H^{-1}\times H_0^1} \qquad \forall v\in H_0^1(\Omega). $$
                         Naturalmente, no es posible usar Lax-Milgram ya que el producto en $L^2$ no es elíptico en $H_0^1$. 
-                \item Proponga un esquema de elementos finitos que le permita aproximar el problema semi-discreto a partir de uno completamente discreto. 
+                \item\pts{1} Proponga un esquema de elementos finitos que le permita aproximar el problema semi-discreto a partir de uno completamente discreto. 
             \end{itemize}
 \end{enumerate}
 
