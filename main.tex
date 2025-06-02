@@ -23,7 +23,6 @@
 \newcommand{\example}[1]{\todo[inline,color=orange!30!white]{\textbf{Example:} #1}}
 
 \title{Applications of Functional Analysis and PDEs}
-%\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
 \author{Nicol\'as A Barnafi}
 %\date{}
 
@@ -436,7 +435,7 @@ Time discretization is an enormous topic, so here we provide simple strategies a
     which we can discretize in space to obtain the system of differential equations
     $$ \dot x_h + \mat L_h \vec x_h = \vec f_h. $$
     Instead of considering a Taylor approximation of the time derivative, we will use a quadrature rule to obtain different strategies. For this, integrating in the interval $(t^n, t^{n+1})$ and using the notation $\vec x(t^n) \approx \vec x^{n}$, yields
-    $$ \vec x^{n+1} - \vec x^n = \int_{t^n}^{t^{n+1}} \mat L_h \vec x_h(s) \,ds = \int_{t^n}^{t^{n+1}} \vec f_h(s)\,ds. $$
+    $$ \vec x^{n+1} - \vec x^n + \int_{t^n}^{t^{n+1}} \mat L_h \vec x_h(s) \,ds = \int_{t^n}^{t^{n+1}} \vec f_h(s)\,ds. $$
     We present three different schemes depending on three different quadrature rules: 
     \begin{itemize}
         \item Left-sided rule (Explicit):
