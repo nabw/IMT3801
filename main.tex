@@ -5,6 +5,13 @@
 \usepackage{fullpage}
 \usepackage{booktabs}
 \usepackage{hyperref}
+%%%% Remove some annoying hyperref warnings. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% See https://tex.stackexchange.com/questions/10555/hyperref-warning-token-not-allowed-in-a-pdf-string
+\makeatletter
+\pdfstringdefDisableCommands{\let\HyPsd@CatcodeWarning\@gobble}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{mathtools}
@@ -15,8 +22,7 @@
 \newcommand{\RightComment}[1]{\hfill \(\triangleright\) \textit{#1}}
 \newcommand{\example}[1]{\todo[inline,color=orange!30!white]{\textbf{Example:} #1}}
 
-\title{Notes for Numerical Analysis of PDEs and related topics}
-%\author{Nicol\'as A Barnafi\thanks{Instituto de Ingeniería Biológica y Médica, Pontificia Universidad Católica de Chile, Chile}, Axel Osses\thanks{Departamento de Ingeniería Matemática, Universidad de Chile, Chile}}
+\title{Applications of Functional Analysis and PDEs}
 \author{Nicol\'as A Barnafi}
 %\date{}
 
@@ -430,7 +436,8 @@ Time discretization is an enormous topic, so here we provide simple strategies a
     which we can discretize in space to obtain the system of differential equations
     $$ \dot x_h + \mat L_h \vec x_h = \vec f_h. $$
     Instead of considering a Taylor approximation of the time derivative, we will use a quadrature rule to obtain different strategies. For this, integrating in the interval $(t^n, t^{n+1})$ and using the notation $\vec x(t^n) \approx \vec x^{n}$, yields
-    $$ \vec x^{n+1} - \vec x^n +    \int_{t^n}^{t^{n+1}} \mat L_h \vec x_h(s) \,ds = \int_{t^n}^{t^{n+1}} \vec f_h(s)\,ds. $$
+    $$ \vec x^{n+1} - \vec x^n + \int_{t^n}^{t^{n+1}} \mat L_h \vec x_h(s) \,ds = \int_{t^n}^{t^{n+1}} \vec f_h(s)\,ds. $$
+
     We present three different schemes depending on three different quadrature rules: 
     \begin{itemize}
         \item Left-sided rule (Explicit):
@@ -1021,7 +1028,7 @@ This property is the basis of the Lax-Milgram lemma, which gives sufficient cond
 \begin{lemma}[Lax-Milgram] Consider a bounded bilinear form $a: H\times H\to \R$ defined on a Hilbert space $H$ that is elliptic with constants $C$ and $\alpha$ respectively, and a linear functional $f$ in $H'$. Then, there exists a unique $u$ in $H$ such that 
     $$ a(u, v) = f(v) \qquad \forall v \in H. $$
 This solution is continuous with respect to the data, in the sense that there exists a positive constant $C$ such that 
-    $$ \| u\|_H \leq \frac C \alpha \| f \|_{H'} .$$
+    $$ \| u\|_H \leq \frac 1 \alpha \| f \|_{H'} .$$
 This is typically referred to as the \emph{a priori} estimate. 
 \end{lemma}
 
@@ -1103,7 +1110,7 @@ which one could also write as $Au = a(u, \cdot)$. Naturally, the bilinear form $
 \begin{lemma}[Lax-Milgram] Consider a bounded bilinear form $a: H\times H\to \R$ defined on a Hilbert space $H$ that is elliptic with constants $C$ and $\alpha$ respectively, and a linear functional $f$ in $H'$. Then, there exists a unique $u$ in $H$ such that 
     $$ a(u, v) = f(v) \qquad \forall v \in H. $$
 This solution is continuous with respect to the data, in the sense that there exists a positive constant $C$ such that 
-    $$ \| u\|_H \leq \frac C \alpha \| f \|_{H'} .$$
+    $$ \| u\|_H \leq \frac 1 \alpha \| f \|_{H'} .$$
 This is typically referred to as the \emph{a priori} estimate. 
 \end{lemma}
 \begin{proof}
@@ -1171,7 +1178,7 @@ such that the hypotheses of Lax-Milgram hold. In this case, we can consider a di
     \begin{equation*}\label{eq:galerkinscheme}
     a(u_h, v_h) = L(v_h) \qquad \forall v_h \in V_h.
     \end{equation*}
-The most notable aspect of Lax-Milgram is that all of its hypotheses hold also in $V_h$, which implies that the Falerkin scheme is also invertible, and the \emph{a priori} estimate holds as well. The natural question is whether the discrete solution $u_h$ converges to the continuous solution $u$, which is studied through the \emph{error equation}. This is computed by setting the continuous test function $V$ as $V_h$ and then subtracting both problems: 
+The most notable aspect of Lax-Milgram is that all of its hypotheses hold also in $V_h$, which implies that the Galerkin scheme is also invertible, and the \emph{a priori} estimate holds as well. The natural question is whether the discrete solution $u_h$ converges to the continuous solution $u$, which is studied through the \emph{error equation}. This is computed by setting the continuous test function $V$ as $V_h$ and then subtracting both problems: 
     $$ a(e_h, v_h) = 0 \qquad \forall v_h \in V_h, $$
 where $e_h = u - u_h$.  This property is known as the \emph{Galerkin orthogonality}, and it can be used to compute the error estimate by considering an arbitrary function $z_h$ in $V_h$:
     $$ \begin{aligned}
@@ -1242,10 +1249,10 @@ which for $\varepsilon$ small enough approximates the nonhomogeneous Dirichlet b
 \item The Nitsche method: let $\gamma > 0$ be a positive function on $\partial\Omega$ and $\theta\in\mathbb{R}$ a fixed parameter. Integrating by parts the weak form of the Poisson problem we first get 
 $$a(u,v) - (\nabla u\cdot \vec n, v)_{\partial\Omega} = (f,v),$$
 and from the Dirichlet condition we can write 
-$$(u,\gamma u -\theta\nabla v\cdot \vec n)_{\partial\Omega} = (g,\gamma v - \theta \nabla v \cdot n)_{\partial\Omega}.$$
+$$(u,\gamma v -\theta\nabla v\cdot \vec n)_{\partial\Omega} = (g,\gamma v - \theta \nabla v \cdot \vec n)_{\partial\Omega}.$$
 Adding these two equations together and rearranging, we get 
 $$a(u,v) - (\nabla u \cdot \vec n, v)_{\partial\Omega} - \theta (u,\nabla v\cdot  \vec n) + (u,\gamma v)_{\partial\Omega} = (f,v) + (g,\gamma v - \theta \nabla v\cdot n)_{\partial\Omega}.$$
-Denote $\zeta$ a piecewise constant function on the boundary, that is defined locally by the value of the diameter of every boundary facet. Taking $\gamma = \gamma_0 \zeta^{-1}$ for some $\gamma_0>0$, and recalling the trace inequality 
+Let $\zeta$ denote a piecewise constant function on the boundary, that is defined locally by the value of the diameter of every boundary facet. Taking $\gamma = \gamma_0 \zeta^{-1}$ for some $\gamma_0>0$, and recalling the trace inequality 
 $$\|\nabla v_h\cdot \vec n\|^2_{-1/2,\partial\Omega} \leq c_T \|\nabla v_h\|^2_{0,\Omega},$$
 we can prove that this problem is well-posed provided that 
 $$\frac{(1+\theta)^2 c_T}{\gamma_0}\leq 1.$$
@@ -1262,7 +1269,7 @@ The idea of studying specifically finite elements will be that of having more si
     $$ \inf_{v_h\in V_h} \| u - v_h\|_V. $$
 A typical use of this inequality will be that of bounding the projection error through a finite element interpolant, such that one gets inequalities such as
     $$ \inf_{v_h\in V_h} \| u - v_h\|_V \leq \| u - I_h u \|_V \leq h^s \|u \|_W, $$
-where $W$ is some space of higher regularity, $s$ is some (hopefully positive) exponent and $I_h:V \to V_h$ is an interpolation operator. Our idea is that of producing FEM spaces for all of our relevant Hilbert spaces: $L^2$, $H^1$, $H(\dive)$, and $H(\curl)$. We will introduce finite elements by following an almost verbatim copy the first chapter of \cite{ern2004theory}. 
+    where $W$ is some space of higher regularity, $s$ is some (hopefully positive) exponent and $I_h:V \to V_h$ is an interpolation operator. Our idea is that of producing FEM spaces for all of our relevant Hilbert spaces: $L^2$, $H^1$, $H(\dive)$, and $H(\curl)$. We will start by introducing first order finite elements in $\R$ by following an almost verbatim copy of \cite[Chapter 1]{ern2004theory}. 
 
 \subsection{One-dimensional interpolation} 
 
@@ -1297,8 +1304,10 @@ with obvious modifications if $i = 0$ or $N+1$. Clearly, $\varphi_i \in P_h^1$. 
     Choose a basis $\{\gamma_0, \dots, \gamma_{N+1}\}$ for $\mathcal{L}(P_h^1;\mathbb{R})$; henceforth, the linear forms in this basis are called the global degrees of freedom in $P_h^1$. The functions in the dual basis are called the global shape functions in $P_h^1$. 
 \end{definition}
 For $i \in \{0, \dots, N+1\}$, choose the linear form
+
 $$ \gamma_i: C(\bar{\Omega}) \ni v \mapsto \gamma_i(v) = v(x_i) \in \mathbb{R}.$$
-The proof of Lemma~\ref{hatbasis} shows that a function $v_h \in P_h^1$ is uniquely defined by the $(N+2)$-uplet $(v_h(x_i))_{0 \le i \le N+1}$, i.e. the values at the nodes. In other words, $\{\gamma_0, \dots, \gamma_{N+1}\}$ is a basis for $\mathcal{L}(P_h^1; \mathbb{R})$. Choosing the linear forms $\{\gamma_i\}_i$ defined above as the global degrees of freedom in $P_h^1$, the global shape functions are precisely the hat functions $\{\varphi_0, \dots, \varphi_{N+1}\}$, since $\gamma_i(\varphi_j) = \delta_{ij}$, $0 \le i,j \le N+1$.
+The proof of Lemma~\ref{hatbasis} shows that a function $v_h \in P_h^1$ is uniquely defined by the $(N+2)$-tuple $(v_h(x_i))_{0 \le i \le N+1}$, i.e. the values at the nodes. In other words, $\{\gamma_0, \dots, \gamma_{N+1}\}$ is a basis for $\mathcal{L}(P_h^1; \mathbb{R})$. Choosing the linear forms $\{\gamma_i\}_i$ defined above as the global degrees of freedom in $P_h^1$, the global shape functions are precisely the hat functions $\{\varphi_0, \dots, \varphi_{N+1}\}$, since $\gamma_i(\varphi_j) = \delta_{ij}$, $0 \le i,j \le N+1$.
+
 
 In this space, we define the interpolation operator
 $$ I_h^1: C(\bar{\Omega}) \ni v \mapsto \sum_{i=0}^{N+1} \gamma_i(v) \varphi_i \in P_h^1.$$
@@ -1318,14 +1327,15 @@ We can characterize the properties of the interpolation operator.
     $I_h^1$ is a linear continuous mapping from $H^1(\Omega)$ to $H^1(\Omega)$, and $\|I_h^1\|_{\mathcal{L}(H^1(\Omega);H^1(\Omega))}$ is uniformly bounded with respect to $h$.
     \begin{proof}
     For the first part, in one dimension, a function in $H^1(\Omega)$ is continuous. Indeed, for $v \in H^1(\Omega)$ and $x,y \in \overline{\Omega}$,
-    \begin{equation*}\label{eq:interpolator_continuity_1d}
+    \begin{equation}\label{eq:interpolator_continuity_1d}
         |v(y) - v(x)| \le \int_x^y |v'(s)| ds  \le |y-x|^{1/2} |v|_{1,\Omega},
-    \end{equation*}
+    \end{equation}
     owing to the Cauchy-Schwarz inequality, which can be justified rigorously by a density argument. Furthermore, taking $x$ to be a point where $|v|$ reaches its minimum over $\overline{\Omega}$, the above inequality implies
     \begin{equation*}\label{eq:supnorm_p1}
         \|v\|_{L^\infty(\Omega)} \le |b-a|^{-1/2} \|v\|_0 + |b-a|^{1/2}|v|_{1,\Omega},
     \end{equation*}
     since $|v(x)| \le |b-a|^{-1/2} \|v\|_{0}$. Therefore, $I_h^1 v$ is well-defined for $v \in H^1(\Omega)$. Moreover, Lemma~\ref{approxP1} implies $I_h^1 v \in H^1(\Omega)$; hence, $I_h^1$ maps $H^1(\Omega)$ to $H^1(\Omega)$.
+
     For the second part, let $I_i \in \mathcal{T}_h$ for $0 \le i \le N$. From the definition of the distributional derivative $w_h$ above, $(I_h^1 v)'|_{I_i} = h_i^{-1}(v(x_{i+1}) - v(x_i))$; hence, using the previous inequality we get the estimate $|I_h^1 v|_{1,I_i} \le |v|_{1,I_i}$. Therefore, $|I_h^1 v|_{1,\Omega} \le |v|_{1,\Omega}$. Moreover, since $\|I_h^1 v\|_{0,\Omega} \le |b-a|^{1/2} \|I_h^1 v\|_{L^\infty(\Omega)}$ and $\|I_h^1 v\|_{L^\infty(\Omega)} \le \|v\|_{L^\infty(\Omega)}$, we deduce that $\|I_h^1 v\|_{0,\Omega} \le c \|v\|_{1,\Omega}$ where $c$ is independent of $h$ (assuming $h$ bounded). The conclusion follows readily.
     \end{proof}
 \end{lemma}
@@ -1334,8 +1344,9 @@ We can explicitly control the interpolation error via the mesh size.
     For all $h$ and $v \in H^2(\Omega)$,
     $$ \|v - I_h^1 v\|_{0,\Omega} \le h^2 \|v''\|_{0,\Omega},\qquad  |v - I_h^1 v|_{1,\Omega} \le h \|v''\|_{0,\Omega}. $$
 \begin{proof}
+
     Consider an interval $I_i \in \mathcal{T}_h$. Let $w \in H^1(I_i)$ be such that $w$ vanishes at some point $\xi$ in $I_i$. Then, owing to inequality~\ref{eq:interpolator_continuity_1d}, we infer $\|w\|_{0,I_i} \le h_i |w|_{1,I_i}$.
-    Let $v \in H^2(\Omega)$, let $i \in \{0, \dots, N\}$, and set $w_i = (v - I_h^1 v)'|_{I_i}$. Note that $w_i \in H^1(I_i)$ and that $w_i$ vanishes at some point $\xi$ in $I_i$ owing to the mean-value theorem. Applying the estimate derived above to $w_i$ and using the fact that $(I_h^1 v)''$ vanishes identically on $I_i$ yields $|v - I_h^1 v|_{1,I_i} \le h_i |v''|_{0,I_i}$. The second estimate is then obtained by summing over the mesh intervals. To prove the first estimate, observe that the result above can also be applied to $(v - I_h^1 v)|_{I_i}$ yielding
+    Let $v \in H^2(\Omega)$, let $i \in \{0, \dots, N\}$, and set $w_i = (v - Iautomatically_h^1 v)'|_{I_i}$. Note that $w_i \in H^1(I_i)$ and that $w_i$ vanishes at some point $\xi$ in $I_i$ owing to the mean-value theorem. Applying the estimate derived above to $w_i$ and using the fact that $(I_h^1 v)''$ vanishes identically on $I_i$ yields $|v - I_h^1 v|_{1,I_i} \le h_i |v''|_{0,I_i}$. The second estimate is then obtained by summing over the mesh intervals. To prove the first estimate, observe that the result above can also be applied to $(v - I_h^1 v)|_{I_i}$ yielding
     $$ \|v - I_h^1 v\|_{0,I_i} \le h_i |v - I_h^1 v|_{1,I_i} \le h_i^2 |v''|_{0,I_i}. $$
     Conclude by summing over the mesh intervals.
 \end{proof}
@@ -1648,10 +1659,10 @@ There is an intrinsic relationship between this structure and inf-sup conditions
     $$ \vec r_h \grad = \grad \pi_h, $$
 which further relates the interpolation results. 
 
-\subsection{Implementation}
+\subsection{FEM Implementation}
 % 8.1.2 Ern & Guermond
 % C21-23 Federico
-Let us now illustrate how to efficiently approximate the solution a boundary value problem using the finite element method. Given $\Omega\subset \R^d$ with boundary $\partial \Omega = \partial\Omega_D \cup \partial\Omega_N \subset \R^{d-1}$, we define its mesh $\mathcal{T}_h = \{\Omega^e\}_{e=1}^{N_{el}}$ with $N_{el}$ elements, and abusing the notation we write the mesh of the boundary $\partial\Omega$ as 
+Let us now illustrate how to efficiently approximate the solution a boundary value problem using the finite element method. Given $\Omega\subset \R^d$ with boundary $\overline{\partial \Omega} = \overline{\partial\Omega_D} \cup \overline{\partial\Omega_N}$, we define an approximating mesh  $\mathcal{T}_h = \{\Omega^e\}_{e=1}^{N_{el}}$ with $N_{el}$ elements and parameterized by $h$ the mesh size. With a mild abuse of notation,  we can write the mesh describing the boundary $\partial\Omega$ as 
 $$\partial\mathcal{T}_h = \partial\mathcal{T}_h^D \cup\partial\mathcal{T}_h^N = \{\partial\Omega^e_D\}_{e=1}^{N_{el}^D} \cup \{\partial\Omega^e_N\}_{e=1}^{N_{el}^N}.$$
 Let $U$ be a Banach space of functions defined on $\Omega$. Consider the Poisson problem with mixed Dirichlet and Neumann boundary conditions, which consists in finding $u\in U$ such that
 $$
@@ -1668,9 +1679,9 @@ $$ a_h(u_h, v_h) = l_h(v_h) \qquad \forall v_h \in U_h, $$
 where $a_h$ and $l_h$ are the discrete approximations of the bilinear form $a(u,v)=(\nabla u, \nabla v)$ and the linear form $l(v) = (f,v) + (g_N, v)_{\partial\Omega_N}$. These approximations are naturally defined by splitting the integrals into its discrete elements, that is, 
 
 $$ a_h(u,v) = \sum_{e=1}^{N_{el}} \int_{\Omega^e} \nabla u \cdot \nabla v \, dx \qquad l(v) = \sum_{e=1}^{N_{el}} \int_{\Omega^e} f v \, dx + \sum_{e \in \mathcal{T}_h^N} \int_{\partial\Omega_N^e} g_N v \, dS. $$
-Since $U_h$ is finite-dimensional, we can expand $u_h$ through the basis functions $\{\varphi_i\}$ as 
+We note that one might be tempted to think that naturally the written $a_h$ matches $a$. This is typically not the case because we compute the integrals using quadrature rules, which might induce an approximation error. Another reason that we do not consider here is that the discrete problem might have some kind of stabilization to improve the overall conditioning of the linear system.  Since $U_h$ is finite-dimensional, we can expand $u_h$ through the basis functions $\{\varphi_i\}$ as 
 $$u_h = \sum_{i=1}^N \alpha_i \varphi_i,$$ 
-where the coordinate vector $\vec\alpha = (\alpha_1, \dots, \alpha_N)^T$ is to be determined. Since the Galerkin scheme is valid for all $v_h \in U_h$, we can choose $v_h = \varphi_i$ for $i=1,\dots,N_{el}$. For every $i=1,\dots,N_{el}$ we have
+where the coordinate vector $\vec\alpha = (\alpha_1, \dots, \alpha_N)^T$ is the unknown that defines the discrete solution. Since the Galerkin scheme is valid for all $v_h \in U_h$, we can choose $v_h = \varphi_i$ for $i=1,\dots,N_{el}$. For every $i=1,\dots,N_{el}$ we have
 \begin{align*}
     a_h(u_h, \varphi_i) &= a_h(\sum_{j=1}^{N_{el}}\alpha_j\varphi_j, \varphi_i)\\
     &= \sum_{j=1}^{N_{el}} \alpha_j a_h(\varphi_j, \varphi_i)\\
@@ -1683,50 +1694,50 @@ $$ K_{ij} = a_h(\varphi_j, \varphi_i) \quad \text{and} \quad F_i = l_h(\varphi_i
 
 Here, we note that computing $K_{ij} = a(\varphi_j, \varphi_i)$ by integrating over the entire domain $\Omega$ for all pairs $(i,j)$ is computationally inefficient, because the basis functions $\varphi_j$ in finite element methods are typically chosen to have compact support, meaning $\varphi_j(x)$ is non-zero only on a small part of the domain. For basis functions associated with nodes of a mesh, the supports of $\varphi_i$ and $\varphi_j$ only overlap for indices $i$ and $j$ corresponding to neighboring nodes or elements, and thus $a(\varphi_j, \varphi_i)$ will be nonzero only for those neighboring $(i,j)$ pairs. This results in the stiffness matrix $\ten K$ being sparse, i.e. most of its entries are zero, and thus a naïve computation method involving nested loops over all global indices $i$ and $j$ would spend an unnecessary amount of time computing zero entries. 
 
-To put this into practice, let $(\Omega, V_h, \Sigma$ be a finite element. Within each element $\Omega^e$, the global basis functions $\varphi_j$ of $V_h$ that are non-zero on $\Omega^e$ are those associated with the nodes of that element. Let $n_{dof}$ number of degrees of freedom (nodes) of the finite element. We define local shape functions $\phi_a^e$, $a=1, \dots, n_{dof}$, which are the restrictions of the global basis functions to the element $\Omega^e$, re-indexed locally from 1 to $n_{dof}$. We define the \textit{element stiffness matrix} $\ten k^e \in \R^{n_{dof}\times n_{dof}}$ and \textit{element force vector} $\vec f^e \in \R^{n_{dof}}$ as integrals over $\Omega^e$ using these local shape functions, i.e.
+To put this into practice, let $(\Omega, V_h, \Sigma)$ be a finite element. Within each element $\Omega^e$, the global basis functions $\varphi_j$ of $V_h$ that are non-zero on $\Omega^e$ are those associated with the nodes of that element. Let $n_{dof}$ number of degrees of freedom (nodes) of the finite element. We define local shape functions $\phi_a^e$, $a=1, \dots, n_{dof}$, which are the restrictions of the global basis functions to the element $\Omega^e$, re-indexed locally from 1 to $n_{dof}$. We define the local or \textit{element stiffness matrix} $\ten k^e \in \R^{n_{dof}\times n_{dof}}$ and local or \textit{element force vector} $\vec f^e \in \R^{n_{dof}}$ as integrals over $\Omega^e$ using these local shape functions, i.e.
 $$ k_{ab}^e = \int_{\Omega^e} \nabla \phi_b^e \cdot \nabla \phi_a^e \, dx \quad \text{and} \quad f_a^e = \int_{\Omega^e} f \phi_a^e \, dx. $$
 If the element $\Omega^e$ has a Neumann boundary segment on $\partial \Omega_N$, there is also a local Neumann boundary force vector $f_{N,a}^e$:
 $$ f_{N,a}^e = \int_{\partial\Omega_N^e} g_N \phi_a^e \, dS. $$
 The assembly process of adding the contributions from the local element matrices and vectors into the global system requires precisely mapping the local effects within each element to their corresponding locations in the global stiffness matrix $\ten K$ and force vector $\vec{F}$. This mapping accounts for both the topological connectivity of the mesh elements and the boundary conditions applied to the domain. We use several arrays to manage this mapping.
 \begin{enumerate}
-    \item The element node matrix $IEN\in \mathbb{Z}^{n_{el}\times n_{dof}}$ is a connectivity array with terms $IEN[e, a]$, which provides the global node index corresponding to the local node $a$ (ranging from 1 to $n_{dof}$) within element $e$ (ranging from 1 to $N_{el}$). Explicitly, if we have three elements in 1D, whose global node indexes are $(0,1)$, $(1,2)$ and $(2,3)$, respectively, then the $IEN$ matrix is 
-    $$ IEN = \begin{bmatrix}
+    \item The element node matrix $\texttt{IEN}\in \mathbb{Z}^{n_{el}\times n_{dof}}$ is a connectivity array with terms $\texttt{IEN}[e, a]$, which provides the global node index corresponding to the local node $a$ (ranging from 1 to $n_{dof}$) within element $e$ (ranging from 1 to $N_{el}$). Explicitly, if we have three elements in 1D, whose global node indexes are $(0,1)$, $(1,2)$ and $(2,3)$, respectively, then the $\texttt{IEN}$ matrix is 
+        $$ \texttt{IEN} = \begin{bmatrix}
     0 & 1 \\
     1 & 2 \\
     2 & 3
-    \end{bmatrix} $$
-    \item The destination array $ID\in \mathbb{Z}^{n_{nodes}}$ maps each global node index $i$ to its corresponding equation number or global degree of freedom index in the assembled linear system. If global node $i$ has a prescribed boundary condition (such as a Dirichlet value), $ID(i)$ is typically set to 0 or a negative value to indicate that this node does not correspond to an unknown degree of freedom in the system. For example, if we have $n_{nodes}=4$ nodes in a 1D mesh, where where nodes $1$ and $3$ have Dirichlet boundary conditions, the $ID$ array might look like:
-    $$ ID = \begin{bmatrix}
+    \end{bmatrix}. $$
+\item The destination array $\texttt{ID}\in \mathbb{Z}^{n_{nodes}}$ maps each global node index $i$ to its corresponding equation number or global degree of freedom index in the assembled linear system. If global node $i$ has a prescribed boundary condition (such as a Dirichlet value), $\texttt{ID}(i)$ is typically set to 0 or a negative value to indicate that this node does not correspond to an unknown degree of freedom in the system. For example, if we have $n_{nodes}=4$ nodes in a 1D mesh, where where nodes $1$ and $3$ have Dirichlet boundary conditions, the $\texttt{ID}$ array might look like:
+    $$ \texttt{ID} = \begin{bmatrix}
     0 \\
     1 \\
     0 \\
     2
-    \end{bmatrix} $$
+    \end{bmatrix}, $$
     where the nonzero entries correspond to free nodes.
-    \item The location matrix $LM\in \mathbb{Z}^{n_{el}\times n_{dof}}$ corresponds to the composite local-to-global mapping, where for a given element $e$ and a local node $a$, $LM[e,a]$ corresponds to the global degree of freedom index. This allows us to write the important relation 
-    $$LM[e,a] = ID[IEN[e,a]].$$
+\item The location matrix $\texttt{LM}\in \mathbb{Z}^{n_{el}\times n_{dof}}$ corresponds to the composite local-to-global mapping, where for a given element $e$ and a local node $a$, $\texttt{LM}[e,a]$ corresponds to the global degree of freedom index. This allows us to write the important relation 
+    $$\texttt{LM}[e,a] = \texttt{ID}[\texttt{IEN}[e,a]].$$
 \end{enumerate}
-    The full mapping to degrees of freedom in the presence of general boundary conditions is captured by the $ID[IEN[e,a]]$ relation, which is the index ultimately used to locate the correct row and column in the global system during assembly. The pseudocode below details the assembly algorithm using this mapping to add the contributions from the element matrices $\ten k^e$ and vectors $\vec f^e$ to the global system $\ten K$ and $\vec F$.
+The full mapping to degrees of freedom in the presence of general boundary conditions is captured by the $\texttt{ID}[\texttt{IEN}[e,a]]$ relation, which is the index ultimately used to locate the correct row and column in the global system during assembly. The pseudocode below details the assembly algorithm using this mapping to add the contributions from the element matrices $\ten k^e$ and vectors $\vec f^e$ to the global system $\ten K$ and $\vec F$.
 \begin{algorithmic}[1]
-    \State Initialize global stiffness matrix $\ten K$ and force vector $\vec{F}$ to zero.
+    \State Initialize global stiffness matrix $\ten K$ and force vector $\vec{F}$ to zero
     \For{each element $e = 1, \dots, N_{el}$}
-        \State Compute element stiffness matrix $\ten k^e\in\R^{n_{dof} \times n_{dof}}$ and force vector $\vec f^e\in\R^{n_{dof}}$.
+        \State Compute element stiffness matrix $\ten k^e\in\R^{n_{dof} \times n_{dof}}$ and force vector $\vec f^e\in\R^{n_{dof}}$
         \For{each local node $a = 1, \dots, n_{dof}$}
-            \State $i = LM[e,a]$.
+            \State $i = \texttt{LM}[e,a]$
             \For{each local node $b = 1, \dots, n_{dof}$}
-                \State $j = LM[e,b]$.
+                \State $j = \texttt{LM}[e,b]$
                 \If{$i \neq 0$ and $j \neq 0$} \Comment{Free nodes}
-                    \State $K_{i,j} \gets K_{i,j} + k^e_{ab}$.
+                    \State $K_{i,j} \gets K_{i,j} + k^e_{ab}$
                 \EndIf
                 \If{$j$-th node is on the Dirichlet boundary $\partial\mathcal{T}_h^D$} \Comment{Dirichlet nodes}
-                    \State $F_i \gets F_i - g_D k^e_{ab}$.
+                    \State $F_i \gets F_i - g_D k^e_{ab}$
                 \EndIf
             \EndFor
             \If{$i \neq 0$} \Comment{Non-Dirichlet nodes}
-                \State $F_i \gets F_i + f^e_a$.
+                \State $F_i \gets F_i + f^e_a$
             \EndIf
             \If{$i$-th node is on the Neumann boundary $\partial\mathcal{T}_h^N$} \Comment{Neumann nodes}
-                \State $F_i \gets F_i + f^e_{N,a}$.
+                \State $F_i \gets F_i + f^e_{N,a}$
             \EndIf
         \EndFor
         \EndFor
@@ -1801,7 +1812,7 @@ In the previous section we have thorougly studied elliptic problems and many app
 
 We are interested in showing first that the inf-sup condition means 
 surjectivity. This will require the use of certain results from 
-functional analysis. For proof and omitted details, see \cite{chen2024infSup} 
+functional analysis. For detailed proofs and omitted details, see \cite{chen2024infSup} 
 and \cite{gatica2014simple}. A first important result is to characterize 
 operators with closed range. 
 
@@ -1817,20 +1828,14 @@ operators with closed range.
 \end{lemma}
 \begin{proof}
     First, we assume \(T\) is bounded below. If \(Tu=0\), the inequality 
-    implies \(u=0\), i.e., \(T\) is injective. Let \(\{Tu_k\}\) be a convergent 
-    sequence in \(V\). By the inequality, we have that
+    implies \(u=0\), i.e., \(T\) is injective. Let \(\{Tu_k\}\) be a convergent sequence in \(V\). By the inequality, we have that
     \begin{displaymath}
         \lVert Tu_k - Tu_m \rVert \ge c\lVert u_k - u_m \rVert
     \end{displaymath}
-    for some \(k,m\). Then, because \(\{Tu_k\}\) is a Cauchy sequence, we 
-    know that \(\{u_k\}\) is also a Cauchy sequence and, because both spaces 
-    are Banach, the sequence then converges to some \(u\in U\). The continuity 
-    of \(T\) shows that \(Tu_k\) converges to \(Tu\) and thus the range of 
-    \(T\) is closed. 
+    for some \(k,m\). Then, because \(\{Tu_k\}\) is a Cauchy sequence, we know that \(\{u_k\}\) is also a Cauchy sequence and, because both spaces are Banach, the sequence then converges to some \(u\in U\). The continuity of \(T\) shows that \(Tu_k\) converges to \(Tu\) and thus the range of \(T\) is closed. 
 
     Now, assume \(T\) is injective and its range is closed. Then, because 
-    \(R(T)\) is a closed subspace of a Banach space, it is also Banach. As 
-    \( T\) is injective, \(T^{-1}\) is well defined on \(R(T)\), i.e., 
+    \(R(T)\) is a closed subspace of a Banach space, it is also Banach. As \( T\) is injective, \(T^{-1}\) is well defined on \(R(T)\), i.e., 
     \(T:U\to R(T)\subset V\) is invertible. In addition, Open Mapping Theorem 
     shows that \(T^{-1}\) is continuous. Then
     \begin{displaymath}
@@ -1860,7 +1865,10 @@ Now, we would like to characterize the surjectivity of the operator using its du
     that \( \langle v', v\rangle = 0\,\,\, \forall v \in V\), which means that 
     \(v' = 0\). Thus, \(N(T') = \{0\}\), so \(T'\) is injective.
 
-    For the proof in the other direction, see \cite{chen2024infSup}. 
+    For the proof in the other direction, we get from Closed Range Theorem that also $R(T)$ is closed. By contradiction, consider $v$in $V$ such that $v\not\in R(T)$. By Hahn-Banach we get that there exists $f$ in $V'$ such that $f(R(T)) = 0$ and $f(v)=1$\footnote{This is an improvement over Urysohn's Lemma, which yields only a possibly nonlinear function}. Then, $T'f$ is such that
+        $$ \langle T'f', u\rangle = \langle f, Tu\rangle = u \qquad \forall u\in U.$$
+    This implies that $f=0$, which contradicts that $f(v)=1$. 
+
 \end{proof}
 
 Combining both lemmas, we can write
@@ -1937,6 +1945,20 @@ We can now postulate a general Lax-Milgram Theorem. We write it in Hilbert Space
         \quad \text{ (injective) }\]
     \end{enumerate}
 \end{theorem}
+We note that injectivity can be equivalently stated as an inf-sup condition simply by inverting the arguments in the surjectivity inf-sup.  The main difficulty in using this theory is that well-posedness of a discrete problem is not inherited from the continuous one. In fact, consider $U_N\subset U$ and $v'_N\in V'_N\subset V$ discrete spaces, then 
+$$ \|T'v_N'\|_{U'} = \sup_{u\in U}\frac{\langle u, T'v_N'\rangle}{\|u\|_U} \geq \sup_{u_N\in U_N}\frac{\langle u_N, T'v_N'\rangle}{\|u_N\|_U}, $$
+which establishes our claim. Despite this, one can still recover convergence as before. To see this, consider $u$ and $u_N$ the continuous and discrete solutions given by the following problems with $a:U\times V \to \R$:
+    $$\begin{aligned}
+        a(u,v) &= f(v) &&\forall v\in V,\\
+        a(u_N, v_N) &= f(v_N) &&\forall v_N\in V_N.
+    \end{aligned}$$
+This bilinear forms make sense as operator equations as they induce an $A:U\to V'$. Both problems are well-posed are both operators are surjective, which implies that 
+    $$ a(u-u_N, v) = 0  \qquad \forall v_N \in V_N. $$
+From the injectivity seen as an inf-sup condition we get that
+$$ \alpha \| u - u_N \|_U \leq \sup_{v_N\in V_N} \frac{a(u-u_N, v_N)}{\|v_N\|} \leq \| a \| \|u - \xi_N \|, $$
+for some $\xi_N$ in $U_N$, as in the Lax-Milgram proof. Taking the infimum in $\xi_N$ and setting $C=\|a\|$ yields that
+    $$ \| u - u_N \| \leq \frac{C}{\alpha}\text{dist}(u, U_N). $$
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Fredholm operators}
