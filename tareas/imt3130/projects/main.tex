@@ -72,9 +72,59 @@
             \item Study the discrete problem and show that the LBB conditions hold
             \item Validate numerically the convergence rates
         \end{itemize}
-    \item \textbf{The steady Navier-Stokes equation.}
-    \item \textbf{The incompressible elasticity equation.}
-    \item \textbf{The Keller-Segel equation.}
+    \item \textbf{The steady Navier-Stokes equation.} The steady Navier-Stokes equation consists in finding a velocity field $\vec u$ in $H_D^1(\Omega, \R^d)$ and a pressulre $p$ in $L^2(\Omega)$ such that
+            $$\begin{aligned}
+                -\mu \Delta \vec u + [\grad \vec u] \vec u + \grad p &= \vec f && \Omega \\
+                \dive \vec u &= 0 && \Omega \\
+                \vec u = \vec u_D && \Gamma_D \\
+                \ten \sigma(\vec u, p)\vec n &= \vec t && \Gamma_N, 
+            \end{aligned}$$
+            where $\vec f$ in $[H_d^1(\Omega, \R^d)]'$ is a given load, $\vec u_D$ in $H^{1/2}(\Gamma_D)$ is a Dirichlet boundary condition, $\ten\sigma(\vec u, p) = \mu\grad \vec u - p\ten I$ is the stress tensor, $\vec n$ is the normal vector, and $\vec t$ in $H^{-1/2}(\Gamma_N)$ is a given surface traction. The objective of this project is to investigate the techniques required to handle the nonlinearity of this problem in order to guarantee the existence (and possibly uniqueness) of solutions. This implies:
+            \begin{itemize}
+                \item To understand the saddle point structure of the problem
+                \item To formulate an auxiliary linear problem that defines a fixed-point operator
+                \item To establish conditions that guarantee contractiveness
+                \item To study extensions using Schauder and Brower fixed-point theorems
+                \item To use the fixed-point operator to devise a solution strategy of the nonlinear problem
+                \item To use such techniques to establish the convergence of a FEM scheme
+                \item To validate all theoretical claims numerically
+            \end{itemize}
+    \item \textbf{The unsteady Navier-Stokes equation.} Adding a time derivative to the momentum equation in the previous equation yields the unsteady NS equation. The scope of this project is to study the numerical instabilities that this equation presents, and some of the remedies that can be used. In particular, provide stabilization strategies for
+        \begin{itemize}
+            \item Inf-sup instabilities
+            \item Reynolds instabilities
+            \item Turbulence modeling
+        \end{itemize}
+        All tests shall be performed on a standard flow pasta a cylinder test (in 2D) to obtain physically relevant solutions to be compared. 
+    \item \textbf{The incompressible elasticity equation.} The incompressible elasticity equation is given by 
+            $$\begin{aligned}
+                -\dive\left( \ten P - \lambda J \ten F^{-T}\right) &= \vec f &&\Omega, \\
+                J&= 1 &&\Omega,
+            \end{aligned}$$
+            plus boundary conditions. The idea of this project is to correctly employ a Lagrange multiplier procedure to derive this problem for hyperelastic materials, and then use homotopy continuation to study certain bifurcation phenomena present in nonlinear elasticity. For this: 
+            \begin{itemize}
+                \item To correctly derive the model
+                \item To formulate a model with rotating boundary conditions (Dirichlet vs Neumann approaches)
+                \item To devise a parameter to be used for the continuation 
+                \item To push the model until bifurcation happens
+                \item To study polyconvexity and use materials that satisfy such a condition (and not convexity)
+                \item To revise (not in detail) bifurcation theory to justify the observations
+                \item What can be said about approximation properties? 
+            \end{itemize}
+    \item \textbf{The Keller-Segel equation.} Chemotaxis describes the dynamics of species that are on one hand attracted and on the other one repelled by certain species. This is described by the following system of equations: 
+        $$\begin{aligned}
+            \partial_t u &= \dive\left(D_1(u,c)\grad u - \chi(u,c) \grad c\right) && \Omega
+            \partial_t c &= D_2\Delta c - g(c) c + f(c) u && \Omega \\
+            [D_1(u,c)\grad u]\cdot \vec n = \grad c\cdot \vec n &= 0 && \partial \Omega,
+        \end{aligned} $$
+        with some initial conditions for $u,c$. The idea of this project is
+        \begin{itemize}
+            \item To propose a time discretization scheme for the model 
+            \item To study the well-posedness of the time-discrete problem
+            \item To establish the convergence of a FEM scheme for the semi-discrete problems
+            \item To study the concept of Turing instabilities that give rise to pattern formation
+            \item To simulate scenarios that are Turing stable and unstable. 
+        \end{itemize}
 
 \end{enumerate}
 
