@@ -141,6 +141,19 @@ Course projects must be developed in groups of 1--3 people. Presentation dates c
             \item Show the convergence rates of the model
             \item To implement the problem and validate all theoretical claims numerically
         \end{itemize}
+        
+    \item \textbf{Schroedinger equation.} [TODO]
+    \item \textbf{Wave equation.} The scope of this project is that of studying the wave equation, given by finding a function $u(t)$ in $H_0^1(\R^d)=\{v\in H^1(\R^d): \lim_{|x|\to \infty} v(x) = 0\}$  such that
+        $$ c\parder{^2 u}{t^2} -\Delta u=0 $$
+        for some initial condition. The scope of this project is to:
+        \begin{itemize}
+            \item Study the formulation of symplectic time integration methods that guarantee energy conservation
+            \item Study the formulation of boundary conditions that allow for a truncation of the domain (unbounded into a bounded one)
+            \item Implement different symplectic time integrators and study the well-posedness of the semi-discrete problem
+            \item Study the convergence of a FEM scheme for the semi-discrete problem and establish its convergence properties
+            \item Validate all theoretical propositions numerically
+        \end{itemize}
+
 \end{enumerate}
 
 \todo[inline,color=white!90!black]{\textbf{Nota: } Abriremos un foro en Canvas para revisar cualquier typo y/o error que haya en el enunciado.}
