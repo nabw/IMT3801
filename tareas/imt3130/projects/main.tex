@@ -128,9 +128,9 @@ Course projects must be developed in groups of 1--3 people. Presentation dates c
         \end{itemize}
 
     \item \textbf{An optimal control problem.} An optimal control problem is a PDE-constrained optimization problem. The idea of this project is to study the discretization of a simple optimal control problem, given by the volume control of the Laplacian. This can be stated as the following minimization problem: 
-        $$ \begin{aligned} \min_{u,\mu} &\frac 1 2 \|u - u_\Omega\|_0^2 + \alpha \|\mu\|_0^2 && \\
-            \text{s.t.} & -\Delta u = \mu &&  \Omega \\
-                        & u = 0 && \partial\Omega
+        $$ \begin{aligned} \min_{u,\mu} && \frac 1 2 \|u - u_\Omega\|_0^2 &+ \alpha \|\mu\|_0^2 && \\
+            \text{s.t.} && -\Delta u &= \mu &&  \Omega \\
+                        && u &= 0 && \partial\Omega
         \end{aligned} $$
         This project consists in:
         \begin{itemize}
@@ -141,8 +141,7 @@ Course projects must be developed in groups of 1--3 people. Presentation dates c
             \item Show the convergence rates of the model
             \item To implement the problem and validate all theoretical claims numerically
         \end{itemize}
-        
-    \item \textbf{Schroedinger equation.} [TODO]
+
     \item \textbf{Wave equation.} The scope of this project is that of studying the wave equation, given by finding a function $u(t)$ in $H_0^1(\R^d)=\{v\in H^1(\R^d): \lim_{|x|\to \infty} v(x) = 0\}$  such that
         $$ c\parder{^2 u}{t^2} -\Delta u=0 $$
         for some initial condition. The scope of this project is to:
@@ -154,8 +153,16 @@ Course projects must be developed in groups of 1--3 people. Presentation dates c
             \item Validate all theoretical propositions numerically
         \end{itemize}
 
+    \item \textbf{Flexibilities. } All projects will be assumed to be developed in high level software such as Firedrake/NGSolve/FEniCS/etc, so that the implementation of a FEM code is not part of the difficulty. Still, flexilibity with respect to the stated goals will be considered for projects if you want to explore different topics, such as: 
+        \begin{itemize}
+            \item Implementation in a lower-level library, such as \texttt{deal.ii} [C++], \texttt{PETSc} [C], Ferrite [Julia].
+            \item Study of preconditioning strategies using spectrally equivalent operators.
+            \item Study of parallel implementations.
+            \item Study of iterative methods such as Uzawa schemes, or any infinite-dimensional optimization problem.
+            \item Others you can think of.
+        \end{itemize}
+    It will be fundamental for all projects to have (i) \textbf{continuous and discrete analysis}, and (ii) \textbf{a convergence analysis} and (iii) \textbf{some physically relevant simulations}.
 \end{enumerate}
 
-\todo[inline,color=white!90!black]{\textbf{Nota: } Abriremos un foro en Canvas para revisar cualquier typo y/o error que haya en el enunciado.}
 \end{document}
 
