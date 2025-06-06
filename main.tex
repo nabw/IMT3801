@@ -30,15 +30,24 @@
 \newcommand{\mat}{\matrixsym}
 \newcommand{\ten}{\tensorsym}
 \DeclareMathOperator{\grad}{\nabla}
+\DeclareMathOperator{\Cof}{\text{Cof}}
+\DeclareMathOperator{\Grad}{\text{Grad}}
 \DeclareMathOperator{\dive}{\text{div}}
 \DeclareMathOperator{\curl}{\text{curl}}
-\newcommand{\tr}{\text{tr}\;}
+\DeclareMathOperator{\Dive}{\text{Div}}
+\DeclareMathOperator{\Curl}{\text{Curl}}
+\DeclareMathOperator{\tr}{\text{tr}}
+
 \newtheorem{remark}{Remark}
 \newtheorem{definition}{Definition}
 \newtheorem{note}{Note}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\D}{\mathcal{D}}
 \newcommand{\T}{\mathcal{T}}
+\newcommand{\tenF}{\ten{F}}
+\newcommand{\vX}{\nabla_X}
+\newcommand{\vx}{\nabla_x}
+\newcommand{\vvarphi}{\vec{\varphi}}
 \renewcommand{\P}{\mathcal{P}}
 
 \newcommand{\tin}{\text{in }}
@@ -2787,7 +2796,7 @@ The fundamental difference between parabolic and hyperbolic systems is the behav
     \begin{equation*}
         (\partial_t u, u) + (\mathcal{L}u,u) = 0.
     \end{equation*}
-    Note that $\partial_t(u^2) = 2u\dot{u}$, and thus we can write $(\partial_t u, u) = \int_\Omega u\dot{u} = \frac{1}{2}\int_\Omega \partial_t (u^2),$ which leads to
+    Note that $\partial_t(u^2) = 2u\dot{u}$, and thus we can write $(\partial_t u, u) = \int_\Omega u\dot{u} = \frac{1}{2}\int_\Omega \partial_t (u^2)$, which leads to
     \begin{equation*}
         \frac{1}{2}\int_\Omega \partial_t (u^2) + \underbrace{\int \mathcal{L}u \cdot u}_{:= a(u,u)} = 0, 
     \end{equation*}
@@ -2939,81 +2948,159 @@ We finally derive a convergence estimate for the fully-discrete problem. [TODO]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Continuum mechanics}\label{sec:continuum}
-A common application of the numerical analysis of PDEs is continuum mechanics, which consists of a framework of modeling mechanics through collections of deformable bodies. In this section, we set the background space $\mathcal{E} = \R^3$ as the standard Euclidean space. 
+A common application of the numerical analysis of PDEs is continuum mechanics, which consists of a framework of modeling mechanics through collections of deformable bodies. In this section, we set the background space $\mathcal{E} = \R^3$ as the standard Euclidean space equipped with a fixed orthonormal basis $\{\vec e_1, \vec e_2, \vec e_3\}$ where $\vec e_i\cdot\vec e_j = \delta_{ij}$ is the Kronecker delta.
+\subsection{Tensor calculus}
+\paragraph{Preliminary definitions} 
+We begin by introducing the \textit{Einstein notation}, where repeated indices imply summation:
+$$a_ib_i = a_1b_1 + \dots + a_n b_n.$$ 
+Here, the index $i$ is called a \textit{dummy index}, because its replacement with another symbol does not change the value of the sum. When an index is not summed over in a given term, we call it a \textit{free index}. With this notation, we write the \textit{dot (inner) product} $\vec a \cdot \vec b = a_ib_i$, and the matrix-vector multiplication $\ten A\vec b = A_{ij}b_j\vec e_i$. We now define the concept of a \textit{tensor} on the standard Euclidean space. 
+\begin{definition}[Tensor and tensor product]
+    A \textit{second-order tensor} $\ten T$ is a linear operator $\ten T\in \mathcal{L}(\R^3, \R^3)$. We write its action on $\vec u\in\R^3$ as $\ten T(\vec u) \equiv \ten T \vec u$. The \textit{components} $T_{ij}\in\R$ of $\ten T$ are defined as the $i$-th component of $\ten T\vec e_j$, i.e. $T_{ij}\vec e_i := \ten T\vec e_j$, or equivalently, $T_{ij} = \vec e_i\cdot\ten T\vec e_j$. Since $\mathcal{L}(\R^3,\R^3)$ and $\R^{3\times 3}$ are isomorphic, we can always uniquely identify a second-order tensor $\ten T$ via its coefficient matrix $[\ten T]\in\R^{3\times 3}$, and thus we just write $\ten T$ for ease of notation.
 
-\subsection{Tensor calculus, kinematics and strain}
-
-\paragraph{Preliminary definitions} As usual, we introduce the Einstein notation, where repeated indexes are added as $\vec X = X_i\vec e_i = X_1\vec e_1 + X_2\vec e_2 + X_3\vec e_3$. In this sense, the components of a vector $\vec X$ are the scalar values $X_j$ for $j=1,2,3$ and the components of a tensor $\ten M$ are the scalar values $M_{ij}$ for $i,j=1,2,3$. We define an additional operation called the \textit{tensor product} $\otimes$ between two vectors (not necessarily of the same length), where 
-\begin{align*}
-    \otimes: \R^m\times\R^n &\to \R^{m\times n}\\
-    (\vec a,\vec n) \mapsto \vec a\otimes\vec b := \vec a\vec b^\top.
-\end{align*}
-With this construction, the object $\vec a\otimes\vec b$ is a rank-2 tensor, which can be represented via its coefficient matrix. 
-\begin{definition}[Configuration]
-    We define the \textit{configuration} of a body $\Omega\subset \R^3$ as the physical space it occupies at time $t$. By convention, we set the reference (initial) time $t=0$, where the body occupies a known \textit{reference configuration} $\Omega_0$ with a known physical state, such as its velocity or physical boundary conditions. We assume $\Omega_0$ is a bounded, open and connected set.
+    Given two vectors $\vec a, \vec b\in\R^3$, we can construct a second-order tensor through the \textit{tensor product} $\otimes$, where we identify
+    \begin{align*}
+        \otimes: \R^3\times\R^3 &\to \R^{3\times 3}\\
+        (\vec a,\vec n) \mapsto \vec a\otimes\vec b := \vec a\vec b^\top.
+    \end{align*}
+    From the definition, we note that $(\vec a\otimes \vec b)_{ij} = a_ib_j$, and we define the action of $(\vec a\otimes\vec b)$ on vector $\vec c$ as 
+    \begin{equation*}
+        (\vec a\otimes\vec b)\vec c = (\vec b\cdot\vec c)\vec a.
+    \end{equation*}
+    
+    More generally, a $n$th-order tensor may be expressed in the form 
+    \begin{equation*}
+        A_{i_1i_2\dots i_n}\vec e_{i_1}\otimes\vec e_{i_2}\otimes\dots\otimes\vec e_{i_n},
+    \end{equation*}
+    which is a linear operator with $3^n$ components, and where its action on $\vec a\in\R^3$ yields a $(n-1)$th-order tensor:
+    \begin{equation*}
+        \left(A_{i_1i_2\dots i_n}\vec e_{i_1}\otimes\vec e_{i_2}\otimes\dots\otimes\vec e_{i_n}\right)\vec a = (\vec e_{i_n}\cdot\vec a)\left(A_{i_1i_2\dots i_n}\vec e_{i_1}\otimes\vec e_{i_2}\otimes\dots\otimes\vec e_{i_{n-1}}\right).
+    \end{equation*}
+    From this definition, a $0$th-order tensor is identified as a \textit{scalar}, a first-order tensor is identified as a \textit{vector}, a second-order tensor is identified as a \textit{matrix} and higher-order tensor are identified as higher-dimensional matrices.
 \end{definition}
-From the above definition, we see that the numerical analysis of any PDE we define in $\Omega_0$ will have to take into account the fact that the domains of integration themselves are subject to change, which will motivate several results below. Before continuing, it is essential to introduce the two frames of reference that will be important when analyzing our problems, which are the material (Lagrangian) frame and the spatial (Eulerian) frame. 
+\begin{definition}[Zero and identity tensor]
+    The zero tensor $\ten 0$ is the tensor whose components are all zero. The second-order \textit{identity tensor} $\ten I$ is defined by components as $I_{ij} = \delta_{ij}$, i.e. $\ten I = \delta_{ij} \vec e_i\otimes\vec e_j = \vec e_j \otimes \vec e_j$. Note that the Kronecker delta allows us to change indices in another factor of a given term, that is, 
+    \begin{equation*}
+        A_{ij}\delta_{jk} = \begin{cases}
+            A_{ij} &j=k\\
+            0 &j\neq k
+        \end{cases}
+        = A_{ik}.
+    \end{equation*}
+\end{definition}
+\begin{definition}[Cross product and the Levi-Civita symbol]
+    We define the \textit{Levi-Civita symbol} $\ten\varepsilon$ as the third-order tensor with components $\varepsilon_{ijk}$, where 
+    \begin{equation*}
+        \varepsilon_{ijk} = \begin{cases}
+            +1&\text{ if }(i,j,k)\in\{(1,2,3),(2,3,1),(3,1,2)\}\\
+            -1&\text{ if }(i,j,k)\in\{(1,3,2),(2,1,3),(3,2,1)\}\\
+            0&\text{ otherwise.}
+        \end{cases}
+    \end{equation*}
+    With this, given two vectors $\vec a, \vec b\in\R^3$, we can write their \textit{cross product} $\vec a\times\vec b\in\R^3$ as
+    \begin{equation*}
+        \vec a\times\vec b = \varepsilon_{ijk}a_jb_k\vec e_i.
+    \end{equation*}
+\end{definition}
+\begin{definition}{Product and transpose of second-order tensors}
+    The \textit{product} $\ten A \ten B$ of two second-order tensors $\ten A$, $\ten B$ is again a second-order tensor that follows $(\ten A\ten B)\vec u = \ten A(\ten B\vec u)$ for all vectors $\vec u$, whose components are 
+    \begin{equation*}
+        (\ten A \ten B)_{ij} = A_{ik}B_{kj}.
+    \end{equation*}
+    The (unique) \textit{transpose} of a second-order tensor $\ten A$ is denoted as $\ten A^\top$ and is given by the identity
+    \begin{equation*}
+        \vec v\cdot (\ten A^\top \vec u) = \ten A\vec v\cdot\vec u.
+    \end{equation*}
+    Clearly, $(\ten A^\top)^\top = \ten A$, and its components are $(\ten A^\top)_{ij} = A_{ji}$.
+\end{definition}
+\begin{definition}[Trace, contraction and determinant]
+    The \textit{trace} of a tensor $\ten A$ is the scalar denoted by $\tr \ten A = A_{ii}$, i.e. the sum of its diagonal. This operator is defined through the identity $\tr(\vec u\otimes\vec v) :=\vec u\cdot\vec v = u_iv_i$, which for a general tensor $\ten A$ yields 
+    \begin{equation*}
+        \tr\ten A = \tr(A_{ij}\vec e_i\otimes\vec e_j) = A_{ij}\tr(\vec e_i\otimes\vec e_j) = A_{ij}(\vec e_i\cdot\vec e_j) = A_{ij}\delta_{ij} = 
+    \end{equation*}
+    It follows from the definition that the trace is linear, does not change under transposition and is invariant under permutation of factors, that is, $\tr(\ten A\ten B) = \tr(\ten B\ten A)$. A \textit{contraction} of indices refers to identifying two indices and summing over them as if they were dummy indices, which is characterized for vectors by the dot product. The (double) contraction for second-order tensors is defined in terms of the trace as 
+    \begin{equation*}
+        \ten A:\ten B = A_{ij}B_{ij} = \tr(\ten A^\top\ten B) = \tr(\ten A\ten B^\top) = B_{ij}A_{ij} =  \ten B:\ten A,
+    \end{equation*}
+    and is a well-defined inner product over $\R^{n\times n}$. The \textit{determinant} of a tensor $\ten A$ is the scalar $\det \ten A$ and is defined as the determinant of the matrix $[\ten A]$ of its coefficients. This operation satisfies $\det(\ten A\ten B) = (\det\ten A)(\det\ten B)$ and $\det\ten A^\top = \det\ten A$. If a tensor has nonzero determinant, we say it is \textit{invertible}, i.e. there exists a unique tensor $\ten A^{-1}$ such that $\ten A \ten A^{-1} = \ten A^{-1}\ten A = \ten I$. 
+    An important observation is that the inverse and the transpose commute, so we write $(\ten A^\top)^{-1} = (\ten A^{-1})^\top = \ten A^{-\top}$. 
+\end{definition}
+
+To differentiate and derive useful properties that will simplify the calculations later on, we recall the cofactor matrix of $\ten A\in\R^{m\times n}$ is
+\begin{equation*}
+    \Cof(\ten A)_{ij} := (-1)^{i+j}\det \ten A'_{ij},
+\end{equation*}
+where $\ten A'_{ij}\in\R^{(m-1)\times(n-1)}$ is the same tensor after removing row $i$ and column $j$. Expanding this calculation we can deduce that 
+\begin{equation*}
+    \Cof(\ten A) := \det(\ten A)\ten A^{-\top}, 
+\end{equation*}
+and thus
+\begin{equation*}
+    \ten A\Cof(\ten A)^\top = (\det\ten A)\ten I. %! determinant as a function of the Levi-Civita tensor
+\end{equation*}
+
+%! Tensor derivative
+We highlight that there is a mild ambiguity in the definition of the divergence operator when in the mechanics community when acting on tensors, so we adopt the following convention: the divergence operator ($\Dive$ or $\dive$) acts row-wise, meaning that a tensor $\ten T$ has divergence that acts row-wise
+ one has that
+$$ [\vec \Dive \ten T]i = T{ij,j}. $$
+In contrast, the dot notation implies summation of contiguous indices, meaning that one instead has the dot product of the nabla operator as
+$$ [\nabla \cdot \ten T]i = \begin{bmatrix} \partial_1 & \hdots & \partial_d \end{bmatrix}^\top \ten T = T{ij,i}, $$
+i.e. a column-wise divergence.
+
+\subsection{Kinematics and strain}
+\begin{definition}[Configuration]
+    We define the \textit{configuration} of a body $\Omega_t\subset \R^3$ as the physical space it occupies at time $t$. By convention, we set the reference (initial) time $t=0$, where the body occupies a known \textit{reference configuration} $\Omega_0$ with a known physical state, such as its velocity or physical boundary conditions. We assume $\Omega_0$ is a bounded, open and connected set.
+\end{definition}
+From the above definition, we see that the numerical analysis of any PDE defined in $\Omega_0$ will have to take into account the fact that the domains of integration themselves are subject to change, which will motivate several results below. Before continuing, it is essential to introduce the two frames of reference that will be important when analyzing our problems, which are the material (Lagrangian) frame and the spatial (Eulerian) frame. 
 \begin{definition}[Material and spatial frames]
     The material, Lagrangian or reference frame corresponds to the reference configuration $\Omega_0$, with material coordinates $X_i$ that are written in uppercase symbols. The spatial, Eulerian or current frame corresponds to the configuration $\Omega_t$ at a time $t>0$, with spatial coordinates $x_i$ that are written in lowercase symbols. 
 
     A body is composed of \textit{material points}, which are assigned material coordinates $\vec X=X_i\vec e_i$ where $\{\vec e_i\}_i$ is an orthonormal basis of $\mathcal{E}$. After deformation and at time $t$, we have \textit{spatial points}, which are assigned spatial coordinates $\vec x = x_i\vec e_i$
 \end{definition}
+
+
 Since the two coordinates are related by a mapping without any constraints on its shape, we have to distinguish between differentiation in the material and spatial coordinates. To this end, we use uppercase and lowercase notation for each case. Explicitly, the gradient, divergence and curl operators in material coordinates are symbolized in nabla and text notation as 
 \begin{equation*}
-    \nabla_X \equiv \text{Grad} \qquad \nabla_X\cdot \equiv \text{Div} \qquad \nabla_X \times \equiv \text{Curl},
+    \vX \equiv \text{Grad} \qquad \vX\cdot \equiv \text{Div} \qquad \vX \times \equiv \text{Curl},
 \end{equation*}
 and in spatial coordinates, we denote them as 
 \begin{equation*}
-    \nabla_x \equiv \text{grad} \qquad \nabla_x\cdot \equiv \text{div} \qquad \nabla_x \times \equiv \text{curl}
+    \vx \equiv \text{grad} \qquad \vx\cdot \equiv \text{div} \qquad \vx \times \equiv \text{curl}
 \end{equation*}
-
 
 With these definitions, we are ready to define the vector field that correspond to the physical movement of the material points. 
 \begin{definition}[Deformation function]
-    The deformation function $\vec\varphi:\Omega_0\times\R^+ \to \Omega_t$ is the differentiable, injective and orientation-preserving\footnote{We say that the mapping preserves orientations if $\det\nabla_X\vec\varphi)>0$.} vector-valued mapping that describes the movement of point $\vec X$ in the material frame to point $\vec x$ in the spatial frame at time $t$, as 
+    The deformation function $\vvarphi:\Omega_0\times\R^+ \to \Omega_t$ is the differentiable, injective and orientation-preserving\footnote{We say that the mapping preserves orientations if $\det(\vX\vvarphi)>0$.} vector-valued mapping that describes the movement of point $\vec X$ in the material frame to point $\vec x$ in the spatial frame at time $t$, as 
     \begin{equation*}
-        \vec x = \vec\varphi(\vec X,t) = \vec\varphi_t(\vec X)\in\Omega_t.
+        \vec x = \vvarphi(\vec X,t) = \vvarphi_t(\vec X)\in\Omega_t.
     \end{equation*}
     We now omit the explicit dependence on $t$ unless strictly necessary. We also define the following maps: 
     \begin{itemize}
-        \item The displacement field is $$\vec u(\vec X) = \vec\varphi(\vec X) - \vec X = \vec x - \vec X.$$ 
-        \item The gradient deformation tensor is $$\ten F(\vec X) = \nabla_X \vec\varphi(\vec X) = \nabla_X \vec u(\vec X) + \ten I,$$ 
+        \item The displacement field is $$\vec u(\vec X) = \vvarphi(\vec X) - \vec X = \vec x - \vec X.$$ 
+        \item The gradient deformation tensor is $$\tenF(\vec X) = \vX \vvarphi(\vec X) = \vX \vec u(\vec X) + \ten I,$$ 
         whose components are $F_{ij}(\vec X) = \partial_j \varphi_i(\vec X) = \varphi_{i,j}(\vec X)$.
     \end{itemize}
 \end{definition}
 We now characterize some types of generic deformation maps. 
 \begin{itemize}
-    \item A deformation map $\vec\varphi$ is an affine deformation if $\vec\varphi(\vec X) = \vec a + \ten M \vec X$, where $\vec a$ represents the translation and $\ten M$ is a fixed tensor. 
-    \item A deformation map $\vec\varphi$ corresponds to rigid motion if $\vec \varphi(\vec X) = \vec a + \ten Q \vec X$, where $\ten Q$ is an orthogonal tensor with $\det\ten Q = \pm 1$ that represents rotation.
+    \item A deformation map $\vvarphi$ is an affine deformation if $\vvarphi(\vec X) = \vec a + \ten M \vec X$, where $\vec a$ represents the translation and $\ten M$ is a fixed tensor. 
+    \item A deformation map $\vvarphi$ corresponds to rigid motion if $\vvarphi(\vec X) = \vec a + \ten Q \vec X$, where $\ten Q$ is an orthogonal tensor with $\det\ten Q = \pm 1$ that represents rotation.
 \end{itemize}
-To differentiate and derive useful properties that will simplify the calculations later on, we recall the cofactor matrix of $\ten A\in\R^{m\times n}$ is
-\begin{equation*}
-    \text{Cof }(\ten A)_{ij} := (-1)^{i+j}\det \ten A'_{ij},
-\end{equation*}
-where $\ten A'_{ij}\in\R^{(m-1)\times(n-1)}$ is the same tensor after removing row $i$ and column $j$. Expanding this calculation we can deduce that 
-\begin{equation*}
-    \text{Cof }(\ten A) := \det(\ten A)\ten A^{-\top}, 
-\end{equation*}
-and thus
-\begin{equation*}
-    \ten A\text{Cof}(\ten A)^\top = (\det\ten A)\ten I.
-\end{equation*}
 
-\paragraph{Deformation metrics} Given a deformation map $\vec\varphi$ and a material point $\vec X$, we would like to precisely calculate the local deformation of line, surface and volume elements around $\vec X$. To this end, introduce the small perturbation $d\vec X$ with $\|d\vec X\|<<1$. By Taylor's theorem we can expand $d\vec x$ as
+\paragraph{Deformation metrics} Given a deformation map $\vvarphi$ and a material point $\vec X$, we would like to precisely calculate the local deformation of line, surface and volume elements around $\vec X$. To this end, introduce the small perturbation $d\vec X$ with $\|d\vec X\|\ll1$. By Taylor's theorem we can expand $d\vec x$ as
 \begin{equation*}
-    d\vec x = \vec\varphi(\vec X + d\vec X) - \vec\varphi(\vec X) \approx \vec\varphi(\vec X) + \nabla_X\vec\varphi(\vec X)\cdot d\vec X - \vec\varphi(\vec X) = \ten F d\vec X,
+    d\vec x = \vvarphi(\vec X + d\vec X) - \vvarphi(\vec X) \approx \vvarphi(\vec X) + \vX\vvarphi(\vec X)\cdot d\vec X - \vvarphi(\vec X) = \tenF d\vec X,
 \end{equation*}
-and thus the gradient deformation tensor $\ten F$ contains information about line element deformation. Directly from this, we note that distances change as 
+and thus the gradient deformation tensor $\tenF$ contains information about line element deformation. Directly from this, we note that distances change as 
 \begin{equation*}
-    \|d\vec x\| = \sqrt{d\vec x^\top d\vec x} = \sqrt{d\vec X^\top \ten F^\top \ten F d\vec X} = \sqrt{d\vec X^\top \ten C d\vec X},
+    \|d\vec x\| = \sqrt{d\vec x^\top d\vec x} = \sqrt{d\vec X^\top \tenF^\top \tenF d\vec X} = \sqrt{d\vec X^\top \ten C d\vec X},
 \end{equation*}
-where we have defined the \textit{Cauchy-Green right deformation tensor} $\ten C = \ten F^\top \ten F$. This tensor is clearly symmetric, and due to the orientation preservation of $\vec\varphi$, is positive definite. The calculation above does not quite compare $\|d\vec x\|$ with $\|d\vec X\|$ because of the square root. Thus, we square the above expression and subtract:
+where we have defined the \textit{Cauchy-Green right deformation tensor} $\ten C = \tenF^\top \tenF$. This tensor is clearly symmetric, and due to the orientation preservation of $\vvarphi$, is positive definite. The calculation above does not quite compare $\|d\vec x\|$ with $\|d\vec X\|$ because of the square root. Thus, we square the above expression and subtract:
 \begin{equation*}
     \|d\vec x\|^2 - \|d\vec X\|^2 = d\vec X^\top \ten C d\vec X - d\vec X^\top d\vec X = d\vec X^\top \underbrace{(\ten C - \ten I)}_{2\ten E} d\vec X,
 \end{equation*}
-where we now define the Euler-Lagrange deformation tensor $\ten E = \frac{1}{2}(\ten C - \ten I)$. Since $\ten F = \ten I + \nabla_X \vec u$, we get
+where we now define the Euler-Lagrange deformation tensor $\ten E = \frac{1}{2}(\ten C - \ten I)$. Since $\tenF = \ten I + \vX \vec u$, we get
 \begin{equation*}
-    \ten E = \frac{1}{2}(\nabla_X \vec u + (\nabla_X \vec u)^\top + (\nabla_X \vec u)^\top (\nabla_X\vec u)),
+    \ten E = \frac{1}{2}(\vX \vec u + (\vX \vec u)^\top + (\vX \vec u)^\top (\vX\vec u)),
 \end{equation*}
 and expanding the square root from the definition of the norm of $d\vec x$ above, we get
 \begin{align*}
@@ -3026,26 +3113,26 @@ which implies
 \begin{equation*}
     \|d\vec x\| - \|d\vec X\| \approx \frac{d\vec X^\top \ten E d\vec X^\top}{\|d\vec X\|} \implies \frac{\|d\vec x\| - \|d\vec X\|}{\|d\vec X\|} \approx \frac{d\vec X^\top \ten E d\vec X}{d\vec X^\top d\vec X}.
 \end{equation*}
-Indeed, when $\|\nabla_X \vec u\|<<1$, $\ten F = \ten I + \nabla_X \vec u$ is a small perturbation from the identity tensor, implying $(\nabla_X \vec u)^\top \nabla_X \vec u \approx 0$, and thus
+Indeed, when $\|\vX \vec u\|\ll1$, $\tenF = \ten I + \vX \vec u$ is a small perturbation from the identity tensor, implying $(\vX \vec u)^\top \vX \vec u \approx 0$, and thus
 \begin{align*}
-    \ten E &= \frac{1}{2}(\nabla_X \vec u + (\nabla_X \vec u)^\top + (\nabla_X \vec u)^\top (\nabla_X\vec u))\\
-    &\approx \frac{1}{2}(\nabla_X \vec u + (\nabla_X \vec u)^\top) =: \ten \varepsilon,
+    \ten E &= \frac{1}{2}(\vX \vec u + (\vX \vec u)^\top + (\vX \vec u)^\top (\vX\vec u))\\
+    &\approx \frac{1}{2}(\vX \vec u + (\vX \vec u)^\top) =: \ten \varepsilon,
 \end{align*}
-where $\ten\varepsilon$ is the \textit{infinitesimal deformation tensor}, which is used often in the mechanics of solids under small deformations. One can define many other deformation tensors, such as the left Cauchy-Green deformation tensor $\ten B = \ten F\ten F^\top$, which are useful in other contexts. 
+where $\ten\varepsilon$ is the \textit{infinitesimal deformation tensor}, which is used often in the mechanics of solids under small deformations. One can define many other deformation tensors, such as the left Cauchy-Green deformation tensor $\ten B = \tenF\tenF^\top$, which are useful in other contexts. 
 
-Let us now check how a simple unidirectional deformation is treated under this framework. Assume $\vec e_1 = (1,0,0)$, and we seek to see how $\vec X + (dX_1,0,0)$ changes under $\vec\varphi$. Let us denote the relative norm change $(\|d\vec x\| - \|d\vec X\|)/\|d\vec X\|$ in the $\vec e_1$ direction as $\rho_1$. We have $\|d\vec X\|^2 = d\vec X^\top d\vec X = dX_1^2$, and 
+Let us now check how a simple unidirectional deformation is treated under this framework. Assume $\vec e_1 = (1,0,0)$, and we seek to see how $\vec X + (dX_1,0,0)$ changes under $\vvarphi$. Let us denote the relative norm change $(\|d\vec x\| - \|d\vec X\|)/\|d\vec X\|$ in the $\vec e_1$ direction as $\rho_1$. We have $\|d\vec X\|^2 = d\vec X^\top d\vec X = dX_1^2$, and 
 \begin{equation*}
     \|d\vec x\|^2 = \begin{bmatrix}
         dX_1 & 0 & 0
     \end{bmatrix}\ten C \begin{bmatrix}
-        dX_1\\ 0\\ 0 = C_{11}dX_1^2,
-    \end{bmatrix}
+        dX_1\\ 0\\ 0
+    \end{bmatrix}  = C_{11}dX_1^2,
 \end{equation*}
 which combined imply $\|d\vec x\| = \sqrt{C_{11}} dX_1 = \sqrt{2E_{11} + 1}dX_1$. Thus,
 \begin{equation*}
     \rho_1 = \frac{\|d\vec x\| - \|d\vec X\|}{\|d\vec X\|} = \frac{(\sqrt{2E_{11} + 1} - 1)dX_1}{dX_1} = \sqrt{2E_{11}+1}-1,
 \end{equation*}
-and when deformations are small, $|E_{11}|<<1$, which results in 
+and when deformations are small, $|E_{11}|\ll1$, which results in 
 \begin{equation*}
     \rho_1 = \sqrt{2E_{11} + 1} - 1 \approx E_{11} \approx \varepsilon_{11}.
 \end{equation*}
@@ -3071,7 +3158,7 @@ whose first-order condition for optimality is
 \begin{equation*}
     0 = \frac{\partial L}{\partial\vec m} = 2\ten C\vec m - 2\lambda\vec m \implies \ten C\vec m = \lambda\vec m.
 \end{equation*}
-The pairs $(\lambda,\vec m)$ are called the \textit{principal stretch} and \textit{principal direction} of the deformation $\vec\varphi$, and correspond to eigenvalues and eigenvectors of $\ten C$. Since $\ten C$ is symmetric and positive definite, the three principal stretches $\lambda_i$, $i=1,2,3$ are all positive, and their corresponding principal directions $\vec m_i$ form an orthogonal basis, i.e. $\vec m_i\cdot\vec m_j = \delta_{ij}$. This diagonalization procedure induces the spectral decomposition of $\ten C$ as 
+The pairs $(\lambda,\vec m)$ are called the \textit{principal stretch} and \textit{principal direction} of the deformation $\vvarphi$, and correspond to eigenvalues and eigenvectors of $\ten C$. Since $\ten C$ is symmetric and positive definite, the three principal stretches $\lambda_i$, $i=1,2,3$ are all positive, and their corresponding principal directions $\vec m_i$ form an orthogonal basis, i.e. $\vec m_i\cdot\vec m_j = \delta_{ij}$. This diagonalization procedure induces the spectral decomposition of $\ten C$ as 
 \begin{equation*}
     \ten C = \sum_{i=1}^3 \lambda_i \vec m_i\otimes\vec m_i,
 \end{equation*}
@@ -3079,7 +3166,7 @@ with $\lambda_1\geq \lambda_2\geq \lambda_3$, and thus the maximum of $\Delta(\v
 
 The above description allows us to compute 1D deformation metrics. For 3D, let $d\vec X$, $d\vec Y$ and $d\vec Z$ be three infinitesimal vectors in the reference configuration, which span a parallelepiped of volume $dV = [d\vec X, d\vec Y, d\vec Z]$, where $[\vec a, \vec b, \vec c] := \vec a \cdot (\vec b \times \vec c)$ is the triple product. Let $d\vec x, d\vec y, d\vec z$ be the corresponding infinitesimal vectors in the spatial configuration, which span a volume $dv = [d\vec x, d\vec y, d\vec z]$. The volume rate of change $J$ is called \textit{Jacobian} and is given by
 \begin{equation*}
-    J := \frac{dv}{dV} = |\det\ten F|.
+    J := \frac{dv}{dV} = |\det\tenF|.
 \end{equation*}
 For 2D deformation metrics, we consider $d\vec X$ and $d\vec Y$, which are mapped to $d\vec x$ and $d\vec y$ in the spatial configuration, respectively. Let $dA = \|d\vec X\times d\vec Y\|$ and $da = \|d\vec x\times d\vec y\|$, and define the \textit{unit normal vectors}
 \begin{equation*}
@@ -3087,94 +3174,97 @@ For 2D deformation metrics, we consider $d\vec X$ and $d\vec Y$, which are mappe
 \end{equation*}
 We can relate the area differentials $dA$ and $da$ via the Nanson-Piola formula, which states that 
 \begin{equation*}
-    \vec n da = J\ten F^{-\top} \vec N dA.
+    \vec n da = J\tenF^{-\top} \vec N dA.
 \end{equation*}
 \begin{definition}[Invariants of a tensor]
     Let $\ten Q$ be an orthogonal tensor and $\ten A$ be an arbitrary tensor. We say that a function $I(\ten A)$ is an invariant of $\ten A$ if and only if $I(\ten Q\ten A\ten Q^\top) = I(\ten A)$. In our setting, we can reduce to the case $\ten A = \ten C$ symmetric and positive definite, and here we have the invariants
     \begin{align*}
         I_1(\ten C) &= \tr\ten C = \lambda_1 + \lambda_2 + \lambda_3\\
-        I_2(\ten C) &= \tr \text{Cof}(\ten C) = \lambda_1\lambda_2 + \lambda_1\lambda_3 + \lambda_2\lambda_3\\
-        I_3(\ten C) &= \det\ten C = \lambda_1\lambda_2\lambda_3 = J^2.
+        I_2(\ten C) &= \tr \Cof(\ten C) = \lambda_1\lambda_2 + \lambda_1\lambda_3 + \lambda_2\lambda_3\\
+        I_3(\ten C) &= \det\ten C = \lambda_1\lambda_2\lambda_3 = J^2.  
     \end{align*}
+    \begin{proof}
+        Homework.
+    \end{proof}
 \end{definition}
 
-\paragraph{Deformation rates} Let us recall that the movement described by $\vec\varphi$ changes in space, which we have reviewed earlier by studying $\vec\varphi(\vec X + d\vec X)$, but also changes in time, since $\vec x =\vec \varphi(\vec X, t)$. We seek to understand how $\vec x$ changes with time. 
+\paragraph{Deformation rates} Let us recall that the movement described by $\vvarphi$ changes in space, which we have reviewed earlier by studying $\vvarphi(\vec X + d\vec X)$, but also changes in time, since $\vec x =\vvarphi(\vec X, t)$. We seek to understand how $\vec x$ changes with time. 
 \begin{definition}[Velocity and acceleration]
-    In the material frame, the material velocity $\vec V$ and the material acceleration $\vec A$ are defined as the time derivative of $\vec\varphi$, that is, 
+    In the material frame, the material velocity $\vec V$ and the material acceleration $\vec A$ are defined as the time derivative of $\vvarphi$, that is, 
     \begin{align*}
-        \vec V(\vec X, t) := \dot{\vec \varphi}(\vec X, t) &= \frac{\partial \vec\varphi(\vec X, t)}{\partial t}\\
-        \vec A(\vec X, t) := \ddot{\vec \varphi}(\vec X, t) &= \frac{\partial^2 \vec\varphi(\vec X, t)}{\partial t^2} = \dot{\vec v}(\vec X, t).
+        \vec V(\vec X, t) := \dot{\vvarphi}(\vec X, t) &= \frac{\partial \vvarphi(\vec X, t)}{\partial t}\\
+        \vec A(\vec X, t) := \ddot{\vvarphi}(\vec X, t) &= \frac{\partial^2 \vvarphi(\vec X, t)}{\partial t^2} = \dot{\vec v}(\vec X, t).
     \end{align*}
     These vector fields are functions of $\vec X$, and thus they can be evaluated at material points. To evaluate in spatial points $\vec x$, we naturally define
     \begin{align*}
-        \vec v(\vec x, t) := (\vec V \circ \varphi^{-1})(\vec x, t) &= V(\vec \varphi^{-1}(\vec x, t), t)\\
-        \vec a(\vec x, t) := (\vec A \circ \varphi^{-1})(\vec x, t) &= A(\vec \varphi^{-1}(\vec x, t), t).
+        \vec v(\vec x, t) := (\vec V \circ \varphi^{-1})(\vec x, t) &= V(\vvarphi^{-1}(\vec x, t), t)\\
+        \vec a(\vec x, t) := (\vec A \circ \varphi^{-1})(\vec x, t) &= A(\vvarphi^{-1}(\vec x, t), t).
     \end{align*}
 \end{definition}
 These definitions are correct in practice, but the second derivative requires more caution. To see this, let $\psi=\psi(\vec X,t)$ be a scalar field defined in the Lagrangian frame. Its total time derivative is, by the chain rule, given by
 \begin{align*}
-    \frac{\mathrm{d}\psi(\vec X, t)}{\mathrm{d}t} &= \frac{\partial\psi(\vec X, t)}{\partial t } + \nabla_X \psi(\vec X, t)\cdot \underbrace{\frac{\partial\vec X}{\partial t}}_{=0} \tag{$\vec X$ does not depend on $t$}\\
+    \frac{\mathrm{d}\psi(\vec X, t)}{\mathrm{d}t} &= \frac{\partial\psi(\vec X, t)}{\partial t } + \vX \psi(\vec X, t)\cdot \underbrace{\frac{\partial\vec X}{\partial t}}_{=0} \tag{$\vec X$ does not depend on $t$}\\
     &= \frac{\partial\psi(\vec X, t)}{\partial t }.
 \end{align*}
 Thus, the material acceleration is simply 
 \begin{equation*}
-    \vec A(\vec X, t) = \frac{\mathrm{d}V(\vec X, t)}{\mathrm{d}t} = \frac{\partial V(\vec X, t)}{\partial t} = \frac{\partial^2 \vec\varphi(\vec X, t)}{\partial t^2}.
+    \vec A(\vec X, t) = \frac{\mathrm{d}V(\vec X, t)}{\mathrm{d}t} = \frac{\partial V(\vec X, t)}{\partial t} = \frac{\partial^2 \vvarphi(\vec X, t)}{\partial t^2}.
 \end{equation*}
-By contrast, if $\psi=\psi(\vec x, f)$ is a scalar field defined in the Eulerian frame, we now have to keep the $frac{\partial\vec x}{\partial t}$ term due to the definition $\vec x = \vec\varphi(\vec X, t)$, and thus
+By contrast, if $\psi=\psi(\vec x, f)$ is a scalar field defined in the Eulerian frame, we now have to keep the $\frac{\partial\vec x}{\partial t}$ term due to the definition $\vec x = \vvarphi(\vec X, t)$, and thus
 \begin{align*}
-    \frac{\mathrm{d}\psi(\vec x, t)}{\mathrm{d}t} &= \frac{\partial\psi(\vec x, t)}{\partial t } + \nabla_x \psi(\vec x, t)\cdot \frac{\partial\vec x(\vec x, t)}{\partial t}\\&
-    = \frac{\partial\psi(\vec x, t)}{\partial t } + \nabla_x \psi(\vec x, t)\cdot \vec v(\vec x, t),
+    \frac{\mathrm{d}\psi(\vec x, t)}{\mathrm{d}t} &= \frac{\partial\psi(\vec x, t)}{\partial t } + \vx \psi(\vec x, t)\cdot \frac{\partial\vec x(\vec x, t)}{\partial t}\\&
+    = \frac{\partial\psi(\vec x, t)}{\partial t } + \vx \psi(\vec x, t)\cdot \vec v(\vec x, t),
 \end{align*}
 which is commonly written with the last term interchanged, that is, 
 \begin{equation*}
-    \frac{\mathrm{d}\psi(\vec x, t)}{\mathrm{d}t} = \frac{\partial\psi(\vec x, t)}{\partial t } + \vec v(\vec x, t) \cdot \nabla_x \psi(\vec x, t).
+    \frac{\mathrm{d}\psi(\vec x, t)}{\mathrm{d}t} = \frac{\partial\psi(\vec x, t)}{\partial t } + \vec v(\vec x, t) \cdot \vx \psi(\vec x, t).
 \end{equation*}
 This total derivative is referred to as the \textit{material derivative}, which we define as the differential operator
 \begin{equation*}
-    \frac{D}{Dt} := \frac{\partial}{\partial t} + \vec v \cdot \nabla_x.
+    \frac{D}{Dt} := \frac{\partial}{\partial t} + \vec v \cdot \vx.
 \end{equation*}
 Consequently, the spatial acceleration has an additional term:
 \begin{equation*}
-    \vec a(\vec x, t) = \frac{Dv(\vec x, t)}{Dt} = \frac{\partial \vec v(\vec x, t)}{\partial t} + \vec v(\vec x, t) \cdot \nabla_x \vec v(\vec x, t),  
+    \vec a(\vec x, t) = \frac{Dv(\vec x, t)}{Dt} = \frac{\partial \vec v(\vec x, t)}{\partial t} + \vec v(\vec x, t) \cdot \vx \vec v(\vec x, t),  
 \end{equation*}
 or more compactly, 
 \begin{equation*}
-    \vec a = \partial_t \vec v + \vec v\cdot\nabla_x\vec v.
+    \vec a = \partial_t \vec v + \vec v\cdot\vx\vec v.
 \end{equation*}
 This last term corresponds to the product of a vector and a rank-2 tensor, which we have to analyze more carefully. Explicitly, we have
 \begin{equation*}
-    \vec v \cdot \nabla_x \vec v = v_j \frac{\partial \vec v}{\partial x_j} = v_j \frac{\partial (v_i\vec e_i)}{\partial x_j} = v_j \frac{\partial v_i}{\partial x_j}\vec e_i,
+    \vec v \cdot \vx \vec v = v_j \frac{\partial \vec v}{\partial x_j} = v_j \frac{\partial (v_i\vec e_i)}{\partial x_j} = v_j \frac{\partial v_i}{\partial x_j}\vec e_i,
 \end{equation*}
 whose $i$-th component is 
 \begin{equation*}
-    (\vec v \cdot \nabla_x \vec v)_i = v_j \frac{\partial \vec v}{\partial x_j} = v_j \frac{\partial (v_i\vec e_i)}{\partial x_j} = \frac{\partial v_i}{\partial x_j} v_j.
+    (\vec v \cdot \vx \vec v)_i = v_j \frac{\partial \vec v}{\partial x_j} = v_j \frac{\partial (v_i\vec e_i)}{\partial x_j} = \frac{\partial v_i}{\partial x_j} v_j.
 \end{equation*}
-Note that this last term resembles matrix-vector $\ten A\vec b$ multiplication, since $(\ten A\vec b)_i = A_{ij}b_j$. Indeed, by this observation it is correct to write the coefficient matrix of the rank-2 tensor $\nabla_x \vec v$ as 
+Note that this last term resembles matrix-vector $\ten A\vec b$ multiplication, since $(\ten A\vec b)_i = A_{ij}b_j$. Indeed, by this observation it is correct to write the coefficient matrix of the rank-2 tensor $\vx \vec v$ as 
 \begin{equation*}
-    \nabla_x \vec v = \begin{bmatrix}
+    \vx \vec v = \begin{bmatrix}
         \frac{\partial v_1}{\partial x_1} & \frac{\partial v_1}{\partial x_2} & \frac{\partial v_1}{\partial x_3}\\
         \frac{\partial v_2}{\partial x_1} & \frac{\partial v_2}{\partial x_2} & \frac{\partial v_2}{\partial x_3}\\
         \frac{\partial v_3}{\partial x_1} & \frac{\partial v_3}{\partial x_2} & \frac{\partial v_3}{\partial x_3}
     \end{bmatrix},
 \end{equation*}
-and thus $\vec v\cdot\nabla_x\vec v = (\nabla_x\vec v)\vec v$, and the spatial acceleration is finally written as 
+and thus $\vec v\cdot\vx\vec v = (\vx\vec v)\vec v$, and the spatial acceleration is finally written as 
 \begin{equation*}
-    \vec a = \partial_t \vec v + (\nabla_x \vec v)\vec v.
+    \vec a = \partial_t \vec v + (\vx \vec v)\vec v.
 \end{equation*}
-In the spatial frame, we can further define the velocity gradient $\ten L$ as 
+In the spatial frame, we can further define the velocity gradient $\ten L$ in the Eulerian frame as 
 \begin{equation*}
-    \ten L(\vec x, t) = \nabla_x\vec v(\vec x, t),
+    \ten L(\vec x, t) = \vx\vec v(\vec x, t),
 \end{equation*}
 and thus acceleration can be written even more compactly as $\vec a = \partial_t \vec v + \ten L \vec v$. We can check that the time derivative of the gradient deformation tensor is 
 \begin{align*}
-    \dot{\ten F}(\vec X, t) &= \partial_t \nabla_X \vec\varphi(\vec X, t)\\
-    &= \nabla_X (\partial_t \vec\varphi(\vec X, t)) \tag{$\partial_t\partial_{X_i} = \partial_{X_i}\partial_t$}\\
-    &= \nabla_X \dot{\vec x}(\vec X, t)\\
-    &= \nabla_X \vec v(\vec\varphi(\vec X, t), t)\\
-    &= \nabla_x \vec v(\vec\varphi(\vec X, t), t) \nabla_X \vec\varphi(\vec X, t)\tag{chain rule}\\
-    &= \ten L(\vec\varphi(\vec X, t), t) \ten F,
+    \dot{\tenF}(\vec X, t) &= \partial_t \vX \vvarphi(\vec X, t)\\
+    &= \vX (\partial_t \vvarphi(\vec X, t)) \tag{$\partial_t\partial_{X_i} = \partial_{X_i}\partial_t$}\\
+    &= \vX \dot{\vec x}(\vec X, t)\\
+    &= \vX \vec v(\vvarphi(\vec X, t), t)\\
+    &= \vx \vec v(\vvarphi(\vec X, t), t) \vX \vvarphi(\vec X, t)\tag{chain rule}\\
+    &= \ten L_m(\vvarphi(\vec X, t), t) \tenF,
 \end{align*}
-where we remark that $\ten L = \ten L(\vec x,t) \neq \ten L(\vec\varphi(\vec X, t), t)$. We now introduce a lemma to decompose $\ten L$ into a symmetric and a skew-symmetric part. 
+% where we denoted the material version o sf $\ten L=\ten L(\vec x,t)$ as $\ten L_m = \ten L_m(\vec X,t) = \ten L(\vvarphi(\vec X, t))$,. We now introduce a lemma to decompose $\ten L$ into a symmetric and a skew-symmetric part. 
 \begin{lemma}
     Let $\ten A$ be a second-order tensor. Then, $\ten A$ can be decomposed uniquely as a sum of a symmetric tensor $\ten S$ and a skew-symmetric tensor $\ten W$, i.e. $\ten A = \ten S + \ten W$. 
     \begin{proof}
@@ -3187,7 +3277,7 @@ The velocity gradient $\ten L$ is often separated using this lemma, as
 \end{equation*}
 where $\ten D = \frac{1}{2}(\ten L + \ten L^\top )$ is called the \textit{deformation rate tensor}, and $\ten W = \frac{1}{2}(\ten L - \ten L^\top )$ is called the \textit{spin tensor}. The latter is associated to the rotation of the body, as we can show that if $\vec v$ is the velocity, then 
 \begin{equation*}
-    \ten W \vec v = \frac{1}{2}\vec \omega \times \vec v =: (\nabla_x\times \vec v)\times v,
+    \ten W \vec v = \frac{1}{2}\vec \omega \times \vec v =: (\vx\times \vec v)\times v,
 \end{equation*}
 where $\frac{1}{2}\vec\omega$ corresponds to the angular velocity and $\vec\omega$ is the \textit{vorticity} vector. 
 
@@ -3195,26 +3285,26 @@ Now we seek to calculate the derivative of the invariants in space and time.
 \begin{lemma}
     For any tensor $\ten A$, the tensor derivative of its determinant is 
     \begin{equation*}
-        \frac{\partial(\det\ten A)}{\partial \ten A} = \text{Cof}(\ten A) = \det(\ten A) \ten A^{-\top}.
+        \frac{\partial(\det\ten A)}{\partial \ten A} = \Cof(\ten A) = \det(\ten A) \ten A^{-\top}.
     \end{equation*}
 \end{lemma}
 \begin{lemma}
     The cofactor matrix of the deformation gradient tensor is solenoidal, i.e. 
     \begin{equation*}
-        \nabla_X \cdot \text{Cof}(\ten F) = \vec 0.
+        \vX \cdot \Cof(\tenF) = \vec 0.
     \end{equation*}
 \end{lemma}
-With these results, we now can compute the time derivative of $\det\ten F$.
+With these results, we now can compute the time derivative of $\det\tenF$.
 \begin{lemma}
-    The time derivative of $\det \ten F$ is 
+    The time derivative of $\det \tenF$ is 
     \begin{equation*}
-        \dot{\overline{\det(\ten F)}} = \text{Cof}(\ten F) : \dot{\ten F} = (\det\ten F)\dive \vec v.
+        \dot{\overline{\det(\tenF)}} = \Cof(\tenF) : \dot{\tenF} = (\det\tenF)\dive \vec v.
     \end{equation*}
 \end{lemma}
 \paragraph{Change of coordinates and the Reynolds transport theorem}
-Now we address the domain changes along the deformation, in order to be able to integrate quantities over arbitrary configurations. We note that that $\vec\varphi:\Omega_0 \to \Omega_t$, and thus by the change of variables theorem, the volume integral of a spatial scalar field $\vec f(\vec x)$ is 
+Now we address the domain changes along the deformation, in order to be able to integrate quantities over arbitrary configurations. We note that $\vvarphi_t:\Omega_0 \to \Omega_t$, and thus by the change of variables theorem, the volume integral of a spatial scalar field $\vec f(\vec x)$ is 
 \begin{equation*}
-    \int_{\Omega_t}f(\vec x)dv = \int_{\Omega_0} f(\vec\varphi(\vec X)) |\det(\nabla_X\vec\varphi)| dV = f(\vec\varphi(\vec X)) JdV.
+    \int_{\Omega_t}f(\vec x)dv = \int_{\Omega_0} f(\vvarphi(\vec X)) |\det(\vX\vvarphi)| dV = \int_{\Omega_0}f(\vvarphi(\vec X)) JdV.
 \end{equation*}
 The integral quantities may represent time-varying values, such as the mass of a body, which may be redistributed in time as mass varies its concentration (density) over the domain, which is also time-varying. To define the time derivatives of spatial integrals, recall the Leibniz rule for integration, which precisely gives an expression for this kind of expression in 1D:
 \begin{equation*}
@@ -3224,19 +3314,19 @@ The extension of this rule to higher dimensions is known as the Reynolds transpo
 \begin{theorem}[Reynolds transport theorem]
     Let $\Omega_0$ and $\Omega_t$ be the material and spatial configurations, and let $\psi(\vec x, t)$ be a tensor or vector field in the spatial frame. Then, 
     \begin{align*}
-        \frac{\mathrm{d}}{\mathrm{d}t}\int_{\Omega_t} &= \int_{\Omega_t}\frac{\partial\psi(\vec x, t)}{\partial t}dv + \int_{\Omega_t}\nabla_x\cdot (\psi\vec v)dv\\
+        \frac{\mathrm{d}}{\mathrm{d}t}\int_{\Omega_t} &= \int_{\Omega_t}\frac{\partial\psi(\vec x, t)}{\partial t}dv + \int_{\Omega_t}\vx\cdot (\psi\vec v)dv\\
         &= \int_{\Omega_t}\frac{\partial\psi(\vec x, t)}{\partial t}dv + \int_{\partial\Omega_t}\psi\vec v\cdot\vec n ds,
     \end{align*}
     where $\vec n$ is the exterior unit normal vector to $\partial\Omega_t$. 
     \begin{proof}
         We prove directly from the left hand side: 
         \begin{align*}
-            \frac{\mathrm{d}}{\mathrm{d}t}\int_{\Omega_t} \psi(\vec x, t)dv &= \frac{\mathrm{d}}{\mathrm{d}t} \int_{\Omega_0} \psi(\vec\varphi(\vec X, t), t) \det\ten F(\vec X, t) dV \tag{change of variable theorem}\\
-            &= \int_{\Omega_0} \frac{\mathrm{d}}{\mathrm{d}t} (\psi(\vec x, t)\det\ten F) dV\tag{$\Omega_0$ fixed in time}\\
-            &= \int_{\Omega_0} \left(\frac{\mathrm{d}\psi}{\mathrm{d}t}\det\ten F + \psi \frac{\partial \det\ten F}{\partial t}\right)dV \tag{product rule, $\ten F = \ten F(\vec X, t)$}\\
-            &= \int_{\Omega_0} \left(\left(\frac{\partial \psi}{\partial t} + \vec v \cdot \nabla_x \psi\right)\det\ten F + \psi \frac{\partial \det\ten F}{\partial t}\right)dV \tag{Reynolds transport theorem}\\
-            &= \int_{\Omega_0} \left(\left(\frac{\partial \psi}{\partial t} + \vec v \cdot \nabla_x \psi\right)\det\ten F + \psi \frac{\partial \det\ten F}{\partial t}\right)dV \tag{$\dot{\overline{\det(\ten F)}} = (\det\ten F)\dive \vec v.$}\\
-            &= \int_{\Omega_0}\frac{\partial \psi}{\partial t} J dV + \int_{\Omega_0} \left(\vec v \cdot \nabla_x \psi + \psi \dive \vec v\right)J dV\\
+            \frac{\mathrm{d}}{\mathrm{d}t}\int_{\Omega_t} \psi(\vec x, t)dv &= \frac{\mathrm{d}}{\mathrm{d}t} \int_{\Omega_0} \psi(\vvarphi(\vec X, t), t) \det\tenF(\vec X, t) dV \tag{change of variable theorem}\\
+            &= \int_{\Omega_0} \frac{\mathrm{d}}{\mathrm{d}t} (\psi(\vec x, t)\det\tenF) dV\tag{$\Omega_0$ fixed in time}\\
+            &= \int_{\Omega_0} \left(\frac{\mathrm{d}\psi}{\mathrm{d}t}\det\tenF + \psi \frac{\partial \det\tenF}{\partial t}\right)dV \tag{product rule, $\tenF = \tenF(\vec X, t)$}\\
+            &= \int_{\Omega_0} \left(\left(\frac{\partial \psi}{\partial t} + \vec v \cdot \vx \psi\right)\det\tenF + \psi \frac{\partial \det\tenF}{\partial t}\right)dV \tag{Reynolds transport theorem}\\
+            &= \int_{\Omega_0} \left(\left(\frac{\partial \psi}{\partial t} + \vec v \cdot \vx \psi\right)\det\tenF + \psi \frac{\partial \det\tenF}{\partial t}\right)dV \tag{$\dot{\overline{\det(\tenF)}} = (\det\tenF)\dive \vec v.$}\\
+            &= \int_{\Omega_0}\frac{\partial \psi}{\partial t} J dV + \int_{\Omega_0} \left(\vec v \cdot \vx \psi + \psi \dive \vec v\right)J dV\\
             &= \int_{\Omega_t} \frac{\partial \psi}{\partial t} dv + \int_{\Omega_0} \dive(\psi \vec v) JdV \tag{product rule}\\
             &= \int_{\Omega_t} \frac{\partial \psi}{\partial t} dv + \int_{\Omega_t} \dive(\psi \vec v) dv \\
             &= \int_{\Omega_t} \frac{\partial \psi}{\partial t} dv + \int_{\partial\Omega_t} \psi \vec v \cdot \vec n ds. \tag{divergence theorem}
@@ -3245,7 +3335,7 @@ The extension of this rule to higher dimensions is known as the Reynolds transpo
 \end{theorem}
 
 \subsection{Mechanics and stress}
-So far, we have discussed how to describe finite strain via deformation metrics, which stem from the deformation map $\vec\varphi$. Here, we introduced the deformation gradient tensor $\ten F$, from which we defined the Cauchy-Green right deformation tensor $\ten C$ and the Euler-Lagrange deformation tensor $\ten E$. We now have to connect these deformations to the actual forces and tensions that exist in a body. To this end, we need to define traction vector fields and the stress tensors.
+So far, we have discussed how to describe finite strain via deformation metrics, which stem from the deformation map $\vvarphi$. Here, we introduced the deformation gradient tensor $\tenF$, from which we defined the Cauchy-Green right deformation tensor $\ten C$ and the Euler-Lagrange deformation tensor $\ten E$. We now have to connect these deformations to the actual forces and tensions that exist in a body. To this end, we need to define traction vector fields and the stress tensors.
 \begin{definition}[Traction vectors and stress tensors]
     Let $d\vec f$ be the internal force acting on a 2D differential element $da$ in $\vec x$ at time $t$. We define the \textit{spatial traction field} $\vec t=\vec t(\vec n, \vec x, t)$ as 
     \begin{equation*}
@@ -3253,9 +3343,9 @@ So far, we have discussed how to describe finite strain via deformation metrics,
     \end{equation*}
     Since the spatial configuration $\Omega_t$ is initially unknown, it is convenient to define the \textit{material traction field} $\vec T(\vec N, \vec X, t)$ analogously as 
     \begin{equation*}
-        d\vec f\circ\vec\varphi = \vec T(\vec N, \vec X, t) dA,
+        d\vec f\circ\vvarphi = \vec T(\vec N, \vec X, t) dA,
     \end{equation*}
-    where we also recall the Nanson-Piola formula $\vec n da = J\ten F^{-\top} \vec N dA$. Cauchy's stress theorem states that there exists a unique second-order tensor $\ten \sigma$, called the \text{Cauchy stress tensor}, such that 
+    where we also recall the Nanson-Piola formula $\vec n da = J\tenF^{-\top} \vec N dA$. Cauchy's stress theorem states that there exists a unique second-order tensor $\ten \sigma$, called the \text{Cauchy stress tensor}, such that 
     \begin{equation*}
         \vec t(\vec x, \vec n, t) = \ten\sigma(\vec x, t)\vec n,
     \end{equation*}
@@ -3265,11 +3355,11 @@ So far, we have discussed how to describe finite strain via deformation metrics,
     \end{equation*}
     From the above relations, we can show that $\ten \sigma$ and $\ten P$ are related via 
     \begin{equation*}
-        \ten P = J\ten\sigma\ten F^{-\top} \qquad (\ten\sigma =J^{-1}\ten P\ten F^{\top}),
+        \ten P = J\ten\sigma\tenF^{-\top} \qquad (\ten\sigma =J^{-1}\ten P\tenF^{\top}),
     \end{equation*}
     and we further define the \textit{second Piola-Kirchhoff stress tensor} $\ten S$ as 
     \begin{equation*}
-        \ten S := \ten F^{-1}\ten P = J\ten F^{-1}\ten\sigma\ten F^{-\top}.
+        \ten S := \tenF^{-1}\ten P = J\tenF^{-1}\ten\sigma\tenF^{-\top}.
     \end{equation*}
     The tensor $\ten S$ formally corresponds to the \textit{pullback} of $\ten \sigma$, or equivalently, $\ten\sigma$ is the \textit{push-forward} of $\ten S$. % This notion is further studied in \ref{holzapfel}.
 \end{definition}
@@ -3289,44 +3379,45 @@ which depends on time since the domain and the density distribution may change o
 \end{equation*}
 By the Reynolds transport theorem, this expression is equivalent to 
 \begin{equation*}
-    \int_{B_t}\left(\frac{\partial\rho}{\partial t} + \nabla_x\cdot(\rho \vec v)\right) dv = 0,
+    \int_{B_t}\left(\frac{\partial\rho}{\partial t} + \vx\cdot(\rho \vec v)\right) dv = 0,
 \end{equation*}
 and since $B_t$ is arbitrary, the above equality implies by the localization theorem that the argument of the integral is pointwise zero in $\Omega_t$, that is, 
 \begin{equation*}
-    \frac{\partial\rho}{\partial t} + \nabla_x\cdot(\rho \vec v) = 0.
+    \frac{\partial\rho}{\partial t} + \vx\cdot(\rho \vec v) = 0.
 \end{equation*}
 To write these equations in the material frame, we can rewrite the law using the change of variables theorem to get 
 \begin{equation*}
-    \int_{B_0} \frac{\mathrm{d}}{\mathrm{d}t}(\rho(\vec\varphi(\vec X, t), t) \det\ten F)dV = 0.
+    \int_{B_0} \frac{\mathrm{d}}{\mathrm{d}t}(\rho(\vvarphi(\vec X, t), t) \det\tenF)dV = 0.
 \end{equation*} 
 The localization theorem then implies 
 \begin{equation*}
-    \frac{\mathrm{d}}{\mathrm{d}t}(\rho(\vec\varphi(\vec X, t), t) \det\ten F(\vec X,t)) = 0,
+    \frac{\mathrm{d}}{\mathrm{d}t}(\rho(\vvarphi(\vec X, t), t) \det\tenF(\vec X,t)) = 0,
 \end{equation*}
-and thus $\rho(\vec\varphi(\vec X, t), t) \det\ten F(\vec X, t)$ is constant. In particular, it is equal to the value it has at $t=0$, which implies
+and thus $\rho(\vvarphi(\vec X, t), t) \det\tenF(\vec X, t)$ is constant. In particular, it is equal to the value it has at $t=0$, which implies
 \begin{equation*}
-    \rho(\vec\varphi(\vec X, t), t) \det\ten F(\vec X, t) = \rho(\underbrace{\vec\varphi(\vec X, 0)}_{\vec X}, 0)\underbrace{\det\ten F(\vec X, 0)}_{\ten I} = \rho(\vec X, 0) =: \rho_0(\vec X) \quad \forall t,
+    \rho(\vvarphi(\vec X, t), t) \det\tenF(\vec X, t) = \rho(\underbrace{\vvarphi(\vec X, 0)}_{\vec X}, 0)\underbrace{\det\tenF(\vec X, 0)}_{\ten I} = \rho(\vec X, 0) =: \rho_0(\vec X) \quad \forall t,
 \end{equation*} 
 where we defined the initial density field $\rho_0$. This translates to
 \begin{equation*}
-    \rho_0(\vec X) = \rho(\vec x) \det\ten F(\vec X),
+    \rho_0(\vec X) = \rho(\vec x) \det\tenF(\vec X),
 \end{equation*}
 where the dependence in time is implicitly written in $\vec x$. This equation corresponds to conservation of mass in the material frame. 
 
-There exist some particular cases where the conservation of mass can be further simplified. We say that a deformation map $\vec\varphi$ is associated with an \textit{isochoric} deformation if and only if the volume of the body $\mathcal{V}(t) = \int_{B_t}1dv$ does not change under deformation, that is, 
+There exist some particular cases where the conservation of mass can be further simplified. We say that a deformation map $\vvarphi$ is associated with an \textit{isochoric} deformation if and only if the volume of the body $\mathcal{V}(t) = \int_{B_t}1dv$ does not change under deformation, that is, 
 \begin{equation*}
-    0 = \frac{D\mathcal{V}(t)}{Dt} = \frac{D}{Dt} \int_{B_t} 1dv \overset{(*)}{=}\int_{B_t} \left(\frac{\partial (1)}{\partial t} + \dive(1\vec v)\right)dv = \int_{B_t} (\dive\vec v)dv,
+    0 = \frac{D\mathcal{V}(t)}{Dt} = \frac{D}{Dt} \int_{B_t} 1dv = \int_{B_t} \left(\frac{\partial (1)}{\partial t} + \dive(1\vec v)\right)dv = \int_{B_t} (\dive\vec v)dv,
 \end{equation*}
-and since $B_t$ is arbitrary, we have $\dive \vec v = 0$. This is known as the \textit{incompressibility condition}, which applied to the  conservation of mass in the spatial frame, yields
+and since $B_t$ is arbitrary, we have $\dive \vec v = 0$. This is known as the \textit{incompressibility condition}, which applied to the conservation of mass in the spatial frame, yields
 \begin{align*}
     0 &= \frac{\partial\rho}{\partial t} + \dive(\rho\vec v) \\
-    &= \frac{\partial\rho}{\partial t} + \rho\dive\vec v + \vec v \cdot\nabla_x \rho\\
+    &= \frac{\partial\rho}{\partial t} + \rho\dive\vec v + \vec v \cdot\vx \rho\\
     &= \frac{D\rho}{Dt},
 \end{align*}
 where we used the incompressibility condition and the definition of the material derivative. Thus, the conservation of mass for an isochoric deformation is reduced to 
 \begin{equation*}
     \frac{D\rho}{Dt} = 0.
 \end{equation*}
+In the material frame, this condition is equivalent to $J=1$, that is, $dv$ is constant and the body does not undergo volumetric changes. 
 \paragraph{Conservation of linear momentum} In a 1D setting we know that Newton's second law holds, which relates a deformation metric (acceleration, $a$) to the forces $F_j$ via the mass $m$ as 
 \begin{equation*}
     ma = \sum_j F_j,
@@ -3369,51 +3460,39 @@ where the last step follows from the divergence theorem. Substituting this and d
 \end{equation*}
 which is the spatial and differential form of this law. To go back to the Lagrangian description, we note that by the change of variable theorem
 \begin{equation*}
-    \int_{B_t} \rho(\vec x, t) \frac{D\vec v(\vec x, t)}{Dt} dv = \int_{B_0} \frac{D\vec v(\vec x, t)}{Dt} \rho(\vec x, t) \det\ten F(\vec X, t)dV = \int_{B_0} \rho_0(\vec X) \ddot{\vec\varphi}(\vec X, t) dV,
+    \int_{B_t} \rho(\vec x, t) \frac{D\vec v(\vec x, t)}{Dt} dv = \int_{B_0} \frac{D\vec v(\vec x, t)}{Dt} \rho(\vec x, t) \det\tenF(\vec X, t)dV = \int_{B_0} \rho_0(\vec X) \ddot{\vvarphi}(\vec X, t) dV,
 \end{equation*}
 where we used the Lagrangian conservation of mass and the fact that we are now integrating over the reference configuration, which is fixed in time. Analogously, the force vectors are 
 \begin{equation*}
-    \vec F_b(t) = \int_{B_0} \vec f(\vec\varphi(\vec X, t), t) \det\ten F(\vec X, t) dV = \int_{B_0} \vec f_0(\vec X, t) dV,
+    \vec F_b(t) = \int_{B_0} \vec f(\vvarphi(\vec X, t), t) \det\tenF(\vec X, t) dV = \int_{B_0} \vec f_0(\vec X, t) dV,
 \end{equation*}
-where we defined $\vec f_0(\vec X, t) := \vec f(\vec\varphi(\vec X, t), t) \det\ten F(\vec X,t)$, i.e. $\vec f_0 = J\vec f$, and similarly, 
+where we defined $\vec f_0(\vec X, t) := \vec f(\vvarphi(\vec X, t), t) \det\tenF(\vec X,t)$, i.e. $\vec f_0 = J\vec f$, and similarly, 
 \begin{equation*}
-    \int_{B_t} \dive\ten\sigma(\vec x, t) dv = \int_{B_0} \dive\ten\sigma(\vec x, t) \det\ten F(\vec X, t) dV = \int_{B_0} \text{Div }\ten P(\vec X, t) dV,
+    \int_{B_t} \dive\ten\sigma(\vec x, t) dv = \int_{B_0} \dive\ten\sigma(\vec x, t) \det\tenF(\vec X, t) dV = \int_{B_0} \text{Div }\ten P(\vec X, t) dV,
 \end{equation*}
-where we transformed the tensions by using the relationship $\ten P = J \ten \sigma\ten F^{-\top}$:
+where we transformed the tensions by using the relationship $\ten P = J \ten \sigma\tenF^{-\top}$:
 \begin{align*}
-    \nabla_X\cdot \ten P(\vec X, t) &= \nabla_X \cdot(J\ten\sigma\ten F^{-\top})\\
-    &= \nabla_X \ten\sigma : (J\ten F^{-\top}) + \ten\sigma \nabla_X \cdot (J\ten F^{-\top}) \tag{product rule}\\
-    &= \nabla_X \ten\sigma : (J\ten F^{-\top}) \tag{$\text{Cof} \ten F = J\ten F^{-\top}$ has zero divergence}\\
-    &= (\ten F \nabla_x\ten\sigma) : J\ten F^{-\top} \tag{chain rule}\\
-    &= \nabla_x \ten\sigma : J\ten I\\
-    &= J \nabla_x\cdot \ten\sigma\\
-    &= (\det\ten F)\dive\ten\sigma.
+    \vX\cdot \ten P(\vec X, t) &= \vX \cdot(J\ten\sigma\tenF^{-\top})\\
+    &= \vX \ten\sigma : (J\tenF^{-\top}) + \ten\sigma \vX \cdot (J\tenF^{-\top}) \tag{product rule}\\
+    &= \vX \ten\sigma : (J\tenF^{-\top}) \tag{$\Cof \tenF = J\tenF^{-\top}$ has zero divergence}\\
+    &= (\tenF \vx\ten\sigma) : J\tenF^{-\top} \tag{chain rule}\\
+    &= \vx \ten\sigma : J\ten I\\
+    &= J \vx\cdot \ten\sigma\\
+    &= (\det\tenF)\dive\ten\sigma.
 \end{align*}
 Thus, conservation of linear momentum in the Lagrangian frame and in integral form is written as 
 \begin{equation*}
-    \int_{B_0}\rho_0(\vec X) \ddot{\vec\varphi}(\vec X, t)dV = \int_{B_0}\vec f_0(\vec X, t) dV + \int_{B_0} \nabla_X \cdot \ten P(\vec X, t)dV,
+    \int_{B_0}\rho_0(\vec X) \ddot{\vvarphi}(\vec X, t)dV = \int_{B_0}\vec f_0(\vec X, t) dV + \int_{B_0} \vX \cdot \ten P(\vec X, t)dV,
 \end{equation*}
 and by using the same arguments as above, we can derive its differential form, which yields
 \begin{equation*}
-    \rho_0(\vec X)\ddot{\vec\varphi}(\vec X, t) = \vec f_0(\vec X, t) + \nabla_X \cdot\ten P(\vec X, t).
+    \rho_0(\vec X)\ddot{\vvarphi}(\vec X, t) = \vec f_0(\vec X, t) + \vX \cdot\ten P(\vec X, t).
 \end{equation*}
 \paragraph{Conservation of angular momentum} In the same fashion as before, we define the angular momentum of $B(t)$ as the vector quantity $\vec H(t)$ given by
 \begin{equation*}
     \vec H(t) := \int_{B_t} \vec x \times \rho(\vec x, t)\vec v(\vec x, t)dv.
 \end{equation*}
-Here, it is convenient to introduce the \textit{Levi-Civita symbol} $\varepsilon$ as the third-order tensor given by components as
-\begin{equation*}
-    \varepsilon_{ijk} = \begin{cases}
-        +1&\text{ if}(i,j,k)\in\{(1,2,3),(2,3,1), (3,1,2)\}\\
-        -1&\text{ if}(i,j,k)\in\{(3,2,1),(2,1,3), (1,3,2)\}\\
-        0 &\text{ otherwise.}
-    \end{cases}
-\end{equation*}
-This third-order tensor has $27$ components, but only $6$ of them are nonzero, which are $+1$ when the indexes are an even permutation of $1$, $2$ and $3$, and $-1$ when they are an odd permutation. This allows us to write the cross product between $\vec a, \vec b\in\R^3$ as
-\begin{equation*}
-    \vec a\times\vec b = \varepsilon_{ijk}a_jb_k\vec e_i.
-\end{equation*}
-We also can show that the material derivative of $\vec x\times\vec v$ is given by 
+We can show that the material derivative of the cross product $\vec x\times\vec v$ is given by 
 \begin{equation*}
     \frac{D(\vec x\times \vec v)}{Dt} = \vec x \times \frac{D\vec v}{Dt}.
 \end{equation*}
@@ -3425,14 +3504,14 @@ which corresponds to the integral form of the conservation of angular momentum i
 \begin{equation*}
     \ten\sigma(\vec x, t) = \ten\sigma^\top(\vec x, t).
 \end{equation*}
-In the Lagrangian frame, we can directly use the relationship between $\ten \sigma$ and $\ten P$. Note that $\ten \sigma = J^{-1}\ten P \ten F^{\top}$, and $\ten\sigma^\top = J^{-1}\ten F \ten P^\top$. Thus, we get the conservation of angular momentum in the material frame
+In the Lagrangian frame, we can directly use the relationship between $\ten \sigma$ and $\ten P$. Note that $\ten \sigma = J^{-1}\ten P \tenF^{\top}$, and $\ten\sigma^\top = J^{-1}\tenF \ten P^\top$. Thus, we get the conservation of angular momentum in the material frame
 \begin{equation*}
-    \ten \sigma = \ten \sigma^\top \iff \ten P \ten F^\top = \ten F \ten P^\top.
+    \ten \sigma = \ten \sigma^\top \iff \ten P \tenF^\top = \tenF \ten P^\top.
 \end{equation*}
-It is important to remark that, in general, $\ten P$ is not symmetric. However, the second Piola-Kirchhoff tensor $\ten S = \ten F^{-1}\ten P$ could be: note that 
+It is important to remark that, in general, $\ten P$ is not symmetric. However, the second Piola-Kirchhoff tensor $\ten S = \tenF^{-1}\ten P$ could be: note that 
 \begin{align*}
-    \ten S &= \ten F^{-1}\ten P = J\ten F^{-1}\ten \sigma\ten F^{-\top}\\
-    \ten S^\top &= J(\ten F^{-1}\ten \sigma\ten F^{-\top})^\top = J\ten F^{-1}\ten \sigma^\top \ten F^{-\top},
+    \ten S &= \tenF^{-1}\ten P = J\tenF^{-1}\ten \sigma\tenF^{-\top}\\
+    \ten S^\top &= J(\tenF^{-1}\ten \sigma\tenF^{-\top})^\top = J\tenF^{-1}\ten \sigma^\top \tenF^{-\top},
 \end{align*}
 where we conclude that $\ten S$ is symmetric if and only if $\ten \sigma$ is symmetric, i.e. conservation of angular momentum holds in the spatial frame. Thus, the conservation of angular momentum in the Lagrangian frame can be equivalently written as 
 \begin{equation}
@@ -3450,9 +3529,9 @@ where the first term is associated to the body forces, and the second term to th
     &= \int_{\partial B_t}(\ten\sigma^\top\vec v)\cdot\vec n ds\\
     &= \int_{\partial B_t}(\ten\sigma\vec v)\cdot\vec n ds \tag{conservation of angular momentum}\\
     &= \int_{B_t}\dive(\ten\sigma\vec v)dv\tag{divergence theorem}\\
-    &= \int_{B_t}\dive\ten\sigma \cdot \vec v dv + \int_{B_t}\ten\sigma:\nabla_x\vec v dv.
+    &= \int_{B_t}\dive\ten\sigma \cdot \vec v dv + \int_{B_t}\ten\sigma:\vx\vec v dv.
 \end{align*}
-Now we split $\nabla_x\vec v = \ten L = \ten D + \ten W$ in its symmetric and skew-symmetric parts, and since the scalar product (tensor contraction, $:$) of a symmetric and a skew-symmetric tensor is zero, we obtain
+Now we split $\vx\vec v = \ten L = \ten D + \ten W$ in its symmetric and skew-symmetric parts, and since the scalar product (tensor contraction, $:$) of a symmetric and a skew-symmetric tensor is zero, we obtain
 \begin{align*}
     \mathcal{P}(t) &= \int_{B_t}(\vec f + \dive\ten\sigma) \cdot\vec v dv + \int_{B_t}\ten\sigma:\ten D dv\\
     &= \int_{B_t} \rho\frac{D\vec v}{Dt}\cdot \vec v dv + \int_{B_t}\ten\sigma:\ten D dv \tag{conservation of linear momentum},
@@ -3465,19 +3544,19 @@ where we define $K(t) = \frac{1}{2}\int_{B_t}\rho \vec v\cdot\vec v dv = \frac{1
 \begin{equation*}
      \mathcal{P}(t) = \frac{DK(t)}{Dt} + \int_{B_t}\ten\sigma:\ten D dv.
 \end{equation*}
-In the Lagrangian frame, we check that the second term, which corresponds to the power associated to mechanical stress, can be rewritten in terms of $\ten F$ and $\ten P$ as
+In the Lagrangian frame, we check that the second term, which corresponds to the power associated to mechanical stress, can be rewritten in terms of $\tenF$ and $\ten P$ as
 \begin{align*}
-    \int_{B_t}\ten\sigma:\ten D dv &= \int_{B_0}\ten\sigma :\nabla_x \vec v JdV \tag{change of variables theorem}\\
-    &= \int_{B_0} J\tr(\ten\sigma(\dot{\ten F}\ten F^{-1})^\top) dV \tag{$\ten A:\ten B = \tr(\ten A^\top \ten B)$}\\
-    &= \int_{B_0} J\tr((\ten\sigma\ten F^{-\top})\dot{\ten F}^\top) dV\\
-    &= \int_{B_0} J (\ten\sigma\ten F^{-\top}):\dot{\ten F} dV\\
-    &= \int_{B_0}\ten P:\dot{\ten F} dV,
+    \int_{B_t}\ten\sigma:\ten D dv &= \int_{B_0}\ten\sigma :\vx \vec v JdV \tag{change of variables theorem}\\
+    &= \int_{B_0} J\tr(\ten\sigma(\dot{\tenF}\tenF^{-1})^\top) dV \tag{$\ten A:\ten B = \tr(\ten A^\top \ten B)$}\\
+    &= \int_{B_0} J\tr((\ten\sigma\tenF^{-\top})\dot{\tenF}^\top) dV\\
+    &= \int_{B_0} J (\ten\sigma\tenF^{-\top}):\dot{\tenF} dV\\
+    &= \int_{B_0}\ten P:\dot{\tenF} dV,
 \end{align*}
 and thus mechanical power in the Lagrangian frame is
 \begin{equation*}
-    \mathcal{P}(t) = \frac{D}{Dt}\left(\frac{1}{2}\int_{B_0}\rho_0 \dot{\vec\varphi}\cdot\dot{\vec\varphi} dV\right) + \int_{\partial B_0} \ten P : \dot{\ten F}dV.
+    \mathcal{P}(t) = \frac{D}{Dt}\left(\frac{1}{2}\int_{B_0}\rho_0 \dot{\vvarphi}\cdot\dot{\vvarphi} dV\right) + \int_{\partial B_0} \ten P : \dot{\tenF}dV.
 \end{equation*}
-As with the conservation of angular momentum, we can write this definition in terms of the second Piola-Kirchhoff tensor $\ten S$ by noting that $\ten P:\dot{\ten F} = \ten S:\dot{\ten E}$. With this definition, we recall the first law of thermodynamics, which states that the rate of change of the total energy of a body is given by the heat influx and the mechanical power applied to the body. More precisely, if we denote heat by $Q$, we have
+As with the conservation of angular momentum, we can write this definition in terms of the second Piola-Kirchhoff tensor $\ten S$ by noting that $\ten P:\dot{\tenF} = \ten S:\dot{\ten E}$. With this definition, we recall the first law of thermodynamics, which states that the rate of change of the total energy of a body is given by the heat influx and the mechanical power applied to the body. More precisely, if we denote heat by $Q$, we have
 \begin{equation*}
     \frac{D(K+U)}{Dt} = \dot{Q} + \mathcal{P},
 \end{equation*}
@@ -3485,7 +3564,7 @@ where $U$ is the internal energy of the system. This internal energy can come fr
 \begin{equation*}
     U(t) = \int_{B_t} \rho(\vec x, t) e(\vec x, t) dv = \int_{B_0}\rho_0(\vec X) e_m(\vec X, t)dV,
 \end{equation*}
-where we have written $e_m = e\circ\vec\varphi$. The heat exchange term is defined as 
+where we have written $e_m = e\circ\vvarphi$. The heat exchange term is defined as 
 \begin{equation*}
     \dot{Q}(t) = \int_{B_t}r(\vec x, t)dv - \int_{\partial B_t}\vec q(\vec x, t)\cdot\vec n(\vec x)ds,
 \end{equation*}
@@ -3495,13 +3574,13 @@ where $r(\vec x, t)$ is the internal heating per unit volume, and $\vec q(\vec x
 \end{equation*}
 By virtue of the localization theorem, we readily obtain the differential form
 \begin{equation*}
-    \rho\left(\frac{\partial e}{\partial t} + \vec v\cdot\nabla_x e\right) = \ten\sigma : \ten D + r - \dive \vec q.
+    \rho\left(\frac{\partial e}{\partial t} + \vec v\cdot\vx e\right) = \ten\sigma : \ten D + r - \dive \vec q.
 \end{equation*}
 To pull back this equation to the reference frame, we note that a vector field $\vec q$ in the spatial frame is transformed to $\vec q_0$ in the reference frame as 
 \begin{equation*}
-    \vec q_0 = J \ten F^{-1}\vec q.
+    \vec q_0 = J \tenF^{-1}\vec q.
 \end{equation*}
-We further define $r_0(\vec X,t) = Jr(\vec\varphi(\vec X, t), t)$ from the change of variables theorem. Substituting and droppping the integrals by the localization theorem, we obtain the differential form of the conservation of energy in the Lagrangian frame, that is,
+We further define $r_0(\vec X,t) = Jr(\vvarphi(\vec X, t), t)$ from the change of variables theorem. Substituting and droppping the integrals by the localization theorem, we obtain the differential form of the conservation of energy in the Lagrangian frame, that is,
 \begin{equation*}
     \rho_0\dot{e}_m = \ten S:\dot{\ten E} + r_0 - \text{Div }\vec q_0.
 \end{equation*}
@@ -3516,36 +3595,36 @@ Note that this inequality is written in terms of extensive (integrated) quantiti
 \end{equation*}
 which can be reorganized and simplified to obtain the \textit{Clausius-Duhem inequality}
 \begin{equation*}
-    \rho\frac{D\eta}{Dt} + \nabla_x\cdot\left(\frac{1}{\theta}\vec q\right) - \frac{r}{\theta} \geq 0.
+    \rho\frac{D\eta}{Dt} + \vx\cdot\left(\frac{1}{\theta}\vec q\right) - \frac{r}{\theta} \geq 0.
 \end{equation*}
 Here, we can interpret $r/\theta$ as an internal entropy source, whereas $\frac{1}{\theta}\vec q$ is an entropy flux. By pulling back to the Lagrangian frame, we obtain the inequality
 \begin{equation*}
-    \rho_0\dot{\eta}_m + \nabla_X \cdot\left(\frac{1}{\theta_m}\vec q_0\right) - \frac{r_0}{\theta_m}\geq 0.
+    \rho_0\dot{\eta}_m + \vX \cdot\left(\frac{1}{\theta_m}\vec q_0\right) - \frac{r_0}{\theta_m}\geq 0.
 \end{equation*}
 We can also rewrite both inequalities by substituting the Helmholtz free energy $\psi = e - \theta\eta$, which yields in the spatial frame
 \begin{equation*}
-    -\rho\frac{D\psi}{Dt} - \rho\eta \frac{D\theta}{Dt} + \ten\sigma:\ten D - \frac{1}{\theta}\nabla_x \theta\cdot\vec q \geq 0
+    -\rho\frac{D\psi}{Dt} - \rho\eta \frac{D\theta}{Dt} + \ten\sigma:\ten D - \frac{1}{\theta}\vx \theta\cdot\vec q \geq 0
 \end{equation*}
 and in the material frame
 \begin{equation*}
-    -\rho_0 \dot{\psi}_m - \rho_0 \eta_m \dot{\theta}_m + \ten S:\dot{\ten E} - \frac{1}{\theta_m}\vec q_0\cdot \nabla_X \theta_m \geq 0.
+    -\rho_0 \dot{\psi}_m - \rho_0 \eta_m \dot{\theta}_m + \ten S:\dot{\ten E} - \frac{1}{\theta_m}\vec q_0\cdot \vX \theta_m \geq 0.
 \end{equation*}
 We will further use this form to deduce \textit{physically consistent} constitutive models that actually satisfy physical laws. Note that in a stationary system, where all time derivatives are zero, the Clausius-Duhem inequality in the spatial frame reduces to
 \begin{equation*}
-    -\frac{1}{\theta}\vec q \cdot\nabla_x\theta \geq 0.
+    -\frac{1}{\theta}\vec q \cdot\vx\theta \geq 0.
 \end{equation*}
-This inequality states that $\vec q$ is a vector whose direction indicates heat flux, and $\nabla_x\theta$ indicates the direction of fastest temperature growth. Thus, since the inner product must be positive, and due to the minus sign, the vector $\vec q$ points from high temperature regions to low temperature regions.
+This inequality states that $\vec q$ is a vector whose direction indicates heat flux, and $\vx\theta$ indicates the direction of fastest temperature growth. Thus, since the inner product must be positive, and due to the minus sign, the vector $\vec q$ points from high temperature regions to low temperature regions.
 \subsection{Constitutive models}
 Let us go back to the linear momentum conservation, which is the time-dependent, vector-valued, possibly nonlinear partial differential equation 
 \begin{equation*}
-    \rho_0 \ddot{\vec u} = \vec f_0 + \nabla_X \cdot(\ten F\ten S).
+    \rho_0 \ddot{\vec u} = \vec f_0 + \vX \cdot(\tenF\ten S).
 \end{equation*}
-At $t=0$, it is reasonable to assume that one knows the initial density function $\rho_0(\vec X) = \rho(\vec x, 0)$, the initial stress $\ten S(\vec X, 0)$ and $\vec f(\vec x, t)$ for all $t>0$. Thus, we would have to solve for $\vec u$, i.e. 3 components, which will allow us to compute $\vec\varphi(\vec X, t)$, and thus $\ten F = \nabla_X\vec u$, $\vec f_0 = J\vec f$, but also we would have to solve for $\ten S$, which due to the symmetry $\ten S = \ten S^\top$ has 6 components. Thus, we need to solve for $9$ components with the $3$ equations that the PDE has, and therefore the system is not solvable. We will necessarily need a \textit{constitutive model}, i.e. a functional relationship between stress and deformation, to reduce the number of unknowns. Since the PDE has $3$ components, the most direct choice is to find a relationship $\ten S = \ten S(\vec u)$ or $\ten\sigma = \ten \sigma(\vec u)$. 
+At $t=0$, it is reasonable to assume that one knows the initial density function $\rho_0(\vec X) = \rho(\vec x, 0)$, the initial stress $\ten S(\vec X, 0)$ and $\vec f(\vec x, t)$ for all $t>0$. Thus, we would have to solve for $\vec u$, i.e. 3 components, which will allow us to compute $\vvarphi(\vec X, t)$, and thus $\tenF = \vX\vec u$, $\vec f_0 = J\vec f$, but also we would have to solve for $\ten S$, which due to the symmetry $\ten S = \ten S^\top$ has 6 components. Thus, we need to solve for $9$ components with the $3$ equations that the PDE has, and therefore the system is not solvable. We will necessarily need a \textit{constitutive model}, i.e. a functional relationship between stress and deformation, to reduce the number of unknowns. Since the PDE has $3$ components, the most direct choice is to find a relationship $\ten S = \ten S(\vec u)$ or $\ten\sigma = \ten \sigma(\vec u)$. 
 
 So far, the body $\Omega_t$ has been thought to be any substance with finite volume, such as a liquid, a solid or a gas. The constitutive model must consist of an expression that reflects how the deformation depends on the stresses (and possibly other variables) of each substance. Some examples: 
 \begin{enumerate}
     \item Solids are able to resist and restore temporal and permanent deformations in any direction. Some solids exhibit distinct failure and fracture behavior, and have different levels of compressibility. Also, solid density and mechanical properties vary with temperature, which allows, for example, for metal to be forged (deformed) to a certain shape only at high temperatures, undergoing plastic deformation while increasing their elastic modulus.
-    \item Fluids do not resist shear stress, only normal stresses through hydrostatic pressure. Their stress derives from the deformation rate tensor $\ten D$, often through the tensor itself (viscous part) or its trace $\frac{1}{2} \tr (\nabla_x\vec v + (\nabla_x \vec v)^\top) = \nabla_x\cdot \vec v$ (compressible part). Most fluids are thermofluids, whose density and viscosity varies with temperature.
+    \item Fluids do not resist shear stress, only normal stresses through hydrostatic pressure. Their stress derives from the deformation rate tensor $\ten D$, often through the tensor itself (viscous part) or its trace $\frac{1}{2} \tr (\vx\vec v + (\vx \vec v)^\top) = \vx\cdot \vec v$ (compressible part). Most fluids are thermofluids, whose density and viscosity varies with temperature.
 \end{enumerate}
 In general, there exist constitutive models for the stress, the heat flow, the internal energy and the entropy. These constitutive models must satisfy a series of physical hypotheses: 
 \begin{enumerate}
@@ -3559,32 +3638,32 @@ These hypotheses are extended with additional conditions when required. When cho
 
 We now study some explicit cases.
 \paragraph{Constitutive modeling of solids} 
-Assuming that $\ten S$ deppends only on the deformation $\vec\varphi$, we first obtain that $\ten S$ depends on $\ten F$ due to the locality principlpe, and from the observer independence, we conclude that $\ten S$ is a function of $\ten C=\ten F^\top \ten F$ or $\ten E = \frac{1}{2}(\ten C - \ten I)$. Some examples are the linear elastic model $\ten S(\ten E) = \lambda\tr(\ten E)\ten I + 2\mu\ten E$, and the neohookean model $\ten S(\ten C) = \frac{\lambda}{2}(J^2-1)\ten C^{-1} + \mu (\ten I - \ten C^{-1})$, where $\lambda,\mu$ are called the Lamé parameters. These parameters are obtained from experiments, and are related to the Young modulus $E$ and the Poisson ratio $\nu$. Since $\ten F=\ten I + \nabla_X \vec u$, $\ten C$ and $\ten E$ are also functions of $\vec u$, and thus $\ten S(\ten E)$ also is a function of $\vec u$, thus allowing us to rewrite the conservation of linear momentum as
+Assuming that $\ten S$ deppends only on the deformation $\vvarphi$, we first obtain that $\ten S$ depends on $\tenF$ due to the locality principlpe, and from the observer independence, we conclude that $\ten S$ is a function of $\ten C=\tenF^\top \tenF$ or $\ten E = \frac{1}{2}(\ten C - \ten I)$. Some examples are the linear elastic model $\ten S(\ten E) = \lambda\tr(\ten E)\ten I + 2\mu\ten E$, and the neohookean model $\ten S(\ten C) = \frac{\lambda}{2}(J^2-1)\ten C^{-1} + \mu (\ten I - \ten C^{-1})$, where $\lambda,\mu$ are called the Lamé parameters. These parameters are obtained from experiments, and are related to the Young modulus $E$ and the Poisson ratio $\nu$. Since $\tenF=\ten I + \vX \vec u$, $\ten C$ and $\ten E$ are also functions of $\vec u$, and thus $\ten S(\ten E)$ also is a function of $\vec u$, thus allowing us to rewrite the conservation of linear momentum as
 \begin{equation*}
-    \rho_0\ddot{\vec u} = \vec f_0 + \nabla_X\cdot(\ten F(\vec u) \ten S(\ten E(\vec u))),
+    \rho_0\ddot{\vec u} = \vec f_0 + \vX\cdot(\tenF(\vec u) \ten S(\ten E(\vec u))),
 \end{equation*}
-which are called the \textit{elastodynamics equations}. These equations are nonlinear in $\vec u$, because at least $\ten E$ is not linear due to the term $(\nabla_X\vec u)^\top (\nabla_X\vec u)$. If we know the initial density $\rho_0(\vec X)$, the initial position $\vec u(\vec X, 0)$, the initial velocity $\dot{\vec u}(\vec X, 0)$, the forces $\vec f_0(\vec X, t)$ and boundary conditions on $\vec u$ or $\ten P\vec n$ for all times $t>0$, we can attempt to solve for $\vec u(\vec X, t)$. Moreover, if the object is stationary, the acceleration is $\ddot{\vec u}=0$, and thus the equations reduce to the \textit{elastostatics equations}
+which are called the \textit{elastodynamics equations}. These equations are nonlinear in $\vec u$, because at least $\ten E$ is not linear due to the term $(\vX\vec u)^\top (\vX\vec u)$. If we know the initial density $\rho_0(\vec X)$, the initial position $\vec u(\vec X, 0)$, the initial velocity $\dot{\vec u}(\vec X, 0)$, the forces $\vec f_0(\vec X, t)$ and boundary conditions on $\vec u$ or $\ten P\vec n$ for all times $t>0$, we can attempt to solve for $\vec u(\vec X, t)$. Moreover, if the object is stationary, the acceleration is $\ddot{\vec u}=0$, and thus the equations reduce to the \textit{elastostatics equations}
 \begin{equation*}
-    -\nabla_X (\ten F(\vec u)\ten S(\ten E(\vec u))) = \vec f_0.
+    -\vX (\tenF(\vec u)\ten S(\ten E(\vec u))) = \vec f_0.
 \end{equation*}
-In a small-deformation regime, we checked that $\ten E \approx \ten \varepsilon = \frac{1}{2}(\nabla_X\vec u + (\nabla_X\vec u)^\top)$, we know that $\ten F = \ten I + \nabla_X\vec u \approx\ten I$, and assuming that the solid follows a linear elastic model, we compute
+In a small-deformation regime, we checked that $\ten E \approx \ten \varepsilon = \frac{1}{2}(\vX\vec u + (\vX\vec u)^\top)$, we know that $\tenF = \ten I + \vX\vec u \approx\ten I$, and assuming that the solid follows a linear elastic model, we compute
 \begin{equation*}
-    \ten F(\vec u)\ten S(\ten E(\vec u)) \approx \ten S(\ten \varepsilon(\vec u)) = \lambda\tr(\ten\varepsilon(\vec u)) \ten I + 2\mu\ten\varepsilon(\vec u),
+    \tenF(\vec u)\ten S(\ten E(\vec u)) \approx \ten S(\ten \varepsilon(\vec u)) = \lambda\tr(\ten\varepsilon(\vec u)) \ten I + 2\mu\ten\varepsilon(\vec u),
 \end{equation*}
 which we can differentiate easily to get the explicit equations. Another way of writing $\ten S$ as a tensor field that is linear on $\ten\varepsilon$ is through a fourth-order \text{elasticity tensor} $\mathbb{C}$, which in the linear case results $\ten S(\ten\varepsilon(\vec u)) = \mathbb{C}:\ten\varepsilon(\vec u)$, resulting in the linear elastodynamics and elastostatic equations 
 \begin{align*}
-    \rho_0 \ddot{\vec u} &= \vec f_0 + \nabla_X \cdot(\mathbb{C}:\ten\varepsilon(\vec u))\\
-    \vec 0 &= \vec f_0 + \nabla_X \cdot(\mathbb{C}:\ten\varepsilon(\vec u)).
+    \rho_0 \ddot{\vec u} &= \vec f_0 + \vX \cdot(\mathbb{C}:\ten\varepsilon(\vec u))\\
+    \vec 0 &= \vec f_0 + \vX \cdot(\mathbb{C}:\ten\varepsilon(\vec u)).
 \end{align*}
 In the stationary case, there is no dependence on time, and thus it is not necessary to specify any initial conditions, but we do requiere boundary conditions on the displacement or the stress. Moreover, the solutions for the nonlinear $\ten S$ case may not be unique, but they are indeed unique in the linear case, where we can rewrite our problem in terms of an elliptic operator. We also note that the linear elastic model is an isotropic material model, and only depends on the two Lamé parameters $\lambda, \mu$. By contrast, linear materials with less symmetries on $\mathbb{C}$ requiere up to 21 parameters to fully describe their behavior. 
 
 To check for thermodynamical consistency, we need to evaluate whether the constitutive model actually satisfies the Clausius-Duhem inequality. To this end, Coleman and Noll described a procedure that gives us an explicit condition for tensor $\ten S$ as a function of the Helmholtz free energy. Recall the Clausius-Duhem inequality written in terms of the Helmholtz free energy $\psi = e - \theta\eta$: in the spatial frame, we have
 \begin{equation*}
-    -\rho\frac{D\psi}{Dt} - \rho\eta \frac{D\theta}{Dt} + \ten\sigma:\ten D - \frac{1}{\theta}\nabla_x \theta\cdot\vec q \geq 0
+    -\rho\frac{D\psi}{Dt} - \rho\eta \frac{D\theta}{Dt} + \ten\sigma:\ten D - \frac{1}{\theta}\vx \theta\cdot\vec q \geq 0
 \end{equation*}
 and in the material frame, we have
 \begin{equation*}
-    -\rho_0 \dot{\psi}_m - \rho_0 \eta_m \dot{\theta}_m + \ten S:\dot{\ten E} - \frac{1}{\theta_m}\vec q_0\cdot \nabla_X \theta_m \geq 0.
+    -\rho_0 \dot{\psi}_m - \rho_0 \eta_m \dot{\theta}_m + \ten S:\dot{\ten E} - \frac{1}{\theta_m}\vec q_0\cdot \vX \theta_m \geq 0.
 \end{equation*}
 Assuming that $\psi_m$ only depends on $\ten E$ and $\theta_m$, i.e. $\psi_m = \psi_m(\ten E, \theta_m)$, we have by the chain rule
 \begin{equation*}
@@ -3592,7 +3671,7 @@ Assuming that $\psi_m$ only depends on $\ten E$ and $\theta_m$, i.e. $\psi_m = \
 \end{equation*}
 which replaced in the Clausius-Duhem inequality yields
 \begin{equation*}
-    \left(\ten S - \rho_0 \frac{\partial\psi_m}{\partial\ten E}\right):\dot{\ten E} - \rho_0 \left(\eta_m + \frac{\partial\psi_m}{\partial \theta_m}\right)\dot{\theta}_m - \frac{1}{\theta_m}\vec q_0\cdot\nabla_X\theta_m\geq 0.
+    \left(\ten S - \rho_0 \frac{\partial\psi_m}{\partial\ten E}\right):\dot{\ten E} - \rho_0 \left(\eta_m + \frac{\partial\psi_m}{\partial \theta_m}\right)\dot{\theta}_m - \frac{1}{\theta_m}\vec q_0\cdot\vX\theta_m\geq 0.
 \end{equation*}
 The Coleman-Noll argument is that it is always possible to construct possible processes given $\ten E, \theta_m$, but $\dot{\ten E}$ and $\dot{\theta}_m$ can have arbitrary signs, and thus to always satisfy the inequality, we require
 \begin{equation*}
@@ -3601,42 +3680,42 @@ The Coleman-Noll argument is that it is always possible to construct possible pr
 that is, from the constitutive model of the Helmholtz free energy $\psi_m$ we can derive constitutive models for $\ten S$ and $\eta_m$. 
 \paragraph{Constitutive modeling of fluids} Unlike solids, fluid stress only depends on the movement velocity. More precisely, the stress only depends on the (symmetric) strain rate tensor
 \begin{equation*}
-    \ten D(\vec v) = \frac{1}{2}\left(\nabla_x\vec v + (\nabla_x\vec v)^\top\right),
+    \ten D(\vec v) = \frac{1}{2}\left(\vx\vec v + (\vx\vec v)^\top\right),
 \end{equation*}
-which we recall is the symmetric part of $\ten L=\nabla_x\vec v$. We may first assume that the fluid is incompressible, that is, 
+which we recall is the symmetric part of $\ten L=\vx\vec v$. We may first assume that the fluid is incompressible, that is, 
 \begin{equation*}
-    \nabla_x\cdot\vec v = 0.
+    \vx\cdot\vec v = 0.
 \end{equation*}
-Then, by conservation of mass, we obtain $\frac{D\rho}{Dt}=0$, and thus if $\rho(\vec X, 0)$ is constant, then $\rho(\vec X, t)$ will be constant as well for all $\vec X$ and time $t$, and moreover $\tr\ten D(\vec v) = \nabla_x\cdot\vec v = 0$. The stress tensor in incompressible fluids can be split into two parts: a volumetric (spherical) part and a deviatoric part. The volumetric part is associated to the hydrostatic pressure, which always points normal to the surface. An example of such a constitutive model is the Newtonian fluid model, which is given by
+Then, by conservation of mass, we obtain $\frac{D\rho}{Dt}=0$, and thus if $\rho(\vec X, 0)$ is constant, then $\rho(\vec X, t)$ will be constant as well for all $\vec X$ and time $t$, and moreover $\tr\ten D(\vec v) = \vx\cdot\vec v = 0$. The stress tensor in incompressible fluids can be split into two parts: a volumetric (spherical) part and a deviatoric part. The volumetric part is associated to the hydrostatic pressure, which always points normal to the surface. An example of such a constitutive model is the Newtonian fluid model, which is given by
 \begin{equation*}
     \ten \sigma(\ten D) = -p\ten I + 2\mu\ten D,
 \end{equation*}
 where $p$ is the hydrostatic pressure and $\mu$ is the dynamic viscosity of the fluid. Here, conservation of linear momentum (in the spatial frame) is 
 \begin{equation*}
-    \rho\left(\frac{\partial \vec v}{\partial t} + (\nabla_x\vec v)\vec v\right) = \dive\ten\sigma + \vec f.
+    \rho\left(\frac{\partial \vec v}{\partial t} + (\vx\vec v)\vec v\right) = \dive\ten\sigma + \vec f.
 \end{equation*} 
 Using index notation, we can show that 
 \begin{equation*}
-    \dive(\ten D) = \frac{1}{2}\nabla_x^2\vec v + \frac{1}{2}\nabla_x(\nabla_x\cdot\vec v),
+    \dive(\ten D) = \frac{1}{2}\vx^2\vec v + \frac{1}{2}\vx(\vx\cdot\vec v),
 \end{equation*}
 and for incompressible fluids the second term is zero, which implies
 \begin{equation*}
-    \dive\ten\sigma = -\nabla_x p + \mu\nabla_x^2 \vec v,
+    \dive\ten\sigma = -\vx p + \mu\vx^2 \vec v,
 \end{equation*}
 and replacing in the conservation of linear momentum we obtain the second-order PDE system known as the \textit{Navier-Stokes equations}:
 \begin{align*}
-    \rho\left(\frac{\partial \vec v}{\partial t} + (\nabla_x\vec v)\vec v\right) &= -\nabla_x p + \mu\nabla_x^2 \vec v + \vec f\\
-    \nabla_x\cdot\vec v &= 0,
+    \rho\left(\frac{\partial \vec v}{\partial t} + (\vx\vec v)\vec v\right) &= -\vx p + \mu\vx^2 \vec v + \vec f\\
+    \vx\cdot\vec v &= 0,
 \end{align*} 
 which is a system with unknowns $\vec v$ and $p$. Two particular cases of the Navier-Stokes equations are of physical relevance. First, when the fluid has no viscosity, we obtain a first-order PDE system known as the incompressible \textit{Euler equations}
 \begin{align*}
-    \rho\left(\frac{\partial \vec v}{\partial t} + (\nabla_x\vec v)\vec v\right) &= -\nabla_x p + \vec f\\
-    \nabla_x\cdot\vec v &= 0.
+    \rho\left(\frac{\partial \vec v}{\partial t} + (\vx\vec v)\vec v\right) &= -\vx p + \vec f\\
+    \vx\cdot\vec v &= 0.
 \end{align*} 
 Second, if the fluid has viscosity but is in stationary state, the left hand side is identically zero, and thus the resulting second-order linear system known as the incompressible \textit{Stokes equations}
 \begin{align*}
-    -\nabla_x p + \mu\nabla_x^2 \vec v &= - \vec f\\
-    \nabla_x\cdot\vec v &= 0.
+    -\vx p + \mu\vx^2 \vec v &= - \vec f\\
+    \vx\cdot\vec v &= 0.
 \end{align*} 
 This system is linear in both $\vec v$ and $p$. 
 
@@ -3650,21 +3729,21 @@ where $p$ is the fluid pressure and $c$ is the speed of sound. Another important
 \end{equation*}
 where $\rho_0$ is a reference, constant density, $\alpha$ is a thermal expansion coefficient, $\theta$ is the temperature change from the reference $T_0$, and $T$ is the current temperature. Assuming that density fluctuations satisfy $\rho\frac{D\vec v}{Dt}\approx \rho_0\frac{D\vec v}{Dt}$, and that body forces are due to gravity, i.e.
 \begin{equation*}
-    \vec f = \rho\vec g = \rho_0\vec g - \rho_0\alpha\theta \vec g = \nabla_x(-\rho_0 g z) - \rho_0\alpha\theta\vec g,
+    \vec f = \rho\vec g = \rho_0\vec g - \rho_0\alpha\theta \vec g = \vx(-\rho_0 g z) - \rho_0\alpha\theta\vec g,
 \end{equation*}
 where $\vec g = (0,0,-g)$ is the gravitational acceleration vector, we substitute in the conservation of linear momentum, which yields 
 \begin{equation*}
-    \rho_0\left(\frac{\partial\vec v}{\partial t}+\vec v \cdot\nabla_x\vec v\right) = -\nabla_x(p+\rho_0 g z) + \mu\nabla_x^2\vec v - \rho_0 \alpha  \theta\vec g.
+    \rho_0\left(\frac{\partial\vec v}{\partial t}+\vec v \cdot\vx\vec v\right) = -\vx(p+\rho_0 g z) + \mu\vx^2\vec v - \rho_0 \alpha  \theta\vec g.
 \end{equation*} 
 Simplifying the energy conservation equation in this settings, we obtain the time-dependent convection-diffusion equation 
 \begin{equation*}
-    \rho_0 c_P\left(\frac{\partial \theta}{\partial t} + \vec v \dot\nabla_x\theta\right) = k\nabla_x^2\theta + r_0.
+    \rho_0 c_P\left(\frac{\partial \theta}{\partial t} + \vec v \dot\vx\theta\right) = k\vx^2\theta + r_0.
 \end{equation*}
-We can equip these equations with the incompressibility condition $\nabla_x\cdot\vec v = 0$, and thus we have a 5-equation system for $\vec v$, $p$ and $\theta$, which can be solved from appropriate initial and boundary conditions. 
+We can equip these equations with the incompressibility condition $\vx\cdot\vec v = 0$, and thus we have a 5-equation system for $\vec v$, $p$ and $\theta$, which can be solved from appropriate initial and boundary conditions. 
 
 Other thermal and non-thermal fluid models are used in practice for different purposes, such as biofluid modeling, atmospherical physics and oceanographic simulations. An example of the latter case consists of integrating a non-inertial reference frame to the Navier-Stokes equations, resulting in an additional Coriolis acceleration term of the form $2\Omega \sin(\phi)$, where $\Omega$ is the (approximately) constant Earth angular velocity, and $\phi$ is the latitude, and an additional drag term $-k\vec v$ where $k$ is a drag coefficient. These equations are solved in 2D, where the third dimension is rewritten as $z = H+h$, where $H$ is the ocean floor average height, and $h$ is the distance to the ocean floor, resulting in the third equation
 \begin{equation*}
-    \frac{\partial h}{\partial t} + \nabla_x((H+h)\vec v) = 0.
+    \frac{\partial h}{\partial t} + \vx((H+h)\vec v) = 0.
 \end{equation*}
 These equations are known as the \textit{shallow water equations}, and are used to model floodings and tsunamis.  
 \bibliography{main}
