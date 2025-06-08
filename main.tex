@@ -2949,7 +2949,7 @@ We finally derive a convergence estimate for the fully-discrete problem. [TODO]
 
 \section{Continuum mechanics}\label{sec:continuum}
 A common application of the numerical analysis of PDEs is continuum mechanics, which consists of a framework of modeling mechanics through collections of deformable bodies. In this section, we set the background space $\mathcal{E} = \R^3$ as the standard Euclidean space equipped with a fixed orthonormal basis $\{\vec e_1, \vec e_2, \vec e_3\}$ where $\vec e_i\cdot\vec e_j = \delta_{ij}$ is the Kronecker delta.
-\subsection{Tensor calculus}
+\subsection{Tensor algebra}
 \paragraph{Preliminary definitions} 
 We begin by introducing the \textit{Einstein notation}, where repeated indices imply summation:
 $$a_ib_i = a_1b_1 + \dots + a_n b_n.$$ 
@@ -3012,7 +3012,7 @@ Here, the index $i$ is called a \textit{dummy index}, because its replacement wi
     \end{equation*}
     Clearly, $(\ten A^\top)^\top = \ten A$, and its components are $(\ten A^\top)_{ij} = A_{ji}$.
 \end{definition}
-\begin{definition}[Trace, contraction and determinant]
+\begin{definition}[Trace and contraction]
     The \textit{trace} of a tensor $\ten A$ is the scalar denoted by $\tr \ten A = A_{ii}$, i.e. the sum of its diagonal. This operator is defined through the identity $\tr(\vec u\otimes\vec v) :=\vec u\cdot\vec v = u_iv_i$, which for a general tensor $\ten A$ yields 
     \begin{equation*}
         \tr\ten A = \tr(A_{ij}\vec e_i\otimes\vec e_j) = A_{ij}\tr(\vec e_i\otimes\vec e_j) = A_{ij}(\vec e_i\cdot\vec e_j) = A_{ij}\delta_{ij} = 
@@ -3021,30 +3021,86 @@ Here, the index $i$ is called a \textit{dummy index}, because its replacement wi
     \begin{equation*}
         \ten A:\ten B = A_{ij}B_{ij} = \tr(\ten A^\top\ten B) = \tr(\ten A\ten B^\top) = B_{ij}A_{ij} =  \ten B:\ten A,
     \end{equation*}
-    and is a well-defined inner product over $\R^{n\times n}$. The \textit{determinant} of a tensor $\ten A$ is the scalar $\det \ten A$ and is defined as the determinant of the matrix $[\ten A]$ of its coefficients. This operation satisfies $\det(\ten A\ten B) = (\det\ten A)(\det\ten B)$ and $\det\ten A^\top = \det\ten A$. If a tensor has nonzero determinant, we say it is \textit{invertible}, i.e. there exists a unique tensor $\ten A^{-1}$ such that $\ten A \ten A^{-1} = \ten A^{-1}\ten A = \ten I$. 
-    An important observation is that the inverse and the transpose commute, so we write $(\ten A^\top)^{-1} = (\ten A^{-1})^\top = \ten A^{-\top}$. 
+    and is a well-defined inner product over $\R^{n\times n}$. 
 \end{definition}
-
-To differentiate and derive useful properties that will simplify the calculations later on, we recall the cofactor matrix of $\ten A\in\R^{m\times n}$ is
+\begin{definition}[Determinant and cofactor matrix]
+    The \textit{determinant} of a tensor $\ten A$ is the scalar $\det \ten A$ and is defined as the determinant of the matrix $[\ten A]$ of its coefficients. This operation satisfies $\det(\ten A\ten B) = (\det\ten A)(\det\ten B)$ and $\det\ten A^\top = \det\ten A$. If a tensor has nonzero determinant, we say it is \textit{invertible}, i.e. there exists a unique tensor $\ten A^{-1}$ such that $\ten A \ten A^{-1} = \ten A^{-1}\ten A = \ten I$. 
+    An important observation is that the inverse and the transpose commute, so we write $(\ten A^\top)^{-1} = (\ten A^{-1})^\top = \ten A^{-\top}$. To differentiate and derive useful properties that will simplify the calculations later on, we recall the cofactor matrix of $\ten A\in\R^{m\times n}$ is
+    \begin{equation*}
+        \Cof(\ten A)_{ij} := (-1)^{i+j}\det \ten A'_{ij},
+    \end{equation*}
+    where $\ten A'_{ij}\in\R^{(m-1)\times(n-1)}$ is the same tensor after removing row $i$ and column $j$. Expanding this calculation we can deduce that 
+    \begin{equation*}
+        \Cof(\ten A) := \det(\ten A)\ten A^{-\top}, 
+    \end{equation*}
+    and thus
+    \begin{equation*}
+        \ten A\Cof(\ten A)^\top = (\det\ten A)\ten I. %! determinant as a function of the Levi-Civita tensor
+    \end{equation*}
+\end{definition}
+\subsection{Tensor derivative}
+Now that we are equipped with tensor algebra and index notation, we need to adapt our standard derivative definitions to this setting. For simplicity, we refer to zero-order tensors as scalars, and to first-order tensors as vectors. The derivative of scalars and vectors with respect to a scalar variable are defined just as in standard vector calculus. We do need to define the derivative of vectors with respect to other vectors, and the derivatives of scalars with respect to second-order tensors, both of which appear naturally in the conservation laws that will follow later in this chapter.
+\begin{definition}[(Tensor) derivative of a scalar field]
+    Let $\psi=\psi(\ten A)$ be a scalar-valued function defined over a second-order tensor argument $\ten A$. The first-order Taylor approximation of $\psi$ at $\ten A$ followed by a perturbation $d\ten A$ is $\psi(\ten A + d\ten A) = \psi(\ten A) + d\psi + o(d\ten A)$, which satisfies
+    \begin{equation*}
+        d\psi = \frac{\partial\psi}{\partial\ten A} : d\ten A, 
+    \end{equation*}
+    where $\frac{\partial\psi}{\partial\ten A}$ is a second-order tensor defined as the \textit{(tensor) derivative} of $\psi$ at $\ten A$. In some cases, $\psi$ can be differentiated directly in tensor form, but sometimes it is useful to differentiate it component-wise as 
+    \begin{equation*}
+        \left[\frac{\partial \phi}{\partial\ten A}\right]_{ij} = \frac{\partial\phi}{A_{ij}},
+    \end{equation*}
+    which may be written back in tensor form. 
+\end{definition}
+\begin{definition}[Nabla operator]
+    In index notation, the \textit{nabla operator} $\nabla$ acting on a scalar, vector or tensor field $(\cdot)$ is defined ias 
+    \begin{equation*}
+        \nabla(\cdot) := \frac{\partial(\cdot)}{\partial x_i}\vec e_i.
+    \end{equation*}
+    By analogy, we define the dot product, cross product and tensor product of $\nabla$ with a (smooth) vector or tensor-valued field $(\cdot)$ as 
+    \begin{equation*}
+        \nabla\cdot(\cdot) = \frac{\partial(\cdot)}{\partial x_i}\cdot\vec e_i,\qquad \nabla\times(\cdot) = \vec e_i \times \frac{\partial(\cdot)}{\partial x_i},\qquad \nabla\otimes(\cdot) = \frac{\partial(\cdot)}{\partial x_i}\otimes \vec e_i.
+    \end{equation*}
+\end{definition}
+\begin{definition}[Gradient, divergence and curl of a vector field]
+    Let $\vec u=\vec u(\vec x)$ be a smooth vector field. The \textit{gradient} of $\vec u$ is denoted by $\text{grad } \vec u$, $\vX \vec u$ or $\nabla\otimes\vec u$, and is defined as 
+    \begin{equation*}
+        \nabla \vec u = \frac{\partial u_i}{\partial x_j}\vec e_i\otimes\vec e_j,
+    \end{equation*}
+    or in component notation,
+    \begin{equation*}
+        [\nabla \vec u] = \begin{bmatrix}
+            \frac{\partial u_1}{\partial x_1} & \frac{\partial u_1}{\partial x_2} & \frac{\partial u_1}{\partial x_3}\\
+            \frac{\partial u_2}{\partial x_1} & \frac{\partial u_2}{\partial x_2} & \frac{\partial u_2}{\partial x_3}\\
+            \frac{\partial u_3}{\partial x_1} & \frac{\partial u_3}{\partial x_2} & \frac{\partial u_3}{\partial x_3}
+        \end{bmatrix}.
+    \end{equation*}
+    The \textit{divergence} of $\vec u$ is denoted by $\dive \vec u$ or $\nabla\cdot \vec u$, and is defined as the scalar field
+    \begin{equation*}
+        \nabla\cdot\vec u = \frac{\partial u_j}{x_i}\vec e_j\cdot\vec e_i = \frac{\partial u_i}{\partial x_i} = \frac{\partial u_1}{\partial x_1} + \frac{\partial u_2}{\partial x_2} + \frac{\partial u_3}{\partial x_3}.
+    \end{equation*}
+    From the above definitions, we can easily check that $\tr\nabla\vec u = \nabla \vec u : \ten I = \nabla\cdot\vec u$.  The \textit{curl} of $\vec u$ is denoted by $\curl\vec u$ or $\nabla\times\vec u$, and is defined as the vector field
+    \begin{equation*}
+        \nabla\times\vec u = \frac{\partial u_j}{\partial x_i}\vec e_i\times\vec e_j = \varepsilon_{ijk}\frac{\partial u_j}{\partial x_i}\vec e_k.
+    \end{equation*}
+\end{definition}
+\begin{definition}[Divergence of a tensor field]
+    The vector operator $\nabla$ dotted with any smooth, second-order tensor field $\ten A$ yields a vector field denoted by $\vec\dive \ten A$, where 
+    \begin{equation*}
+        \vec \dive \ten A = \frac{\partial A_{ij}}{x_j}\vec e_i,
+    \end{equation*}
+    that is, the divergence operator acts row-wise. We highlight that there is a mild ambiguity when reviewing literature from the mathematical or mechanical communities, where some authors define a column-wise divergence, which we denote by $\nabla\cdot\ten A$, defined as 
+    \begin{equation*}
+        \nabla\cdot\ten A \frac{\partial A_{ij}}{x_i}\vec e_j
+    \end{equation*}
+\end{definition}
+Since material and spatial coordinates are related by a mapping without any constraints on its shape, we have to distinguish between differentiation in both frames. To this end, we use uppercase and lowercase notation for each case, and thus the gradient, divergence and curl operators in material coordinates are symbolized in nabla and text notation as 
 \begin{equation*}
-    \Cof(\ten A)_{ij} := (-1)^{i+j}\det \ten A'_{ij},
+    \vX \equiv \text{Grad} \qquad \vX\cdot \neq \text{Div} \qquad \vX \times \equiv \text{Curl},
 \end{equation*}
-where $\ten A'_{ij}\in\R^{(m-1)\times(n-1)}$ is the same tensor after removing row $i$ and column $j$. Expanding this calculation we can deduce that 
+and in spatial coordinates, we denote them as 
 \begin{equation*}
-    \Cof(\ten A) := \det(\ten A)\ten A^{-\top}, 
+    \vx \equiv \text{grad} \qquad \vx\cdot \neq \text{div} \qquad \vx \times \equiv \text{curl}.
 \end{equation*}
-and thus
-\begin{equation*}
-    \ten A\Cof(\ten A)^\top = (\det\ten A)\ten I. %! determinant as a function of the Levi-Civita tensor
-\end{equation*}
-
-%! Tensor derivative
-We highlight that there is a mild ambiguity in the definition of the divergence operator when in the mechanics community when acting on tensors, so we adopt the following convention: the divergence operator ($\Dive$ or $\dive$) acts row-wise, meaning that a tensor $\ten T$ has divergence that acts row-wise
- one has that
-$$ [\vec \Dive \ten T]i = T{ij,j}. $$
-In contrast, the dot notation implies summation of contiguous indices, meaning that one instead has the dot product of the nabla operator as
-$$ [\nabla \cdot \ten T]i = \begin{bmatrix} \partial_1 & \hdots & \partial_d \end{bmatrix}^\top \ten T = T{ij,i}, $$
-i.e. a column-wise divergence.
 
 \subsection{Kinematics and strain}
 \begin{definition}[Configuration]
@@ -3056,17 +3112,6 @@ From the above definition, we see that the numerical analysis of any PDE defined
 
     A body is composed of \textit{material points}, which are assigned material coordinates $\vec X=X_i\vec e_i$ where $\{\vec e_i\}_i$ is an orthonormal basis of $\mathcal{E}$. After deformation and at time $t$, we have \textit{spatial points}, which are assigned spatial coordinates $\vec x = x_i\vec e_i$
 \end{definition}
-
-
-Since the two coordinates are related by a mapping without any constraints on its shape, we have to distinguish between differentiation in the material and spatial coordinates. To this end, we use uppercase and lowercase notation for each case. Explicitly, the gradient, divergence and curl operators in material coordinates are symbolized in nabla and text notation as 
-\begin{equation*}
-    \vX \equiv \text{Grad} \qquad \vX\cdot \equiv \text{Div} \qquad \vX \times \equiv \text{Curl},
-\end{equation*}
-and in spatial coordinates, we denote them as 
-\begin{equation*}
-    \vx \equiv \text{grad} \qquad \vx\cdot \equiv \text{div} \qquad \vx \times \equiv \text{curl}
-\end{equation*}
-
 With these definitions, we are ready to define the vector field that correspond to the physical movement of the material points. 
 \begin{definition}[Deformation function]
     The deformation function $\vvarphi:\Omega_0\times\R^+ \to \Omega_t$ is the differentiable, injective and orientation-preserving\footnote{We say that the mapping preserves orientations if $\det(\vX\vvarphi)>0$.} vector-valued mapping that describes the movement of point $\vec X$ in the material frame to point $\vec x$ in the spatial frame at time $t$, as 
@@ -3262,9 +3307,9 @@ and thus acceleration can be written even more compactly as $\vec a = \partial_t
     &= \vX \dot{\vec x}(\vec X, t)\\
     &= \vX \vec v(\vvarphi(\vec X, t), t)\\
     &= \vx \vec v(\vvarphi(\vec X, t), t) \vX \vvarphi(\vec X, t)\tag{chain rule}\\
-    &= \ten L_m(\vvarphi(\vec X, t), t) \tenF,
+    &= \ten L_m(\vvarphi(\vec X, t), t) \tenF.
 \end{align*}
-% where we denoted the material version o sf $\ten L=\ten L(\vec x,t)$ as $\ten L_m = \ten L_m(\vec X,t) = \ten L(\vvarphi(\vec X, t))$,. We now introduce a lemma to decompose $\ten L$ into a symmetric and a skew-symmetric part. 
+Here, we recall that $\ten L=\ten L(\vec x,t)$ is a spatial tensor, and thus it may not have the same structure as its material tensor $\ten L_m = \ten L_m(\vec X,t) = \ten L(\vvarphi(\vec X, t))$. Further, from the above equality we explicitly obtain $\ten L_m = \dot{\ten F} \ten F^{-1}$. We now introduce a lemma to decompose $\ten L$ into a symmetric and a skew-symmetric part. 
 \begin{lemma}
     Let $\ten A$ be a second-order tensor. Then, $\ten A$ can be decomposed uniquely as a sum of a symmetric tensor $\ten S$ and a skew-symmetric tensor $\ten W$, i.e. $\ten A = \ten S + \ten W$. 
     \begin{proof}
@@ -3458,35 +3503,33 @@ where the last step follows from the divergence theorem. Substituting this and d
 \begin{equation*}
     \rho(\vec x, t) \frac{D\vec v(\vec x, t)}{Dt} = \vec f(\vec x, t) + \dive \ten\sigma(\vec x, t),
 \end{equation*}
-which is the spatial and differential form of this law. To go back to the Lagrangian description, we note that by the change of variable theorem
+which is the spatial and differential form of this law.
+To go back to the Lagrangian description, we note that by the change of variable theorem
 \begin{equation*}
-    \int_{B_t} \rho(\vec x, t) \frac{D\vec v(\vec x, t)}{Dt} dv = \int_{B_0} \frac{D\vec v(\vec x, t)}{Dt} \rho(\vec x, t) \det\tenF(\vec X, t)dV = \int_{B_0} \rho_0(\vec X) \ddot{\vvarphi}(\vec X, t) dV,
+    \int_{B_t} \rho(\vec x, t) \frac{D\vec v(\vec x, t)}{Dt} dv = \int_{B_0} \rho_0(\vec X) \ddot{\vvarphi}(\vec X, t) dV,
 \end{equation*}
-where we used the Lagrangian conservation of mass and the fact that we are now integrating over the reference configuration, which is fixed in time. Analogously, the force vectors are 
+where we used the conservation of mass in the material form. Analogously, the body force term transforms as
 \begin{equation*}
-    \vec F_b(t) = \int_{B_0} \vec f(\vvarphi(\vec X, t), t) \det\tenF(\vec X, t) dV = \int_{B_0} \vec f_0(\vec X, t) dV,
+    \vec F_b(t) = \int_{B_t} \vec f(\vec x, t) dv = \int_{B_0} \vec f(\vvarphi(\vec X, t), t) J dV = \int_{B_0} \vec f_0(\vec X, t) dV,
 \end{equation*}
-where we defined $\vec f_0(\vec X, t) := \vec f(\vvarphi(\vec X, t), t) \det\tenF(\vec X,t)$, i.e. $\vec f_0 = J\vec f$, and similarly, 
-\begin{equation*}
-    \int_{B_t} \dive\ten\sigma(\vec x, t) dv = \int_{B_0} \dive\ten\sigma(\vec x, t) \det\tenF(\vec X, t) dV = \int_{B_0} \text{Div }\ten P(\vec X, t) dV,
-\end{equation*}
-where we transformed the tensions by using the relationship $\ten P = J \ten \sigma\tenF^{-\top}$:
+where $\vec f_0 = J\vec f$ is the body force in the reference configuration. The final term involving the stress is transformed by relating the spatial divergence of $\ten\sigma$ to the material divergence of $\ten P = J \ten\sigma \ten F^{-\top}$. This is achieved via the identity $\Dive\ten P = J \dive \ten\sigma$, as follows:
 \begin{align*}
-    \vX\cdot \ten P(\vec X, t) &= \vX \cdot(J\ten\sigma\tenF^{-\top})\\
-    &= \vX \ten\sigma : (J\tenF^{-\top}) + \ten\sigma \vX \cdot (J\tenF^{-\top}) \tag{product rule}\\
-    &= \vX \ten\sigma : (J\tenF^{-\top}) \tag{$\Cof \tenF = J\tenF^{-\top}$ has zero divergence}\\
-    &= (\tenF \vx\ten\sigma) : J\tenF^{-\top} \tag{chain rule}\\
-    &= \vx \ten\sigma : J\ten I\\
-    &= J \vx\cdot \ten\sigma\\
-    &= (\det\tenF)\dive\ten\sigma.
+    \int_{B_0} \Dive\ten P(\vec X, t) dV &= \int_{\partial B_0} \ten P \vec N dA \tag{divergence theorem} \\
+    &= \int_{\partial B_0} (J \ten\sigma \ten F^{-\top}) \vec N dA \tag{Definition of $\ten P$} \\
+    &= \int_{\partial B_t} \ten\sigma \vec n da \tag{$\vec n da = J \ten F^{-\top} \vec N dA$} \\
+    &= \int_{B_t} \dive\ten\sigma(\vec x, t) dv \tag{divergence theorem}
 \end{align*}
+Since $dv = J dV$, we have $\int_{B_t} \dive\ten\sigma dv = \int_{B_0} (\dive\ten\sigma) J dV$. By the localization theorem, it follows that $\Dive\ten P = J \dive\ten\sigma$. Therefore, the integral of the traction forces can be written in the material description as:
+\begin{equation*}
+    \int_{B_t} \dive\ten\sigma(\vec x, t) dv = \int_{B_0} \Dive\ten P(\vec X, t) dV.
+\end{equation*}
 Thus, conservation of linear momentum in the Lagrangian frame and in integral form is written as 
 \begin{equation*}
-    \int_{B_0}\rho_0(\vec X) \ddot{\vvarphi}(\vec X, t)dV = \int_{B_0}\vec f_0(\vec X, t) dV + \int_{B_0} \vX \cdot \ten P(\vec X, t)dV,
+    \int_{B_0}\rho_0(\vec X) \ddot{\vvarphi}(\vec X, t)dV = \int_{B_0}\vec f_0(\vec X, t) dV + \int_{B_0} \Dive \ten P(\vec X, t)dV,
 \end{equation*}
 and by using the same arguments as above, we can derive its differential form, which yields
 \begin{equation*}
-    \rho_0(\vec X)\ddot{\vvarphi}(\vec X, t) = \vec f_0(\vec X, t) + \vX \cdot\ten P(\vec X, t).
+    \rho_0(\vec X)\ddot{\vvarphi}(\vec X, t) = \vec f_0(\vec X, t) + \Dive\ten P(\vec X, t).
 \end{equation*}
 \paragraph{Conservation of angular momentum} In the same fashion as before, we define the angular momentum of $B(t)$ as the vector quantity $\vec H(t)$ given by
 \begin{equation*}
