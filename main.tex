@@ -37,10 +37,12 @@
 \DeclareMathOperator{\Dive}{\text{Div}}
 \DeclareMathOperator{\Curl}{\text{Curl}}
 \DeclareMathOperator{\tr}{\text{tr}}
+\newcommand{\parder}[2]{\frac{\partial #1}{\partial #2} }
 
 \newtheorem{remark}{Remark}
 \newtheorem{definition}{Definition}
 \newtheorem{note}{Note}
+
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\D}{\mathcal{D}}
 \newcommand{\T}{\mathcal{T}}
@@ -3332,12 +3334,20 @@ Now we seek to calculate the derivative of the invariants in space and time.
     \begin{equation*}
         \frac{\partial(\det\ten A)}{\partial \ten A} = \Cof(\ten A) = \det(\ten A) \ten A^{-\top}.
     \end{equation*}
+    \begin{proof}
+        Homework.
+    \end{proof}
 \end{lemma}
 \begin{lemma}
     The cofactor matrix of the deformation gradient tensor is solenoidal, i.e. 
     \begin{equation*}
-        \vX \cdot \Cof(\tenF) = \vec 0.
+        \Dive \Cof(\tenF) = \vec 0.
     \end{equation*}
+    \begin{proof}
+        By localization, consider an arbitrary subdomain $\omega_0$, then 
+        $$ \int_{\omega_0} \Dive J\ten F^{-T}\,dX = \int_{\partial\omega_0} J\ten F^{-T}\vec N\,dA = \int_{\partial\omega_t} \vec n\,da = \int_{\omega_t} \dive 1\,dx = 0, $$
+        where the change of domain was done using Nanson's formula. This concludes the proof.
+    \end{proof}
 \end{lemma}
 With these results, we now can compute the time derivative of $\det\tenF$.
 \begin{lemma}
@@ -3345,6 +3355,12 @@ With these results, we now can compute the time derivative of $\det\tenF$.
     \begin{equation*}
         \dot{\overline{\det(\tenF)}} = \Cof(\tenF) : \dot{\tenF} = (\det\tenF)\dive \vec v.
     \end{equation*}
+    \begin{proof}
+        By using chain rule and that $\dot{\ten F} = \parder{^2\vec x}{\vec X\partial t} = \parder{\vec v}{\vec X} = [\grad_x \vec v] \ten F$, we get that
+        $$ \dot J = \parder{J}{\ten F}:\dot{\ten F} = J\ten F^{-T}:\left([\grad_x \vec v] \ten F\right), $$
+        and then we switch to index notation:
+        $$ \dot J = J F_{ij}^{-T}v_{i,k}F_{kj} = J F_{kj} F_{ji}^{-1}v_{i,k} = J \delta_{ki} v_{i,k} = J \dive \vec v. $$
+    \end{proof}
 \end{lemma}
 \paragraph{Change of coordinates and the Reynolds transport theorem}
 Now we address the domain changes along the deformation, in order to be able to integrate quantities over arbitrary configurations. We note that $\vvarphi_t:\Omega_0 \to \Omega_t$, and thus by the change of variables theorem, the volume integral of a spatial scalar field $\vec f(\vec x)$ is 
