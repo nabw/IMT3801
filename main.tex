@@ -3886,7 +3886,7 @@ This system can be analyzed through Brouwer's fixed-point theorem, as detailed i
 \begin{theorem}[Existence of a solution to the Navier-Stokes equations]
     Let $\Omega\subset\R^3$ be a bounded Lipschitz domain, $\nu>0$ a positive constant and $\vec f\in H^{-1}(\Omega)$ be given. Then, there exists a solution $(\vec v, \lambda)\in (H_0^1(\Omega))^3\times L^2(\Omega)$ to the time-independent Navier-Stokes equations. Further, if a given $\vec u\in (H_0^1(\Omega))^3$ is such that $(\vec u, \lambda)$ is a solution to this problem, then $\lambda$ is unique. 
     \begin{proof}
-        The full proof is detailed in \cite{ciarlet2013linear}, and we only outline the important steps here. For any $\vec v \in (H_0^1(\Omega))^3$, we arrive at the weak form
+        The full proof is detailed in \cite{ciarlet2013linear} (section 9.11), and we only outline the important steps here. For ease of notation, we write $\nabla$ instead of $\vx$. We multiply the equation above by $\vec v \in (H_0^1(\Omega))^3$ and integrate, yielding the weak form
         \begin{align*}
             a(\vec u, \vec v) + b(\vec u; \vec u,\vec v) - \int_\Omega\lambda\dive\vec vdv &= \ell(\vec v)\\
             \dive\vec u &= 0,
