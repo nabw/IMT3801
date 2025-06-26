@@ -1,12 +1,12 @@
 \section{Local analysis}
 Consider the set 
-\[ \text{Inv}(X,Y) = \left\{ A\in \mathcal{L}(X,Y): A \text{ is invertible} \right\} \]
+\[ \text{Inv}(X,Y) = \left\{ A\in \mathcal{L}(X,Y): A \text{ is invertible} \right\}. \]
 
 Then, we have the following local inversion result
 
 \begin{theorem}
     Consider $F\in C^1(X,Y)$, $F'(u^*)\in\text{Inv}(X,Y)$. Then, $F$ is locally invertible at $u^*$ with $F^{-1}\in C^1$. In fact,
-    \[ dF^{-1}(v) = (F'(u))^{-1}, \quad u=F^{-1}(v) \]
+    \[ dF^{-1}(v) = (F'(u))^{-1}, \quad u=F^{-1}(v). \]
 \end{theorem}
 
 \example{
@@ -18,14 +18,14 @@ Then, we have the following local inversion result
     \end{array}\right.
     \]
     where $p>1$, $h\in H^{-1}(\Omega)$, so $F:X\to Y$ with $X\coloneqq H_0^1(\Omega)$ and $Y\coloneqq H^{-1}(\Omega)$. We compute
-    \[ dF(u)[w] = -\Delta w + p u^{p-1} w \]
+    \[ dF(u)[w] = -\Delta w + p u^{p-1} w. \]
     We want to show that $dF(u)\in\text{Inv}(X,Y)$. That is, for a given $g\in Y$, we need to prove that there exists a $w\in X$ that solves
-    \[ 
-    a(w,v) = (\nabla w, \nabla v) + p(u^{p-1}w,v) = \langle g,v \rangle \quad \forall v\in X
+    \[
+    a(w,v) = (\nabla w, \nabla v) + p(u^{p-1}w,v) = \langle g,v \rangle \quad \forall v\in X.
     \]
-    We've proven many times before the bound for the first term, so let us focus in the second:
-    \[ 
-    |(u^{p-1}w,v)|\leq \|u^{p-1} \|_{L^\infty} \|w\|_{0} \|v \|_{0} 
+    We have proven many times before the bound for the first term, so let us focus in the second:
+    \[
+    |(u^{p-1}w,v)|\leq \|u^{p-1} \|_{L^\infty} \|w\|_{0} \|v \|_{0}.
     \]
     Note that if $u\geq 0$, then $a$ is elliptic. Then, if $u\in X\cap L^\infty \cap \{u\geq 0\}$ we have that $dF(u)\in\text{Inv}(X,Y)$ and we can use the theorem.
 
@@ -38,7 +38,7 @@ Then, we have the following local inversion result
 The main idea is that certain non-linearities would be less terrible if we could fix one of the functions. For example, consider the problem of finding a function $u$ such that
 \begin{equation}
 \begin{aligned}
-    -\Delta u &= \sin (u) &&\qquad \text{in $\Omega$}, 
+    -\Delta u &= \sin (u) &&\qquad \text{in $\Omega$},  \\
     u &= 0 && \qquad \text{on $\partial\Omega$}.
 \end{aligned}
 \end{equation}
@@ -64,9 +64,9 @@ is said to be:
 
 \begin{proof} Set $x^{n+1}=f(x^n)$, which we typically refer to as a \emph{Picard iteration}, and consider some initial $x^0\in X$. By induction we get that
 \begin{align*}
-     \|x^{n+1}-x^n\| &\leq \lambda \|x^n-x^{n-1}\|\leq \underbrace{...}_\text{induction} \lambda^n\|x^1-x^0\|\\
-    \Rightarrow  \| x^{n+m}-x^n\| &\leq \|x^{n+m}-x^{n+m-1}\|+ ... \|x^{n+1}-x^n\|\\
-    &\leq (\lambda ^{n+m-1}+...+\lambda^n)\|x^1-x^0\|\\
+     \|x^{n+1}-x^n\| &\leq \lambda \|x^n-x^{n-1}\|\leq \underbrace{\dots}_\text{induction} \lambda^n\|x^1-x^0\|\\
+    \Rightarrow  \| x^{n+m}-x^n\| &\leq \|x^{n+m}-x^{n+m-1}\|+ \dots = \|x^{n+1}-x^n\|\\
+    &\leq (\lambda ^{n+m-1}+\dots+\lambda^n)\|x^1-x^0\|\\
     &=\lambda^n\left(\displaystyle\sum_{j=0}^m\lambda^j\right)\|x^1-x^0\|\\
     &\leq\lambda^n\left(\displaystyle\sum_{j=0}^\infty\lambda^j\right)\|x^1-x^0\|\\
     &=\lambda^n\dfrac{1}{1-\lambda}\|x^1-x^0\|
@@ -102,10 +102,9 @@ Again, using the \emph{a-priori} bound we use $\sin' = \cos \leq 1$ to obtain
 This yields that $T_h:\mathcal{B}(0,r)\to \mathcal{B}(0,r)$ is continuous and thus has at least one fixed point.
 }
 
-From the previous result we can extend to $h\to 0$ through compactness. This can be generalized to another fixed point theorem known as Schauder's fixed point theorem, which has 2 forms.
+From the previous result we can extend to $h\to 0$ through compactness. This can be generalized to another fixed point theorem known as Schauder's fixed point theorem, which has two forms.
 
 \begin{theorem}[Schauder fixed point]
-The following statements hold. 
 \begin{enumerate}
     \item Set $K$ a compact, convex subset of $X$ normed space, and $f:K\to K$ a continuous mapping. Then $f$ has at least one fixed point.
     \item Let $\mathcal{C}$ a closed, convex subset of a Banach space $X$, and $f:\mathcal{C}\to \mathcal{C}$ continuous s.t. $\overline{f(\mathcal{C})}$ is compact. Then $f$ has at least one fixed point.
@@ -216,7 +215,7 @@ and noting that $w\mapsto \|\nabla w\|_{W_0^{1,p}(\Omega)}$ is a norm on $W_0^{1
     \Psi:W_0^{1,p}(\Omega)&\to \R\\
     u&\mapsto \Psi(u):= \frac{1}{p}\int_\Omega |\nabla u|^p dx.
 \end{align*}
-This functional is Gâteaux-differentiable, and we explicitly calculate its the Gâteaux derivative for $u,v\in W_0^{1,p}(\Omega)$:
+This functional is Gâteaux-differentiable, and we explicitly compute its the Gâteaux derivative for $u,v\in W_0^{1,p}(\Omega)$:
 \begin{align*}
     d\Psi(u)[v] &= \left.\frac{d}{d\varepsilon}\right|_{\varepsilon=0} \Psi(u+\varepsilon v)\\
     &= \left.\frac{d}{d\varepsilon}\right|_{\varepsilon=0} \frac{1}{p}\int_\Omega \underbrace{|\nabla (u+\varepsilon v)|^p}_{|\nabla(u+\varepsilon v)\cdot \nabla(u+\varepsilon v)|^{p/2}} dx\\

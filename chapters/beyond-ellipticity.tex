@@ -237,7 +237,6 @@ A simpler way of showing that an operator is Fredholm, is through a Gårding ine
     We now try to write the equation in operator form. The form $(u,v)_V$ is handled as follows: set $T:V\to H^*$ as
 
     \[\langle Tv, w\rangle_{H^*\times H} = "(v,w)_V"\equiv (v,iw)_V,\]
-
     where $i: H\to V$ is the compact embedding. $T$ is clearly bounded:
 
     \begin{align*}
@@ -303,6 +302,7 @@ We call this result,
 
 \[\|u_h\| \leq C\sup_{v_h\in V_h}\frac{a(u_h,v_h)}{\|v_h\|},\qquad \forall u_h\in H_h,\]
 
+\todo[inline]{NB: Esto ya no tiene sentido acá.}
 an \textbf{inf-sup condition}, which we will later use to prove \textbf{surjectivity} and \textbf{injectivity} separately. One may readily see that this condition implies (discrete) injectivity as $Au_h$ implies $u_h = 0$.
 
 We will require the following Lemma regarding discrete stability of Fredholm operators. Details are provided in \cite{sayas2019variational}.
@@ -502,7 +502,7 @@ where $\ten K$ is symmetric and positive definite ($ k_1|\vec x|^2 \leq \vec x\c
         In such a space, the form $a$ is elliptic: 
         \[ a(\vec u, \vec u) = (\ten K^{-1}\vec u, \vec u) \geq k_1 \| \vec u \|_0^2 = k_1 \| \vec u\|_{\dive}^2 \qquad\forall \vec u \in \vec V,\]
         where the term $\|\dive \vec u\|$ can be trivially added as $\dive \vec u = 0$ for $\vec u$ in $\vec V$. This shows that $\Pi A|_V$ is invertible using the Lax-Milgram lemma.
-        \item We now show the inf-sup property. For this, we will use the technique of the auxiliary problem. Consider the following problem
+        \item We now show the inf-sup property. For this, we will use the auxiliary problem technique. Consider the following problem
         \[ \begin{aligned}
             - \Delta z &= q && \Omega \\
             \grad z\cdot \vec n &= 0 &&\partial\Omega,

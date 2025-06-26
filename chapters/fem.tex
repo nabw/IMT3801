@@ -253,8 +253,8 @@ This property is usually referred to as unisolvence. In the literature, the bije
 \subsection{Local interpolation operator}
 Let $\{K, P, \Sigma\}$ be a finite element. Assume that there exists a normed vector space $V(K)$ of functions $v: K \rightarrow \mathbb{R}^m$ such that:
 \begin{enumerate}
-    \item $P \subset V(K)$
-    \item The linear forms $\{\sigma_1, \dots, \sigma_{n_{sh}}\}$ can be extended to $V(K)'$
+    \item $P \subset V(K)$.
+    \item The linear forms $\{\sigma_1, \dots, \sigma_{n_{sh}}\}$ can be extended to $V(K)'$.
 \end{enumerate}
 Then, the local interpolation operator $\mathcal{I}_K$ can be defined as follows:
 $$ \mathcal{I}_K: V(K) \ni v \mapsto \sum_{i=1}^{n_{sh}} \sigma_i(v) \theta_i \in P. $$
@@ -280,7 +280,7 @@ At this point, it may seem more appropriate to define a finite element as a quad
 We now extend the above definitions to the higher-dimensional setting, by introducing simplicial and tensor product finite elements.
 \subsection{Simplicial Lagrange finite elements}
 \paragraph{Simplices and barycentric coordinates} Let $\{a_0, \dots, a_d\}$ be a family of points in $\mathbb{R}^d$, $d \ge 1$. Assume that the vectors $\{a_1 - a_0, \dots, a_d - a_0\}$ are linearly independent. Then, the convex hull of $\{a_0, \dots, a_d\}$ is called a simplex, and the points $\{a_0, \dots, a_d\}$ are called the vertices of the simplex. The unit simplex of $\mathbb{R}^d$ is the set
-$$ \{x \in \mathbb{R}^d: x_i \ge 0, 1 \le i \le d, \text{ and } \sum_{i=1}^d x_i \le 1 \}. $$
+$$ \left\{x \in \mathbb{R}^d: x_i \ge 0, 1 \le i \le d, \text{ and } \sum_{i=1}^d x_i \le 1 \right\}. $$
 A simplex can be equivalently defined to be the image of the unit simplex by a bijective affine transformation. For $0 \le i \le d$, define $F_i$ to be the face of $K$ opposite to $a_i$, and define $n_i$ to be the outward normal to $F_i$. Note that in dimension 2 a face is also called an edge, but this distinction will not be made unless necessary.
 Given a simplex $K$ in $\mathbb{R}^d$, it is often convenient to consider the associated barycentric coordinates $\{\lambda_0, \dots, \lambda_d\}$ defined as follows: For $0 \le i \le d$,
 \begin{equation*}\label{eq:barycentric_coords}
@@ -416,7 +416,7 @@ We note that one might be tempted to think that naturally the written $a_h$ matc
 $$u_h = \sum_{i=1}^N \alpha_i \varphi_i,$$ 
 where the coordinate vector $\vec\alpha = (\alpha_1, \dots, \alpha_N)^T$ is the unknown that defines the discrete solution. Since the Galerkin scheme is valid for all $v_h \in U_h$, we can choose $v_h = \varphi_i$ for $i=1,\dots,N_{el}$. For every $i=1,\dots,N_{el}$ we have
 \begin{align*}
-    a_h(u_h, \varphi_i) &= a_h(\sum_{j=1}^{N_{el}}\alpha_j\varphi_j, \varphi_i)\\
+    a_h(u_h, \varphi_i) &= a_h\left(\sum_{j=1}^{N_{el}}\alpha_j\varphi_j, \varphi_i\right)\\
     &= \sum_{j=1}^{N_{el}} \alpha_j a_h(\varphi_j, \varphi_i)\\
     &= l_h(\varphi_i),
 \end{align*}
@@ -507,7 +507,7 @@ $$ \vec{x}(\xi_1, \xi_2) =  \vec{x}_0^e\xi_1  + \vec{x}_1^e \xi_2 + \vec{x}_2^e 
 % 8.4 Ern & Guermond
 There exist several approaches to treat the implementation of nonhomogeneous Dirichlet boundary conditions, which we introduce from \cite{ern2004theory}. Assume that there exist $N_D$ Dirichlet nodes in the mesh, and thus $N_{free} = N_{el} - N_D$ free nodes.
 \begin{itemize}
-    \item \underline{Eliminating the Dirichlet nodes}: a straightforward method is to reorder the global degrees of freedom so that the first $N_D$ rows of the system correspond to the Dirichlet nodes, and the remaining $N_{free}$ rows correspond to the free nodes. Introduce the notation $\vec x = (\hat{\vec x},\tilde{\vec x})$ where $\hat{\vec x} = (x_1,\dots,x_{N_D})^\top$ and $\tilde{\vec x} = (x_{N_D + 1},\dots,x_{N_el})$ are the Dirichlet and non-Dirichlet parts of the vector $\vec x$. This induces a block problem 
+    \item \emph{Eliminating the Dirichlet nodes}: a straightforward method is to reorder the global degrees of freedom so that the first $N_D$ rows of the system correspond to the Dirichlet nodes, and the remaining $N_{free}$ rows correspond to the free nodes. Introduce the notation $\vec x = (\hat{\vec x},\tilde{\vec x})$ where $\hat{\vec x} = (x_1,\dots,x_{N_D})^\top$ and $\tilde{\vec x} = (x_{N_D + 1},\dots,x_{N_el})$ are the Dirichlet and non-Dirichlet parts of the vector $\vec x$. This induces a block problem 
     $$
         \left[
     \begin{array}{cc}
@@ -528,8 +528,8 @@ There exist several approaches to treat the implementation of nonhomogeneous Dir
     where $B_{ij} = a_h(\varphi_j, \varphi_i)$ for $i=N_D+1,\dots,N_{el}$ and $j=1,\dots,N_{D}$ and $\tilde{K}_{ij} = a_h(\varphi_j, \varphi_i)$ for $i,j=N_D+1,\dots,N_{el}$. Here, it is clear that the subsystem associated to the Dirichlet nodes is trivial, i.e. $\hat{\vec \alpha} = \hat{\vec F}$, and thus we can eliminate the Dirichlet nodes from the system. The resulting system is given by 
     $$\ten{\tilde{K}} \tilde{\vec\alpha} = \tilde{\vec F} - \ten B \hat{\vec F},$$
     which implies that we need to assemble now two matrices, with sparsity profiles that may not be inherited from $\ten K$. This is exactly equivalent to performing a lifting on the original system, as seen in Remark 8.17 in \cite{ern2004theory}.
-    \item \underline{Keeping the Dirichlet nodes}: instead of eliminating the Dirichlet nodes, we can keep them in the system and assemble as usual, which leads to the stiffness matrix and force vector associated to the Neumann problem. After assembling, we correct the rows of $\ten K$ corresponding to the $N_D$ Dirichlet nodes, by setting them equal to zero, except the diagonal which is set to 1. Similarly, we set the entries of $\vec F$ corresponding to the Dirichlet nodes equal to the prescribed values. Although the resulting system has more degrees of freedom, by using an appropriate iterative solver (such as a Krylov subspace method), the Dirichlet data will be exactly satisfied in the solution for every iteration. 
-    \item \underline{The penalty method}: as we studied previously in the context of non-conforming spaces, one can add a penalty term to the Dirichlet nodes to enforce them approximately. First, one assembles $\ten K$ and $\vec F$ as usual, which corresponds to the Neumann problem system. Then, in every row corresponding to a Dirichlet node, one adds the penalty term 
+    \item \emph{Keeping the Dirichlet nodes}: instead of eliminating the Dirichlet nodes, we can keep them in the system and assemble as usual, which leads to the stiffness matrix and force vector associated to the Neumann problem. After assembling, we correct the rows of $\ten K$ corresponding to the $N_D$ Dirichlet nodes, by setting them equal to zero, except the diagonal which is set to 1. Similarly, we set the entries of $\vec F$ corresponding to the Dirichlet nodes equal to the prescribed values. Although the resulting system has more degrees of freedom, by using an appropriate iterative solver (such as a Krylov subspace method), the Dirichlet data will be exactly satisfied in the solution for every iteration. 
+    \item \emph{The penalty method}: as we studied previously in the context of non-conforming spaces, one can add a penalty term to the Dirichlet nodes to enforce them approximately. First, one assembles $\ten K$ and $\vec F$ as usual, which corresponds to the Neumann problem system. Then, in every row corresponding to a Dirichlet node, one adds the penalty term 
     $$\varepsilon^{-1}\alpha_i = \varepsilon^{-1}g_{D,i}$$
     where $g_{D,i}$ is the Dirichlet data at node $i$ and $\varepsilon$ is a small positive parameter. In contrast to the previous two methods, this method does not ensure that the Dirichlet data is satisfied exactly, but it allows one to inherit the possible symmetry of the original stiffness matrix $\ten K$, which is a very useful property for iterative solvers. The penalty method is also particularly useful when the Dirichlet data is not smooth, as it allows one to control the convergence of the solution to the Dirichlet data by adjusting the penalty parameter $\varepsilon$.
 \end{itemize}
