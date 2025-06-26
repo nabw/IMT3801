@@ -1,4 +1,7 @@
-This section has been heavily extracted from some notes from the WIAS in Berlin. They didn't have any authorship, so I don't really know who to thank for them.  Probably the simplest (and oldest) idea for approximating equations stems from the use of Taylor's theorem:
+This section has been heavily extracted from some notes from the WIAS in Berlin. They didn't have any authorship, so I don't really know who to thank for them. At the time of writing these notes, they can be found at
+
+\texttt{https://www.wias-berlin.de/people/john/LEHRE/NUMERIK\_IV\_21\_22/num\_konv\_dom\_prob\_3.pdf}.
+Probably the simplest (and oldest) idea for approximating equations stems from the use of Taylor's theorem:
 
 \begin{theorem}\label{thm:taylor}
     Consider a function $f$ in $C^n((a,b), \R)$, i.e. $n$ times differentiable whose derivatives are well-defined in $a$. Then, there is some $\xi$ in $(a,b)$ such that
@@ -90,8 +93,7 @@ and note that we obtain roughly a line equation if we assume an equality. Becaus
 $$ k \approx \frac{\log \|[\vec e_h]_{j+1}\|_X - \log \|[\vec e_h]_j\|_X}{ \log h_{j+1} - \log h_j}, $$
 which yields the classical expression one gets everywhere: 
     $$ k \approx  \frac{\log \left(\|[\vec e_h]_{j+1}\|_X / \|[\vec e_h]_j\|_X\right)}{ \log \left(h_{j+1} / h_j\right)}. $$
-
-    This is also referred to sometimes as \emph{numerical convergence rate}. 
+This is also referred to sometimes as \emph{numerical convergence rate}. 
 
 \section{Method of manufactured solutions}
 A typical problem is that one wants to estimate the convergence of some discrete solution
@@ -133,6 +135,7 @@ and its finite difference approximation as
 This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \|_{\infty,h}$ is $\mathcal O(h^k)$. 
 \end{definition}
 
+\todo[inline]{NB: Agregar las hipótesis usadas sobre el operador $\mathcal A$}
 \begin{theorem}[Lax equivalence theorem]
     Let $ \mat A_h \vec u_h = \vec f_h$ be the finite difference discretization for the problem $\mathcal A u = f$ as defined above. If $A_h$ is consistent, then stability and convergence are equivalent. 
     \begin{proof}
@@ -289,10 +292,10 @@ $$
     \end{bmatrix}. \\
 \end{aligned}
 $$
-This operation is needed to correctly define the operator matrix. For this, we need a brief lemma to calculate this matrix. 
+Note that the meaning here is different to the tensor product defined in \nota{ADD REFERENCE}. This operation is needed to correctly define the operator matrix. For this, we need a brief lemma to calculate this matrix. 
 \begin{lemma}
     Let $A\in R^{m\times n}$, $B\in \R^{p\times q}$ and $X\in \R^{q\times n}$. Denote the vector form of a matrix (in our case, a grid function) $A$ as $\vec A^I$, $A_i\in \R^n$ the rows of $A$ and $X_i\in \R^q$ the columns of $X$. Then, 
-    $$(BXA^\top)^I = (A\otimes B)\vec X^I$$.
+    $$(BXA^\top)^I = (A\otimes B)\vec X^I.$$
     \begin{proof}
         We expand from the right hand side:
         \begin{align*}
@@ -432,21 +435,21 @@ $$
 $$
 Now we look at the stability of forward and backward Euler and the $\theta$-method. 
 \begin{enumerate}
-    \item \underline{Explicit}: we have $u^{n+1}-u^n + c\Delta t u^n = \Delta t f^n$. Stability is a property of the differential operator, and thus we analyze it with $f\equiv 0$. We note that
+    \item \emph{Explicit}: we have $u^{n+1}-u^n + c\Delta t u^n = \Delta t f^n$. Stability is a property of the differential operator, and thus we analyze it with $f\equiv 0$. We note that
     $$u^{n+1} = (1-c\Delta t)u^n \implies |u^{n+1}|\leq |1-c\Delta t||u^n|,$$
     and thus this scheme is stable if $|1-c\Delta t|< 1$. We note two cases:
     \begin{itemize}
-        \item If $c > 0$, then we have $|1-c\Delta t|<1$ if $\Delta t < \frac{2}{c}$. This means that this method is \underline{conditionally stable}. 
-        \item If $c< 0$, then $|1-c\Delta t|\geq 1$, which means that the scheme is \underline{unconditionally unstable}.
+        \item If $c > 0$, then we have $|1-c\Delta t|<1$ if $\Delta t < \frac{2}{c}$. This means that this method is \emph{conditionally stable}. 
+        \item If $c< 0$, then $|1-c\Delta t|\geq 1$, which means that the scheme is \emph{unconditionally unstable}.
     \end{itemize} 
-    \item \underline{Implicit}: we have $u^{n+1}-u^n + c\Delta tu^{n+1} = \Delta t f^n$. This yields
+    \item \emph{Implicit}: we have $u^{n+1}-u^n + c\Delta tu^{n+1} = \Delta t f^n$. This yields
     $$(1+c\Delta t) u^{n+1} = u^n \implies |u^{n+1}| \leq \left|\frac{1}{1+c\Delta t}\right| |u^{n}|.$$
     \begin{itemize}
-        \item If $c > 0$,  we have $1+c\Delta t >1$, which means that the method is \underline{unconditionally stable}. 
-        \item If $c < 0$, then $1+c\Delta t <1$, so the scheme is \underline{unconditionally unstable}.
+        \item If $c > 0$,  we have $1+c\Delta t >1$, which means that the method is \emph{unconditionally stable}. 
+        \item If $c < 0$, then $1+c\Delta t <1$, so the scheme is \emph{unconditionally unstable}.
     \end{itemize}     
     It is important to note that if $c<0$, then the solution is just $u(x) = Ce^x$, so a condition such as $|u^{n+1}|<|u^n|$ does not make sense. Thankfully, our analysis reveals that, and we now just assume $c>0$. 
-    \item \underline{$\theta$-method}: we have
+    \item \emph{$\theta$-method}: we have
     $$
     u^{n+1}-u^n + \theta c\Delta t u^{n+1} + (1-\theta)c\Delta t u^n = 0.
     $$
@@ -484,7 +487,7 @@ We write $g(\vec u_h) = \{g(u^i)\}$ for the vector of evaluations of $g$ at the 
 $$F(\vec u_h):= \mat A_h \vec u_h + \sin(\vec u_h) = 0.$$
 Let us analyze both methods for solving this problem.
 \begin{enumerate}
-    \item \underline{Newton-Raphson}: we look for solutions of a linearized problems and iterate. Abstractly, we solve the equation $F(\vec x)=0$ by considering an initial point $\vec x^0$ and then using Taylor's theorem for linearizing $F(\vec x^{k+1})$ (unknown) around the previous iteration result $\vec x^k$ (known):
+    \item \emph{Newton-Raphson}: we look for solutions of a linearized problems and iterate. Abstractly, we solve the equation $F(\vec x)=0$ by considering an initial point $\vec x^0$ and then using Taylor's theorem for linearizing $F(\vec x^{k+1})$ (unknown) around the previous iteration result $\vec x^k$ (known):
     $$
     F(\vec x^{k+1}) \approx F(\vec x^k) + \nabla F(\vec x^k)\cdot \underbrace{\vec{\delta x}^{k+1}}_{\vec x^{k+1} - \vec{x}^k}.
     $$
@@ -514,7 +517,7 @@ Let us analyze both methods for solving this problem.
     $$
     \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} = -\left(\mat A_h \vec{u}^k + \textbf{diag}(\sin(\vec u^k))\right).
     $$
-    \item \underline{Fixed point}: similarly to the time-dependent case, we can \textit{delay} the evaluation of a nonlinearity. We do this by choosing a starting point $\vec u^0$ and evaluating the nonlinear part in the previous iteration $\vec u^k$. This yields
+    \item \emph{Fixed point}: similarly to the time-dependent case, we can \textit{delay} the evaluation of a nonlinearity. We do this by choosing a starting point $\vec u^0$ and evaluating the nonlinear part in the previous iteration $\vec u^k$. This yields
     $$
     -\nabla \vec u^{k+1} + \sin(\vec u^k) = 0.
     $$
@@ -524,7 +527,7 @@ Let us analyze both methods for solving this problem.
     $$
     where $\vec u_h^k$ is the discrete vector $\vec u_h$ at the $k$-th iteration. In such cases, we can sometimes prove the convergence of the scheme. For that, we consider the discrete iterates $\vec u_h^k$ given by
     \begin{align*}
-        \mat A_h \vec u_h^{k+1} + \sin(\vec u_h^k) &= 0
+        \mat A_h \vec u_h^{k+1} + \sin(\vec u_h^k) &= 0 \\
         \mat A_h \vec u_h^{k} + \sin(\vec u_h^{k-1}) &= 0,
     \end{align*}
     which subtracted give the equation
@@ -537,7 +540,7 @@ Let us analyze both methods for solving this problem.
         &= C\|-(\sin(\vec u_h^k) - \sin(\vec u_h^{k-1}))\|_{\infty, h}\tag{Error equation}\\
         &\leq C\|\vec u_h^{k+1} - \vec u_h^{k}\|_{\infty, h},\tag{$\sin$ is $1$-Lipschitz}
     \end{align*}
-    thus the scheme is convergent if $C<1$. Otherwise, the scheme \underline{can converge}, but we have no theoretical guarantee from this analysis. Still, each fixed point iteration
+    thus the scheme is convergent if $C<1$. Otherwise, the scheme \emph{can converge}, but we have no theoretical guarantee from this analysis. Still, each fixed point iteration
     $$
     \mat A_h \vec u_h^{k+1} = - \sin(\vec u_h^k)
     $$

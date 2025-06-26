@@ -103,6 +103,7 @@ This is typically referred to as the \emph{a priori} estimate.
                            &= \|u-v\|_H^2 - 2\rho\langle A(u-v), u-v\rangle_{H'\times H} + \rho^2 \| \mathcal R^{-1} \circ A(u-v)\|_H^2.
     \end{align*}
     We bound the second and third terms as follows: 
+    \todo[inline]{NB: Usar {\textbackslash{tag}} y saltar líneas para frases explicativas.} 
     $$ \langle A(u-v), u-v\rangle =^\text{by definition of $A$} a(u-v, u-v) \geq^\text{ellipticity} \alpha \| u-v\|_H^2, $$ 
         and 
         $$ \| \mathcal R^{-1} \circ A(u-v) \|_H =^\text{Riesz isometry} \| A(u-v) \|_{H'} =^\text{continuity} C \| u-v \|_H^2. $$
@@ -132,8 +133,8 @@ which using the generalized Poincaré can be shown to still satisfy an elliptici
 
 \paragraph{The pure Neumann problem} In general, having Neumann boundary conditions is problematic for two reasons: It results in a \emph{data compatibility} condition and (ii) it results in having a non-trivial kernel in the problem. The problem in general reads: Find $u$ in $H^1(\Omega)$ such that
     $$ \begin{aligned}
-        -\Delta u &= f \\
-        \grad u \cdot \vec n &= h.
+        -\Delta u &= f && \text{in $\Omega$},\\
+        \grad u \cdot \vec n &= h && \text{on $\partial\Omega$}.
        \end{aligned}
     $$
 The weak formulation is 

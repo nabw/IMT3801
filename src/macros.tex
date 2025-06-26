@@ -19,17 +19,18 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
 \newcommand{\RightComment}[1]{\hfill \(\triangleright\) \textit{#1}}
-\newcommand{\example}[1]{\todo[inline,color=orange!30!white]{\textbf{Example:} #1}}
+\newcommand{\example}[1]{\todo[inline,color=orange!10!white]{\textbf{Example:} #1}}
+\newcommand{\nota}[1]{{\colorbox{red!30}{[#1]}}}
 
 \renewcommand{\vec}{\vectorsym}
 \newcommand{\mat}{\matrixsym}
 \newcommand{\ten}{\tensorsym}
 \DeclareMathOperator{\grad}{\nabla}
-\DeclareMathOperator{\Cof}{\text{Cof}}
 \DeclareMathOperator{\Grad}{\text{Grad}}
+\DeclareMathOperator{\Cof}{\text{Cof}}
 \DeclareMathOperator{\dive}{\text{div}}
-\DeclareMathOperator{\curl}{\text{curl}}
 \DeclareMathOperator{\Dive}{\text{Div}}
+\DeclareMathOperator{\curl}{\text{curl}}
 \DeclareMathOperator{\Curl}{\text{Curl}}
 \DeclareMathOperator{\tr}{\text{tr}}
 \newcommand{\parder}[2]{\frac{\partial #1}{\partial #2} }
