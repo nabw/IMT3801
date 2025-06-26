@@ -1,5 +1,5 @@
 A common application of the numerical analysis of PDEs is continuum mechanics, which consists of a framework of modeling mechanics through collections of deformable bodies. In this section, we set the background space $\mathcal{E} = \R^3$ as the standard Euclidean space equipped with a fixed orthonormal basis $\{\vec e_1, \vec e_2, \vec e_3\}$ where $\vec e_i\cdot\vec e_j = \delta_{ij}$ is the Kronecker delta.
-\subsection{Kinematics and strain}
+\section{Kinematics and strain}
 \begin{definition}[Configuration]
     We define the \textit{configuration} of a body $\Omega_t\subset \R^3$ as the physical space it occupies at time $t$. By convention, we set the reference (initial) time $t=0$, where the body occupies a known \textit{reference configuration} $\Omega_0$ with a known physical state, such as its velocity or physical boundary conditions. We assume $\Omega_0$ is a bounded, open and connected set.
 \end{definition}
@@ -290,7 +290,7 @@ The extension of this rule to higher dimensions is known as the Reynolds transpo
     \end{proof}
 \end{theorem}
 
-\subsection{Mechanics and stress}
+\section{Mechanics and stress}
 So far, we have discussed how to describe finite strain via deformation metrics, which stem from the deformation map $\vvarphi$. Here, we introduced the deformation gradient tensor $\tenF$, from which we defined the Cauchy-Green right deformation tensor $\ten C$ and the Euler-Lagrange deformation tensor $\ten E$. We now have to connect these deformations to the actual forces and tensions that exist in a body. To this end, we need to define traction vector fields and the stress tensors.
 \begin{definition}[Traction vectors]
     Let $d\vec f$ be the internal force acting on a 2D differential element $da$ in $\vec x$ at time $t$. We define the \textit{spatial traction field} $\vec t=\vec t(\vec n, \vec x, t)$ as 
@@ -362,7 +362,7 @@ The traction vector in the material frame can be subject to the same derivation,
     The tensor $\ten S$ formally corresponds to the \textit{pullback} of $\ten \sigma$, or equivalently, $\ten\sigma$ is the \textit{push-forward} of $\ten S$.
 \end{definition}
 
-\subsection{Conservation laws}
+\section{Conservation laws}
 With the above definitions and the precise technique to differentiate quantities defined as spatial integrals via the Reynolds transport theorem, we can now write down \textit{conservation laws}, which are relationships between the rates of change of quantities of interest (e.g. mass, momentum) and the factors that physically induce those rates of change. Conservation laws define the partial differential equations that will be at the core of our numerical analysis later on. These laws have spatial and material formulations, both of which can be written in integral or differential form. To pass from the integral to the differential form, we use the following theorem: 
 \begin{theorem}[Localization theorem]
     Let $\Omega\subset\R^n$ be a bounded, open and connected set. Given a scalar field $f:\Omega\to \R$, if for every subset $B\subset \Omega$ it holds that $\int_B fdV = 0$, then necessarily $f\equiv 0$ in $\Omega$. 
@@ -611,7 +611,7 @@ We will further use this form to deduce \textit{physically consistent} constitut
     -\frac{1}{\theta}\vec q \cdot\vx\theta \geq 0.
 \end{equation*}
 This inequality states that $\vec q$ is a vector whose direction indicates heat flux, and $\vx\theta$ indicates the direction of fastest temperature growth. Thus, since the inner product must be positive, and due to the minus sign, the vector $\vec q$ points from high temperature regions to low temperature regions.
-\subsection{Constitutive models}
+\section{Constitutive models}
 Let us go back to the linear momentum conservation, which is the time-dependent, vector-valued, possibly nonlinear partial differential equation 
 \begin{equation*}
     \rho_0 \ddot{\vec u} = \vec f_0 + \vX \cdot(\tenF\ten S).
@@ -744,7 +744,7 @@ Other thermal and non-thermal fluid models are used in practice for different pu
 \end{equation*}
 These equations are known as the \textit{shallow water equations}, and are used to model floodings and tsunamis.  
 
-\subsection{Analysis}
+\section{Analysis}
 In this section we use the PDE analysis machinery we have developed in the previous chapters to analyze the PDE systems we have derived. 
 \paragraph{Elastostatics equations} We previously derived the elastostatics equation as the steady-state version of conservation of linear momentum. Let $\Omega\subset\R^k$ with $k\in\{2,3\}$ be a bounded Lipschitz domain with boundary $\partial\Omega$. In a simple case, we can enforce a Dirichlet boundary condition $\vec u = \vec 0$ on $\partial\Omega$. Then, the problem consists of finding a function $\vec u\in (H_0^1(\Omega))^k$ such that 
 \begin{equation*}

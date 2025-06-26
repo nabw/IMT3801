@@ -1,4 +1,4 @@
-\subsection{Weak formulations}
+\section{Weak formulations}
 A weak formulation refers to an integral form of a PDE, understood distributionally. This is typically a systematic procedure that should not be too difficult, and it helps in revealing what are the adequate boundary conditions for a given problem. The main tool for this will be the integration by parts formulas. Our test problem will be the Laplace problem, given by the $-\Delta$ operator. The minus sign will be better justified in the following section. Consider then the problem of finding $u$ such that 
     $$ -\Delta u = f \qquad \text{ in $\Omega$}. $$
 Define an arbitrary smooth function $v$, then integration by parts yields
@@ -63,7 +63,7 @@ Consider now the weak formulation of the Poisson problem: Find $u$ in $V_0$ such
     This problem will be studied in detail further ahead. 
 }
 
-\subsection{Elliptic problems and Lax-Milgram}
+\section{Elliptic problems and Lax-Milgram}
 One of the easiest classes of PDEs where we can prove existence and uniqueness of solutions are \textit{elliptic} problems. 
 \begin{definition}[Elliptic forms]
     A bilinear form $a(\cdot, \cdot)$ defined on a Hilbert space $X$ is said to be elliptic if there exists a constant $\alpha$ such that
@@ -114,7 +114,7 @@ This is typically referred to as the \emph{a priori} estimate.
         $$ \| u \|_H \leq \frac{1}{\alpha} \| F \|_{H'}. $$
 \end{proof}
 
-\subsection{Examples}
+\section{Examples}
 \paragraph{The Poisson problem} Consider $f$ in $H^{-1}(\Omega)$ and $g$ in $H^{1/2}(\Gamma)$ with $\Gamma\coloneqq \partial\Omega$. The Poisson problem in strong form is given as the following boundary value problem: 
     \begin{align*}
         -\Delta u  &= f \qquad \tin\quad\Omega\\

@@ -1,6 +1,6 @@
 In the previous section we have thorougly studied elliptic problems and many approximation propoerties. Still, one might rightfully notice that ellipticity can be quickly broken. For example, the operator $-\Delta: H_0^1(\Omega)\to H^{-1}(\Omega)$ is elliptic, but if we remove the minus sign, it loses that property. As this case is linear, it is possible to remap the unknown with $u\mapsto -u$, but it still feels unsatisfactory that the property is so fragile. Because of this, in this section we review two important theories that go beyond ellipticity: the inf-sup theory and the theory of Fredholm operators.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Inf-sup conditions}
+\section{Inf-sup conditions}
 
 We are interested in showing first that the inf-sup condition means 
 surjectivity. This will require the use of certain results from 
@@ -153,7 +153,7 @@ for some $\xi_N$ in $U_N$, as in the Lax-Milgram proof. Taking the infimum in $\
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Fredholm operators}
+\section{Fredholm operators}
 
 Most of the forms in which we present our problems comes from the fantastic notes from Andrea Moiola on time-harmonic acoustic waves \cite{moiola2021scattering}. Our reference problem will be the Helmholtz equation, given by the following strong form:
 
@@ -260,7 +260,7 @@ A simpler way of showing that an operator is Fredholm, is through a Gårding ine
 
 
 
-\subsection{Galerkin stability}
+\section{Galerkin stability}
 
 We have seen that elliptic problems have the following a-priori stability estimate
 
@@ -338,7 +338,7 @@ which implies
 which is a Céa estimate for sufficiently small $h$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Saddle point problems}
+\section{Saddle point problems}
 
 In this section we will study the well-posedness theory of saddle point problems. The presentation has been taken, mostly verbatim, from \cite{gatica2014simple}. A saddle point problem has the form:
 \begin{displaymath}
@@ -516,7 +516,7 @@ where $\ten K$ is symmetric and positive definite ($ k_1|\vec x|^2 \leq \vec x\c
     Given that we have shown the required properties for $a$ and $b$, then there exists a unique and stable solution $(u,p)$ of Darcy's problem. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Discretization of saddle point problems}
+\section{Discretization of saddle point problems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 We consider finite dimensional and conforming spaces $\{H_h\}_h \subset H$ and $\{Q_h\}_h \subset Q$. Then, given $\vec F$ in $H'$ and $G$ in $Q'$, the discrete problem reads: Find $(u_h, p_h)$ in $H_h \times Q_h$ such that 
     \[ \begin{aligned}

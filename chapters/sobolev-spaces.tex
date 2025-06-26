@@ -1,7 +1,7 @@
 In this section we will review some important properties of functional spaces and operators. These things should be deemed as 'review' material. Intrinsically new things will start appearing in Section~\ref{section:beyond-ellipticity}. Most, if not all, results will be coming from the amazing book \emph{Linear and nonlinear functional analysis} by PG Ciarlet.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Weak derivatives and Sobolev spaces}
+\section{Weak derivatives and Sobolev spaces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Distributions and derivatives} To formulate differential equations in Banach/Hilbert spaces, it will be important to be able to define derivatives in such spaces. This is done through the language of distributions, invented (discovered) by L Schwartz. For this, we require the notion of 'test functions', i.e. functions on which we can discharge derivatives of abstract objects through integration by parts. Consider then a function $f$ in $C_0^\infty(\R^d)$, the space of infinitely differentiable scalar functions with compact support in $\R^d$, then a distribution is simply an element $T$ in the dual space $(C_0^\infty(\R^d))'$, whose action can be written as $\langle T, f\rangle_{(C_0^\infty)'\times C_0^\infty}$, or sometimes simply as $\langle T, f\rangle$, if it is clear by context. 
 
@@ -83,7 +83,7 @@ and thus we can bound
 $$|f(x+h)-f(x)|\leq \left|\int_x^{x+h}f'(s)\mathrm{d}s\right|\leq \int_x^{x+h}|f'(s)|\mathrm{d}s \overset{\text{C-S}}{\leq} \|f'\|_{L^2((x,x+h))}h \leq \|f'\|_{L^2(I)}h \quad \forall x\in I. $$
 This shows that if $f'\in L^2(I)$, then $f$ is uniformly continuous. In particular, we have the injection $H^1(I)\to C^0(\overline{I})$. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Traces}
+\section{Traces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Traces or trace operators are the ones that restrict a function in $\R^d$ to some set in $\R^{d-1}$, most commonly the boundary of a domain. They are fundamental to adequately define boundary conditions. For the presentation of this section, we follow \cite{gatica2014simple} and \cite{monk2003finite}. Some details about Sobolev spaces are drawn from \cite{adams2003sobolev}. The fundamental difficulty of defining trace operators is that the domain where the boundary condition is defined has measure 0 in the measure of the starting domain, so some regularity of the function is required to guarantee that this operation makes sense. We will not enter the details of how a Lipschitz boundary is defined, see \cite{monk2003finite} for further details.
@@ -236,7 +236,7 @@ but one can also look at the tangential components of the stress tensor, thus ge
     $$ (I - \vec n \otimes \vec n)[\sigma(\vec u)\vec n] = \vec g_\tau. $$
 }
 
-\subsection{Poincaré inequalities}
+\section{Poincaré inequalities}
 Using all of the previous definitions, we can finally look at actual problems and some first well-posedness results. For all of them, the Poincaré inequality will be fundamental.
 
 \begin{lemma}[Poincaré inequality] Let $\Omega\subset \R^d$ be a bounded Lipschitz domain. Then, there exists $C>0$ such that

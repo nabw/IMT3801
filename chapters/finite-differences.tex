@@ -62,7 +62,7 @@ from which we readily obtain that
     $$ | D^+f(x) - f'(x) | = O(h), $$
     so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. However, it is noteworthy that although centered differences also start converging linearly, they become unstable for very small $h$, see  Figure \ref{fig:fd_convergence}.
 
-\subsection{Second order derivatives}
+\section{Second order derivatives}
 The standard way of approximating second order derivatives is that of using a finite difference approximation twice. It is given by the following: 
 $$ \begin{aligned}
     f''(x) &\approx D^+(f')(x) \\
@@ -72,7 +72,7 @@ $$ \begin{aligned}
     \end{aligned}
 $$
 We note that the intermediate steps show that these computations can be represented as the matrix product $\mat D^+ \mat D^-$, where the order of differentiation can be inverted and thus equivalently $\mat D^- \mat D^+$. 
-\subsection{Order of convergence}
+\section{Order of convergence}
 The order of convergence of the previously computed schemes can be derived from Taylor's theorem. For example, we previously showed that backward/forward differences converge linearly (pointwise), and indeed we can do the same for centered differences. For this, consider the following third order expansions:
     $$
     \begin{aligned}
@@ -81,7 +81,7 @@ The order of convergence of the previously computed schemes can be derived from 
     \end{aligned}
     $$
 and by simply adding both equations it can be shown that the finite difference formula computed converges linearly.
-\subsection{The empirical convergence rate}
+\section{The empirical convergence rate}
 One issue that is always overviewed is the computation of the \emph{observed} convergence rate, so we will write it here once and for all so that it is never an issue again. Assume that some error $\vec e_h$ converges to zero in some $X$ norm with rate $k$:
     $$ \|\vec e_h\|_X \leq C h^k.$$
     Then, given a sequence of mesh sizes $h$ and errors as $(h_j, [\vec e_h]_j)$, we would like to estimate $k$ to validate we really obtained the computed rate $k$. For this, we take the logarithm of the error expression:
@@ -93,7 +93,7 @@ which yields the classical expression one gets everywhere:
 
     This is also referred to sometimes as \emph{numerical convergence rate}. 
 
-\subsection{Method of manufactured solutions}
+\section{Method of manufactured solutions}
 A typical problem is that one wants to estimate the convergence of some discrete solution
     $$ \mat L_h \vec u_h = 0, $$
 which approximates a differential equation
@@ -106,7 +106,7 @@ such that the solution of the modified problem
     $$ \mat L_h \vec u_h = \vec f_h \quad (=R_h \mathcal L u_{ex}) $$
 converges to the continuous solution $u_{ex}$ by construction. 
 
-\subsection{Convergence Analysis}
+\section{Convergence Analysis}
 Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in the Lax equivalence theorem. We will first require other definitions. 
 
 \begin{definition}[Consistency]
@@ -168,7 +168,7 @@ This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \
     \end{proof}
 \end{theorem}
 
-\subsection{Stability of the discrete Laplacian in 1D}
+\section{Stability of the discrete Laplacian in 1D}
 Let us now study the stability of the discretized Laplacian operator in 1D, $-\Delta u = -u''$, over the interval $[a,b]$ with $a<b$ and homogeneous boundary conditions $u_h(x_1) = u_h(x_N) = 0$. Consider $\Omega_h = \{x_i\}_{i=1}^N$ a grid of $[a,b]$ with $N$ equispaced elements, where $x_1=a$ and $x_{N-1}=b$, and mesh size $h=(b-a)/N$. Recall that the numerical second derivative can be approximated by the three-point approximation derived above, which for a given interior point is given by
 $$-u_h''(x_i) = -\left(\frac{u_h(x_{i-1}) - 2u_h(x_i) + u_h(x_{i+1})}{h^2}\right) = \frac{1}{h^2}(-u_h(x_{i-1}) + 2u_h(x_i) - u_h(x_{i+1})).$$
 We note that in our discretized system we do not need to solve for $u_h(x_1)=u_h(x_N)=0$ because of the boundary condition. This implies that the derivative at $x_2$ and $x_{N-1}$ is
@@ -209,7 +209,7 @@ We can apply this principle to show that $A_h$ is stable.
     \end{proof}
 \end{theorem}
 
-\subsection{Discretization in 2D and 3D}
+\section{Discretization in 2D and 3D}
 In this section we hint on how to address numerically higher dimensional problems, and also how to include time. The stability of such schemes will be studied further ahead with the von Neumann stability analysis. In typical 1D examples, one has a domain $(a,b)$ and an associated grid given by some points $\{x_i\}_i^N$ such that each index $i$ corresponds to an order of the domain, and thus naturally a finite difference operator is going to involve something like $i$ and its neighbors. This scenario would be different if, for example, one had a random ordering of the grid points such as
     $$ x_0 = a,\; x_7 = a + h,\; x_{12} = a + 2h,\; \hdots, x_N = b, $$
 so that in such a grid, a forward difference with respect to the point $x_0$ would be given by
@@ -332,7 +332,7 @@ Now, we take the 1D vector form of the discrete Laplace equation and invoke the 
 \end{align*}
 Thus, our new operator is now $D^2_h = A_h\otimes I + I\otimes A_h$, and then the discrete Laplace equation is reduced to the linear system $D^2_h \vec u^I = \vec f^I$, where $D^2_h$ is sparse by construction. We can use the same methods as before to prove the stability of the scheme.  
 
-\subsection{Time discretization}
+\section{Time discretization}
 Time discretization is an enormous topic, so here we provide simple strategies and ways to think about them. We will dedicate an entire section to their analysis using the von Neumann stability analysis. To avoid messing with Bochner spaces, we will refrain from considering a precise functional setting, and leave this for further ahead in the notes. Consider a differential operator $\mathcal L$ and its associated discrete matrix $\mat L_h$ which includes the problems boundary conditions. The continuous differential equation, for some initial condition $x(0) = x_0$, is given by 
     $$ \dot x + \mathcal L x = f, $$
     which we can discretize in space to obtain the system of differential equations
@@ -360,7 +360,7 @@ Time discretization is an enormous topic, so here we provide simple strategies a
     $$\int \mat L_h \vec x_h(s)\,ds \approx \theta\Delta t \mat L_h\vec x_h^{n+1} + (1-\theta)\Delta t \mat L_h \vec x_h^n. $$
     We note that $\theta=1$ corresponds to the explicit scheme, $\theta=0$ to the implicit scheme, and $\theta=1/2$ to the mid-point scheme. 
     
-\subsection{Von Neumann stability analysis}
+\section{Von Neumann stability analysis}
 Energy methods for stability analysis can quickly become untractable, so in order to get easier bounds, we can perform this analysis after moving the equation to the frequency domain. This is the so-called \emph{von Neumann stability analysis}, which is a very powerful tool for analyzing the stability of finite difference schemes. The idea is to assume that the solution can be expressed as a Fourier series, and then analyze the growth of the Fourier modes over time.
 
 For this analysis, we will use the Fourier transform, which is comfortable for this task as it yields simple eigenfunctions of the derivatives. 
@@ -415,7 +415,7 @@ We note that the first inequality yields $g(\xi)\leq 1$, and from the second ine
 \end{align*}
 which yields an upper bound for the time step $\Delta t$ to ensure stability of the finite difference scheme. Inequalities of this kind are studied more thoroughly in \cite{LeVeque2007}.
 
-\subsection{Stability in time}
+\section{Stability in time}
 We now look for stability estimates regarding also time. We first study a forward scheme 
 $$
 \begin{cases}
@@ -467,7 +467,7 @@ Now we look at the stability of forward and backward Euler and the $\theta$-meth
     \end{itemize}
 \end{enumerate}
 
-\subsection{Unavoidable nonlinearities}
+\section{Unavoidable nonlinearities}
 Sometimes, specially in stationary models, we cannot avoid having to solve a nonlinear problem. Two common ways to obtain an approximate solution to a nonlinear problem are 1) fixed point methods (usually of first order), and 2) Newton-Raphson methods. To analyze them, consider the domain $\Omega=(a,b)$ and the example problem
 $$
 \begin{cases}
