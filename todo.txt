@@ -16,3 +16,4 @@
 - Párrafos después de ecuaciones pegados a la ecuación para evitar indentación.
 - Estoy usando \todo[inline] (de todonotes) y el comando \nota para dejar cosas por hacer. 
 - Agregar referencias a teoremas y ecuaciones en todo el texto.
+- Agregar Aubin- Nitsche
