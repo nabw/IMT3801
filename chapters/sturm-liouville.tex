@@ -17,7 +17,7 @@ Under appropriate boundary conditions, linear self-adjoint second-order differen
     \end{equation*}
     Since $\dom(A)$ is dense in $X$, $\varphi\circ A$ can be uniquely extended to $A'\varphi:X\to \R$, that is, $A'\varphi(x) = (\varphi\circ A)(x)$ for any $x\in\dom(A)$, and thus $A'\varphi\in X'$, whose domain is precisely $\dom(A') = \mathcal{D}$. The operator $A'$ is called the \text{transpose} of $A$. Moreover, if $H_1$ and $H_2$ are Hilbert spaces and $A:\dom A\to H_2$ is densely defined in $H_1$, then we analogously define the set 
     \begin{equation*}
-        \dom(A*) := \{y\in H_2: \exists z\in H_1: (Ax,y)_{H_2} = (x,z)_{H_2}\quad \forall x\in\dom(A)\}\subseteq H_2
+        \dom(A^*) := \{y\in H_2: \exists z\in H_1: (Ax,y)_{H_2} = (x,z)_{H_2}\quad \forall x\in\dom(A)\}\subseteq H_2
     \end{equation*}
     where $A^*$ is called the \text{Hermitian adjoint} of $A$, defined as $A^*y = z$ with $A^*:\dom(A^*)\to H_1$.
 \end{definition}
@@ -57,7 +57,6 @@ One of the most essential results in spectral theory is the characterization of 
 \begin{theorem}[Spectral theorem for compact operators]
     Let $X$ be a Banach space and $T:X\to X$ a compact operator. Then, $\sigma_p(T)$ is a countable set, and it is infinite, they converge to $0$, which is the only accumulation points of $\sigma_p(T)$. Thus, since $\lambda\in\mathbb{C}\setminus\{0\}$, it holds that either $\lambda\in\rho(T)$ or $\lambda\in\sigma_p(T)$, and in both cases $\ker T_\lambda$ is finite-dimensional. 
 \end{theorem}
-We now give a 
 \begin{theorem}[Hilbert-Schmidt]
     Let $H$ be a Hilbert space, $T:H\to H$ a self-adjoint compact operator, that is, $T=T^*$, or equivalently, $(Tx,y)=(y,Tx)$ $\forall x,y\in H$. Then, there exists an orthogonal set of eigenvectors $\{u_n\}$ associated to eigenvalues $\lambda\in\R\setminus\{0\}$ of $T$, such that every $x\in H$ can be uniquely decomposed as 
     \begin{equation*}
@@ -288,7 +287,7 @@ where $\alpha = k/(\rho c_v)$ is the thermal diffusivity. To find $\theta(x,t)$ 
 \begin{equation*}
     \theta(x,t_0) = \sum_{k=1}^\infty c_kX_k(x)
 \end{equation*}
-for some unique coefficients $\{c_k\}$. In fact, if we know $X_k(x)$ for all $k$, then we can take the inner product and obtain $c_k$:
+for some unique coefficients $\{c_k\}_k$. In fact, if we know $X_k(x)$ for all $k$, then we can take the inner product and obtain $c_k$:
 \begin{equation*}
     (\theta(\cdot, t_0), X_k)_{L^2(\Omega)} = \left(\sum_{j=1}^\infty c_jX_j, X_k\right)_{L^2(\Omega)} = c_k(X_k,X_k)_{L^2(\Omega)} = c_k\|X_k\|_{L^2(\Omega)}^2,
 \end{equation*}
@@ -422,7 +421,7 @@ Therefore, if the spectral structure of A including the boundary conditions is k
 It is then sufficient to find the set of eigenvalues and eigenfunctions of the operator, which in the case of being an orthogonal basis, effectively solves the problem. To find these eigenvalues and eigenfunctions, we can use the separation of variables method. For the eigenvalue problem of our Laplace operator, the boundary conditions must always be homogeneous, although the type of boundary condition may vary on different parts of the boundary. We start by assuming $u(x,y)=X(x)Y(y)$:
 \begin{align*}
     -\nabla^{2}u(x,y)&=-X''(x)Y(y)-X(x)Y''(y)=\lambda X(x)Y(y) \\
-    &\Rightarrow-\frac{X''(x)}{X(x)}-\frac{Y''(y)}{Y(y)}=\lambda
+    &\Rightarrow-\frac{X''(x)}{X(x)}-\frac{Y''(y)}{Y(y)}=\lambda.
 \end{align*}
 From this, we can separate the variables:
 \begin{equation*}
@@ -430,7 +429,7 @@ From this, we can separate the variables:
 \end{equation*}
 such that $\lambda = \mu^x + \mu^y$.  The boundary conditions $u|_{\partial\Omega}=0$ imply
 \begin{equation*}
-    X(0)=X(L)=0, \quad Y(0)=Y(H)=0
+    X(0)=X(L)=0, \quad Y(0)=Y(H)=0.
 \end{equation*}
 So, we obtain two eigenvalue problems in one dimension: 
 \begin{equation*}
@@ -450,7 +449,7 @@ Thus we obtain that the eigenfunctions and eigenvalues of the 2D problem are:
 \end{equation*}
 with
 \begin{equation*}
-    \lambda_{k,l}= \mu_{k}^{x}+\mu_{l}^{y}=\left(\frac{k\pi}{L}\right)^{2}+\left(\frac{l\pi}{H}\right)^{2}, \quad \text{for } k,l \in\mathbb{N}
+    \lambda_{k,l}= \mu_{k}^{x}+\mu_{l}^{y}=\left(\frac{k\pi}{L}\right)^{2}+\left(\frac{l\pi}{H}\right)^{2}, \quad \text{for } k,l \in\mathbb{N}. 
 \end{equation*}
 Now that we have found an explicit form for the eigenvalues and eigenvectors, we seek to determine if they form an orthogonal basis of $L^{2}(\Omega)$. If it were, and assuming $f\in L^{2}(\Omega)$, it follows that
 \begin{equation*}
@@ -459,7 +458,7 @@ Now that we have found an explicit form for the eigenvalues and eigenvectors, we
 For the original problem $-\nabla^2u=f$ with $u|_{\partial\Omega}=0$, we seek a solution $u=\sum_{k=1}^{\infty}\sum_{l=1}^{\infty}c_{k,l}u_{k,l}$ (i.e. we seek to find $c_{k,l}$) such that: 
 \begin{align*}
     -\nabla^{2}u &=-\nabla^{2}\left(\sum_{k=1}^{\infty}\sum_{l=1}^{\infty}c_{k,l}u_{k,l}\right)=\sum_{k=1}^{\infty}\sum_{l=1}^{\infty}c_{k,l}(-\nabla^{2}u_{k,l}) \\
-    &=\sum_{k=1}^{\infty}\sum_{l=1}^{\infty}c_{k,l}\lambda_{k,l}u_{k,l}=\sum_{k=1}^{\infty}\sum_{l=1}^{\infty}\hat{f}_{k,l}u_{k,l}=f
+    &=\sum_{k=1}^{\infty}\sum_{l=1}^{\infty}c_{k,l}\lambda_{k,l}u_{k,l}=\sum_{k=1}^{\infty}\sum_{l=1}^{\infty}\hat{f}_{k,l}u_{k,l}=f.
 \end{align*}
 From this, we conclude that $c_{k,l}=\frac{\hat{f}_{k,l}}{\lambda_{k,l}}$, and the solution is
 \begin{equation*}
@@ -481,7 +480,7 @@ In two dimensions, we can find a similar relationship, as long as we assume that
 \end{equation*}
 and then the solution operator in 2D would be written as
 \begin{equation*}
-    \mathcal{S}f(\vec{x})=\int_{\Omega}G(\vec{x},\vec{\xi})f(\vec{\xi})d\vec{\xi}=\sum_{k=1}^{\infty}\sum_{l=1}^{\infty}\frac{\hat{f}_{k,l}}{\lambda_{k,l}}u_{k,l}(\vec{x})
+    \mathcal{S}f(\vec{x})=\int_{\Omega}G(\vec{x},\vec{\xi})f(\vec{\xi})d\vec{\xi}=\sum_{k=1}^{\infty}\sum_{l=1}^{\infty}\frac{\hat{f}_{k,l}}{\lambda_{k,l}}u_{k,l}(\vec{x}).
 \end{equation*}
 Here, we could use Fredholm theory to study how Green functions are related to the spaces generated by the eigenfunctions. 
 \paragraph{Nonhomogeneous boundary conditions} In the case that our boundary condition is not homogeneous, i.e. 
@@ -553,7 +552,7 @@ where $u_L(x)$ and $u_R(x)$ are the unique solutions to the problem $\mathcal{L}
 \end{theorem}
 Green functions also exist for problems with non-homogeneous boundary conditions by adding appropriate terms in the definition of $u$ as a function of $G$. These constructions generalize to more dimensions, but only up to a point. The Green function of the Laplacian will be the one that satisfies $\mathcal{L}_{\vec{x}}G(\vec{x},\vec{\xi})=\delta(\vec{\xi}-\vec{x})$. The solution operator then looks like
 \begin{equation*}
-    u(\vec{x})=\int_{\Omega}G(\vec{x},\vec{\xi})f(\vec{\xi})d\Omega_{\xi}+\int_{\Gamma}(u(\vec{s})\nabla_{\vec{s}}G(\vec{x},\vec{s})\cdot\vec{n}-G(\vec{x},\vec{\xi})\nabla_{\vec{s}}u(\vec{\xi})\cdot\vec{n})d\Gamma_{\vec{s}}
+    u(\vec{x})=\int_{\Omega}G(\vec{x},\vec{\xi})f(\vec{\xi})d\Omega_{\xi}+\int_{\Gamma}(u(\vec{s})\nabla_{\vec{s}}G(\vec{x},\vec{s})\cdot\vec{n}-G(\vec{x},\vec{\xi})\nabla_{\vec{s}}u(\vec{\xi})\cdot\vec{n})d\Gamma_{\vec{s}}.
 \end{equation*}
 For the Laplacian, in general $G(\vec{x},\vec{\xi})=G^{F}(\vec{x},\vec{\xi})+h(\vec{x},\vec{\xi})$, with $G^F$ being the fundamental solution 
 \begin{equation*}
