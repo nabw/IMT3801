@@ -17,8 +17,12 @@ With these definitions, we are ready to define the vector field that correspond 
     \end{equation*}
     We now omit the explicit dependence on $t$ unless strictly necessary. We also define the following maps: 
     \begin{itemize}
-        \item The displacement field is $$\vec u(\vec X) = \vvarphi(\vec X) - \vec X = \vec x - \vec X.$$ 
-        \item The gradient deformation tensor is $$\tenF(\vec X) = \vX \vvarphi(\vec X) = \vX \vec u(\vec X) + \ten I,$$ 
+        \item The displacement field is \begin{equation*}
+\vec u(\vec X) = \vvarphi(\vec X) - \vec X = \vec x - \vec X.
+\end{equation*} 
+        \item The gradient deformation tensor is \begin{equation*}
+\tenF(\vec X) = \vX \vvarphi(\vec X) = \vX \vec u(\vec X) + \ten I,
+\end{equation*} 
         whose components are $F_{ij}(\vec X) = \partial_j \varphi_i(\vec X) = \varphi_{i,j}(\vec X)$.
     \end{itemize}
 \end{definition}
@@ -240,7 +244,9 @@ Now we seek to calculate the derivative of the invariants in space and time.
     \end{equation*}
     \begin{proof}
         By localization, consider an arbitrary subdomain $\omega_0$, then 
-        $$ \int_{\omega_0} \Dive J\ten F^{-T}\,dX = \int_{\partial\omega_0} J\ten F^{-T}\vec N\,dA = \int_{\partial\omega_t} \vec n\,da = \int_{\omega_t} \dive 1\,dx = 0, $$
+        \begin{equation*}
+\int_{\omega_0} \Dive J\ten F^{-T}\,dX = \int_{\partial\omega_0} J\ten F^{-T}\vec N\,dA = \int_{\partial\omega_t} \vec n\,da = \int_{\omega_t} \dive 1\,dx = 0,
+\end{equation*}
         where the change of domain was done using Nanson's formula. This concludes the proof.
     \end{proof}
 \end{lemma}
@@ -252,9 +258,13 @@ With these results, we now can compute the time derivative of $\det\tenF$.
     \end{equation*}
     \begin{proof}
         By using chain rule and that $\dot{\ten F} = \parder{^2\vec x}{\vec X\partial t} = \parder{\vec v}{\vec X} = [\grad_x \vec v] \ten F$, we get that
-        $$ \dot J = \parder{J}{\ten F}:\dot{\ten F} = J\ten F^{-T}:\left([\grad_x \vec v] \ten F\right), $$
+        \begin{equation*}
+\dot J = \parder{J}{\ten F}:\dot{\ten F} = J\ten F^{-T}:\left([\grad_x \vec v] \ten F\right),
+\end{equation*}
         and then we switch to index notation:
-        $$ \dot J = J F_{ij}^{-T}v_{i,k}F_{kj} = J F_{kj} F_{ji}^{-1}v_{i,k} = J \delta_{ki} v_{i,k} = J \dive \vec v. $$
+        \begin{equation*}
+\dot J = J F_{ij}^{-T}v_{i,k}F_{kj} = J F_{kj} F_{ji}^{-1}v_{i,k} = J \delta_{ki} v_{i,k} = J \dive \vec v.
+\end{equation*}
     \end{proof}
 \end{lemma}
 \paragraph{Change of coordinates and the Reynolds transport theorem}

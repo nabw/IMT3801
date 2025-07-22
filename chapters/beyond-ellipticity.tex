@@ -58,7 +58,9 @@ Now, we would like to characterize the surjectivity of the operator using its du
     \(v' = 0\). Thus, \(N(T') = \{0\}\), so \(T'\) is injective.
 
     For the proof in the other direction, we get from Closed Range Theorem that also $R(T)$ is closed. By contradiction, consider $v$in $V$ such that $v\not\in R(T)$. By Hahn-Banach we get that there exists $f$ in $V'$ such that $f(R(T)) = 0$ and $f(v)=1$\footnote{This is an improvement over Urysohn's Lemma, which yields only a possibly nonlinear function}. Then, $T'f$ is such that
-        $$ \langle T'f', u\rangle = \langle f, Tu\rangle = u \qquad \forall u\in U.$$
+        \begin{equation*}
+\langle T'f', u\rangle = \langle f, Tu\rangle = u \qquad \forall u\in U.
+\end{equation*}
     This implies that $f=0$, which contradicts that $f(v)=1$. 
 
 \end{proof}
@@ -138,18 +140,28 @@ We can now postulate a general Lax-Milgram Theorem. We write it in Hilbert Space
     \end{enumerate}
 \end{theorem}
 We note that injectivity can be equivalently stated as an inf-sup condition simply by inverting the arguments in the surjectivity inf-sup.  The main difficulty in using this theory is that well-posedness of a discrete problem is not inherited from the continuous one. In fact, consider $U_N\subset U$ and $v'_N\in V'_N\subset V$ discrete spaces, then 
-$$ \|T'v_N'\|_{U'} = \sup_{u\in U}\frac{\langle u, T'v_N'\rangle}{\|u\|_U} \geq \sup_{u_N\in U_N}\frac{\langle u_N, T'v_N'\rangle}{\|u_N\|_U}, $$
+\begin{equation*}
+\|T'v_N'\|_{U'} = \sup_{u\in U}\frac{\langle u, T'v_N'\rangle}{\|u\|_U} \geq \sup_{u_N\in U_N}\frac{\langle u_N, T'v_N'\rangle}{\|u_N\|_U},
+\end{equation*}
 which establishes our claim. Despite this, one can still recover convergence as before. To see this, consider $u$ and $u_N$ the continuous and discrete solutions given by the following problems with $a:U\times V \to \R$:
-    $$\begin{aligned}
+    \begin{equation*}
+\begin{aligned}
         a(u,v) &= f(v) &&\forall v\in V,\\
         a(u_N, v_N) &= f(v_N) &&\forall v_N\in V_N.
-    \end{aligned}$$
+    \end{aligned}
+\end{equation*}
 This bilinear forms make sense as operator equations as they induce an $A:U\to V'$. Both problems are well-posed are both operators are surjective, which implies that 
-    $$ a(u-u_N, v) = 0  \qquad \forall v_N \in V_N. $$
+    \begin{equation*}
+a(u-u_N, v) = 0  \qquad \forall v_N \in V_N.
+\end{equation*}
 From the injectivity seen as an inf-sup condition we get that
-$$ \alpha \| u - u_N \|_U \leq \sup_{v_N\in V_N} \frac{a(u-u_N, v_N)}{\|v_N\|} \leq \| a \| \|u - \xi_N \|, $$
+\begin{equation*}
+\alpha \| u - u_N \|_U \leq \sup_{v_N\in V_N} \frac{a(u-u_N, v_N)}{\|v_N\|} \leq \| a \| \|u - \xi_N \|,
+\end{equation*}
 for some $\xi_N$ in $U_N$, as in the Lax-Milgram proof. Taking the infimum in $\xi_N$ and setting $C=\|a\|$ yields that
-    $$ \| u - u_N \| \leq \frac{C}{\alpha}\text{dist}(u, U_N). $$
+    \begin{equation*}
+\| u - u_N \| \leq \frac{C}{\alpha}\text{dist}(u, U_N).
+\end{equation*}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -166,9 +178,13 @@ Most of the forms in which we present our problems comes from the fantastic note
 \]
 
 for some $f\in H^{-1}(\Omega)$ and some boundary condition. This equation can be recoverred in the following way: consider the wave equation
-    $$ \ddot u - \Delta u = 0, $$
+    \begin{equation*}
+\ddot u - \Delta u = 0,
+\end{equation*}
 and consider a variable separation procedure with $u(t,x) = V(t)U(x)$. This is a common technique, and it results in 
-    $$ \frac{\Delta U}{U} = k^2.$$
+    \begin{equation*}
+\frac{\Delta U}{U} = k^2.
+\end{equation*}
 multiplying by $U$ gives the desired result. Regarding well-posedness, let's first explore what we can conclude with Lax-Milgram. We will assume $u$ in $H_0^1(\Omega)$ for simplicity, which yields the following weak form: Find $u$ in $H_0^1(\Omega)$ such that
 
 \[
@@ -201,7 +217,9 @@ Using $H_0^1(\Omega)$ with the norm induced by the seminorm $|v|_1 = \|\nabla v\
     \end{align*}
 
     In other words, the problem is well-possed if 
-    $$1-k^2C_\Omega^2 > 0 \iff k^2 < \frac{1}{C_\Omega^2}$$
+    \begin{equation*}
+1-k^2C_\Omega^2 > 0 \iff k^2 < \frac{1}{C_\Omega^2}
+\end{equation*}
 \end{itemize}
 
 This is a very limited answer, so we will now answer what happens for arbitrary $k\in\R$.
@@ -490,7 +508,9 @@ as the \emph{Ladyzhenskaya-Babu\v{s}hka-Brezzi Theory}, typically denoted as LBB
 where $\ten K$ is symmetric and positive definite ($ k_1|\vec x|^2 \leq \vec x\cdot \ten K^{-1}\vec x \leq k_2 |\vec x|^2$), $f$ is in $\vec H'$ and $g$ is in $Q'$. We omit details regarding continuity as it is a simply application of the Cauchy-Schwartz inequality. The bilinear forms to be studied here are $a(\vec u, \vec v) = (\ten K^{-1}\vec u, \vec v)$ and $b(\vec v, q) = (\dive \vec v, q)$.
     \begin{itemize}
         \item First, we need to show that $\Pi A|_V$ is invertible. To better understand this operator, we recall that $\Pi$ is the orthogonal projector of $\vec H$ into $\vec V = \ker B$, so let's look into all the pieces to make sense out of it. First, $B:H\to Q$ is the operator given by 
-        $$ (B\vec v, q) = (\dive \vec v, q),$$
+        \begin{equation*}
+(B\vec v, q) = (\dive \vec v, q),
+\end{equation*}
         and thus, as $L^2$ can be identified with its dual, we have that simply $B = \dive$ and thus $\vec V = \{\vec v \in \vec H: \dive \vec v = 0\}$, i.e. the space of solenoidal functions in $H(\dive;\Omega)$ with null normal component on the boundary. Second, the projection $\Pi$ is surjective, and thus 
             \[ \langle \Pi A|_V \vec u, \vec v\rangle \]
         which is defined for all $\vec u, \vec v$ in $\vec H$, can be written analogously as 

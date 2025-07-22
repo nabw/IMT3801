@@ -78,9 +78,13 @@ which implies that $\{x_n\}_n$ is Cauchy, and since $X$ is complete, this gives 
 We note that if $X$ is compact, then this theorem can be extended to \textit{weak} contractions, ie $\|f(x)-f(y)\|< \|x-y\|$.
 
 \example{Consider problem \eqref{eq:fixed-point:lap u sin u}, where we note that Lax-Milgram immediately yields the existence of a unique solution $u$ for each $w$. From the mean value theorem one has that differentiable functions satisfy $f(x) - f(y) = f'(\xi)(x-y)$ for some $\xi$ in $(x,y)$. This in particular shows that $\sin$ is a Lipschitz function as $\sup_{\xi\in \R}\sin(\xi) = 1$. Using this fact we can compute the following for some given $w_1, w_2$:  
-    $$ -\Delta(T(w_1)-T(w_2))= \sin(w_1)-\sin(w_2),$$ 
+    \begin{equation*}
+-\Delta(T(w_1)-T(w_2))= \sin(w_1)-\sin(w_2),
+\end{equation*} 
     and the \emph{a-priori} estimate gives
-    $$\|T(w_1)-T(w_2)\|\leq C\|\sin(w_1)-\sin(w_2)\|\leq C \|w_1-w_2\|.$$
+    \begin{equation*}
+\|T(w_1)-T(w_2)\|\leq C\|\sin(w_1)-\sin(w_2)\|\leq C \|w_1-w_2\|.
+\end{equation*}
 Then, if $C<1$ there exists $\bar u$ such that $T(\bar u)= \bar u$. }
 
 \begin{theorem}[Brouwer fixed point] Set $K$ a non-empty, compact and convex subset of a finite-dimensional Banach space. Then every continuous $f:K\to K$ has a fixed point.
@@ -96,9 +100,13 @@ where $dim(V_h)<\infty$. Then, from the \emph{a-priori} bound we have
     \|u_h\|_{1}\leq C||\sin (w_h)||< C
 \end{align*}
 using that $|\sin (x)|\leq 1$. This implies that $u_h$ is contained in a finite-dimensional ball of $V_h$, $\mathcal{B}(0,r), r=C$. To show that it is continuous, we consider two functions $w_1,w_2$ in $V_h$, and obtain the difference equation setting $u_i=T(w_i)$: 
-    $$(\grad [u_1 - u_2], \grad v_h) = (\sin(w_1) - \sin(w_2), v_h) \qquad \forall v_h \in V_h. $$
+    \begin{equation*}
+(\grad [u_1 - u_2], \grad v_h) = (\sin(w_1) - \sin(w_2), v_h) \qquad \forall v_h \in V_h.
+\end{equation*}
 Again, using the \emph{a-priori} bound we use $\sin' = \cos \leq 1$ to obtain 
-    $$ \| u_1 - u_2\|_1 \leq \|w_1 - w_2\|_0.$$
+    \begin{equation*}
+\| u_1 - u_2\|_1 \leq \|w_1 - w_2\|_0.
+\end{equation*}
 This yields that $T_h:\mathcal{B}(0,r)\to \mathcal{B}(0,r)$ is continuous and thus has at least one fixed point.
 }
 
