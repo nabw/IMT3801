@@ -90,7 +90,7 @@ With this information, we conclude that for small deformations, $\ten E \approx 
 \paragraph{Principal directions and deformation invariants}
 Given a material line oriented in the (unit) direction $\vec m$ in the reference configuration, i.e. $d\vec X = \|d\vec X\|\vec m$, we seek to deduce how much has the actual configuration stretched from the original configuration. We define the quotient $\Delta$ as 
 \begin{equation*}
-    \Delta(\vec m) := \frac{\|d\vec x\|^2}{\|d\vec X\|^2} = \frac{\|d\vec X\| \vec m^\top \ten C\vec m \|d\vec X\|}{\|d\vec X\|^2} = \vec m^\top \ten C\vec m.
+    \Delta(\vec m)  \coloneqq  \frac{\|d\vec x\|^2}{\|d\vec X\|^2} = \frac{\|d\vec X\| \vec m^\top \ten C\vec m \|d\vec X\|}{\|d\vec X\|^2} = \vec m^\top \ten C\vec m.
 \end{equation*}
 Thus, the direction of maximum (or analogously, minimum) stretch $\Delta(\vec m)$ follows from the optimization problem
 \begin{equation*}
@@ -110,9 +110,9 @@ The pairs $(\lambda,\vec m)$ are called the \textit{principal stretch} and \text
 \end{equation*}
 with $\lambda_1\geq \lambda_2\geq \lambda_3$, and thus the maximum of $\Delta(\vec m)$ is $\lambda_1$ in the direction $\vec m_1$, while the minimum is $\lambda_3$ in the direction $\vec m_3$. 
 
-The above description allows us to compute 1D deformation metrics. For 3D, let $d\vec X$, $d\vec Y$ and $d\vec Z$ be three infinitesimal vectors in the reference configuration, which span a parallelepiped of volume $dV = [d\vec X, d\vec Y, d\vec Z]$, where $[\vec a, \vec b, \vec c] := \vec a \cdot (\vec b \times \vec c)$ is the triple product. Let $d\vec x, d\vec y, d\vec z$ be the corresponding infinitesimal vectors in the spatial configuration, which span a volume $dv = [d\vec x, d\vec y, d\vec z]$. The volume rate of change $J$ is called \textit{Jacobian} and is given by
+The above description allows us to compute 1D deformation metrics. For 3D, let $d\vec X$, $d\vec Y$ and $d\vec Z$ be three infinitesimal vectors in the reference configuration, which span a parallelepiped of volume $dV = [d\vec X, d\vec Y, d\vec Z]$, where $[\vec a, \vec b, \vec c]  \coloneqq  \vec a \cdot (\vec b \times \vec c)$ is the triple product. Let $d\vec x, d\vec y, d\vec z$ be the corresponding infinitesimal vectors in the spatial configuration, which span a volume $dv = [d\vec x, d\vec y, d\vec z]$. The volume rate of change $J$ is called \textit{Jacobian} and is given by
 \begin{equation*}
-    J := \frac{dv}{dV} = |\det\tenF|.
+    J  \coloneqq  \frac{dv}{dV} = |\det\tenF|.
 \end{equation*}
 For 2D deformation metrics, we consider $d\vec X$ and $d\vec Y$, which are mapped to $d\vec x$ and $d\vec y$ in the spatial configuration, respectively. Let $dA = \|d\vec X\times d\vec Y\|$ and $da = \|d\vec x\times d\vec y\|$, and define the \textit{unit normal vectors}
 \begin{equation*}
@@ -138,13 +138,13 @@ We can relate the area differentials $dA$ and $da$ via the Nanson-Piola formula,
 \begin{definition}[Velocity and acceleration]
     In the material frame, the material velocity $\vec V$ and the material acceleration $\vec A$ are defined as the time derivative of $\vvarphi$, that is, 
     \begin{align*}
-        \vec V(\vec X, t) := \dot{\vvarphi}(\vec X, t) &= \frac{\partial \vvarphi(\vec X, t)}{\partial t}\\
-        \vec A(\vec X, t) := \ddot{\vvarphi}(\vec X, t) &= \frac{\partial^2 \vvarphi(\vec X, t)}{\partial t^2} = \dot{\vec v}(\vec X, t).
+        \vec V(\vec X, t)  \coloneqq  \dot{\vvarphi}(\vec X, t) &= \frac{\partial \vvarphi(\vec X, t)}{\partial t}\\
+        \vec A(\vec X, t)  \coloneqq  \ddot{\vvarphi}(\vec X, t) &= \frac{\partial^2 \vvarphi(\vec X, t)}{\partial t^2} = \dot{\vec v}(\vec X, t).
     \end{align*}
     These vector fields are functions of $\vec X$, and thus they can be evaluated at material points. To evaluate in spatial points $\vec x$, we naturally define
     \begin{align*}
-        \vec v(\vec x, t) := (\vec V \circ \varphi^{-1})(\vec x, t) &= V(\vvarphi^{-1}(\vec x, t), t)\\
-        \vec a(\vec x, t) := (\vec A \circ \varphi^{-1})(\vec x, t) &= A(\vvarphi^{-1}(\vec x, t), t).
+        \vec v(\vec x, t)  \coloneqq  (\vec V \circ \varphi^{-1})(\vec x, t) &= V(\vvarphi^{-1}(\vec x, t), t)\\
+        \vec a(\vec x, t)  \coloneqq  (\vec A \circ \varphi^{-1})(\vec x, t) &= A(\vvarphi^{-1}(\vec x, t), t).
     \end{align*}
 \end{definition}
 These definitions are correct in practice, but the second derivative requires more caution. To see this, let $\psi=\psi(\vec X,t)$ be a scalar field defined in the Lagrangian frame. Its total time derivative is, by the chain rule, given by
@@ -167,7 +167,7 @@ which is commonly written with the last term interchanged, that is,
 \end{equation*}
 This total derivative is referred to as the \textit{material derivative}, which we define as the differential operator
 \begin{equation*}
-    \frac{D}{Dt} := \frac{\partial}{\partial t} + \vec v \cdot \vx.
+    \frac{D}{Dt}  \coloneqq  \frac{\partial}{\partial t} + \vec v \cdot \vx.
 \end{equation*}
 Consequently, the spatial acceleration has an additional term:
 \begin{equation*}
@@ -350,7 +350,7 @@ To relate traction vectors to deformation metrics, we need to define stress tens
         \end{equation*}
         Defining tensor $\ten \sigma(\vec x, t)$ by components as 
         \begin{equation*}
-            \sigma_{ij}(\vec x, t) := -t_i(\vec x, t, -\vec e_j),
+            \sigma_{ij}(\vec x, t)  \coloneqq  -t_i(\vec x, t, -\vec e_j),
         \end{equation*}
         we obtain $t_i(\vec x, t, \vec n) = \sigma_{ij}(\vec x, t)n_j$, which in vector form is simply $\vec t(\vec x, t, \vec n) = \ten\sigma(\vec x, t)\vec n$. The symmetry of $\ten\sigma$ follows from the conservation of angular momentum and is left as an exercise.
     \end{proof}
@@ -367,7 +367,7 @@ The traction vector in the material frame can be subject to the same derivation,
     \end{equation*}
     and we further define the \textit{second Piola-Kirchhoff stress tensor} $\ten S$ as 
     \begin{equation*}
-        \ten S := \tenF^{-1}\ten P = J\tenF^{-1}\ten\sigma\tenF^{-\top}.
+        \ten S  \coloneqq  \tenF^{-1}\ten P = J\tenF^{-1}\ten\sigma\tenF^{-\top}.
     \end{equation*}
     The tensor $\ten S$ formally corresponds to the \textit{pullback} of $\ten \sigma$, or equivalently, $\ten\sigma$ is the \textit{push-forward} of $\ten S$.
 \end{definition}
@@ -449,11 +449,11 @@ and gathering components we deduce
 \end{equation*}
 We assume that the forces applied to $B_t$ come from traction forces and body forces. The traction forces are defined as 
 \begin{equation*}
-    \vec F_{e} (t) := \int_{\partial B_t} \vec t(\vec x, t) ds,
+    \vec F_{e} (t)  \coloneqq  \int_{\partial B_t} \vec t(\vec x, t) ds,
 \end{equation*}
 and the body forces are defined as 
 \begin{equation*}
-    \vec F_b(t) := \int_{B_t} f(\vec x, t) dv = \int_{B_t} \rho(\vec x, t) \vec b(\vec x, t)dv,
+    \vec F_b(t)  \coloneqq  \int_{B_t} f(\vec x, t) dv = \int_{B_t} \rho(\vec x, t) \vec b(\vec x, t)dv,
 \end{equation*}
 where $\vec f$ corresponds to the body force vector per unit volume, and $\vec b$ corresponds to the body force vector per unit mass, which are related via $\vec f = \rho\vec b$. With this, we can now properly define the conservation of linear momentum, which states that the rate of change of linear momentum of $B_t$ is equal to the sum of all forces acting on $B_t$, that is,
 \begin{equation*}
@@ -497,7 +497,7 @@ and by using the same arguments as above, we can derive its differential form, w
 \end{equation*}
 \paragraph{Conservation of angular momentum} In the same fashion as before, we define the angular momentum of $B(t)$ as the vector quantity $\vec H(t)$ given by
 \begin{equation*}
-    \vec H(t) := \int_{B_t} \vec x \times \rho(\vec x, t)\vec v(\vec x, t)dv.
+    \vec H(t)  \coloneqq  \int_{B_t} \vec x \times \rho(\vec x, t)\vec v(\vec x, t)dv.
 \end{equation*}
 We can show that the material derivative of the cross product $\vec x\times\vec v$ is given by 
 \begin{equation*}
@@ -814,11 +814,11 @@ This system can be analyzed through Brouwer's fixed-point theorem, as detailed i
         \end{align*}
         where we defined 
         \begin{align*}
-            a(\vec u, \vec v) &:= \nu\int_\Omega \nabla\vec u:\nabla\vec v dv,\\
-            b(\vec w; \vec u,\vec v) &:= \int_\Omega ((\nabla\vec u)\vec w)\cdot\vec v dv,\\
-            \ell(\vec v) &:=  \int_\Omega \vec f\cdot\vec v dv = \langle \vec f, \vec v\rangle_{H^{-1}(\Omega), H_0^1(\Omega)}.
+            a(\vec u, \vec v) & \coloneqq  \nu\int_\Omega \nabla\vec u:\nabla\vec v dv,\\
+            b(\vec w; \vec u,\vec v) & \coloneqq  \int_\Omega ((\nabla\vec u)\vec w)\cdot\vec v dv,\\
+            \ell(\vec v) & \coloneqq   \int_\Omega \vec f\cdot\vec v dv = \langle \vec f, \vec v\rangle_{H^{-1}(\Omega), H_0^1(\Omega)}.
         \end{align*}
-        The bilinear form $a$ is clearly continuous, and $b$ is continuous by Holder's inequality and the Sobolev embedding theorem. We define the space $V(\Omega) = \{\vec v \in(H_0^1(\Omega))^3: \dive\vec v = 0\}$, which is a closed subspace of $(H_0^1(\Omega))^3$, making it a separable Hilbert space, and thus there exists a Hilbert basis $(\vec w_i)_{i=1}^\infty$ of $V(\Omega)$, from which we define the truncated space $\vec V^n := \text{span}(\vec w_i)_{i=1}^n$, and given any element $\vec w\in\vec V^n$, we can construct the (unique) functional $\vec F^n(\vec w)\in \vec V^n$ such that 
+        The bilinear form $a$ is clearly continuous, and $b$ is continuous by Holder's inequality and the Sobolev embedding theorem. We define the space $V(\Omega) = \{\vec v \in(H_0^1(\Omega))^3: \dive\vec v = 0\}$, which is a closed subspace of $(H_0^1(\Omega))^3$, making it a separable Hilbert space, and thus there exists a Hilbert basis $(\vec w_i)_{i=1}^\infty$ of $V(\Omega)$, from which we define the truncated space $\vec V^n  \coloneqq  \text{span}(\vec w_i)_{i=1}^n$, and given any element $\vec w\in\vec V^n$, we can construct the (unique) functional $\vec F^n(\vec w)\in \vec V^n$ such that 
         \begin{equation*}
             (\vec F^n(\vec w), \vec v)_{1,\Omega} = a(\vec w, \vec v) + b(\vec w; \vec w, \vec v) - \ell(\vec v) \qquad \forall \vec v\in\vec V^n.
         \end{equation*}

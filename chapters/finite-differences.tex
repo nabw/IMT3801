@@ -469,9 +469,9 @@ Energy methods for stability analysis can quickly become untractable, so in orde
 For this analysis, we will use the Fourier transform, which is comfortable for this task as it yields simple eigenfunctions of the derivatives. 
 
 \begin{definition}[Fourier transform]
-    Let $v\in L^2(\Omega)$. Then, its Fourier transform $\mathcal{F}(v) := \hat{v}$ is defined as
+    Let $v\in L^2(\Omega)$. Then, its Fourier transform $\mathcal{F}(v)  \coloneqq  \hat{v}$ is defined as
     \begin{equation*}
-\mathcal{F}(v)(\xi) := \hat{v}(\xi) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty} v(x)e^{-i\xi x}dx,
+\mathcal{F}(v)(\xi)  \coloneqq  \hat{v}(\xi) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty} v(x)e^{-i\xi x}dx,
 \end{equation*}
     where $\xi$ is the frequency variable and $i=\sqrt{-1}$. This transform satisfies the Parseval identity:
     \begin{equation*}
@@ -607,7 +607,7 @@ As usual, we set a discrete grid of $N$ equispaced interior points $a=x_1<\cdots
 \end{equation*}
 We write $g(\vec u_h) = \{g(u^i)\}$ for the vector of evaluations of $g$ at the non-boundary nodes. This allows us to write more compactly the root-finding problem
 \begin{equation*}
-F(\vec u_h):= \mat A_h \vec u_h + \sin(\vec u_h) = 0.
+F(\vec u_h) \coloneqq  \mat A_h \vec u_h + \sin(\vec u_h) = 0.
 \end{equation*}
 Let us analyze both methods for solving this problem.
 \begin{enumerate}

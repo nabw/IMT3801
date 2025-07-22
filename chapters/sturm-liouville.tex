@@ -13,11 +13,11 @@ Under appropriate boundary conditions, linear self-adjoint second-order differen
 \begin{definition}[Transpose and Hermitian adjoint]
     Let $X, Y$ be Banach spaces and $A:\dom A \to Y$ be a operator densely defined in $X$. Define the space
     \begin{equation*}
-        \mathcal{D} := \{\varphi\in Y': \varphi\circ A:\dom A\to \R \}\subseteq Y'.
+        \mathcal{D}  \coloneqq  \{\varphi\in Y': \varphi\circ A:\dom A\to \R \}\subseteq Y'.
     \end{equation*}
     Since $\dom(A)$ is dense in $X$, $\varphi\circ A$ can be uniquely extended to $A'\varphi:X\to \R$, that is, $A'\varphi(x) = (\varphi\circ A)(x)$ for any $x\in\dom(A)$, and thus $A'\varphi\in X'$, whose domain is precisely $\dom(A') = \mathcal{D}$. The operator $A'$ is called the \text{transpose} of $A$. Moreover, if $H_1$ and $H_2$ are Hilbert spaces and $A:\dom A\to H_2$ is densely defined in $H_1$, then we analogously define the set 
     \begin{equation*}
-        \dom(A^*) := \{y\in H_2: \exists z\in H_1: (Ax,y)_{H_2} = (x,z)_{H_2}\quad \forall x\in\dom(A)\}\subseteq H_2
+        \dom(A^*)  \coloneqq  \{y\in H_2: \exists z\in H_1: (Ax,y)_{H_2} = (x,z)_{H_2}\quad \forall x\in\dom(A)\}\subseteq H_2
     \end{equation*}
     where $A^*$ is called the \text{Hermitian adjoint} of $A$, defined as $A^*y = z$ with $A^*:\dom(A^*)\to H_1$.
 \end{definition}
@@ -31,7 +31,7 @@ Under appropriate boundary conditions, linear self-adjoint second-order differen
 Note that a symmetric operator with a Hilbert domain is self-adjoint, due to the Hellinger-Toeplitz theorem.
 
 \begin{definition}[Eigenvalues, resolvent] 
-    Let $X$ be a normed space, $\mathcal{D}$ a dense subset of $X$ and $T:\mathcal{D}\to X$ a linear operator. Denote $I:X\to X$ the identity operator. We define the \textit{eigenvalues} $\sigma_p(T)$ as the set of $\lambda\in\mathbb{C}$ such that $T_\lambda := T - \lambda I$ is not injective, which implies that there exists $v\in \ker(T_\lambda)\setminus \{0\}$ such that $Tv=\lambda v$. The \textit{resolvent} $\rho(T)$ is the set of the $\lambda\in\mathbb{C}$ such that $T_\lambda$ is injective, has dense range in $X$ and its inverse is bounded.
+    Let $X$ be a normed space, $\mathcal{D}$ a dense subset of $X$ and $T:\mathcal{D}\to X$ a linear operator. Denote $I:X\to X$ the identity operator. We define the \textit{eigenvalues} $\sigma_p(T)$ as the set of $\lambda\in\mathbb{C}$ such that $T_\lambda  \coloneqq  T - \lambda I$ is not injective, which implies that there exists $v\in \ker(T_\lambda)\setminus \{0\}$ such that $Tv=\lambda v$. The \textit{resolvent} $\rho(T)$ is the set of the $\lambda\in\mathbb{C}$ such that $T_\lambda$ is injective, has dense range in $X$ and its inverse is bounded.
 \end{definition}
 
 \begin{definition}[Eigenvalues and eigenvectors]

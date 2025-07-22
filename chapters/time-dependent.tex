@@ -20,7 +20,7 @@ The fundamental difference between parabolic and hyperbolic systems is the behav
     \end{equation*}
     Note that $\partial_t(u^2) = 2u\dot{u}$, and thus we can write $(\partial_t u, u) = \int_\Omega u\dot{u} = \frac{1}{2}\int_\Omega \partial_t (u^2)$, which leads to
     \begin{equation*}
-        \frac{1}{2}\int_\Omega \partial_t (u^2) + \underbrace{\int \mathcal{L}u \cdot u}_{:= a(u,u)} = 0, 
+        \frac{1}{2}\int_\Omega \partial_t (u^2) + \underbrace{\int \mathcal{L}u \cdot u}_{ \coloneqq  a(u,u)} = 0, 
     \end{equation*}
     and integrating in time in $[0,t]$ with $t\leq T$ we get
     \begin{equation*}
@@ -30,7 +30,7 @@ The fundamental difference between parabolic and hyperbolic systems is the behav
     \begin{equation*}
         \frac{1}{2}\int_\Omega u(t)^2 =  \frac{1}{2} \int_\Omega u(0)^2 - \int_0^t a(u,u)ds.
     \end{equation*}
-    Defining the energy as $E(t) := \int_\Omega u(t)^2$, we get
+    Defining the energy as $E(t)  \coloneqq  \int_\Omega u(t)^2$, we get
     \begin{equation*}
         \frac{1}{2}E(t) = \frac{1}{2}E(0) - \int_0^t \underbrace{a(u,u)}_{\geq \alpha\|u\|^2>0} ds \implies \boxed{E(t) < E(0)}.
     \end{equation*}
@@ -51,13 +51,13 @@ The fundamental difference between parabolic and hyperbolic systems is the behav
     \begin{equation*}
         \frac{1}{2} \int_\Omega \left[\dot{u}^2(t) + (Bu(t))^2\right] = \frac{1}{2} \int_\Omega \left[\dot{u}^2(0) + (Bu(0))^2\right].
     \end{equation*}
-    Now, setting the energy as $E(t) := \int_\Omega \left[u(t)^2 + (Bu(t))^2\right]$, we conclude that $E(t) = E(0)$. Thus, hyperbolic systems are \textit{conservative}.
+    Now, setting the energy as $E(t)  \coloneqq  \int_\Omega \left[u(t)^2 + (Bu(t))^2\right]$, we conclude that $E(t) = E(0)$. Thus, hyperbolic systems are \textit{conservative}.
 \end{enumerate}
 The parabolic initial value problem is given by:
 \begin{equation*}
     \begin{aligned}
-        \partial_t + \mathcal{L}u &= f &&\quad \text{in }\Omega_T := (0,T) \times \Omega\\
-        \hfill Bu &= g &&\quad \text{in }\Sigma_T := (0,T) \times \partial\Omega\\
+        \partial_t + \mathcal{L}u &= f &&\quad \text{in }\Omega_T  \coloneqq  (0,T) \times \Omega\\
+        \hfill Bu &= g &&\quad \text{in }\Sigma_T  \coloneqq  (0,T) \times \partial\Omega\\
         \hfill u(0,x)&= u_0(x) &&\quad \text{in }\Omega,
     \end{aligned}
 \end{equation*}
@@ -87,18 +87,18 @@ and if $f(t) = \sum_{i=1}^{\infty} \lambda_i \phi_i(t)$ for every $t$ where the 
 
 We now define the Bochner spaces we will be using for our analysis:
 \begin{equation*}
-    L^p(0,T; X) := \left\{v:(0,T)\to X: v \text{ is Bochner-integrable}, \int_0^T \|v\|_X^p ds <\infty \right\}.
+    L^p(0,T; X)  \coloneqq  \left\{v:(0,T)\to X: v \text{ is Bochner-integrable}, \int_0^T \|v\|_X^p ds <\infty \right\}.
 \end{equation*}
 \begin{equation*}
-    H^1(0,T; X) := \left\{v:(0,T)\to X: v\in L^2(0,T;X), \partial_t v\in L^2(0,T;X) \right\}.
+    H^1(0,T; X)  \coloneqq  \left\{v:(0,T)\to X: v\in L^2(0,T;X), \partial_t v\in L^2(0,T;X) \right\}.
 \end{equation*}
 In general, $\partial_t v$ should be interpreted as an element of $V'$, since the weak form we will be using is, given $f:\Omega_T\to \R$,
 \begin{equation*}
     (\dot{u},v) + a(u,v) = \langle f, v\rangle \quad \forall v\in V,
 \end{equation*}
-and thus $\dot{u}\in V'$ for the first term to exist. The natural definition that gives sense to this object is as follows: setting $X=L^2(\Omega)$ and $L^2(\Omega_T) := L^2(0,T; L^2(\Omega))$, we denote
+and thus $\dot{u}\in V'$ for the first term to exist. The natural definition that gives sense to this object is as follows: setting $X=L^2(\Omega)$ and $L^2(\Omega_T)  \coloneqq  L^2(0,T; L^2(\Omega))$, we denote
 \begin{equation*}
-    H^1(0,T;L^2(\Omega)) := \left\{v:(0,T)\to X: v\in L^2(\Omega_T), \partial_t v\in L^2(\Omega_T) \right\}.
+    H^1(0,T;L^2(\Omega))  \coloneqq  \left\{v:(0,T)\to X: v\in L^2(\Omega_T), \partial_t v\in L^2(\Omega_T) \right\}.
 \end{equation*}
 This yields a norm equivalence:
 \begin{align*}
