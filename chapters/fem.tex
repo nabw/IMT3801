@@ -558,7 +558,7 @@ We note that one might be tempted to think that naturally the written $a_h$ matc
 \begin{equation*}
 u_h = \sum_{i=1}^N \alpha_i \varphi_i,
 \end{equation*} 
-where the coordinate vector $\vec\alpha = (\alpha_1, \dots, \alpha_N)^T$ is the unknown that defines the discrete solution. Since the Galerkin scheme is valid for all $v_h \in U_h$, we can choose $v_h = \varphi_i$ for $i=1,\dots,N_{el}$. For every $i=1,\dots,N_{el}$ we have
+where the coordinate vector $\vec\alpha = (\alpha_1, \dots, \alpha_N)^\top$ is the unknown that defines the discrete solution. Since the Galerkin scheme is valid for all $v_h \in U_h$, we can choose $v_h = \varphi_i$ for $i=1,\dots,N_{el}$. For every $i=1,\dots,N_{el}$ we have
 \begin{align*}
     a_h(u_h, \varphi_i) &= a_h\left(\sum_{j=1}^{N_{el}}\alpha_j\varphi_j, \varphi_i\right)\\
     &= \sum_{j=1}^{N_{el}} \alpha_j a_h(\varphi_j, \varphi_i)\\
