@@ -27,7 +27,6 @@ D^-f(x_i) \coloneqq \frac{f_{i} - f_{i-1}}{h_{i}}
             \begin{equation*}
 Df(x_i) \coloneqq \frac{f_{i+1} - f_{i-1}}{h_{i+1} - h_{i-1}}
 \end{equation*}
-
     \end{itemize}
 A nice simple exercise is to extend these ideas to second order derivatives, which all stem from Taylor's formula. The application we will be interested is in that of approximating the action of a differential operator using these formulas. For this, we will focus on the forward difference formula. At each grid point we will have
 \begin{equation*}
@@ -198,7 +197,6 @@ This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_hu \
                                              &=C \|R_h(\mathcal A u) - \mat A_hR_h u\|_{\infty,h}&& \\
                                              &\leq Ch^k && \text{(Consistency)}.
         \end{align*}
-
         \paragraph{Convergence $\implies$ stability:}
 
         We note that by taking inverses, we can write stability as 
@@ -434,7 +432,6 @@ Time discretization is an enormous topic, so here we provide simple strategies a
     \begin{equation*}
 \vec x^{n+1} - \vec x^n + \int_{t^n}^{t^{n+1}} \mat L_h \vec x_h(s) \,ds = \int_{t^n}^{t^{n+1}} \vec f_h(s)\,ds.
 \end{equation*}
-
     We present three different schemes depending on three different quadrature rules: 
     \begin{itemize}
         \item Left-sided rule (Explicit):

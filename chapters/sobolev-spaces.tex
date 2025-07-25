@@ -19,7 +19,6 @@ The idea is to generalize the notion of action through integration, so that for 
     \begin{equation*}
 \langle Tf, g \rangle = \int_{\R^d} fg\,dx.
 \end{equation*}
-
 \example{All classical (or strong) derivatives coincide with the weak derivatives, as seen from the integration by parts formulas. Also, consider the Dirac delta distribution given by
     \begin{equation*}
 \langle \delta_x, f\rangle = f(x),
@@ -40,7 +39,6 @@ as given by integration by parts. This is known as a \emph{weak derivative}. Arb
         \langle \dive T, f\rangle &\coloneqq -\langle T, \grad f\rangle, \\
         \langle \curl T, f\rangle &\coloneqq \langle T, \curl f\rangle.
     \end{align*}
-
 \paragraph{Sobolev spaces} The notion of weak derivatives allows us to define differentiable Banach spaces, given by 
     \begin{equation*}
 W^{1,p}(\Omega) \coloneqq \{ f\in L^p(\Omega): \grad f \in L^p(\Omega)\}.
@@ -142,7 +140,6 @@ An important property that we will use many times is the \emph{trace inequality}
     \begin{equation*}
 \| \gamma_0 f \|_{0,\partial\Omega} \leq C \| f \|_{1,\Omega} \qquad\forall f \in \mathcal D(\bar\Omega).
 \end{equation*}
-
 \begin{theorem}[Trace theorem]\label{thm:trace-theorem}
     Set $\Omega$ a bounded and Lipscthiz domain. Then, considering $1/p < s \leq 1$, there exists a continuous extension of $\gamma_0$ given by $\gamma_0: W^{s,p}(\Omega) \to W^{\frac{s-1}{p}, p}(\partial\Omega)$
     \begin{proof}
@@ -194,7 +191,6 @@ where $V_i$ are the extension functions. Finally, it will be useful to know that
     \begin{equation*}
 H_0^1(\Omega) \coloneqq \overline{C_0^\infty(\Omega)}^{\|\cdot \|_{1,\Omega}}.
 \end{equation*}
-
 \paragraph{Note on integration by parts formulas} These formulas will be important to define the normal and tangential traces. All formulas stem from the divergence theorem: 
 
 \begin{theorem}[Divergence Theorem]
@@ -354,7 +350,6 @@ Using all of the previous definitions, we can finally look at actual problems an
         \begin{equation*}
 \|v\|_{0,\Omega} = \lim_{k\to\infty} \underbrace{\|v_{n_k}\|_{0,\Omega}}_{=1} = 1.
 \end{equation*}
-        
         Given a vector field $\vec\phi = (\phi_1,\dots,\phi_d)\in (C_0^\infty(\Omega))^d$, we can show that for $w$ in $H_0^1$ the map $\varphi_{\vec{\phi}}:H^1(\Omega)\to\R$ given by $\varphi_{\vec{\phi}}(w) = (w, \nabla\cdot \vec \phi)$ is continuous:
         \begin{equation*}
 |(w,\nabla\cdot\vec\phi)| = |-(\nabla w, \vec\phi)| \leq \|\nabla w\|_{0,\Omega}\|\vec\phi\|_{0,\Omega} \leq \|w\|_{1,\Omega}\|\vec\phi\|_{0,\Omega},

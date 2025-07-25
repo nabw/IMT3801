@@ -131,7 +131,6 @@ The proofs of the two previous lemmas can now be rewritten using the local inter
 \begin{equation*}
 \|v - \mathcal{I}_{I_i}^1 v\|_{0,I_i} \le h_i^2 |v|_{2,I_i},\qquad|\mathcal{I}_{I_i}^1 v|_{1,I_i} \le h_i |v|_{2,I_i}.
 \end{equation*}
-
 \subsection{The $\mathbb{P}_k$ Lagrange finite elements}
 The interpolation technique presented for the piecewise-linear case (polynomial degree $1$) generalizes to higher-degree polynomials. Consider the mesh $\mathcal{T}_h = \{I_i\}_{0 \le i \le N}$ introduced previously. Let
 \begin{equation*}
@@ -168,7 +167,6 @@ Introduce the set of nodes $\{a_j\}_{0 \le j \le k(N+1)}$ such that $a_j = \xi_{
 \begin{equation*}
 \gamma_j: C(\bar{\Omega}) \ni v \mapsto \gamma_j(v) = v(a_j).
 \end{equation*}
-
 \begin{lemma}
     $\{\varphi_0, \dots, \varphi_{k(N+1)}\}$ is a basis for $P_h^k$, and $\{\gamma_0, \dots, \gamma_{k(N+1)}\}$ is a basis for $\mathcal{L}(P_h^k; \mathbb{R})$.
 
@@ -254,7 +252,6 @@ As well as with the one-dimensional case, we can characterize the interpolation 
     \begin{equation*}
 \sum_{m=2}^{l+1} h^m \left(\sum_{i=0}^N |v - I_h^k v|_{m,I_i}^2\right)^{1/2} \le c h^{l+1} |v|_{l+1,\Omega}.
 \end{equation*}
-
 \begin{proof}
     Let $0 \le l \le k$, $0 \le m \le l+1$. Let $v \in H^{l+1}(\Omega)$.
     Consider a mesh interval $I_i$. Set $\hat{v} = v \circ T_i$. Then, we can go back to $\hat{K}$ via the transformations $T_i$, i.e. change variables in the integral to obtain
@@ -392,7 +389,6 @@ One readily verifies that $\mathbb{P}_k$ is a vector space of dimension
 \begin{equation*}
 \dim \mathbb{P}_k = \binom{d+k}{k} = \begin{cases} k+1 & \text{if } d=1, \\ \frac{1}{2}(k+1)(k+2) & \text{if } d=2, \\ \frac{1}{6}(k+1)(k+2)(k+3) & \text{if } d=3. \end{cases}
 \end{equation*}
-
 \begin{lemma}\label{lemma:simplicial_lagrange_fe}
     Let $K$ be a simplex in $\mathbb{R}^d$. Let $k \ge 1$, let $P = \mathbb{P}_k$, and let $n_{sh} = \dim \mathbb{P}_k$. Consider the set of nodes $\{a_i\}_{1 \le i \le n_{sh}}$ with barycentric coordinates
     \begin{equation*}
@@ -416,7 +412,6 @@ and for $k=3$
 \begin{equation*}
 \begin{cases} \frac{1}{2}\lambda_i(3\lambda_i - 1)(3\lambda_i - 2), & 0 \le i \le d, \\ \frac{9}{2}\lambda_i(3\lambda_i - 1)\lambda_j, & 0 \le i,j \le d, i \ne j, \\ 27\lambda_i \lambda_j \lambda_k, & 0 \le i < j < k \le d. \end{cases}
 \end{equation*}
-
 \subsection{Tensor product Lagrange finite elements}
 \paragraph{Cuboids}
 Given a set of $d$ intervals $\{[c_i, d_i]\}_{1 \le i \le d}$, all with non-zero measure, the set $K = \prod_{i=1}^d [c_i, d_i]$ is called a cuboid. For $x \in K$, there exists a unique vector $(t_1, \dots, t_d) \in [0, 1]^d$ such that, for all $1 \le i \le d$, $x_i = c_i + t_i(d_i - c_i)$. The vector $(t_1, \dots, t_d)$ is called the local coordinate vector of $x$ in $K$.
@@ -442,7 +437,6 @@ For $1 \le i \le d$, set $\xi_{i,l} = c_i + \frac{l}{k}(d_i - c_i)$, $0 \le l \l
 \begin{equation*}
 \theta_{i_1 \dots i_d}(x) = \mathcal{L}_{1,i_1}^k(x_1) \dots \mathcal{L}_{d,i_d}^k(x_d), \quad 0 \le i_1, \dots, i_d \le k.
 \end{equation*}
-
 \section{Finite elements in $H(\dive)$ and $H(\curl)$}
 \paragraph{$H(\dive)$:} Here we consider the local polynomial in $\R^d$ given by
     \begin{equation*}
@@ -578,7 +572,6 @@ where we have defined the \textit{stiffness matrix} $\ten K$ and the \textit{for
 \begin{equation*}
 K_{ij} = a_h(\varphi_j, \varphi_i) \quad \text{and} \quad F_i = l_h(\varphi_i).
 \end{equation*}
-
 Here, we note that computing $K_{ij} = a(\varphi_j, \varphi_i)$ by integrating over the entire domain $\Omega$ for all pairs $(i,j)$ is computationally inefficient, because the basis functions $\varphi_j$ in finite element methods are typically chosen to have compact support, meaning $\varphi_j(x)$ is non-zero only on a small part of the domain. For basis functions associated with nodes of a mesh, the supports of $\varphi_i$ and $\varphi_j$ only overlap for indices $i$ and $j$ corresponding to neighboring nodes or elements, and thus $a(\varphi_j, \varphi_i)$ will be nonzero only for those neighboring $(i,j)$ pairs. This results in the stiffness matrix $\ten K$ being sparse, i.e. most of its entries are zero, and thus a naïve computation method involving nested loops over all global indices $i$ and $j$ would spend an unnecessary amount of time computing zero entries. 
 
 To put this into practice, let $(\Omega, V_h, \Sigma)$ be a finite element. Within each element $\Omega^e$, the global basis functions $\varphi_j$ of $V_h$ that are non-zero on $\Omega^e$ are those associated with the nodes of that element. Let $n_{dof}$ number of degrees of freedom (nodes) of the finite element. We define local shape functions $\phi_a^e$, $a=1, \dots, n_{dof}$, which are the restrictions of the global basis functions to the element $\Omega^e$, re-indexed locally from 1 to $n_{dof}$. We define the local or \textit{element stiffness matrix} $\ten k^e \in \R^{n_{dof}\times n_{dof}}$ and local or \textit{element force vector} $\vec f^e \in \R^{n_{dof}}$ as integrals over $\Omega^e$ using these local shape functions, i.e.

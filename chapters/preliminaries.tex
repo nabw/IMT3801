@@ -26,76 +26,76 @@ Throughout the entire manuscript, we will rely on Banach spaces, Hilbert spaces,
 For now, let's simply review some relevant properties: 
     \begin{itemize}
         \item Continuous linear operators acting on Banach spaces have an induced operator norm: if $T: X\mapsto Y$, then 
-        \begin{equation*}
-\| T\| =  \sup_{x\in X}\frac{|Tx|_Y}{|x|_X}.
-\end{equation*}
+        \begin{equation}\label{eq:operator-norm}
+        \| T\| =  \sup_{x\in X}\frac{|Tx|_Y}{|x|_X}.
+        \end{equation}
         We denote the space of continuous linear operators from $X$ to $Y$ as $L(X,Y)$. 
         \item Given a Banach space $X$ and a linear operator $T:X\to Y$, where $Y$ is a normed space, we can define the norm induced by $T$ in the space $W=\text{Dom}(T)\subseteq X$ as
-        \begin{equation*}
-\|x\|_{W} \coloneqq \|x\|_X + \|Tx\|_Y.
-\end{equation*}
+        \begin{equation*}\label{eq:banach-induced-norm}
+        \|x\|_{W} \coloneqq \|x\|_X + \|Tx\|_Y.
+        \end{equation*}
         This will be important when constructing Sobolev spaces and their norms. We can show this is indeed a norm: taking $x,y\in W$ and $\alpha\in \R$ we get
         \begin{itemize}
             \item Triangle inequality:
-            \begin{align*}
+            \begin{align*}\label{eq:banach-triangle-inequality}
                 \|x+y\|_W &= \|x+y\|_X + \|T(x+y)\|_Y \\
                 &\leq \|x\|_X + \|y\|_X + \|Tx\|_Y + \|Ty\|_Y \tag{$\|\cdot\|_X$ and $\|\cdot\|_Y$ are norms}\\
                 &= \|x\|_W + \|y\|_W.
             \end{align*}
             \item Homogeneity: since $T$ is linear, we get 
-            \begin{equation*}
-\|\alpha x\|_W = \|\alpha x\|_X + \|T(\alpha x)\|_Y = |\alpha|\|x\|_X + |\alpha|\|Tx\|_Y = |\alpha|\|x\|_W.
-\end{equation*}
+            \begin{equation*}\label{eq:banach-homogeneity}
+            \|\alpha x\|_W = \|\alpha x\|_X + \|T(\alpha x)\|_Y = |\alpha|\|x\|_X + |\alpha|\|Tx\|_Y = |\alpha|\|x\|_W.
+            \end{equation*}
             \item Positive-definiteness: we note that $0=\|x\|_W\geq \|x\|_X\geq 0$, which implies $x=0$.
         \end{itemize}
         \item Banach spaces are complete metric spaces. For a given Banach space $X$, its (topological) dual is the space $X'$ of functions $X\mapsto \R$, which is always Banach. The norm in $X'$ is referred to as the dual norm, and for $T\in X'$ it is defined as 
-            \begin{equation*}
-\|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|= \sup_{x\in X}\frac{|T(x)|}{\|x\|_X}.
-\end{equation*}
+            \begin{equation}\label{eq:dual-norm}
+            \|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|= \sup_{x\in X}\frac{|T(x)|}{\|x\|_X}.
+            \end{equation}
         The action of an element of the dual space is sometimes denoted as $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. In general, one can identify a part of the bidual space $X'' = (X')'$ through the evaluation operator $T_f:X'\mapsto \R$ in $X''$ defined as $T_f(L) = L(f)$. This immersion is not surjective. 
         \item Inner products are mostly used as projections. This means that, in the same way that we can orthogonalize a vector $x$ with respect to $y$, we can also do this in the Hilbert space setting analogously as 
-            \begin{equation*}
-x_\perp \coloneqq x - (x, y)_H y.
-\end{equation*}
+            \begin{equation}\label{eq:projection-orthogonalization}
+            x_\perp \coloneqq x - (x, y)_H y.
+            \end{equation}
         It can be quickly verified that the function $x_\perp$ is indeed perpendicular to $y$ in the sense that $(x_\perp, y)_H=0$. 
         \item The inner product yields the fantastic Riesz map, which is actually an isometry. This is given as follows: consider a Hilbert space $H$ with inner product $(\cdot, \cdot)_H$, then a Riesz map is an operator $R_H: H\mapsto H'$ such that for any $x,y$ in $H$ it holds that $\langle R_H(x), y\rangle_{H'\times H} = (x, y)_H$. Notably, $\|R_H(x)\|_{H'} = \| x \|_H$. 
     \end{itemize}
 One fundamental aspect of Hilbert spaces is that they provide some intuitive properties related to projections, which we recall through the following results: 
 \begin{theorem}[Best approximation]\label{thm:best-approximation}
     Set $U\subset H$ a closed subspace of a Hilbert space $H$ and set $f$ in $H$. Then there exists a unique $g$ in $U$ such that
-        \begin{equation*}
-\|f - g \|_H = \inf_{u\in U} \| f - u\|_H.
-\end{equation*}
+        \begin{equation}
+        \|f - g \|_H = \inf_{u\in U} \| f - u\|_H.
+        \end{equation}
 \end{theorem}
 Using this, we can uniquely define the orthogonal complement of a set $U$: 
-    \begin{equation*}
-U^\perp \coloneqq \{v\in H: (v, u)_H = 0 \quad\forall u\in U\}.
-\end{equation*}
-\begin{theorem}\label{thm:orthogonal-decomposition}
+    \begin{equation}\label{eq:orthogonal-complement}
+    U^\perp \coloneqq \{v\in H: (v, u)_H = 0 \quad\forall u\in U\}.
+    \end{equation}
+\begin{theorem}\label{thm:orthogonal-decomposition} 
     Set $U$ a closed subspace of a Hilbert space $H$. Then, if $f$ is in $H$, there exists a unique pair $(u,v)$ in $U\times U^\perp$ such that 
         \begin{equation*}
-f = u + v.
-\end{equation*}
+        f = u + v.
+        \end{equation*}
 \end{theorem}
-Some common and/or simple examples: Helmholtz decomposition, zero average functions, zero trace tensors, symmetric tensors. Note that the orthogonal complement is defined with respect to a \emph{given} inner product.
+Some common and/or simple examples: Helmholtz decomposition, zero average functions, zero trace tensors, symmetric tensors. Note that the orthogonal complement is defined with respect to a \emph{given} inner product.\\
 
 \example{
   Assume we want to orthogonalize with respect to $U=\R$. Then, we have that there is a constant $c$ such that for $f$ in a Hilbert space $H$ we can write
     \begin{equation*}
-f = h + c,
-\end{equation*}
+    f = h + c,
+    \end{equation*}
   with $h\perp U$. Noting that a function $x$ satisfies $x\perp U$ iff $(x,1)_H = 0$, then we can use the previous expression to obtain 
     \begin{equation*}
-(f,1)_H = (c,1) = c(1,1)_H,
-\end{equation*} 
+    (f,1)_H = (c,1) = c(1,1)_H,
+    \end{equation*} 
   which yields
     \begin{equation*}
-c = \frac{(f,1)_H}{(1,1)_H},
-\end{equation*}
+    c = \frac{(f,1)_H}{(1,1)_H},
+    \end{equation*}
   and
     \begin{equation*}
-h = f - c = f -  \frac{(f,1)_H}{(1,1)_H}f.
-\end{equation*}
+    h = f - c = f -  \frac{(f,1)_H}{(1,1)_H}f.
+    \end{equation*}
 }
 
 The most important spaces for us will be the Lebesgue spaces $L^p(\Omega;\R^d)$ given by measurable functions $f:\Omega \mapsto \R^d$ such that
@@ -109,8 +109,7 @@ L^\infty(\Omega) \subset L^p(\Omega) \subset ... \subset L^1(\Omega).
 A simple way to remember this is to split a function as $f = I_{|f|\leq 1}f + I_{|f|\geq 1}f$ and note that $|x|^p < |x|^{p+\epsilon}$ for $\epsilon > 0$. 
 
 
-\section{Fundamental theorems of Functional Analysis}
-\todo[inline]{Add: Closed Graph, Open Mapping, Hahn-Banach as written by Long Chen.}
+
 
 
 \section{Fréchet and Gateaux derivatives}
@@ -258,7 +257,6 @@ Let us list some useful properties:
         &= \frac{1}{p} \int_\Omega p(u+\varepsilon v)^{p-1}v dx|_{\varepsilon=0} \\
         &= \int_\Omega u^{p-1}v dx
     \end{align*}
-
     \begin{align*}
         d^2\psi(u)[v_1,v_2] &= d(d F_{v_1}(u))[v_2] \\
         &= \frac{d}{d\varepsilon}|_{\varepsilon=0}\int_\Omega(u+\varepsilon v_2)^{p-1} v_1 dx\\
@@ -287,7 +285,8 @@ Here, the index $i$ is called a \textit{dummy index}, because its replacement wi
 \end{equation*} 
     We now define the concept of a \textit{tensor} on the standard Euclidean space. 
 \begin{definition}[Tensor and tensor product]
-    A \textit{second-order tensor} $\ten T$ is a linear operator $\ten T\in \mathcal{L}(\R^3, \R^3)$. We write its action on $\vec u\in\R^3$ as $\ten T(\vec u) \equiv \ten T \vec u$. The \textit{components} $T_{ij}\in\R$ of $\ten T$ are defined as the $i$-th component of $\ten T\vec e_j$, i.e. $T_{ij}\vec e_i \coloneqq \ten T\vec e_j$, or equivalently, $T_{ij} = \vec e_i\cdot\ten T\vec e_j$. Since $\mathcal{L}(\R^3,\R^3)$ and $\R^{3\times 3}$ are isomorphic, we can always uniquely identify a second-order tensor $\ten T$ via its coefficient matrix $[\ten T]\in\R^{3\times 3}$, and thus we just write $\ten T$ for ease of notation.
+    A \textit{second-order tensor} $\ten T$ is a linear operator $\ten T\in \mathcal{L}(\R^3, \R^3)$. We write its action on $\vec u\in\R^3$ as $\ten T(\vec u) \equiv \ten T \vec u$. The \textit{components} $T_{ij}\in\R$ of $\ten T$ are defined as the $i$-th component of $\ten T\vec e_j$, i.e. $T_{ij}\vec e_i \coloneqq \ten T\vec e_j$, or\section{Fundamental theorems of Functional Analysis}
+\todo[inline]{Add: Closed Graph, Open Mapping, Hahn-Banach as written by Long Chen.} equivalently, $T_{ij} = \vec e_i\cdot\ten T\vec e_j$. Since $\mathcal{L}(\R^3,\R^3)$ and $\R^{3\times 3}$ are isomorphic, we can always uniquely identify a second-order tensor $\ten T$ via its coefficient matrix $[\ten T]\in\R^{3\times 3}$, and thus we just write $\ten T$ for ease of notation.
 
     Given two vectors $\vec a, \vec b\in\R^3$, we can construct a second-order tensor through the \textit{tensor product} $\otimes$, where we identify
     \begin{align*}
@@ -298,7 +297,6 @@ Here, the index $i$ is called a \textit{dummy index}, because its replacement wi
     \begin{equation*}
         (\vec a\otimes\vec b)\vec c = (\vec b\cdot\vec c)\vec a.
     \end{equation*}
-    
     More generally, a $n$th-order tensor may be expressed in the form 
     \begin{equation*}
         A_{i_1i_2\dots i_n}\vec e_{i_1}\otimes\vec e_{i_2}\otimes\dots\otimes\vec e_{i_n},
@@ -435,5 +433,3 @@ and in spatial coordinates, we denote them as
 \begin{equation*}
     \vx \equiv \grad \qquad \vx\cdot \neq \dive \qquad \vx \times \equiv \curl.
 \end{equation*}
-
-

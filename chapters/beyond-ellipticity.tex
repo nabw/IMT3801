@@ -71,7 +71,6 @@ Combining both lemmas, we can write
     &\Longleftrightarrow T'\text{ injective and with closed range}
     \\&\Longleftrightarrow T'\text{ is bounded below}
 \end{align*}
-
 Let \(U\) and \(V\) Hilbert spaces and \(T:U\to V\) linear continuous operator
 with transpose \(T':V'\to U'\), considering its adjoint operator \(T^*:V \to U\), 
 we can write \[T^* = R_U^{-1} \circ T' \circ R_V\] and 
@@ -105,7 +104,6 @@ Theorem, we have that
     0 < c \le \inf_{v\in V}\sup_{u\in U}
     \frac{(Tu, v)}{\lVert u \rVert_{U}\lVert v \rVert_{V}}
 \end{align*}
-
 We also can characterize the injectivity of the operator.
 
 \begin{lemma}
@@ -162,8 +160,6 @@ for some $\xi_N$ in $U_N$, as in the Lax-Milgram proof. Taking the infimum in $\
     \begin{equation*}
 \| u - u_N \| \leq \frac{C}{\alpha}\text{dist}(u, U_N).
 \end{equation*}
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Fredholm operators}
 
@@ -199,12 +195,10 @@ Using $H_0^1(\Omega)$ with the norm induced by the seminorm $|v|_1 = \|\nabla v\
         a(u,v) &\leq \|\nabla u\|_0\|\nabla v\|_0 + k^2\|u\|_0\|v\|_0,\\ 
         &\leq (1+k^2C_\Omega^2)|u|_1|v|_1.
     \end{align*}
-
     \item Coercivity: 
     \begin{equation*}
         a(v,v) = \|\nabla v\|^2_{0,\Omega} - k^2\|v\|^2_{0,\Omega}.
     \end{equation*}
-
     We note that, by Poincaré inequality,
 
     \[ k^2\|v\|^2_0 \leq k^2 C^2_{\Omega}\|\nabla v\|^2_0, \]
@@ -215,7 +209,6 @@ Using $H_0^1(\Omega)$ with the norm induced by the seminorm $|v|_1 = \|\nabla v\
         a(v,v) &\geq \|\nabla v\|^2_0 - k^2C_\Omega^2\|\nabla v\|^2_0 \\
         &= (1- k^2 C_\Omega^2)\|\nabla v\|^2_{0,\Omega}.
     \end{align*}
-
     In other words, the problem is well-possed if 
     \begin{equation*}
 1-k^2C_\Omega^2 > 0 \iff k^2 < \frac{1}{C_\Omega^2}
@@ -263,7 +256,6 @@ A simpler way of showing that an operator is Fredholm, is through a Gårding ine
         &\leq \sup_{w\in H}\frac{\|v\|_V\|i\|\|w\|_H}{\|w\|_H},\\
         &\leq \|i\|\|v\|.
     \end{align*}
-
     Then, the operator associated to the problem is $B  \coloneqq A + C_V T\circ i$, where:
     \begin{itemize}
         \item $B$ is invertible,
@@ -296,7 +288,6 @@ Then:
     \iff &\langle Au, v\rangle_{H'\times H} = \langle f, v\rangle_{H'\times H}\quad \forall v\in H,\\
     \iff &Au = f \quad\text{ in $H'$ and }(R^{-1}\circ A)u = R^{-1}f\quad\text{in }H.
 \end{align*}
-
 Also:
 
 \begin{align*}
@@ -304,7 +295,6 @@ Also:
     \iff &(R^{-1}\circ A u_h,v_h)_H = (R^{-1}f,v_h)_H\quad\forall v_h\in H_h,\\
     \iff &\Pi_h\mathbb{A}u_h = \Pi_h\mathbb{F},
 \end{align*}
-
 where $\mathbb{A} = R^-1\circ A$ and $\mathbb{F} = R^{-1}f$. The stability estimate gives, 
 
 \[\|u_h\| \leq\frac{1}{\alpha}\|\Pi_h\mathbb{F}\| = \frac{1}{\alpha}\|\Pi_h\mathbb{A} u_h\|.\]
@@ -315,7 +305,6 @@ Finally, by duality, we get
     \|u_h\| &\leq \frac{1}{\alpha}\|\Pi_h\mathbb{A}u_h\| = \frac{1}{\alpha}\sup_{v_h}\frac{(\Pi_h\mathbb{A}u_h,v_h)}{\|v_h\|}
     =\frac{1}{\alpha}\sup_{v_h}\frac{\langle Au_h,v_h\rangle_{H'\times H}}{\|v_h\|} = \frac{1}{\alpha}\sup_{v_h}\frac{a(u_h,v_h)}{\|v_h\|}.
 \end{align*}
-
 We call this result,
 
 \[\|u_h\| \leq C\sup_{v_h\in V_h}\frac{a(u_h,v_h)}{\|v_h\|},\qquad \forall u_h\in H_h,\]
@@ -348,7 +337,6 @@ Then $G_h$ is bounded. We observe that, as $G_h$ is a porjection, it holds that 
     &= \|u-\Pi_hu\| + \|G_h(\Pi_hu - u)\|,\\
     &\leq (1+C\|A+K\|)\|u - \Pi_h u\|,
 \end{align*}
-
 which implies
 
 \[\|u-u_h\|\leq (1+C\|A+K\|)\inf_{v_h\in H_h}\|u-v_h\|,\] 
