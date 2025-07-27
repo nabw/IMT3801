@@ -4,6 +4,7 @@
 \usepackage{fullpage}
 \usepackage{booktabs}
 \usepackage{hyperref}
+\usepackage{environ}
 %%%% Remove some annoying hyperref warnings. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % See https://tex.stackexchange.com/questions/10555/hyperref-warning-token-not-allowed-in-a-pdf-string
 \makeatletter
@@ -55,6 +56,11 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 
+\setlength{\abovedisplayskip}{0pt}%
+\setlength{\belowdisplayskip}{0pt}%
+\setlength{\abovedisplayshortskip}{0pt}%
+\setlength{\belowdisplayshortskip}{0pt}%
+
 \usepackage{listings}
 \usepackage{xcolor}
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -83,3 +89,22 @@
 }
 \lstset{style=mystyle}
 
+\NewEnviron{tightalign*}{%
+  \setlength{\abovedisplayskip}{4pt}%
+  \setlength{\belowdisplayskip}{4pt}%
+  \setlength{\abovedisplayshortskip}{4pt}%
+  \setlength{\belowdisplayshortskip}{4pt}%
+  \begin{align*}
+    \BODY % \BODY is the content of the environment
+  \end{align*}
+}
+
+\NewEnviron{tightalign}{%
+  \setlength{\abovedisplayskip}{4pt}%
+  \setlength{\belowdisplayskip}{4pt}%
+  \setlength{\abovedisplayshortskip}{4pt}%
+  \setlength{\belowdisplayshortskip}{4pt}%
+  \begin{align}
+    \BODY % \BODY is the content of the environment
+  \end{align}
+}

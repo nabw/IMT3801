@@ -7,9 +7,17 @@ From the above definition, we see that the numerical analysis of any PDE defined
 \begin{definition}[Material and spatial frames]
     The material, Lagrangian or reference frame corresponds to the reference configuration $\Omega_0$, with material coordinates $X_i$ that are written in uppercase symbols. The spatial, Eulerian or current frame corresponds to the configuration $\Omega_t$ at a time $t>0$, with spatial coordinates $x_i$ that are written in lowercase symbols. 
 
-    A body is composed of \textit{material points}, which are assigned material coordinates $\vec X=X_i\vec e_i$ where $\{\vec e_i\}_i$ is an orthonormal basis of $\mathcal{E}$. After deformation and at time $t$, we have \textit{spatial points}, which are assigned spatial coordinates $\vec x = x_i\vec e_i$
+    A body is composed of \textit{material points}, which are assigned material coordinates $\vec X=X_i\vec e_i$ where $\{\vec e_i\}_i$ is an orthonormal basis of $\mathcal{E}$. After deformation and at time $t$, we have \textit{spatial points}, which are assigned spatial coordinates $\vec x = x_i\vec e_i$.
 \end{definition}
-With these definitions, we are ready to define the vector field that correspond to the physical movement of the material points. 
+Since material and spatial coordinates are related by a mapping without any constraints on its shape, we have to distinguish between differentiation in both frames. To this end, we use uppercase and lowercase notation for each case, and thus the gradient, divergence and curl operators in material coordinates are symbolized in nabla and text notation as 
+\begin{equation*}
+    \vX \equiv \Grad \qquad \vX\cdot \neq \Dive \qquad \vX \times \equiv \Curl,
+\end{equation*}
+and in spatial coordinates, we denote them as 
+\begin{equation*}
+    \vx \equiv \grad \qquad \vx\cdot \neq \dive \qquad \vx \times \equiv \curl.
+\end{equation*}
+With these definitions and notations, we are ready to define the vector field that correspond to the physical movement of the material points. 
 \begin{definition}[Deformation function]
     The deformation function $\vvarphi:\Omega_0\times\R^+ \to \Omega_t$ is the differentiable, injective and orientation-preserving\footnote{We say that the mapping preserves orientations if $\det(\vX\vvarphi)>0$.} vector-valued mapping that describes the movement of point $\vec X$ in the material frame to point $\vec x$ in the spatial frame at time $t$, as 
     \begin{equation*}
