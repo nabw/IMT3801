@@ -23,18 +23,18 @@ Throughout the entire manuscript, we will rely on Banach spaces, Hilbert spaces,
     We will denote inner products mostly by $\langle\cdot, \cdot\rangle$ and $(\cdot, \cdot)$. Sometimes it will be important to distinguish the specific product we consider, i.e. $(\cdot, \cdot)_H$. 
 \end{definition}
 \begin{definition}[Linear operators]
-    Given two Banach spaces $X$ and $Y$, we denote the set of continuous linear operators from $X$ to $Y$ as $L(X,Y)$. Naturally, for a linear operator $T\in L(X,Y)$, for $x_1,x_2\in X$ and $\alpha\in\R$, it holds that 
+    Given two Banach spaces $X$ and $Y$, we denote the set of continuous linear operators from $X$ to $Y$ as $\mathcal{L}(X,Y)$. Naturally, for a linear operator $T\in \mathcal{L}(X,Y)$, for $x_1,x_2\in X$ and $\alpha\in\R$, it holds that 
     \begin{equation*}
         T(x_1+\alpha x_2) = T(x_1) + \alpha T(x_2).
     \end{equation*}
 \end{definition}
 For now, let's simply review some relevant properties: 
     \begin{itemize}
-        \item Continuous linear operators acting on Banach spaces have an induced operator norm: if $T\in L(X,Y)$, then 
+        \item Continuous linear operators acting on Banach spaces have an induced operator norm: if $T\in \mathcal{L}(X,Y)$, then 
         \begin{equation}\label{eq:operator-norm}
         \| T\| =  \sup_{x\in X}\frac{|Tx|_Y}{|x|_X}.
         \end{equation}
-        \item Given a Banach space $X$ and a linear operator $T\in L(X,Y)$, where $Y$ is a normed space, we can define the norm induced by $T$ in the space $W=\text{Dom}(T)\subseteq X$ as
+        \item Given a Banach space $X$ and a linear operator $T\in \mathcal{L}(X,Y)$, where $Y$ is a normed space, we can define the norm induced by $T$ in the space $W=\text{Dom}(T)\subseteq X$ as
         \begin{equation*}\label{eq:banach-induced-norm}
         \|x\|_{W} \coloneqq \|x\|_X + \|Tx\|_Y.
         \end{equation*}
@@ -56,7 +56,7 @@ For now, let's simply review some relevant properties:
             \begin{equation}\label{eq:dual-norm}
             \|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|= \sup_{x\in X}\frac{|T(x)|}{\|x\|_X}.
             \end{equation}
-        The action of an element of the dual space is sometimes denoted as $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. In general, one can identify a part of the bidual space $X'' = (X')'$ through the evaluation operator $T_f:X'\mapsto \R$ in $X''$ defined as $T_f(L) = L(f)$. This immersion is not surjective. 
+        The action of an element of the dual space is sometimes denoted as $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. In general, one can identify a part of the bidual space $X'' = (X')'$ through the evaluation operator $T_f:X'\mapsto \R$ in $X''$ defined as $T_f(L) = \mathcal{L}(f)$. This immersion is not surjective. 
         \item Inner products are mostly used as projections. This means that, in the same way that we can orthogonalize a vector $x$ with respect to $y$, we can also do this in the Hilbert space setting analogously as 
             \begin{equation}\label{eq:projection-orthogonalization}
             x_\perp \coloneqq x - (x, y)_H y.
@@ -116,7 +116,7 @@ A simple way to remember this is to split a function as $f = I_{|f|\leq 1}f + I_
 \section{Fréchet and Gateaux derivatives}
 We will now cover the notion of differentiability in Banach spaces. The presentation closely follows that of~\cite{ambrosetti1995primer}, with substantially less detail.
 \begin{definition}
-    Set $u\in U \subset X$ with $U$ an open set, and $F:U\to Y$. We say $F$ is Fréchet differentiable at $u$ if there exists a linear operator $A\in L(X,Y)$ such that
+    Set $u\in U \subset X$ with $U$ an open set, and $F:U\to Y$. We say $F$ is Fréchet differentiable at $u$ if there exists a linear operator $A\in \mathcal{L}(X,Y)$ such that
     \begin{equation}\label{eq:frechet-derivative}
         F(u+h)=F(u)+A(h)+o(\|h\|),
     \end{equation}
@@ -150,7 +150,7 @@ We now define the Fréchet derivative map.
 \begin{definition}
     Let $F:U\to Y$ be a Fréchet differentiable function in $U$ (i.e. Fréchet differentiable at every point $u\in U$). The map
     \begin{tightalign*}
-            F':U&\to L(X,Y)\\
+            F':U&\to \mathcal{L}(X,Y)\\
             u&\mapsto dF(u)
     \end{tightalign*}
     is called the Fréchet derivative of $F$. If $F'$ is continuous, we say that $F\in C^1$ and write $F\in C^1(U,Y)$.
@@ -223,15 +223,15 @@ Then, we have
 \end{proof}
 Typically, one computes the Gâteaux derivative and hope it is continuous.
 
-For higher order derivatives, we start from the Fréchet derivative $F'(u) \coloneqq dF(u)\in L(X,Y)$, where $F:U\to Y$. Repeating the calculation, we have
+For higher order derivatives, we start from the Fréchet derivative $F'(u) \coloneqq dF(u)\in \mathcal{L}(X,Y)$, where $F:U\to Y$. Repeating the calculation, we have
 \begin{equation*}
     d^2 F(u) = dF'(u), 
 \end{equation*} 
-where $F': U\to L(X,Y)$, and so $dF'(u) \in L(X, L(X,Y))$. Notably, the space $L(X, L(X,Y))$ is isometric to $L(X\times X,Y)$ through the isometry
+where $F': U\to \mathcal{L}(X,Y)$, and so $dF'(u) \in \mathcal{L}(X, \mathcal{L}(X,Y))$. Notably, the space $\mathcal{L}(X, \mathcal{L}(X,Y))$ is isometric to $\mathcal{L}(X\times X,Y)$ through the isometry
 \begin{equation*}
     \Psi_A(u_1,u_2) = [A(u_1)](u_2),
 \end{equation*} 
-for $A\in L(X,L(X,Y))$. For this reason, most people write the second derivative as $d^2 F(u) [h_1,h_2]$, instead of $(d^2 F(u)[h_1])[h_2]$. In calculus of variations, it is common to study the second varition of a functional. This is simply $d^2 \Pi(u)[h,h]$, as seen in the second order term of the Taylor series
+for $A\in \mathcal{L}(X,\mathcal{L}(X,Y))$. For this reason, most people write the second derivative as $d^2 F(u) [h_1,h_2]$, instead of $(d^2 F(u)[h_1])[h_2]$. In calculus of variations, it is common to study the second varition of a functional. This is simply $d^2 \Pi(u)[h,h]$, as seen in the second order term of the Taylor series
 \begin{equation*}
     f(x+h)\approx f(x) + \nabla f(x) \cdot h + \frac{1}{2} h^\top (Hf)(x) h,
 \end{equation*} 
@@ -244,7 +244,7 @@ Let us list some useful properties:
         dF_h(u)[k] = F''(u)[h,k]. 
     \end{equation}
     We can then compute the second derivative by fixing $h$ in the first derivative and differentiating like we've done in respect to $u$ for a direction $k$.
-    \item If $F$ is twice differentiable, then $F''(u)\in L(X\times X, Y)$ is symmetric.
+    \item If $F$ is twice differentiable, then $F''(u)\in \mathcal{L}(X\times X, Y)$ is symmetric.
     \item Partial derivatives are defined using projections, i.e. if $F: U\times V \to Y$, set $\sigma_v(u)=(u,v)$. Then, the partial derivatives w.r.t. $u$ is
     \begin{equation*}
         d(F\circ \sigma_v)(u)[h],
@@ -291,7 +291,7 @@ Here, the index $i$ is called a \textit{dummy index}, because its replacement wi
     \end{equation*} 
     We now define the concept of a \textit{tensor} on the standard Euclidean space. 
 \begin{definition}[Tensor and tensor product]
-    A \textit{second-order tensor} $\ten T$ is defined as a linear operator $\ten T\in L(\R^3, \R^3)$. We write its action on $\vec u\in\R^3$ as $\ten T(\vec u) \equiv \ten T \vec u$. The \textit{components} $T_{ij}\in\R$ of $\ten T$ are defined as the $i$-th component of $\ten T\vec e_j$, i.e. $T_{ij}\vec e_i \coloneqq \ten T\vec e_j$, or equivalently, $T_{ij} = \vec e_i\cdot\ten T\vec e_j$. Since $L(\R^3,\R^3)$ and $\R^{3\times 3}$ are isomorphic, we can always uniquely identify a second-order tensor $\ten T$ via its coefficient matrix $[\ten T]\in\R^{3\times 3}$, and thus we just write $\ten T$ for ease of notation.
+    A \textit{second-order tensor} $\ten T$ is defined as a linear operator $\ten T\in \mathcal{L}(\R^3, \R^3)$. We write its action on $\vec u\in\R^3$ as $\ten T(\vec u) \equiv \ten T \vec u$. The \textit{components} $T_{ij}\in\R$ of $\ten T$ are defined as the $i$-th component of $\ten T\vec e_j$, i.e. $T_{ij}\vec e_i \coloneqq \ten T\vec e_j$, or equivalently, $T_{ij} = \vec e_i\cdot\ten T\vec e_j$. Since $\mathcal{L}(\R^3,\R^3)$ and $\R^{3\times 3}$ are isomorphic, we can always uniquely identify a second-order tensor $\ten T$ via its coefficient matrix $[\ten T]\in\R^{3\times 3}$, and thus we just write $\ten T$ for ease of notation.
 
     Given two vectors $\vec a, \vec b\in\R^3$, we can construct a second-order tensor through the \textit{tensor product} $\otimes$, where we identify
     \begin{tightalign*}\label{eq:tensor-product-definition}

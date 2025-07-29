@@ -456,8 +456,8 @@ This proof can be modified to accomodate for boundary conditions holding only in
             \| \grad v_k \|_p = \| \|u_k - \bar u_k\|_p^{-1} \grad (u_k - \bar u_k) \|_p < \frac 1 k,
         \end{equation*}
         which in particular means that $(v_k)_k$ is a bounded sequence in $W^{1,p}(\Omega)$. This means that $(v_k)_k$ has a weakly convergent sequence in $W^{1,p}(\Omega)$, and as this space is compactly embedded in $L^p(\Omega)$ (Rellich-Kondrachov), then there exists an element $v$ in $L^p(\Omega)$ such that, possibly up to a subsequence, $v_{k_j} \to v$. This implies that $\bar v=0$ and $\|v\|_p=1$. Using the bound on $\grad v_k$, one can also show that for smooth functions $\phi$, 
-            \begin{equation*}
-        \int_\Omega v \partial_i \phi\,dx = \lim_k \int v_k \partial_i \phi\,dx = - \lim_k \int_\Omega \partial_i v_k \phi = 0.
+        \begin{equation*}
+            \int_\Omega v \partial_i \phi\,dx = \lim_k \int v_k \partial_i \phi\,dx = - \lim_k \int_\Omega \partial_i v_k \phi = 0.
         \end{equation*}
         This establishes that $\grad v=0$, which implies that $v$ is constant (it is not trivial to check that null weak derivatives implies being a constant), and the null average condition yields that $v=0$. This contradicts the initial hypothesis. 
     \end{proof}
