@@ -2,7 +2,7 @@ Under appropriate boundary conditions, linear self-adjoint second-order differen
 
 \section{Spectral theory}\label{sec:spectral-theory}
 \begin{definition}[Densely-defined operators]\label{def:densely-defined}
-    A linear operator $A:\dom A \to Y$ is \textit{densely defined in $X$} if its domain is dense in a Banach space $(X,\|\cdot\|_X)$ from which it inherits the norm, i.e. $\overline{\dom A} = X$. For instance, the derivative operator 
+    A linear operator $A:\dom A \to Y$ is \emph{densely defined in $X$} if its domain is dense in a Banach space $(X,\|\cdot\|_X)$ from which it inherits the norm, i.e. $\overline{\dom A} = X$. For instance, the derivative operator 
     \begin{equation*}
         \frac{d}{dx}:C^1((0,1))\to C((0,1))
     \end{equation*}
@@ -20,18 +20,18 @@ Under appropriate boundary conditions, linear self-adjoint second-order differen
     where $A^*$ is called the \text{Hermitian adjoint} of $A$, defined as $A^*y = z$ with $A^*:\dom(A^*)\to H_1$.
 \end{definition}
 \begin{definition}[Symmetric and self-adjoint operators]\label{def:symmetric-selfadjoint}
-    An operator $A:\dom A\to H$ densely defined in a Hilbert space $H$ is \textit{symmetric} if 
+    An operator $A:\dom A\to H$ densely defined in a Hilbert space $H$ is \emph{symmetric} if 
     \begin{equation}
         (Ax,y)_H = (x,Ay)_H \quad \forall x,y\in\dom(A).
     \end{equation}
-    Equivalently, $A$ is symmetric if and only if $A$ is a restriction of $A^*$, that is, $A=A^*|_{\dom(A)}$ with $\dom(A)\subseteq \dom(A^*)$. Further, the operator $A$ is called \textit{self-adjoint} if $A^*=A$, i.e. if it is symmetric and $\dom(A) = \dom(A^*)$.  
+    Equivalently, $A$ is symmetric if and only if $A$ is a restriction of $A^*$, that is, $A=A^*|_{\dom(A)}$ with $\dom(A)\subseteq \dom(A^*)$. Further, the operator $A$ is called \emph{self-adjoint} if $A^*=A$, i.e. if it is symmetric and $\dom(A) = \dom(A^*)$.  
 \end{definition}
 Note that a symmetric operator with a Hilbert domain is self-adjoint, due to the Hellinger-Toeplitz theorem.
 \begin{definition}[Eigenvalues, resolvent]\label{def:eigenvalues-resolvent}
-    Let $X$ be a normed space, $\mathcal{D}$ a dense subset of $X$ and $T:\mathcal{D}\to X$ a linear operator. Denote $I:X\to X$ the identity operator. We define the \textit{eigenvalues} $\sigma_p(T)$ as the set of $\lambda\in\mathbb{C}$ such that $T_\lambda  \coloneqq  T - \lambda I$ is not injective, which implies that there exists $v\in \ker(T_\lambda)\setminus \{0\}$ such that $Tv=\lambda v$. The \textit{resolvent} $\rho(T)$ is the set of the $\lambda\in\mathbb{C}$ such that $T_\lambda$ is injective, has dense range in $X$ and its inverse is bounded.
+    Let $X$ be a normed space, $\mathcal{D}$ a dense subset of $X$ and $T:\mathcal{D}\to X$ a linear operator. Denote $I:X\to X$ the identity operator. We define the \emph{eigenvalues} $\sigma_p(T)$ as the set of $\lambda\in\mathbb{C}$ such that $T_\lambda  \coloneqq  T - \lambda I$ is not injective, which implies that there exists $v\in \ker(T_\lambda)\setminus \{0\}$ such that $Tv=\lambda v$. The \emph{resolvent} $\rho(T)$ is the set of the $\lambda\in\mathbb{C}$ such that $T_\lambda$ is injective, has dense range in $X$ and its inverse is bounded.
 \end{definition}
 \begin{definition}[Eigenvalues and eigenvectors]\label{def:eigenvalues-eigenvectors}
-    Let $A:\dom(A)\to Y$ be a linear operator. An element $v\in \dom(A)$ is called an \textit{eigenvector} of $A$, with \textit{eigenvalue} $\lambda\in\R$, if $A(v) = \lambda v$. 
+    Let $A:\dom(A)\to Y$ be a linear operator. An element $v\in \dom(A)$ is called an \emph{eigenvector} of $A$, with \emph{eigenvalue} $\lambda\in\R$, if $A(v) = \lambda v$. 
 \end{definition}
 
 One of the most essential results in spectral theory is the characterization of eigenvalues and eigenvectors (eigenfunctions) of symmetric operators. 
@@ -155,7 +155,7 @@ We distinguish here two cases:
 \begin{equation}\label{eq:sturm-liouville-operator}
     Tu = -\frac{1}{w(x)}\left(\frac{d}{dx}\left(p(x)\frac{du}{dx}(x)\right) + q(x)u(x)\right),
 \end{equation}
-where $0<w\in C([0,1])$, $q\in C([0,L])$ and $0\neq p\in C^1([0,L])$. This operator is symmetric in the \textit{weighted $L^2$ space} $L^2_w((0,L))$, where
+where $0<w\in C([0,1])$, $q\in C([0,L])$ and $0\neq p\in C^1([0,L])$. This operator is symmetric in the \emph{weighted $L^2$ space} $L^2_w((0,L))$, where
 \begin{equation}
     L^2_w((0,L)) = \{f:(0,L)\to \R: \int f^2(x)w(x) dx < \infty,\}
 \end{equation}
@@ -259,7 +259,7 @@ one can impose the boundary conditions
 \end{equation*}
 which are equivalent to imposing that $u(\pm 1)$ and $\partial_x u(\pm 1)$ are finite. These boundary conditions yield the same result as in the above theorem, and result in  eigenfunctions known as the Legendre polynomials, which are an orthogonal basis of $L^2((-1,1))$. 
 
-There are other possible boundary conditions that can be used to prove similar results. The most important class of such boundary conditions are \textit{periodic boundary conditions}
+There are other possible boundary conditions that can be used to prove similar results. The most important class of such boundary conditions are \emph{periodic boundary conditions}
 \begin{tightalign*}
     u(a) &= u(b)\\
     \partial_x u(a) &= \partial_x u(b),
@@ -524,7 +524,7 @@ Recall that the problem of finding a solution $u\in\mathcal{D}$ such that $\math
 \begin{equation}
     u(\vec{x})=\mathcal{S}f(\vec{x})=\sum_{k=1}^{\infty}\frac{\hat{f}_{k}}{\lambda_{k}}u_{k}(\vec{x})=\int_{\Omega}G(\vec{x},\vec{\xi})f(\vec{\xi})d\vec{\xi}
 \end{equation}
-for $G(\vec{x},\vec{\xi})=\sum_{k=1}^{\infty}\frac{\overline{u_{k}(\vec{\xi})}u_{k}(\vec{x})}{\lambda_{k}}$.  This function is the kernel of the solution operator and is usually called the \textit{Green function} of the original problem. In the case of the Poisson equation in the interval $\Omega = (0,L)$,
+for $G(\vec{x},\vec{\xi})=\sum_{k=1}^{\infty}\frac{\overline{u_{k}(\vec{\xi})}u_{k}(\vec{x})}{\lambda_{k}}$.  This function is the kernel of the solution operator and is usually called the \emph{Green function} of the original problem. In the case of the Poisson equation in the interval $\Omega = (0,L)$,
 \begin{equation}
     \begin{aligned}
         -\partial_{x}^{2}u&=f&&\text{in }\Omega\\ 

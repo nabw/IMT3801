@@ -142,7 +142,7 @@ such that the solution of the modified problem
 converges to the continuous solution $u_{ex}$ by construction. 
 
 \section{Convergence Analysis}
-Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in the Lax equivalence theorem. We will first require other definitions, and we will assume that our differential operators are \textit{densely-defined}, a property that is studied more carefully in Section~\ref{chapter:sturm-liouville}.
+Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in the Lax equivalence theorem. We will first require other definitions, and we will assume that our differential operators are \emph{densely-defined}, a property that is studied more carefully in Section~\ref{chapter:sturm-liouville}.
 
 \begin{definition}[Consistency]
     Consider some differential operator $\mathcal A$ that is densely-defined. A discrete operator $\mat A_h$ in $\R^{N\times N}$ is said to be \emph{consistent} with $\mathcal A$ of order $k$ if for all sufficiently smooth functions it holds that
@@ -290,7 +290,7 @@ and analogously we can define a (matrix) grid function associated to some contin
 \begin{equation*}
     \vec f^{ij} \coloneqq f(\vec X_{ij}) = f(x_i, y_j) \in \R^{N_x}\times \R^{N_y}
 \end{equation*}
-We can flatten 2D matrices to obtain 1D vectors through the definition of an \textit{index map} $I: \{0,\hdots, N_x-1\} \times \{0, \hdots, N_y-1\}\to \{0,\hdots, N_x N_y-1\}$ given by 
+We can flatten 2D matrices to obtain 1D vectors through the definition of an \emph{index map} $I: \{0,\hdots, N_x-1\} \times \{0, \hdots, N_y-1\}\to \{0,\hdots, N_x N_y-1\}$ given by 
 \begin{equation*}
     I \coloneqq I(i,j) = i + j N_x.
 \end{equation*}
@@ -612,7 +612,7 @@ Let us analyze both methods for solving this problem.
     \begin{equation*}
         \vec x^{k+1} = \vec{x}^k + \vec{\delta x}^{k+1}.
     \end{equation*}
-    We call such a system a \textit{Newton iteration} or \textit{tangent system}. Also, $\vec{\delta x}^{k}$ must have homogeneous (zero) boundary conditions, so that all $\{\vec x^{k}\}_k$ satisfy the original ones. 
+    We call such a system a \emph{Newton iteration} or \emph{tangent system}. Also, $\vec{\delta x}^{k}$ must have homogeneous (zero) boundary conditions, so that all $\{\vec x^{k}\}_k$ satisfy the original ones. 
     
     In our problem, the $i$-th component of $F(\vec u_h)$ is given by
     \begin{equation*}
@@ -634,7 +634,7 @@ Let us analyze both methods for solving this problem.
     \begin{equation*}
         \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} = -\left(\mat A_h \vec{u}^k + \textbf{diag}(\sin(\vec u^k))\right).
     \end{equation*}
-    \item \emph{Fixed point}: similarly to the time-dependent case, we can \textit{delay} the evaluation of a nonlinearity. We do this by choosing a starting point $\vec u^0$ and evaluating the nonlinear part in the previous iteration $\vec u^k$. This yields
+    \item \emph{Fixed point}: similarly to the time-dependent case, we can \emph{delay} the evaluation of a nonlinearity. We do this by choosing a starting point $\vec u^0$ and evaluating the nonlinear part in the previous iteration $\vec u^k$. This yields
     \begin{equation*}
         -\nabla \vec u^{k+1} + \sin(\vec u^k) = 0.
     \end{equation*}
@@ -651,7 +651,7 @@ Let us analyze both methods for solving this problem.
     \begin{equation*}
         \mat A_h(\vec u_h^{k+1} - \vec u_h^{k}) = -(\sin(\vec u_h^k) - \sin(\vec u_h^{k-1})).
     \end{equation*}
-    We typically call this equation an \textit{error equation}. Finally, we can use the fact that $\mat A_h$ is stable, so we can bound the error norm as
+    We typically call this equation an \emph{error equation}. Finally, we can use the fact that $\mat A_h$ is stable, so we can bound the error norm as
     \begin{tightalign*}
         \|\vec u_h^{k+1} - \vec u_h^{k}\|_{\infty, h} &\leq C\|\mat A_h (\vec u_h^{k+1} - \vec u_h^{k})\|_{\infty, h} \tag{Stability}\\
         &= C\|-(\sin(\vec u_h^k) - \sin(\vec u_h^{k-1}))\|_{\infty, h}\tag{Error equation}\\

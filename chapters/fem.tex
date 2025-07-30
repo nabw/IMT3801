@@ -575,13 +575,13 @@ and thus we obtain the linear system of equations
 \begin{equation*}
 \ten K \vec \alpha = \vec F,
 \end{equation*}
-where we have defined the \textit{stiffness matrix} $\ten K$ and the \textit{force vector} $\vec F$ as
+where we have defined the \emph{stiffness matrix} $\ten K$ and the \emph{force vector} $\vec F$ as
 \begin{equation}
     K_{ij} = a_h(\varphi_j, \varphi_i) \quad \text{and} \quad F_i = l_h(\varphi_i).
 \end{equation}
 Here, we note that computing $K_{ij} = a(\varphi_j, \varphi_i)$ by integrating over the entire domain $\Omega$ for all pairs $(i,j)$ is computationally inefficient, because the basis functions $\varphi_j$ in finite element methods are typically chosen to have compact support, meaning $\varphi_j(x)$ is non-zero only on a small part of the domain. For basis functions associated with nodes of a mesh, the supports of $\varphi_i$ and $\varphi_j$ only overlap for indices $i$ and $j$ corresponding to neighboring nodes or elements, and thus $a(\varphi_j, \varphi_i)$ will be nonzero only for those neighboring $(i,j)$ pairs. This results in the stiffness matrix $\ten K$ being sparse, i.e. most of its entries are zero, and thus a naïve computation method involving nested loops over all global indices $i$ and $j$ would spend an unnecessary amount of time computing zero entries. 
 
-To put this into practice, let $(\Omega, V_h, \Sigma)$ be a finite element. Within each element $\Omega^e$, the global basis functions $\varphi_j$ of $V_h$ that are non-zero on $\Omega^e$ are those associated with the nodes of that element. Let $n_{dof}$ number of degrees of freedom (nodes) of the finite element. We define local shape functions $\phi_a^e$, $a=1, \dots, n_{dof}$, which are the restrictions of the global basis functions to the element $\Omega^e$, re-indexed locally from 1 to $n_{dof}$. We define the local or \textit{element stiffness matrix} $\ten k^e \in \R^{n_{dof}\times n_{dof}}$ and local or \textit{element force vector} $\vec f^e \in \R^{n_{dof}}$ as integrals over $\Omega^e$ using these local shape functions, i.e.
+To put this into practice, let $(\Omega, V_h, \Sigma)$ be a finite element. Within each element $\Omega^e$, the global basis functions $\varphi_j$ of $V_h$ that are non-zero on $\Omega^e$ are those associated with the nodes of that element. Let $n_{dof}$ number of degrees of freedom (nodes) of the finite element. We define local shape functions $\phi_a^e$, $a=1, \dots, n_{dof}$, which are the restrictions of the global basis functions to the element $\Omega^e$, re-indexed locally from 1 to $n_{dof}$. We define the local or \emph{element stiffness matrix} $\ten k^e \in \R^{n_{dof}\times n_{dof}}$ and local or \emph{element force vector} $\vec f^e \in \R^{n_{dof}}$ as integrals over $\Omega^e$ using these local shape functions, i.e.
 \begin{equation}
     k_{ab}^e = \int_{\Omega^e} \nabla \phi_b^e \cdot \nabla \phi_a^e \, dx \quad \text{and} \quad f_a^e = \int_{\Omega^e} f \phi_a^e \, dx.
 \end{equation}
@@ -666,7 +666,7 @@ Using these, the element integrals become integrals over the master element:
 \begin{equation}
     f_{N,a}^e = \int_{\partial\hat{\Omega}_N} g_N(\vec{x}(\vec{\xi})) \hat{\phi}_a(\vec{\xi}) |\det J_{\partial}| \, d\hat{\Gamma},
 \end{equation}
-where $J_\partial$ is the Jacobian of the transformation on the boundary segment. These integrals over the master element can be computed efficiently using numerical integration rules, known as \textit{quadratures}. The shape functions $\hat{\phi}_a$ and their gradients on the master element, and the Jacobian and its determinant, only need to be evaluated at the fixed quadrature points on $\hat{\Omega}$.
+where $J_\partial$ is the Jacobian of the transformation on the boundary segment. These integrals over the master element can be computed efficiently using numerical integration rules, known as \emph{quadratures}. The shape functions $\hat{\phi}_a$ and their gradients on the master element, and the Jacobian and its determinant, only need to be evaluated at the fixed quadrature points on $\hat{\Omega}$.
 
 \example{In 2D, we can define a triangular (simplicial) element with vertices $\vec{x}_0^e$, $\vec{x}_1^e$, and $\vec{x}_2^e$. The master element is the reference triangle with vertices $(0,0)$, $(1,0)$, and $(0,1)$. In this setting the local shape functions are given by 
 \begin{tightalign*}

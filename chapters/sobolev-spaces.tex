@@ -1,6 +1,6 @@
-In this section we will review some important properties of the functional spaces in which we will formulate all equations. Most, if not all, results will be coming from the amazing books \textit{Linear and nonlinear functional analysis} by PG Ciarlet~\cite{ciarlet2013linear} and the standard PDEs book by L Evans~\cite{evans2022partial}.
+In this section we will review some important properties of the functional spaces in which we will formulate all equations. Most, if not all, results will be coming from the amazing books \emph{Linear and nonlinear functional analysis} by PG Ciarlet~\cite{ciarlet2013linear} and the standard PDEs book by L Evans~\cite{evans2022partial}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Weak derivatives and Sobolev spaces}
+\section{Weak derivatives and Sobolev spaces}\label{sec:weak-derivatives-sobolev-spaces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Distributions and derivatives} 
 {\color{blue}
@@ -10,7 +10,7 @@ The topology we consider in each space is the usual one, meaning the ones induce
 \begin{equation} %! verify
     \| f \|_{\mathcal D(\R^d)} \coloneqq \sup_{k} \sup_{|\alpha|} \|D^\alpha f\|_\infty,
 \end{equation}
-where $\alpha=(\alpha_1, \hdots, \alpha_N)$ is called a \textit{multi-index}, with $|\alpha| = \sum_i \alpha_i$, and $D^\alpha$ is a differential operator given by 
+where $\alpha=(\alpha_1, \hdots, \alpha_N)$ is called a \emph{multi-index}, with $|\alpha| = \sum_i \alpha_i$, and $D^\alpha$ is a differential operator given by 
 \begin{equation}
     D^\alpha \coloneqq \frac{\partial^{|\alpha|}}{\partial^{\alpha_1}_{x_1}\hdots \partial^{\alpha_N}_{x_N}}.
 \end{equation}
@@ -45,7 +45,7 @@ as given by integration by parts. This is known as a \emph{weak derivative}. Arb
     \langle \dive T, f\rangle &\coloneqq -\langle T, \grad f\rangle, \\
     \langle \curl T, f\rangle &\coloneqq \langle T, \curl f\rangle.
 \end{tightalign}
-\paragraph{Sobolev spaces} The notion of weak derivatives allows us to define differentiable Banach spaces, which are known as \textit{Sobolev spaces}.
+\paragraph{Sobolev spaces} The notion of weak derivatives allows us to define differentiable Banach spaces, which are known as \emph{Sobolev spaces}.
 \begin{definition}[Sobolev spaces]
     Let $\Omega\subset\R^n$ be an open set, and let $1\leq p\leq \infty$. The Sobolev space $W^{1,p}=W^{1,p}(\Omega)$ is defined as the subspace of scalar-valued functions in $L^p(\Omega)$ whose first (weak) derivative is also in $L^p(\Omega)$, i.e.
     \begin{tightalign}\label{eq:sobolev-space-1}
@@ -158,9 +158,9 @@ The preliminary notions we will need are the following:
 
 Some technicalities arise when $\Omega$ is unbounded. For the sake of this course, all domains are bounded and Lipschitz unless otherwise stated. 
 \subsection{Dirichlet trace}
-We start by defining the trace operator and the trace inequality. 
+We start by defining the (Dirichlet) trace operator and the trace inequality. 
 \begin{definition}[Trace]\label{def:trace}
-    Let $\Omega\subset\R^n$ be a bounded, Lipschitz domain. The \textit{trace operator} $\gamma_0$ is defined as 
+    Let $\Omega\subset\R^n$ be a bounded, Lipschitz domain. The \emph{trace operator} $\gamma_0$ is defined as 
     \begin{tightalign}\label{eq:def-trace}
         \gamma_0: \D(\bar\Omega) &\to C^\infty(\partial\Omega)\notag \\
         u &\mapsto \gamma_0 u \coloneqq u|_{\partial\Omega}.
