@@ -1,25 +1,116 @@
 In this section we set most of the foundational mathematics required to understand these notes. In general, this consists in defining rigorously the abstract functional setting and preparing the student for what a colleague calls the \emph{tensor-fu}, i.e. the capability of derivating anything.
 
-\section{Banach and Hilbert spaces}\label{sec:banach-hilbert-spaces}
-Throughout the entire manuscript, we will rely on Banach spaces, Hilbert spaces, and their duals. Despite the existence of a flexible theory of Banach space formulations, we will mostly rely on Hilbert spaces because of their many nice properties. 
+\section{Elements of functional analysis}\label{sec:elements-functional-analysis}
 
-\begin{definition}[Banach space]\label{def:banach-space}
-    We say that a metric vector space $X$, with a fixed metric $d$, is a \emph{Banach space} if it is complete (i.e. that all Cauchy sequences converge to a well defined limit in $X$). Just for reference, we recall that a function $d:X\times X\to \R$ is a metric if it satisfies the following properties: 
+% \section{Fundamental theorems of Functional Analysis}\label{sec:fundamental-theorems-FA}
+In this section we recall some basic definitions and theorems of functional analysis by following closely the presentation by Long Chen in~\cite{chen2024infSup}. We refrain from giving a detailed explanation and proofs, which are covered in detail in standard functional analysis references, such as~\cite{BrezisFA}.
+
+In order to transfer the notions that are developed in undergraduate calculus and linear algebra courses to functional analysis, we need to define conditions on the \emph{spaces} and on the \emph{operators}. This occurs mainly due to the fact that we are now in an infinite-dimensional setting, which leads to non-intuitive results. There are three key properties that we will study: \emph{closeness} (or \emph{completeness}), \emph{continuity} (or \emph{boundedness}) and \emph{compactness}.
+
+We will study spaces of scalar-valued and vector-valued functions, which will often be denoted by $f, g$ and $\vec u, \vec v$, respectively. The domains of these functions will be usually denoted by $\Omega\subset\R^n$ for some $n\in\N$, and the properties of $\Omega$ (e.g. closed/open, compactness, boundedness) can impact the properties of the function spaces defined on $\Omega$.
+
+\subsection{Topology, normed spaces and metric spaces}
+We begin by considering a set $V$ with infinitely many elements, and introduce structures on this set. A fundamental structure is the \emph{linear structure}:
+\begin{equation}\label{eq:linearity}
+    \alpha u + \beta v \in V,\quad \forall u,v\in V, \; \alpha, \beta\in \mathbb{F},
+\end{equation}
+where $\mathbb{F}$ is a field. In our notes, we will always consider $\mathbb{F}=\R$, and thus the set $V$ equipped with property~\eqref{eq:linearity} is a \emph{real vector space}. It is clear here that properties from finite-dimensional vector spaces are not inherited to our infinite-dimensional setting, since we would have an infinite basis and infinitely many coordinates. 
+
+Another important structure is the \emph{topology}, which allow us to define concepts such as the interior, exterior and boundary of a set.
+\begin{definition}[Topology, open sets, closed sets, topological space] 
+    A \emph{topology} $\tau$ on a set $X$ is a collection of subsets of $X$, called \emph{open sets}, that satisfies the following three properties:
+    \begin{enumerate}
+        \item The empty set $\emptyset$ and $X$ are open, i.e. $\emptyset\in\tau$ and $X\in\tau$.
+        \item Any union (finite or infinite) of open sets is also open.
+        \item The intersection of finitely many open sets is open.
+    \end{enumerate}
+    A \emph{topological space} is a pair $(X,\tau)$ where $X$ is a set and $\tau$ is a topology on $X$. A subset $C\in X$ is a \emph{closed set} if and only if its complement $X\setminus C$ is an open set. 
+\end{definition}
+
+Informally, we say that $X$ is a topological space when the topology is obvious, and it is often the topology induced by a \emph{metric}, as defined later in this section.
+
+Using open sets, we can define the three important notions: \emph{neighborhood} of an element, the \emph{closure} of a set, and the \emph{continuity} of a function.
+\begin{definition}[Neighborhood]
+    Let $X$ be a topological space. A \emph{neighborhood} of an element $x\in X$ is an open subset of $X$ that contains $x$. 
+\end{definition}
+\begin{definition}[Closure]
+    For a subset $S$ of a topological space $X$, its \emph{closure} $\overline{S}$ is the intersection of all closed sets containing $S$, i.e. the smallest closed set that contains $S$.
+\end{definition}
+\begin{definition}[Continuity]\label{def:continuity-topological}
+    A function $f:X\to Y$ between two topological spaces $X$ and $Y$ is \emph{continuous} if the preimage $f^{-1}(U)\subset X$ of an open set $U\subset Y$ is also open. 
+\end{definition}
+Note that if $X=Y=\R$, then this definition is equivalent to the definition of an introductory calculus course, such as the $\varepsilon-\delta$ definition. If a continuous function $f$ is injective and surjective, then its inverse $f^{-1}:Y\to X$ is also continuous.
+\begin{definition}[Interior, exterior and boundary of a set]
+    Let $S$ be a subset of a topological space $X$.
+    \begin{enumerate}
+        \item An element $x\in S$ is an \emph{interior point} of $S$ if there exists an open set such that $x\in U\subset S$.
+        \item The \emph{interior} of $S$, denoted by $\interior S$, is the set of all interior points, i.e. the union of all open subsets of $S$.
+        \item The \emph{exterior} of $S$ is the complement of the closure of $S$.
+        \item The \emph{boundary} $\partial S = \overline{S}\setminus\interior S$ is the set of points of the closure that are not in the interior. 
+    \end{enumerate}       
+\end{definition}
+
+An important type of topological vector spaces are \emph{normed vector spaces}.
+\begin{definition}[Normed vector space]
+    A \emph{normed vector space} $(X,\|\cdot\|)$ is a vector space $X$ endowed with a \emph{norm}, which is a map $\|\cdot\|:X\to \R^+$ that for any $x,y\in X$ satisfies
     \begin{itemize}
-        \item $d(x,x) = 0$ for all $x$ in $X$. 
-        \item (Positivity) $d(x,y) > 0$ for all $x\neq y$ in $X$. 
-        \item (Symmetry) $d(x,y) = d(y,x)$ for all $x,y$ in $X$. 
-        \item (Triangle inequality) $d(x,z) \leq d(x,y) + d(y,z)$ for all $x,y,z$ in $X$. 
+        \item a scalar multiplication property $\|\alpha x\|=|\alpha|\|x\|$ for all $\alpha\in\R$,
+        \item a triangle inequality $\|x+y\|\leq \|x\|+\|y\|$, and 
+        \item is non-negative, i.e. $\|x\|\geq 0$ and $\|x\|=0$ if and only if $x=0$.
     \end{itemize}
+    We also say that a function $|\cdot|$ is a \emph{seminorm} if the last property is missing, i.e. there exist $0 \neq x\in X$ such that $|x|=0$.
+\end{definition}
+
+A norm will induce a topology by considering \emph{open balls}
+\begin{equation}
+    \mathbb{B}(x,r) \coloneqq \{y\in X: \|x-y\|<r\}
+\end{equation}
+as open sets, and it is easy to prove that a normed vector space is a topological vector space. This norm structure allows us to calculate lengths (norms) of vectors, and also to induce a \emph{metric}.
+\begin{definition}[Metric and metric space]
+    A function $d:X\times X\to \R^+$ is a \emph{metric} on $X$ if for any $x,y,z\in X$, it satisfies
+    \begin{itemize}
+        \item a symmetry property $d(x,y) = d(y,x)$ ,
+        \item a triangle inequality $d(x,z) \leq d(x,y) + d(y,z)$,
+        \item is non-negative, i.e. $d(x,x) \geq 0$, and
+        \item $d(x,x)=0$.
+    \end{itemize}
+    A \emph{metric space} $(X,d)$ is a set $X$ with a metric $d:X\times X\to \R^+$ on $X$. If $X$ is a normed vector space, then we define a \emph{metric induced by the norm} 
+    \begin{equation}
+        d(x,y) \coloneqq \|x-y\|,
+    \end{equation}
+    which indeed is easily proven to be a metric, and thus all normed vector spaces are metric spaces. 
+\end{definition}
+
+Through the structure provided by the norm and the metric it induces, we can talk about the length (norm) of vectors in a space, and the distances (metric) between two vectors. In some cases, we will have additional geometric structure in our space thanks to an \emph{inner product}. 
+\begin{definition}[Inner product space]
+    Let $X$ be a vector space, not necessarily normed. An \emph{inner product} $(\cdot,\cdot):X\times X\to \R$ is a function that for any $x,y,z\in X$, $\alpha, \beta\in\R$, satisfies
+    \begin{itemize}
+        \item $(x,x)\geq 0$ and $(x,x)=0$ if and only if $x=0$, 
+        \item a symmetry property $(x,y)=(y,x)$, and
+        \item a \emph{bilinearity} property $(\alpha x+\beta y, z)=\alpha(x,z)$.
+    \end{itemize}
+    An \emph{inner product space} $(X,(\cdot,\cdot))$ is a vector space $X$ with a product space defined on $X$. Given an inner product $(\cdot,\cdot)$, there always exists a \emph{norm induced by the inner product} $\|x\|\coloneqq (x,x)^{1/2}$ and a \emph{metric induced by the inner product} $d(x,y)\coloneqq (x,y)^{1/2}$, and thus all inner product spaces are normed spaces and metric spaces. In the case that a norm $\|\cdot\|$ is induced by an inner product, then the \emph{parallelogram property} holds:
+    \begin{equation}
+        \|x+y\|^2 + \|x-y\|^2 = 2\|x\|^2 + 2\|y\|^2.
+    \end{equation}
+    Further, from the properties of the inner product, one can derive the useful property 
+    \begin{equation}
+        \|x\pm y\|^2 = \|x\|^2 \pm 2(x,y) + \|y\|^2.
+    \end{equation}
+    We will denote inner products mostly by $\langle\cdot, \cdot\rangle$ and $(\cdot, \cdot)$. Sometimes it will be important to distinguish the specific product we consider, i.e. $(\cdot, \cdot)_H$. 
+\end{definition}
+
+\subsection{Banach and Hilbert spaces}\label{sec:banach-hilbert-spaces}
+Throughout the entire manuscript, we will rely on \emph{Banach spaces}, \emph{Hilbert spaces}, and their duals. Despite the existence of a flexible theory of Banach space formulations, we will mostly rely on Hilbert spaces because of their many nice properties. To define these spaces, we need to define \emph{completeness}.
+\begin{definition}[Completeness]
+    A metric space $(X,d)$ is \emph{complete} if all Cauchy sequences in $X$ converge to a limit that is also in $X$.
+\end{definition}
+Completeness allows us to take limits in a safe and consistence manner, without having to worry about converging to points outside the space, e.g. having a space of continuous functions that contains a sequence whose limit is not continuous. 
+\begin{definition}[Banach space]\label{def:banach-space}
+    We say that a metric space $(X,d)$ is a \emph{Banach space} if it is complete.
 \end{definition}
 \begin{definition}[Hilbert space]\label{def:hilbert-space}
-    We say that an inner product space $H$ is a \emph{Hilbert space} if it is complete with respect to the metric induced by the inner product. Throughout this manuscript, we will consider only real numbers, so the inner product $\langle\cdot, \cdot\rangle: H\times H \to \R$ is a function that satisfies the following: 
-    \begin{itemize}
-        \item (Symmetry) $\langle x,y\rangle = \langle y,x\rangle$ for all $x,y$ in $H$.
-        \item (Linear) $\langle ax_1 + bx_2, y\rangle = a\langle x_1, y\rangle + b\langle x_2, y\rangle$ for all $a,b$ in $\R$ and $x,y$ in $H$. 
-        \item (Positive definite) $\langle x, x\rangle \geq 0$ for all $x$ in $H$. The equality holds only for $x=0$. 
-    \end{itemize}
-    We will denote inner products mostly by $\langle\cdot, \cdot\rangle$ and $(\cdot, \cdot)$. Sometimes it will be important to distinguish the specific product we consider, i.e. $(\cdot, \cdot)_H$. 
+    We say that an inner product space $H$ is a \emph{Hilbert space} if it is complete with respect to the metric induced by the inner product.
 \end{definition}
 \begin{definition}[Linear operators]\label{def:linear-operator}
     Given two Banach spaces $X$ and $Y$, we denote the set of continuous linear operators from $X$ to $Y$ as $\mathcal{L}(X,Y)$. Naturally, for a linear operator $T\in \mathcal{L}(X,Y)$, for $x_1,x_2\in X$ and $\alpha\in\R$, it holds that 
@@ -27,13 +118,28 @@ Throughout the entire manuscript, we will rely on Banach spaces, Hilbert spaces,
         T(x_1+\alpha x_2) = T(x_1) + \alpha T(x_2).
     \end{equation}
 \end{definition}
-For now, let's simply review some relevant properties: 
-\begin{itemize}
-    \item Continuous linear operators acting on Banach spaces have an induced operator norm: if $T\in \mathcal{L}(X,Y)$, then 
-    \begin{equation}\label{eq:operator-norm}
-    \| T\| =  \sup_{x\in X}\frac{|Tx|_Y}{|x|_X}.
+\begin{definition}[Topological dual of a Banach space]
+    For a given Banach space $X$, its \emph{(topological) dual} is the space $X'\coloneqq \mathcal{L}(X,\R)$ of bounded, linear functionals $X\mapsto \R$, which is always a Banach space. The norm in $X'$ is referred to as the \emph{dual norm}, and for $T\in X'$ it is defined as 
+    \begin{equation}\label{eq:dual-norm}
+        \|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|= \sup_{x\in X}\frac{|T(x)|}{\|x\|_X}.
     \end{equation}
-    \item Given a Banach space $X$ and a linear operator $T\in \mathcal{L}(X,Y)$, where $Y$ is a normed space, we can define the norm induced by $T$ in the space $W=\text{Dom}(T)\subseteq X$ as
+\end{definition}
+\begin{definition}[Duality pairing, transpose, bidual space]
+    Given $x\in X$, $f\in Y'$ and $T\in X'$, the action of $T$ is called the \emph{duality pairing} and is denoted by $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. The \emph{transpose} operator $T^*\in \mathcal{L}(Y',X')$ is defined by the equation 
+    \begin{equation}
+        \langle T^* f, x\rangle_{X',X} = \langle f, Tx\rangle_{Y',Y},
+    \end{equation}
+    In general, one can identify a part of the \emph{bidual space} $X'' \coloneqq (X')'$ through the evaluation operator $T_f = X'\mapsto \R$ in $X''$ defined as $T_f(L) \coloneqq \mathcal{L}(f)$. This immersion is not surjective. 
+\end{definition}
+\begin{definition}[Bounded operators and operator norm]\label{def:bounded-operator}
+    An operator $T:X\to Y$ is \emph{bounded} if it maps bounded sets into bounded sets. When $X$ and $Y$ are normed spaces, (i) boundedness is equivalent to continuity, and thus $\mathcal{L}(X,Y)$ is the set of continuous, bounded linear operators, and (ii) for every bounded operator there exists a constant $M\geq 0$ such that $\|T(x)\|\leq M\|x\|$. The smallest constant $M$ is defined as the \emph{operator norm}
+    \begin{equation}\label{eq:operator-norm}
+        \| T\| =  \sup_{x\in X}\frac{\|Tx\|_Y}{\|x\|_X} = \sup_{x\in X,\|x\|=1}\|Tx\|_Y.
+    \end{equation}
+\end{definition}
+Let us now review some relevant properties: 
+\begin{itemize}
+    \item Given a Banach space $X$ and a linear operator $T\in \mathcal{L}(X,Y)$, where $Y$ is a normed space, we can define the norm induced by $T$ in the space $W=\dom(T)\subseteq X$ as
     \begin{equation}\label{eq:banach-induced-norm}
     \|x\|_{W} \coloneqq \|x\|_X + \|Tx\|_Y.
     \end{equation}
@@ -51,35 +157,30 @@ For now, let's simply review some relevant properties:
         \end{equation*}
         \item Positive-definiteness: we note that $0=\|x\|_W\geq \|x\|_X\geq 0$, which implies $x=0$.
     \end{itemize}
-    \item Banach spaces are complete metric spaces. For a given Banach space $X$, its (topological) dual is the space $X'$ of functions $X\mapsto \R$, which is always a Banach space. The norm in $X'$ is referred to as the \emph{dual norm}, and for $T\in X'$ it is defined as 
-        \begin{equation}\label{eq:dual-norm}
-        \|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|= \sup_{x\in X}\frac{|T(x)|}{\|x\|_X}.
-        \end{equation}
-    The action of an element of the dual space is sometimes denoted as $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. In general, one can identify a part of the bidual space $X'' = (X')'$ through the evaluation operator $T_f:X'\mapsto \R$ in $X''$ defined as $T_f(L) = \mathcal{L}(f)$. This immersion is not surjective. 
     \item Inner products are mostly used as projections. This means that, in the same way that we can orthogonalize a vector $x$ with respect to $y$, we can also do this in the Hilbert space setting analogously as 
     \begin{equation}\label{eq:projection-orthogonalization}
         x_\perp \coloneqq x - (x, y)_H y.
     \end{equation}
-    It can be quickly verified that the function $x_\perp$ is indeed perpendicular to $y$ in the sense that $(x_\perp, y)_H=0$. 
+    It can be quickly verified that the function $x_\perp$ is indeed perpendicular to $y$ in the sense that $(x_\perp, y)_H=0$.
     \item The inner product yields the fantastic Riesz map, which is actually an isometry. This is given as follows: consider a Hilbert space $H$ with inner product $(\cdot, \cdot)_H$, then a Riesz map is an operator $R_H: H\mapsto H'$ such that for any $x,y$ in $H$ it holds that $\langle R_H(x), y\rangle_{H'\times H} = (x, y)_H$. Notably, $\|R_H(x)\|_{H'} = \| x \|_H$. 
 \end{itemize}
 One fundamental aspect of Hilbert spaces is that they provide a precise way to \emph{project} elements into subspaces, and thus defining \emph{orthogonal complements}. We state the theorems that define these objects without proving them. 
 \begin{theorem}[Best approximation]\label{thm:best-approximation}
     Set $U\subset H$ a closed subspace of a Hilbert space $H$ and fix $f$ in $H$. Then there exists a unique $g$ in $U$ such that
         \begin{equation}\label{eq:best-approximation} 
-        \|f - g \|_H = \inf_{u\in U} \| f - u\|_H.
+            \|f - g \|_H = \inf_{u\in U} \| f - u\|_H.
         \end{equation}
     The element $g$ is often called the \emph{projection} of $f$ onto $U$. 
 \end{theorem}
 Using this, we can uniquely define the orthogonal complement of a set $U$: 
-    \begin{equation}\label{eq:orthogonal-complement}
+\begin{equation}\label{eq:orthogonal-complement}
     U^\perp \coloneqq \{v\in H: (v, u)_H = 0 \quad\forall u\in U\}.
-    \end{equation}
+\end{equation}
 \begin{theorem}\label{thm:orthogonal-decomposition} 
     Set $U$ a closed subspace of a Hilbert space $H$. Then, if $f$ is in $H$, there exists a unique pair $(u,v)$ in $U\times U^\perp$ such that 
-        \begin{equation}\label{eq:orthogonal-decomposition} 
+    \begin{equation}\label{eq:orthogonal-decomposition} 
         f = u + v.
-        \end{equation}
+    \end{equation}
 \end{theorem}
 Some common and simple examples: Helmholtz decomposition, zero average functions, zero trace tensors, symmetric tensors. Note that the orthogonal complement is defined with respect to a \emph{given} inner product.\\
 
@@ -101,16 +202,217 @@ Some common and simple examples: Helmholtz decomposition, zero average functions
         h = f - c = f -  \frac{(f,1)_H}{(1,1)_H}f.
     \end{equation*}\vspace{-10pt}
 }
-
-The most important spaces for us will be the Lebesgue spaces $L^p(\Omega;\R^d)$ given by measurable functions $f:\Omega \mapsto \R^d$ such that
-\begin{equation}\label{eq:lebesgue-norm}
-\|f\|_{L^p(\R^d)}^p \coloneqq \int_\Omega |f|_{\R^d}^p\,dx < \infty.
-\end{equation}
-It will be important to know that if $|\Omega|<\infty$, then these spaces form an ordered inclusion: 
+\subsection{$L^p$ spaces}
+The most important spaces for us are the Lebesgue spaces $L^p(\Omega;\R^n)$, which are equipped with a $p$-norm. To this end, we need to recall some basic definitions of measure theory. We will denote $\mathcal{P}(\Omega)$ as the \emph{power set} of $\Omega$, that is, the set of all subsets of $\Omega$. 
+\begin{definition}[$L^p$ vector norm]
+    Let $x\in\Omega\subset\R^n$. For $1\leq p, \infty$, the \emph{$p$-norm} of $x$ is defined as 
+    \begin{equation}
+        \|x\|_p \coloneqq \left(\sum_{i=1}^n |x_i|^p\right)^{1/p},
+    \end{equation}
+    and for $p=\infty$, the $p$-norm is the \emph{supremum} norm
+    \begin{equation}
+        \|x\|_\infty \coloneqq \sup_{i=1,\dots,n} |x_i|.
+    \end{equation}
+    A simple exercise proves that these functions are indeed norms, and we can further prove that $\R^n$ is complete with respect to these norms, which implies that $(\R^n, \|\cdot\|_p)$ is a Banach space for $1\leq p\leq \infty$.
+\end{definition}
+\begin{definition}[Measure space, measurable sets, measure]
+    A triplet $(\Omega, \Sigma, \mu)$ is called a \emph{measure space}, if 
+    \begin{itemize}
+        \item $\Omega\subset\R^n$ is a set,
+        \item $\Sigma$ is a $\sigma$-algebra on $\Omega$, i.e. $\Omega\in\Sigma$ and  $\Sigma$ is closed under complement (which implies $\emptyset\in\Sigma)$ and under countable unions, and
+        \item $\mu$ is a \emph{measure} on $(\Omega,\Sigma)$, i.e. $\mu$ is non-negative, $\mu(\emptyset) = 0$, and it satisfies the $\sigma$-additivity property
+        \begin{equation*}
+            \mu\left(\bigcup_{k=1}^\infty E_k\right) = \sum_{k=1}^\infty \mu(E_k),
+        \end{equation*}
+        for any countable, pairwise-disjoint collection $\{E_k\}_{k=1}^\infty$ of subsets of $\Sigma$.
+    \end{itemize}
+    The elements (sets) contained in $\Sigma$ are called \emph{measurable sets}, and the pair $(\Omega,\Sigma)$ is often called a \emph{measurable space} without fixing a measure. We will always implicitly choose $\mu$ the \emph{Lebesgue measure}, which coincides with the usual length, area and volume in $\R^1$, $\R^2$ and $\R^3$, respectively. 
+\end{definition}
+\begin{definition}[Measurable functions, equality and boundedness hold almost everywhere]
+    Let $(X,\Sigma_X)$ and $(Y, \Sigma_Y)$ be measurable spaces. A function $f:X\to Y$ is \emph{measurable} if for every measurable set $S_Y\in\Sigma_Y$, the preimage $f^{-1}(S_Y)$ is in $\Sigma_X$. 
+    
+    Two measurable functions $f,g:\Omega\to\R$ are \emph{equal almost everywhere} if the set 
     \begin{equation*}
-    L^\infty(\Omega) \subset L^p(\Omega) \subset \dots \subset L^1(\Omega).
+        \{x\in \Omega: f(x)\neq g(x)\}
     \end{equation*}
+    is measurable and has measure zero. Similarly, a function $f:\Omega\to \R$ is \emph{bounded almost everywhere} by $C\in\R$, written as $|f|\leq C$, if the set $\{x\in\Omega: |f(x)|>C\}$ is measurable and has measure zero.
+\end{definition}
+\begin{definition}[Indicator functions, simple functions]
+    Let $(\Omega,\Sigma,\mu)$ be a measure space with $\Omega\subset\R^n$. The \emph{indicator function} $1_S$ of a set $S\in\Sigma$ is defined by 
+    \begin{equation*}
+        1_S(x) = \begin{cases}
+            1 & x\in S\\
+            0 & x\notin S.
+        \end{cases}
+    \end{equation*}
+    A function $f:\Omega\to \R$ is called a \emph{simple function} if it can be expressed as a linear combination of indicator functions 
+    \begin{equation*}
+        f(x) = \sum_k a_k 1_{S_k}(x),
+    \end{equation*}
+    where $a_k\in\R$ and $\{S_k\}_k\subset \Sigma$ are disjoint measurable sets. A simple function is measurable. 
+\end{definition}
+\begin{definition}[Lebesgue integral]
+    Let $\sum_k a_k 1_{S_k} \eqqcolon f_s^+:\Omega\to \R$ be a non-negative simple function with non-negative coefficients $\alpha_k\geq 0$. The integral of the indicator of each $S_k$ is defined as the measure of $S_k$, namely,
+    \begin{equation*}
+        \int 1_{S_k}d\mu \coloneqq \mu(S_k),
+    \end{equation*}
+    where $\mu$ is a fixed measure on the $\sigma$-algebra, and by imposing linearity, we set
+    \begin{equation*}
+        \int f_s^+ d\mu = \int \left(\sum_k a_k 1_{S_k}\right) d\mu = \sum_k a_k \int 1_{S_k} d\mu = \sum_k a_k \mu(S_k),
+    \end{equation*}
+    which is uniquely defined modulo a different choice of the $S_k$ subsets that make up the integration domain $\cup_k S_k$. An analogous definition follows for a non-positive simple function $f_s^-$ with non-positive coefficients. Now, for any subset $B\subset \Omega$ define 
+    \begin{equation*}
+        \int_B f_s^+ d\mu \coloneqq \int 1_B f_s^+ d\mu = \sum_k a_k \mu(S_k \cap B),
+    \end{equation*}
+    where it is clear that $1_B 1_{S_k} = 1_{B \cap S_k}$. Now, for an arbitrary positive function $f^+$ that is not necessarily simple, we define its integral as 
+    \begin{equation*}
+        \int_B f^+ d\mu \coloneqq \sup \left\{\int_B s\,d\mu: 0\leq s\leq f,\; s\text{ is simple}\right\},
+    \end{equation*}
+    which can attain the value $+\infty$. To handle signed functions, we can repeat the above procedure to define non-positive simple functions $f_s^-$ and for any non-positive function $f^-$.
+
+    For an arbitrary signed function $f=f^+ + f^-$ with non-negative and non-positive parts 
+    \begin{equation*}
+        f^+(x) = \begin{cases}
+            f(x)& f(x)>0\\
+            0 & f(x)\leq 0
+        \end{cases},\quad 
+        f^-(x) = \begin{cases}
+            -f(x)&f(x)<0\\
+            0& f(x)\geq 0,
+        \end{cases}
+    \end{equation*}
+    we define the \emph{Lebesgue integral} of $f$ as 
+    \begin{equation*}
+        \int_B f\,d\mu \coloneqq \int_B f^+ d\mu - \int_B f^-d\mu,
+    \end{equation*}
+    which exists if and only if
+    \begin{equation*}
+        \min\left\{\int_B f^+d\mu, \int_B f^- d\mu\right\}<\infty.
+    \end{equation*}
+    In this case, we say that $f$ is \emph{Lebesgue integrable}. A direct consequence of this definition is that $f$ is Lebesgue integrable if and only if $|f|$ is Lebesgue integrable.
+\end{definition}
+\begin{definition}[$L^p$ space and norm]
+    Let $(\Omega, \Sigma, \mu)$ be a measure space, and $1\leq p<\infty$. We define the \emph{Lebesgue space} $L^p(\Omega,\mu)$ as the set of measurable functions $f:\Omega\to \R$ such that $|f|^p$ is Lebesgue integrable, i.e. its $p$-norm is finite:
+    \begin{equation*}
+        \|f\|_p \coloneqq \left(\int_\Omega |f|^p d\mu\right)^{1/p} < \infty.
+    \end{equation*}
+    For $p=\infty$, the space $L^\infty(\Omega,\mu)$ is the set of measurable functions $f$ that are bounded everywhere, and the $p$-norm (i.e. the $\infty$-norm) is defined as the infimum of such bounds: 
+    \begin{equation*}
+        \|f\|_\infty \coloneqq \inf\{C\in\R^+: |f(x)|\leq C \text{ almost everywhere}\}.
+    \end{equation*}
+
+    When the choice of $\mu$ and/or the space $\Omega$ is obvious, then we simply write $L^p(\Omega)$ or even just $L^p$.
+\end{definition}
+
+For $1\leq p\leq \infty$, we can prove that $\|\cdot\|_p$ is indeed a norm. There are three central inequalities that stem from these definitions, whose proofs we omit here since they are covered in standard real analysis courses. 
+\begin{theorem}[Minkowski inequality]
+    The triangle inequality for $\|\cdot\|_p$ is referred to as the \emph{Minkowski inequality}, which states that for $1\leq p\leq \infty$ and $f,g\in L^p(\Omega,\mu)$, we have
+    \begin{equation}
+        \|f+g\|_p \leq \|f\|_p + \|g\|_p.
+    \end{equation}
+\end{theorem}
+\begin{theorem}[Young's inequality]
+    Let $a,b,p,q\geq 0$ be non-negative real numbers, where $p$ and $q$ are \emph{Hölder conjugates}, i.e. $\frac{1}{p}+\frac{1}{q}=1$. If $p>1$ and $q>1$, it holds that 
+    \begin{equation}
+        ab\leq \frac{a^p}{p} + \frac{b^q}{q},
+    \end{equation}
+    and the equality holds if and only if $a^p=b^q$. A very useful case is $p=q=2$, where Young's inequality is 
+    \begin{equation}
+        ab\leq \frac{a^2}{2}+\frac{b^2}{2},
+    \end{equation}
+    and if we choose the non-negative real numbers $a'=a/\sqrt{\varepsilon}$ and $b'=b\sqrt{\varepsilon}$ for $\varepsilon>0$, we get
+    \begin{equation}
+        ab\leq \frac{a^2}{2\varepsilon} + \frac{\varepsilon b^2}{2}.
+    \end{equation}
+    This last inequality allows us to tighten the control on one term by losing the control on the other term, by taking limits as $\varepsilon\to 0+$ or $\varepsilon\to+\infty$. 
+\end{theorem}
+\begin{theorem}[Hölder's inequality]
+    Suppose that $1\leq p,q,r\leq \infty$ satisfy $\frac{1}{p}+\frac{1}{q}=\frac{1}{r}$. If $f\in L^p(\Omega,\mu)$ and $g\in L^q(\Omega,\mu)$, then the product $fg\in L^r(\Omega,\mu)$, and its norm is bounded as 
+    \begin{equation}
+        \|fg\|_r \leq \|f\|_p\|g\|_q.
+    \end{equation}
+    In the case $r=1$, $p$ and $q$ are Hölder conjugates, and two common examples are for $p=q=2$ and $p=1$, $q=\infty$:
+    \begin{equation*}
+        \|fg\|_1 \leq \|f\|_2\|g\|_2,\qquad \|fg\|_1 \leq \|f\|_1\|g\|_\infty.
+    \end{equation*}
+\end{theorem}
+
+It will be important to know that if $|\Omega|<\infty$, then these spaces form an ordered inclusion: 
+\begin{equation}
+    L^\infty(\Omega) \subset L^p(\Omega) \subset \dots \subset L^1(\Omega).
+\end{equation}
 A simple way to remember this is to split a function as $f = I_{|f|\leq 1}f + I_{|f|\geq 1}f$ and note that $|x|^p < |x|^{p+\epsilon}$ for $\epsilon > 0$. 
+
+\subsection{The fundamental theorems}
+In the finite dimensional case, elements in a space $V$ and its topological dual $V'$ can be represented by vectors in $\R^n$ with $n=\dim V$ when a basis is chosen, and a linear, bounded operator between two spaces can be represented as a matrix. In the infinite dimensional setting, we need to extend this result, which is done via the Riesz representation theorem. 
+
+\begin{theorem}[Riesz representation theorem]
+    Let $V$ be a Hilbert space with inner product $(\cdot,\cdot)$. For any $u\in V$, the map $f_u\coloneqq (u,\cdot):V\to \R$ is a continuous linear functional, i.e. $f_u\in V'$, and we have a mapping $V\to V'$ via $u\mapsto f_u=(u,\cdot)$. It holds that for any $f\in V'$ there exists a unique element $u\in V$ such that 
+    \begin{equation}
+        (f,v) = (u,v)\quad \forall v\in V,
+    \end{equation}
+    where we identify $f=f_u$. Furthermore, $\|f\|_{V'} = \|u\|_V$, and thus $V$ and $V'$ are isometric.
+\end{theorem}
+
+Now in our infinite-dimensional setting, note that a subspace $S\subset V$ of a vector space $V$ is itself a vector space. For any normed vector space, a closed subspace is closed under the topology, i.e. for every convergent sequence, the limit also lies in the subspace. If a function is defined only in the subspace, the Hahn-Banach theorem allows us to extend our function to the whole space. 
+\begin{theorem}[Hahn-Banach]
+    Let $V$ be a normed vector space and $S\subset V$ a subspace. For any $f\in S'$, i.e. $f:S\to\R$, there exists an extension $\tilde{f}\in V'$ that preserves the norm $\|f\|_{S'} = \|\tilde{f}\|_{V'}$.
+\end{theorem}
+
+For any continuous linear functional $f$ defined on the subspace $S'$, the natural extension by density can extend the domain of $f$ to $\overline{S}$, so we can take the closure of $S$ and consider closed subspaces only. 
+
+Now, let $T\in \mathcal{L}(X,Y)$ be a continuous, bounded linear operator, where $U,V$ are Banach spaces. Denote $\ker T\subset U$ and $\im T\subset V$ the \emph{kernel} (or \emph{null space}) and \emph{image} of $T$. Due to the continuity of $T$, $\ker T$ is a closed subspace of $U$. Recall that in a Hilbert space $H$, the \emph{orthogonal complement} of $S\subset H$, defined as
+\begin{equation*}
+    S^\perp \coloneqq \{u\in H: (u,v)=0,\forall v\in S\}
+\end{equation*}
+is also a closed subspace. For a general Banach space $V$, we do not have the inner product structure, but we can use the duality pairing $\langle\cdot,\cdot\rangle:V'\times V\to \R$ to define an orthogonal complement for $S\subset V$, called the \emph{annhilator}, as 
+\begin{equation*}
+    S^\circ \coloneqq \{f\in V': \langle f, v\rangle,\forall v\in S\},
+\end{equation*}
+which is a closed subspace, and similarly, for $F\subset V'$, define
+\begin{equation*}
+    \phantom{.}^\circ F \coloneqq \{v\in V:\langle f,v\rangle = 0,\forall f\in F\}.
+\end{equation*}
+For a subset (not necessarily a subspace) $S\subset V$, $S\subseteq S^{\perp\perp}$ if $V$ is an inner product space, and $S\subseteq\phantom{.}^\circ(S^\circ)$ if $V$ is a normed space. The equality holds if and only if $S$ is a closed subspace, due to the Hahn-Banach theorem, and thus they are the smallest closed subspaces containing $S$. These definitions allow us to obtain a topological characterization of $\im T$ and $\ker T$, through the \emph{closed range theorem}. 
+\begin{theorem}[Closed range]\label{thm:closed-range-theorem}
+    Let $U,V$ be Banach spaces and $T\in\mathcal{L}(U,V)$. Then, the following conditions are equivalent: 
+    \begin{enumerate}
+        \item $\im T$ is closed in $V$. 
+        \item $\im T*$ is closed in $U'$.
+        \item $\im T = \phantom{.}^\circ (\ker T^*)$.
+        \item $\im T^* = (\ker T)^\circ$.
+    \end{enumerate}
+\end{theorem}
+
+Further, the \emph{closeness} of an operator is a very important property to study.
+\begin{definition}[Closed operator]
+    An operator $T:U\to V$ is \emph{closed} if its graph 
+    \begin{equation}
+        G(T) \coloneqq \{(u,Tu):u\in U\}\subset U\times V
+    \end{equation}
+    is closed in the product space $U\times V$.
+\end{definition}
+
+It is an easy exercise to show that a continuous linear operator is always closed, but the inverse is not necessarily true. When $U, V$ are Banach, then closeness and continuity are indeed equivalent, as justified by the \emph{closed graph theorem}. 
+\begin{theorem}[Closed graph]\label{thm:closed-graph-theorem}
+    Let $U,V$ be Banach spaces and $T\in\mathcal{L}(U,V)$. Then, $T$ is closed if and only if $T$ is continuous. 
+\end{theorem}
+
+Note that a closeness of the range (image) of $T$ is stronger than the closeness of $T$, as seen by comparing the convergence in the definitions: 
+\begin{itemize}
+    \item If the graph is closed, $(u_n, Tu_n)\to (u,v)$ implies $v=Tu$.
+    \item If the range is closed, then $Tu_n\to v$ implies that there exists $u\in U$ such that $v=Tu$. 
+\end{itemize}
+In the first case, we do not know if $u_n$ converges or not, but in the second one we assume that such limit $u$ exists. 
+
+\emph{Open} mappings (operators) are functions between topological spaces that map open sets into open sets. To determine the surjectivity of the operator, we can use the \emph{open mapping theorem}, and a corollary allows us to define an \emph{inverse operator}.
+
+\begin{theorem}[Open mapping]\label{thm:open-mapping-theorem}
+    Let $U,V$ be Banach spaces and $T\in \mathcal{L}(U,V)$ be a continuous, bounded linear operator. If $T$ is surjective (onto), then $T$ is open. 
+\end{theorem}
+\begin{corollary}
+    For $T\in\mathcal{L}(U,V)$ with $U,V$ Banach, if $T$ is injective (into) and surjective (onto), then $T^{-1}\in \mathcal{L}(V,U)$ exists and is continuous. 
+\end{corollary}
 
 \section{Fréchet and Gateaux derivatives}\label{sec:frechet-gateaux-derivatives}
 We will now cover the notion of differentiability in Banach spaces. The presentation closely follows that of~\cite{ambrosetti1995primer}, with substantially less detail.
@@ -158,9 +460,9 @@ We now define the Fréchet derivative map.
 We note that the definition of the Fréchet derivative gives no hints to actually compute it from a given $F$. We begin by defining a different notion of differentiability.
 \begin{definition}
     We define the Gâteaux derivative of $F:U\to Y$ at a fixed $u\in U$ as
-    \begin{equation*}
+    \begin{equation}\label{eq:gateaux-derivative}
         d_G F(u)[h] \coloneqq \lim_{\varepsilon\to 0} \frac{F(u+\varepsilon h)-F(u)}{\varepsilon} = \frac{d}{d\varepsilon}\left.\left(F(u+\varepsilon h)\right)\right|_{\varepsilon = 0}.
-    \end{equation*}
+    \end{equation}
     This corresponds to the directional derivative of $F$ in the direction $h$.
 \end{definition}
 
@@ -221,7 +523,7 @@ In order to show the equivalence between Fréchet and Gâteaux derivatives, we r
         because of the continuity of $d_G F$.
     \end{proof}
 \end{theorem}
-Typically, one computes the Gâteaux derivative and hope it is continuous.
+Typically, one computes the Gâteaux derivative of $f$ by definition~\eqref{eq:gateaux-derivative}, which requires handling the term $f(x+\varepsilon d)$,
 
 For higher order derivatives, we start from the Fréchet derivative $F'(u) \coloneqq dF(u)\in \mathcal{L}(X,Y)$, where $F:U\to Y$. Repeating the calculation, we have
 \begin{equation*}
@@ -235,7 +537,7 @@ for $A\in \mathcal{L}(X,\mathcal{L}(X,Y))$. For this reason, most people write t
 \begin{equation*}
     f(x+h)\approx f(x) + \nabla f(x) \cdot h + \frac{1}{2} h^\top (Hf)(x) h,
 \end{equation*} 
-where we wrote $d^2 f = Hf$ as the Hessian of $f$ at $x$.
+where we wrote $d^2 f(x) = Hf(x)$ as the Hessian of $f$ at $x$.
 
 Let us list some useful properties:
 \begin{itemize}
@@ -271,9 +573,6 @@ Let us list some useful properties:
 }
 
 In calculus of variations $d^2 F(u)[h] = d^2 F(u)[h,h]$ is used for checking the properties of the minimizers of problems in the same way one would do in finite-dimensional optimization.
-
-\section{Fundamental theorems of Functional Analysis}\label{sec:fundamental-theorems-FA}
-\todo[inline]{Add: Closed Graph, Open Mapping, Hahn-Banach as written by Long Chen.} 
 
 \section{Tensors}\label{sec:tensors}
 Tensors are the natural way to put into one consistent algebraic setting all indexed objects, by further considering them to be independent of the coordinate system being used. In the end we will have that scalars are 0-tensors, vectors are 1-tensors, matrices are 3-tensors and so on. In addition, it will be fundamental to extend common calculus derivatives to tensor functions, which is the second topic of this section. Tensors are object of deep study in both algebra and geometry communities, so to maintain the presentation under control (and within our knowledge), we will present everything in Euclidean space $\R^3$. Generalizations should be clear by context. 

@@ -1,5 +1,5 @@
 Instead of discretizing the differential operator, as one would do in the case of finite differences to obtain discrete derivatives, one can consider discrete functional spaces, with the idea that the discrete space somehow converges to the continuous space. This is known as a Galerkin scheme.  
-\section{Galerkin schemes}
+\section{Galerkin schemes}\label{sec:galerkin-schemes}
 Consider thus an abstract differential problem given by finding $u$ in $V$ such that
 \begin{equation}
     a(u, v) = L(v) \qquad \forall v \in V,
@@ -29,7 +29,7 @@ Taking the infimum over $z_h$ one obtains the celebrated \emph{Ceà estimate}:
 This inequality can reveal many things. For example, if the number $C/\alpha$ is very big, it can hint on a very wide gap between the optimal solution (i.e. the projection) and the discrete one computed from the space $V_h$. A more precise characterization of the approximation properties of a space can be given by the \emph{Kolmogorov width}, which has been studied in~\cite{evans2009n}.
 
 \todo[inline]{NB: Esto seguro va en FEM}
-\section{Inverse inequalities}
+\section{Inverse inequalities}\label{thm:inverse-inequalities}
 All of the discrete spaces considered are finite dimensional, which means that all their norms are equivalent. Of course, these relationships don't hold in the continuous setting, so there is bound to be some dependence of these constants on $h$. The great thing about inverse inequalities is that in the discrete settings we can sometimes get away with operations that would be otherwise not feasible, but using adequate bounds can yield convergence anyway. We provide a general result first and then show some important consequences. For details, see~\cite{ern2004theory}. We will require the following definition: we say that a family of affine meshes in $\R^d$ is \emph{shape regular} if there exists $\sigma_0$ such that 
 \begin{equation}
     \forall h: \sigma_K\coloneqq \frac{h_K}{\rho_K} \leq \sigma_0 \quad\forall K\in \T_h,
@@ -60,7 +60,7 @@ One can also obtain the following local estimate in 2D for simplices~\cite{warbu
 where $F$ is a facet (line or triangle) and $K$ is the element (triangle or tetrahedron).
 
 \todo[inline]{NB: Por mover}
-\section{Conforming and non-conforming schemes} 
+\section{Conforming schemes}\label{sec:conforming-schemes}
 Galerkin schemes are based on discrete approximation spaces, which may or may not be contained in the underlying function space.
 \begin{definition}[Conforming scheme]\label{def:conforming-scheme}
     Let $V$ be an infinite-dimensional space, such as a Sobolev space, and $V_h$ a finite-dimensional approximation space associated with a discrete scheme. We say that this scheme is \emph{conforming} if $V_h\subset V$, and \emph{non-conforming} if $V_h\not\subset V$. 
@@ -77,6 +77,8 @@ Galerkin schemes are based on discrete approximation spaces, which may or may no
 %     \end{proof}
 % \end{lemma}
 
+
+\section{Non-conforming schemes}\label{sec:non-conforming-schemes}
 In order to have a good approximation, it is not necessary that the scheme is conforming. Some examples of conforming schemes are most finite element methods and spectral element methods, and among non-conforming schemes are discontinuous-Galerkin (DG) finite element methods, and methods that impose boundary conditions weakly. We will study several conforming finite element methods in Chapter~\ref{chapter:fem}. 
 
 Although conforming spaces have some nice properties, there exist some applications where the mesh and the domain boundaries may not match, or where traditional finite elements may not apply, forcing one to use other schemes such as spline-based methods, where the degrees of freedom are control points of the splines, rather than actual nodes. In these cases, we can use a non-conforming scheme. The following presentation is based on~\cite{Chouly2024}. Consider the Poisson problem with a nonhomogeneous Dirichlet boundary condition: find $u:\Omega\to \mathbb{R}$ such that
@@ -130,5 +132,3 @@ where as usual we denote $a(u,v)=(\nabla u,\nabla v)$. Let $K^h$ be a discretiza
 \end{itemize}
 
 In practice, the penalty method is much simpler to understand and to implement, but its accuracy in some specific problems may not always be satisfactory. The Nitsche method is still simple to implement, and it constitutes a better alternative to the penalty method, where one has to tune only one numerical parameter. There exist more variants to these methods, such as the penalty-free Nitsche method and methods with Lagrange multipliers. The interested reader is referred to~\cite{Chouly2024} for more details.
-
-
