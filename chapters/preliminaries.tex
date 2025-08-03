@@ -61,7 +61,7 @@ An important type of topological vector spaces are \emph{normed vector spaces}.
 
 A norm will induce a topology by considering \emph{open balls}
 \begin{equation}
-    \mathbb{B}(x,r) \coloneqq \{y\in X: \|x-y\|<r\}
+    \mathcal{B}(x,r) \coloneqq \{y\in X: \|x-y\|<r\}
 \end{equation}
 as the open sets, and it is easy to prove that a normed vector space is indeed a topological vector space. This norm structure allows us to calculate lengths (norms) of vectors, and also to induce a \emph{metric}.
 \begin{definition}[Metric and metric space]
@@ -309,7 +309,7 @@ The most important spaces for us are the Lebesgue spaces $L^p(\Omega;\R^n)$, whi
         \|f\|_\infty \coloneqq \inf\{C\in\R^+: |f(x)|\leq C \text{ almost everywhere}\}.
     \end{equation*}
 
-    When the choice of $\mu$ and/or the space $\Omega$ is obvious, then we simply write $L^p(\Omega)$ or even just $L^p$.
+    When the choice of $\mu$ and/or the space $\Omega$ is obvious, then we simply write $L^p(\Omega)$ or even just $L^p$. Note that $L^1$ is the space of Lebesgue integrable functions.
 \end{definition}
 
 For $1\leq p\leq \infty$, we can prove that $\|\cdot\|_p$ is indeed a norm. There are three central inequalities that stem from these definitions, whose proofs we omit here since they are covered in standard real analysis courses. 
@@ -367,9 +367,16 @@ In an infinite-dimensional setting, a subspace $S\subset V$ of a vector space $V
     Let $V$ be a normed vector space and $S\subset V$ a subspace. For any $f\in S'$, i.e. $f:S\to\R$, there exists an extension $\tilde{f}\in V'$ that preserves the norm $\|f\|_{S'} = \|\tilde{f}\|_{V'}$.
 \end{theorem}
 
-For any continuous linear functional $f$ defined on the subspace $S'$, the natural extension by density can extend the domain of $f$ to $\overline{S}$, so we can take the closure of $S$ and consider closed subspaces only. 
+For any continuous linear functional $f$ defined on the subspace $S'$, the natural extension by density can extend the domain of $f$ to $\overline{S}$, so we can take the closure of $S$ and consider closed subspaces only. The following corollary says that we can find a functional to separate a point with a closed subspace. 
+\begin{corollary}\label{cor:hahn-banach-extension}
+    Let $V$ be a normed vector space and $S\subset V$ a closed subspace. Let $v\in V$ such that $v\notin S$. Then, there exists a functional $f\in V'$ such that $f(S)=0$ and $f(v)=1$, with $\|f\| = \dist^{-1}(v, S)$.
+    \begin{proof}
+        Consider the subspace $S_v \coloneqq \spanned(S,v)$. For any $u\in S_v$, decompose $u=u_s+\lambda v$ with $u_s\in S$ and $\lambda\in \R$. We define $f(u)=\lambda$, and by the Hahn-Banach theorem~\ref{thm:hahn-banach}, we can extend the domain of $f$ to the entire space $V$. Then, $f(S)=0$ and $f(v)=1$. The norm is left as an exercise. 
+    \end{proof}
+\end{corollary}
+Note that this corollary is (i) an improvement over Urysohn's lemma, which provides a possibly nonlinear function, and (ii) is obvious in an inner product space, where we can just use $\overline{f} = v - \Pi_S v$, which is orthogonal to $S$, then scale $\overline{F}$ with the distance such that $f(v)=1$, and finally extend $f$ through the inner product. 
 
-Now, let $T\in \mathcal{L}(X,Y)$ be a continuous, bounded linear operator, where $U,V$ are Banach spaces. Denote $\ker T\subset U$ and $\im T\subset V$ the \emph{kernel} (or \emph{null space}) and \emph{image} of $T$. Due to the continuity of $T$, $\ker T$ is a closed subspace of $U$. Recall that in a Hilbert space $H$, the \emph{orthogonal complement} of $S\subset H$, defined as
+Now, let $T\in \mathcal{L}(U,V)$ be a continuous, bounded linear operator, where $U,V$ are Banach spaces. Denote $\ker T\subset U$ and $\im T\subset V$ the \emph{kernel} (or \emph{null space}) and \emph{image} of $T$. Due to the continuity of $T$, $\ker T$ is a closed subspace of $U$. Recall that in a Hilbert space $H$, the \emph{orthogonal complement} of $S\subset H$, defined as
 \begin{equation*}
     S^\perp \coloneqq \{u\in H: (u,v)=0,\forall v\in S\}
 \end{equation*}
@@ -458,10 +465,12 @@ Furthermore, we recover some classical properties of differentiation:
 We now define the Fréchet derivative map.
 \begin{definition}
     Let $F:U\to Y$ be a Fréchet differentiable function in $U$ (i.e. Fréchet differentiable at every point $u\in U$). The map
-    \begin{tightalign*}
-        F':U&\to \mathcal{L}(X,Y)\\
-        u&\mapsto dF(u)
-    \end{tightalign*}
+    \begin{equation}
+        \begin{aligned}
+            F':U &\to \mathcal{L}(X,Y)\\
+            u &\mapsto dF(u)
+        \end{aligned}
+    \end{equation}
     is called the \emph{Fréchet derivative} of $F$. If $F'$ is continuous, we say that $F\in C^1$ and write $F\in C^1(U,Y)$.
 \end{definition}
 
@@ -477,13 +486,13 @@ We note that the definition of the Fréchet derivative gives no hints to actuall
 In order to show the equivalence between Fréchet and Gâteaux derivatives, we require the mean value theorem. 
 \begin{theorem}[Mean value]\label{thm:mean-value-banach}
     Let $F:U\to Y$ be a function that is Gâteaux differentiable in $U$ (i.e. at every point $u\in U$). Define the function interval (convex combination)
-    \begin{equation*}
+    \begin{equation}
         [u,v] \coloneqq \{tu+(1-t)v, t\in[0,1]\}.
-    \end{equation*}
+    \end{equation}
     Then, we have
-    \begin{equation*}
+    \begin{equation}
         \|F(u)-F(v)\| \leq \left(\sup_{w\in[u,v]} \|d_G F(w)\|\right) \|u-v\|. 
-    \end{equation*}
+    \end{equation}
     \begin{proof}
         Assume that $F(u)-F(v)\neq 0$. We build the norm using the Hahn-Banach theorem: there exists $\psi \in Y^*$ with $\|\psi\|=1$ such that 
         \begin{equation*}
@@ -510,7 +519,10 @@ In order to show the equivalence between Fréchet and Gâteaux derivatives, we r
 \end{theorem}
 
 \begin{theorem}[Equivalence of Gâteaux and Fréchet derivatives]\label{thm:frechet-gateaux-equivalence}
-    If the Gâteaux derivative $d_G F$ of a function $F:X\to Y$ is continuous at $u^*\in X$, then $F$ is Fréchet differentiable at $u^*$, and they coincide, i.e. $dF(u^*) = d_G F(u^*)$.
+    If the Gâteaux derivative $d_G F$ of a function $F:X\to Y$ is continuous at $u^*\in X$, then $F$ is Fréchet differentiable at $u^*$, and they coincide, i.e.
+    \begin{equation}
+        dF(u^*) = d_G F(u^*).
+    \end{equation}
     \begin{proof}
         Because of uniqueness, we simply need to verify that the Gâteaux derivative is indeed the Fréchet one. Fix $u\in U$ and define $R(h) = F(u+h) - F(u) - d_G F(u)[h]$. We now need to prove $R(h)=o(\|h\|)$, so that $Ah=d_G F(u)[h]$ in the definition of the Fréchet derivative. The Gâteaux derivative of $R$ at $h$ in the direction $k$ is
         \begin{tightalign*}
