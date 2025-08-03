@@ -1,8 +1,6 @@
 In this section we set most of the foundational mathematics required to understand these notes. In general, this consists in defining rigorously the abstract functional setting and preparing the student for what a colleague calls the \emph{tensor-fu}, i.e. the capability of derivating anything.
 
 \section{Elements of functional analysis}\label{sec:elements-functional-analysis}
-
-% \section{Fundamental theorems of Functional Analysis}\label{sec:fundamental-theorems-FA}
 In this section we recall some basic definitions and theorems of functional analysis by following closely the presentation by Long Chen in~\cite{chen2024infSup}. We refrain from giving a detailed explanation and proofs, which are covered in detail in standard functional analysis references, such as~\cite{BrezisFA}.
 
 In order to transfer the notions that are developed in undergraduate calculus and linear algebra courses to functional analysis, we need to define conditions on the \emph{spaces} and on the \emph{operators}. This occurs mainly due to the fact that we are now in an infinite-dimensional setting, which leads to non-intuitive results. There are three key properties that we will study: \emph{closeness} (or \emph{completeness}), \emph{continuity} (or \emph{boundedness}) and \emph{compactness}.
@@ -65,7 +63,7 @@ A norm will induce a topology by considering \emph{open balls}
 \begin{equation}
     \mathbb{B}(x,r) \coloneqq \{y\in X: \|x-y\|<r\}
 \end{equation}
-as open sets, and it is easy to prove that a normed vector space is a topological vector space. This norm structure allows us to calculate lengths (norms) of vectors, and also to induce a \emph{metric}.
+as the open sets, and it is easy to prove that a normed vector space is indeed a topological vector space. This norm structure allows us to calculate lengths (norms) of vectors, and also to induce a \emph{metric}.
 \begin{definition}[Metric and metric space]
     A function $d:X\times X\to \R^+$ is a \emph{metric} on $X$ if for any $x,y,z\in X$, it satisfies
     \begin{itemize}
@@ -80,6 +78,18 @@ as open sets, and it is easy to prove that a normed vector space is a topologica
     \end{equation}
     which indeed is easily proven to be a metric, and thus all normed vector spaces are metric spaces. 
 \end{definition}
+A broad class of norms are the $p$-norms, which will be useful when dealing with $L^p$ spaces later on. 
+\begin{definition}[$p$-norm of a vector]
+    Let $x\in\Omega\subset\R^n$. For $1\leq p, \infty$, the \emph{$p$-norm} of $x$ is defined as 
+    \begin{equation}
+        \|x\|_p \coloneqq \left(\sum_{i=1}^n |x_i|^p\right)^{1/p},
+    \end{equation}
+    and for $p=\infty$, the $p$-norm is the \emph{supremum} norm
+    \begin{equation}
+        \|x\|_\infty \coloneqq \sup_{i=1,\dots,n} |x_i|.
+    \end{equation}
+    A simple exercise proves that these functions are indeed norms, and we can further prove that $\R^n$ is complete with respect to these norms, which implies that $(\R^n, \|\cdot\|_p)$ is a Banach space for $1\leq p\leq \infty$.
+\end{definition}
 
 Through the structure provided by the norm and the metric it induces, we can talk about the length (norm) of vectors in a space, and the distances (metric) between two vectors. In some cases, we will have additional geometric structure in our space thanks to an \emph{inner product}. 
 \begin{definition}[Inner product space]
@@ -89,19 +99,27 @@ Through the structure provided by the norm and the metric it induces, we can tal
         \item a symmetry property $(x,y)=(y,x)$, and
         \item a \emph{bilinearity} property $(\alpha x+\beta y, z)=\alpha(x,z)$.
     \end{itemize}
-    An \emph{inner product space} $(X,(\cdot,\cdot))$ is a vector space $X$ with a product space defined on $X$. Given an inner product $(\cdot,\cdot)$, there always exists a \emph{norm induced by the inner product} $\|x\|\coloneqq (x,x)^{1/2}$ and a \emph{metric induced by the inner product} $d(x,y)\coloneqq (x,y)^{1/2}$, and thus all inner product spaces are normed spaces and metric spaces. In the case that a norm $\|\cdot\|$ is induced by an inner product, then the \emph{parallelogram property} holds:
-    \begin{equation}
-        \|x+y\|^2 + \|x-y\|^2 = 2\|x\|^2 + 2\|y\|^2.
-    \end{equation}
-    Further, from the properties of the inner product, one can derive the useful property 
-    \begin{equation}
-        \|x\pm y\|^2 = \|x\|^2 \pm 2(x,y) + \|y\|^2.
-    \end{equation}
+    An \emph{inner product space} $(X,(\cdot,\cdot))$ is a vector space $X$ with a product space defined on $X$. Given an inner product $(\cdot,\cdot)$, there always exists a \emph{norm induced by the inner product} $\|x\|\coloneqq (x,x)^{1/2}$ and a \emph{metric induced by the inner product} $d(x,y)\coloneqq (x,y)^{1/2}$, and thus all inner product spaces are normed spaces and metric spaces. In the case that a norm $\|\cdot\|$ is induced by an inner product, we obtain three important properties: 
+    \begin{enumerate}
+        \item the \emph{Cauchy-Schwarz inequality}, which states that for any $u,v$ in an inner product space, 
+            \begin{equation}
+                |\langle u, v\rangle| \leq \|u\| \|v\|,
+            \end{equation}
+            where $\|\cdot\|$ is the induced norm,
+        \item the \emph{parallelogram property}:
+            \begin{equation}
+                \|x+y\|^2 + \|x-y\|^2 = 2\|x\|^2 + 2\|y\|^2,
+            \end{equation}
+        \item and the useful property 
+            \begin{equation}
+                \|x\pm y\|^2 = \|x\|^2 \pm 2(x,y) + \|y\|^2.
+            \end{equation}
+    \end{enumerate}
     We will denote inner products mostly by $\langle\cdot, \cdot\rangle$ and $(\cdot, \cdot)$. Sometimes it will be important to distinguish the specific product we consider, i.e. $(\cdot, \cdot)_H$. 
 \end{definition}
 
 \subsection{Banach and Hilbert spaces}\label{sec:banach-hilbert-spaces}
-Throughout the entire manuscript, we will rely on \emph{Banach spaces}, \emph{Hilbert spaces}, and their duals. Despite the existence of a flexible theory of Banach space formulations, we will mostly rely on Hilbert spaces because of their many nice properties. To define these spaces, we need to define \emph{completeness}.
+Throughout the entire manuscript, we will rely on \emph{Banach spaces}, \emph{Hilbert spaces}, and their dual spaces. Despite the existence of a flexible theory of Banach space formulations, we will mostly rely on Hilbert spaces because of their many nice properties. To define these spaces, we need to define \emph{completeness}.
 \begin{definition}[Completeness]
     A metric space $(X,d)$ is \emph{complete} if all Cauchy sequences in $X$ converge to a limit that is also in $X$.
 \end{definition}
@@ -124,12 +142,12 @@ Completeness allows us to take limits in a safe and consistence manner, without 
         \|T\|_{X'} = \sup_{\substack{x\in X\\ \|x\|_X\leq 1}} |T(x)|= \sup_{x\in X}\frac{|T(x)|}{\|x\|_X}.
     \end{equation}
 \end{definition}
-\begin{definition}[Duality pairing, transpose, bidual space]
-    Given $x\in X$, $f\in Y'$ and $T\in X'$, the action of $T$ is called the \emph{duality pairing} and is denoted by $\langle T, x\rangle_{X'\times X}$, so as to resemble the notation of an inner product. The \emph{transpose} operator $T^*\in \mathcal{L}(Y',X')$ is defined by the equation 
+\begin{definition}[Duality pairing, transpose, bidual space, reflexive space]
+    Given $x\in X$, $f\in Y'$ and $T\in X'$, the action of $T$ on $x$ which is called the \emph{duality pairing} and is denoted by $\langle T, x\rangle_{X'\times X}$, or simply $T(x)$. The \emph{transpose} operator $T^*\in \mathcal{L}(Y',X')$ is defined by the equation 
     \begin{equation}
         \langle T^* f, x\rangle_{X',X} = \langle f, Tx\rangle_{Y',Y},
     \end{equation}
-    In general, one can identify a part of the \emph{bidual space} $X'' \coloneqq (X')'$ through the evaluation operator $T_f = X'\mapsto \R$ in $X''$ defined as $T_f(L) \coloneqq \mathcal{L}(f)$. This immersion is not surjective. 
+    The \emph{bidual space} is the dual of the dual space, i.e. $X'' \coloneqq (X')'$. One can identify a part $X''$ through the evaluation operator $T_f = X'\mapsto \R$ in $X''$ defined as $T_f(L) \coloneqq \mathcal{L}(f)$. This immersion is always injective by the Hahn-Banach theorem~\ref{thm:hahn-banach}, but it is not necessarily surjective, and in the case that indeed $X''=X$ (i.e. $T_f$ is surjective), the space $X$ is said to be \emph{reflexive}. In reflexive spaces, bounded sequences always have weakly convergent subsequences. %! weak convergence
 \end{definition}
 \begin{definition}[Bounded operators and operator norm]\label{def:bounded-operator}
     An operator $T:X\to Y$ is \emph{bounded} if it maps bounded sets into bounded sets. When $X$ and $Y$ are normed spaces, (i) boundedness is equivalent to continuity, and thus $\mathcal{L}(X,Y)$ is the set of continuous, bounded linear operators, and (ii) for every bounded operator there exists a constant $M\geq 0$ such that $\|T(x)\|\leq M\|x\|$. The smallest constant $M$ is defined as the \emph{operator norm}
@@ -164,6 +182,7 @@ Let us now review some relevant properties:
     It can be quickly verified that the function $x_\perp$ is indeed perpendicular to $y$ in the sense that $(x_\perp, y)_H=0$.
     \item The inner product yields the fantastic Riesz map, which is actually an isometry. This is given as follows: consider a Hilbert space $H$ with inner product $(\cdot, \cdot)_H$, then a Riesz map is an operator $R_H: H\mapsto H'$ such that for any $x,y$ in $H$ it holds that $\langle R_H(x), y\rangle_{H'\times H} = (x, y)_H$. Notably, $\|R_H(x)\|_{H'} = \| x \|_H$. 
 \end{itemize}
+
 One fundamental aspect of Hilbert spaces is that they provide a precise way to \emph{project} elements into subspaces, and thus defining \emph{orthogonal complements}. We state the theorems that define these objects without proving them. 
 \begin{theorem}[Best approximation]\label{thm:best-approximation}
     Set $U\subset H$ a closed subspace of a Hilbert space $H$ and fix $f$ in $H$. Then there exists a unique $g$ in $U$ such that
@@ -204,17 +223,6 @@ Some common and simple examples: Helmholtz decomposition, zero average functions
 }
 \subsection{$L^p$ spaces}
 The most important spaces for us are the Lebesgue spaces $L^p(\Omega;\R^n)$, which are equipped with a $p$-norm. To this end, we need to recall some basic definitions of measure theory. We will denote $\mathcal{P}(\Omega)$ as the \emph{power set} of $\Omega$, that is, the set of all subsets of $\Omega$. 
-\begin{definition}[$L^p$ vector norm]
-    Let $x\in\Omega\subset\R^n$. For $1\leq p, \infty$, the \emph{$p$-norm} of $x$ is defined as 
-    \begin{equation}
-        \|x\|_p \coloneqq \left(\sum_{i=1}^n |x_i|^p\right)^{1/p},
-    \end{equation}
-    and for $p=\infty$, the $p$-norm is the \emph{supremum} norm
-    \begin{equation}
-        \|x\|_\infty \coloneqq \sup_{i=1,\dots,n} |x_i|.
-    \end{equation}
-    A simple exercise proves that these functions are indeed norms, and we can further prove that $\R^n$ is complete with respect to these norms, which implies that $(\R^n, \|\cdot\|_p)$ is a Banach space for $1\leq p\leq \infty$.
-\end{definition}
 \begin{definition}[Measure space, measurable sets, measure]
     A triplet $(\Omega, \Sigma, \mu)$ is called a \emph{measure space}, if 
     \begin{itemize}
@@ -246,9 +254,9 @@ The most important spaces for us are the Lebesgue spaces $L^p(\Omega;\R^n)$, whi
         \end{cases}
     \end{equation*}
     A function $f:\Omega\to \R$ is called a \emph{simple function} if it can be expressed as a linear combination of indicator functions 
-    \begin{equation*}
+    \begin{equation}\label{def:simple-functions}
         f(x) = \sum_k a_k 1_{S_k}(x),
-    \end{equation*}
+    \end{equation}
     where $a_k\in\R$ and $\{S_k\}_k\subset \Sigma$ are disjoint measurable sets. A simple function is measurable. 
 \end{definition}
 \begin{definition}[Lebesgue integral]
@@ -306,12 +314,12 @@ The most important spaces for us are the Lebesgue spaces $L^p(\Omega;\R^n)$, whi
 
 For $1\leq p\leq \infty$, we can prove that $\|\cdot\|_p$ is indeed a norm. There are three central inequalities that stem from these definitions, whose proofs we omit here since they are covered in standard real analysis courses. 
 \begin{theorem}[Minkowski inequality]
-    The triangle inequality for $\|\cdot\|_p$ is referred to as the \emph{Minkowski inequality}, which states that for $1\leq p\leq \infty$ and $f,g\in L^p(\Omega,\mu)$, we have
+    The triangle inequality for $\|\cdot\|_p$ is known as the \emph{Minkowski inequality}, which states that for $1\leq p\leq \infty$ and $f,g\in L^p(\Omega,\mu)$, we have
     \begin{equation}
         \|f+g\|_p \leq \|f\|_p + \|g\|_p.
     \end{equation}
 \end{theorem}
-\begin{theorem}[Young's inequality]
+\begin{theorem}[Young's inequality]\label{thm:young-inequality}
     Let $a,b,p,q\geq 0$ be non-negative real numbers, where $p$ and $q$ are \emph{Hölder conjugates}, i.e. $\frac{1}{p}+\frac{1}{q}=1$. If $p>1$ and $q>1$, it holds that 
     \begin{equation}
         ab\leq \frac{a^p}{p} + \frac{b^q}{q},
@@ -346,7 +354,7 @@ A simple way to remember this is to split a function as $f = I_{|f|\leq 1}f + I_
 \subsection{The fundamental theorems}
 In the finite dimensional case, elements in a space $V$ and its topological dual $V'$ can be represented by vectors in $\R^n$ with $n=\dim V$ when a basis is chosen, and a linear, bounded operator between two spaces can be represented as a matrix. In the infinite dimensional setting, we need to extend this result, which is done via the Riesz representation theorem. 
 
-\begin{theorem}[Riesz representation theorem]
+\begin{theorem}[Riesz representation theorem]\label{thm:riesz-representation}
     Let $V$ be a Hilbert space with inner product $(\cdot,\cdot)$. For any $u\in V$, the map $f_u\coloneqq (u,\cdot):V\to \R$ is a continuous linear functional, i.e. $f_u\in V'$, and we have a mapping $V\to V'$ via $u\mapsto f_u=(u,\cdot)$. It holds that for any $f\in V'$ there exists a unique element $u\in V$ such that 
     \begin{equation}
         (f,v) = (u,v)\quad \forall v\in V,
@@ -354,8 +362,8 @@ In the finite dimensional case, elements in a space $V$ and its topological dual
     where we identify $f=f_u$. Furthermore, $\|f\|_{V'} = \|u\|_V$, and thus $V$ and $V'$ are isometric.
 \end{theorem}
 
-Now in our infinite-dimensional setting, note that a subspace $S\subset V$ of a vector space $V$ is itself a vector space. For any normed vector space, a closed subspace is closed under the topology, i.e. for every convergent sequence, the limit also lies in the subspace. If a function is defined only in the subspace, the Hahn-Banach theorem allows us to extend our function to the whole space. 
-\begin{theorem}[Hahn-Banach]
+In an infinite-dimensional setting, a subspace $S\subset V$ of a vector space $V$ is itself a vector space. For any normed vector space, a closed subspace is closed under the topology, i.e. for every convergent sequence, the limit also lies in the subspace. If a function is defined only in the subspace, the Hahn-Banach theorem allows us to extend our function to the whole space. 
+\begin{theorem}[Hahn-Banach]\label{thm:hahn-banach}
     Let $V$ be a normed vector space and $S\subset V$ a subspace. For any $f\in S'$, i.e. $f:S\to\R$, there exists an extension $\tilde{f}\in V'$ that preserves the norm $\|f\|_{S'} = \|\tilde{f}\|_{V'}$.
 \end{theorem}
 
@@ -414,7 +422,7 @@ In the first case, we do not know if $u_n$ converges or not, but in the second o
     For $T\in\mathcal{L}(U,V)$ with $U,V$ Banach, if $T$ is injective (into) and surjective (onto), then $T^{-1}\in \mathcal{L}(V,U)$ exists and is continuous. 
 \end{corollary}
 
-\section{Fréchet and Gateaux derivatives}\label{sec:frechet-gateaux-derivatives}
+\section{Fréchet and Gâteaux derivatives}\label{sec:frechet-gateaux-derivatives}
 We will now cover the notion of differentiability in Banach spaces. The presentation closely follows that of~\cite{ambrosetti1995primer}, with substantially less detail.
 \begin{definition}
     Set $u\in U \subset X$ with $U$ an open set, and $F:U\to Y$. We say $F$ is \emph{Fréchet differentiable} at $u$ if there exists a linear operator $A\in \mathcal{L}(X,Y)$ such that
@@ -459,7 +467,7 @@ We now define the Fréchet derivative map.
 
 We note that the definition of the Fréchet derivative gives no hints to actually compute it from a given $F$. We begin by defining a different notion of differentiability.
 \begin{definition}
-    We define the Gâteaux derivative of $F:U\to Y$ at a fixed $u\in U$ as
+    We define the \emph{Gâteaux derivative} of $F:U\to Y$ at a fixed $u\in U$ as
     \begin{equation}\label{eq:gateaux-derivative}
         d_G F(u)[h] \coloneqq \lim_{\varepsilon\to 0} \frac{F(u+\varepsilon h)-F(u)}{\varepsilon} = \frac{d}{d\varepsilon}\left.\left(F(u+\varepsilon h)\right)\right|_{\varepsilon = 0}.
     \end{equation}
@@ -523,7 +531,7 @@ In order to show the equivalence between Fréchet and Gâteaux derivatives, we r
         because of the continuity of $d_G F$.
     \end{proof}
 \end{theorem}
-Typically, one computes the Gâteaux derivative of $f$ by definition~\eqref{eq:gateaux-derivative}, which requires handling the term $f(x+\varepsilon d)$,
+Typically, one computes the Gâteaux derivative of $f$ by definition~\eqref{eq:gateaux-derivative}, which requires handling the term $f(x+\varepsilon d)$ by using the properties of $f$, and finish by checking its continuity.
 
 For higher order derivatives, we start from the Fréchet derivative $F'(u) \coloneqq dF(u)\in \mathcal{L}(X,Y)$, where $F:U\to Y$. Repeating the calculation, we have
 \begin{equation*}
@@ -575,7 +583,7 @@ Let us list some useful properties:
 In calculus of variations $d^2 F(u)[h] = d^2 F(u)[h,h]$ is used for checking the properties of the minimizers of problems in the same way one would do in finite-dimensional optimization.
 
 \section{Tensors}\label{sec:tensors}
-Tensors are the natural way to put into one consistent algebraic setting all indexed objects, by further considering them to be independent of the coordinate system being used. In the end we will have that scalars are 0-tensors, vectors are 1-tensors, matrices are 3-tensors and so on. In addition, it will be fundamental to extend common calculus derivatives to tensor functions, which is the second topic of this section. Tensors are object of deep study in both algebra and geometry communities, so to maintain the presentation under control (and within our knowledge), we will present everything in Euclidean space $\R^3$. Generalizations should be clear by context. 
+\emph{Tensors} are the natural way to put into one consistent algebraic setting all indexed objects, by further considering them to be independent of the coordinate system being used. In the end we will have that scalars are 0-tensors, vectors are 1-tensors, matrices are 3-tensors and so on. In addition, it will be fundamental to extend common calculus derivatives to tensor functions, which is the second topic of this section. Tensors are object of deep study in both algebra and geometry communities, so to maintain the presentation under control (and within our knowledge), we will present everything in Euclidean space $\R^3$. Generalizations should be clear by context. 
 
 In addition, we also mention that we will stick to the convention that scalars, vectors, and matrices are denoted with $a$, $\vec a$, and $\mat A$. Higher order tensors are sometimes denoted with $\mathcal A$ (3rd order) and $\mathbb A$ (4th order), but we will not use those too much. 
 
