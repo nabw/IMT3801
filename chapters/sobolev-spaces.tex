@@ -123,7 +123,7 @@ Consider $\Omega$ a bounded Lipschitz domain in $\R^d$, $m\geq 1$ integer, $j\ge
 \end{enumerate}
 These inclusions hold also if the arrival domain is an arbitrary subdomain of $\Omega$. 
 \end{theorem}
-These theorems hold in greater generality, and are typically used together with the weak-compactness of the unit ball (c.f. Banach-Alaoglu theorem) to show the existence of certain strongly convergent subsequence. We will see examples of this further ahead. One fundamental consequence is that $H^1$ is compactly embedded in $L^2$.
+These theorems hold in greater generality, and are typically used together with the weak compactness of the unit ball (c.f. Banach-Alaoglu theorem) to show the existence of a strongly convergent subsequence. We will see examples of this further ahead. One fundamental consequence is that $H^1$ is compactly embedded in $L^2$.
 
 It is important to note that the embeddings are done through the identity map, and the main difference lies in the norms. In this sense, one immediately sees that, for example, the embedding $I:W^{1,p}(\Omega)\to L^p(\Omega)$ is continuous. In fact, it is defined by $Ix=x$, and we get
 \begin{equation*}
@@ -143,7 +143,7 @@ and thus we can bound
 \end{equation*}
 This shows that if $f'\in L^2(I)$, then $f$ is uniformly continuous. In particular, we have the injection $H^1(I)\to C^0(\overline{I})$. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Traces}
+\section{Traces}\label{sec:traces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Traces or trace operators are the ones that restrict a function in $\R^d$ to some set in $\R^{d-1}$, most commonly the boundary of a domain. They are fundamental to adequately define boundary conditions. For the presentation of this section, we follow~\cite{gatica2014simple} and~\cite{monk2003finite}. Some details about Sobolev spaces are drawn from~\cite{adams2003sobolev}. The fundamental difficulty of defining trace operators is that the domain where the boundary condition is defined has measure 0 in the measure of the starting domain, so some regularity of the function is required to guarantee that this operation makes sense. We will not enter the details of how a Lipschitz boundary is defined, see~\cite{monk2003finite} for further details.
@@ -391,53 +391,54 @@ but one can also look at the tangential components of the stress tensor, thus ge
 \end{equation*}\vspace{-20pt}
 }
 
-\section{Poincaré inequalities}
+\section{Poincaré inequalities}\label{sec:poincare-inequalities}
 Using all of the previous definitions, we can finally look at actual problems and some first well-posedness results. For all of them, the Poincaré inequality will be fundamental.
 
-\begin{lemma}[Poincaré inequality] Let $\Omega\subset \R^d$ be a bounded Lipschitz domain. Then, there exists $C>0$ such that
-\begin{equation}\label{eq:poincare-inequality}
-    \|u\|_{0,\Omega} \leq C\|\nabla u\|_{0,\Omega} \qquad \forall u\in H^1_0(\Omega).
-\end{equation}
-\begin{proof}
-    It suffices to show the result for functions in $C_0^\infty(\Omega)$, since this space is dense in $H_0^1(\Omega)$. By contradiction, assume that there exists a sequence $(v_n)_n\subset C_0^\infty(\Omega)$ such that $\|v_n\|_{0,\Omega}=1$ and 
-    \begin{equation*}
-        \|\nabla v_n\|_{0,\Omega} < \frac{1}{n} \qquad \forall n\in \mathbb{N}.
-    \end{equation*}
-    Then, as $(v_n)_n$ is bounded in the reflexive space $H^1(\Omega)$, there exists a weakly convergent subsequence $(v_{n_k})_k$ to some $v\in H^1(\Omega)$, which converges strongly in $L^2(\Omega)$ by the Rellich-Kondrachov theorem, and in particular, it converges in norm, that is,
-    \begin{equation*}
-        \|v\|_{0,\Omega} = \lim_{k\to\infty} \underbrace{\|v_{n_k}\|_{0,\Omega}}_{=1} = 1.
-    \end{equation*}
-    Given a vector field $\vec\phi = (\phi_1,\dots,\phi_d)\in (C_0^\infty(\Omega))^d$, we can show that for $w$ in $H_0^1$ the map $\varphi_{\vec{\phi}}:H^1(\Omega)\to\R$ given by $\varphi_{\vec{\phi}}(w) = (w, \nabla\cdot \vec \phi)$ is continuous:
-    \begin{equation*}
-        |(w,\nabla\cdot\vec\phi)| = |-(\nabla w, \vec\phi)| \leq \|\nabla w\|_{0,\Omega}\|\vec\phi\|_{0,\Omega} \leq \|w\|_{1,\Omega}\|\vec\phi\|_{0,\Omega},
-    \end{equation*}
-    that is, $\varphi_{\vec{\phi}} \in (H^1(\Omega))'$. We note that for the subsequence $(v_{n_k})_k$ and for any $\vec\phi \in [C_0^\infty(\Omega)]^d$ we have 
-    \begin{equation*}
-        |(v_{n_k},\nabla\cdot\vec\phi)| \leq \|\nabla v_{n_k}\|_{0,\Omega}\|\vec\phi\|_{0,\Omega} < \frac{1}{n_k}\|\vec\phi\|_{0,\Omega}\overset{k\to\infty}{\longrightarrow} 0.
-    \end{equation*}
-    Since $v_{n_k} \rightharpoonup v$ weakly in $H^1(\Omega)$, we have that for any $\vec\phi \in (C_0^\infty(\Omega))^d$ it holds that
-    \begin{equation*}
-        (\nabla v,\vec\phi) = -(v,\nabla\cdot\vec\phi) = -\varphi_{\vec{\phi}}(v) = -\lim_{k\to\infty} \varphi_{\vec{\phi}}(v_{n_k}) = -\lim_{k\to\infty} (v_{n_k},\nabla\cdot\vec\phi) = 0,
-    \end{equation*}
-    and thus $\nabla v = 0$. Since $\Omega$ is Lipschitz, it is connected, and by the generalized mean value theorem we can prove that $\nabla v = 0$ implies that $v=c$ almost everywhere for $c\in \mathbb{R}$. Now, consider $\vec\phi$ in $[C^\infty(\overline{\Omega})]^d$ and the functional $\psi_{\vec{\phi}}:H^1(\Omega)\to \mathbb{R}$ such that 
-    \begin{equation*}
-        \psi_{\vec{\phi}}(u) = \int_{\partial\Omega} \gamma_D u \vec\phi\cdot\vec n \mathrm{d}S,
+\begin{lemma}[Poincaré inequality]\label{lemma:poincare-inequality}
+    Let $\Omega\subset \R^d$ be a bounded Lipschitz domain. Then, there exists $C>0$ such that
+    \begin{equation}\label{eq:poincare-inequality}
+        \|u\|_{0,\Omega} \leq C\|\nabla u\|_{0,\Omega} \qquad \forall u\in H^1_0(\Omega).
+    \end{equation}
+    \begin{proof}
+        It suffices to show the result for functions in $C_0^\infty(\Omega)$, since this space is dense in $H_0^1(\Omega)$. By contradiction, assume that there exists a sequence $(v_n)_n\subset C_0^\infty(\Omega)$ such that $\|v_n\|_{0,\Omega}=1$ and 
+        \begin{equation*}
+            \|\nabla v_n\|_{0,\Omega} < \frac{1}{n} \qquad \forall n\in \mathbb{N}.
         \end{equation*}
-    which is linear and continuous due to the trace inequality. Weak convergence implies
-    \begin{equation*}
-        \psi_{\vec{\phi}}(v) = \lim_{k\to\infty} \psi_{\vec{\phi}}(v_{n_k}) = \lim_{k\to\infty} \int_{\partial\Omega} v_{n_k} \vec\phi\cdot\vec n \mathrm{d}S = 0,
-    \end{equation*}
-    since  $v_{n_k}|_{\partial\Omega} = 0$. Now replacing $v=c$ we get
-    \begin{equation*}
-        0 = \psi_{\vec{\phi}}(v) = \int_{\partial\Omega} v\vec\phi \cdot\vec n\mathrm{d}S = c\int_{\partial\Omega} \vec\phi\cdot\vec n \mathrm{d}S \qquad \forall \vec\phi \in [C^\infty(\overline\Omega)]^d,
-    \end{equation*}
-    and thus $c=0$, which is a contradiction since we assumed that $\|v\|_{0,\Omega}=1$. 
+        Then, as $(v_n)_n$ is bounded in the reflexive space $H^1(\Omega)$, there exists a weakly convergent subsequence $(v_{n_k})_k$ to some $v\in H^1(\Omega)$, which converges strongly in $L^2(\Omega)$ by the Rellich-Kondrachov theorem, and in particular, it converges in norm, that is,
+        \begin{equation*}
+            \|v\|_{0,\Omega} = \lim_{k\to\infty} \underbrace{\|v_{n_k}\|_{0,\Omega}}_{=1} = 1.
+        \end{equation*}
+        Given a vector field $\vec\phi = (\phi_1,\dots,\phi_d)\in (C_0^\infty(\Omega))^d$, we can show that for $w$ in $H_0^1$ the map $\varphi_{\vec{\phi}}:H^1(\Omega)\to\R$ given by $\varphi_{\vec{\phi}}(w) = (w, \nabla\cdot \vec \phi)$ is continuous:
+        \begin{equation*}
+            |(w,\nabla\cdot\vec\phi)| = |-(\nabla w, \vec\phi)| \leq \|\nabla w\|_{0,\Omega}\|\vec\phi\|_{0,\Omega} \leq \|w\|_{1,\Omega}\|\vec\phi\|_{0,\Omega},
+        \end{equation*}
+        that is, $\varphi_{\vec{\phi}} \in (H^1(\Omega))'$. We note that for the subsequence $(v_{n_k})_k$ and for any $\vec\phi \in [C_0^\infty(\Omega)]^d$ we have 
+        \begin{equation*}
+            |(v_{n_k},\nabla\cdot\vec\phi)| \leq \|\nabla v_{n_k}\|_{0,\Omega}\|\vec\phi\|_{0,\Omega} < \frac{1}{n_k}\|\vec\phi\|_{0,\Omega}\overset{k\to\infty}{\longrightarrow} 0.
+        \end{equation*}
+        Since $v_{n_k} \rightharpoonup v$ weakly in $H^1(\Omega)$, we have that for any $\vec\phi \in (C_0^\infty(\Omega))^d$ it holds that
+        \begin{equation*}
+            (\nabla v,\vec\phi) = -(v,\nabla\cdot\vec\phi) = -\varphi_{\vec{\phi}}(v) = -\lim_{k\to\infty} \varphi_{\vec{\phi}}(v_{n_k}) = -\lim_{k\to\infty} (v_{n_k},\nabla\cdot\vec\phi) = 0,
+        \end{equation*}
+        and thus $\nabla v = 0$. Since $\Omega$ is Lipschitz, it is connected, and by the generalized mean value theorem we can prove that $\nabla v = 0$ implies that $v=c$ almost everywhere for $c\in \mathbb{R}$. Now, consider $\vec\phi$ in $[C^\infty(\overline{\Omega})]^d$ and the functional $\psi_{\vec{\phi}}:H^1(\Omega)\to \mathbb{R}$ such that 
+        \begin{equation*}
+            \psi_{\vec{\phi}}(u) = \int_{\partial\Omega} \gamma_D u \vec\phi\cdot\vec n \mathrm{d}S,
+            \end{equation*}
+        which is linear and continuous due to the trace inequality. Weak convergence implies
+        \begin{equation*}
+            \psi_{\vec{\phi}}(v) = \lim_{k\to\infty} \psi_{\vec{\phi}}(v_{n_k}) = \lim_{k\to\infty} \int_{\partial\Omega} v_{n_k} \vec\phi\cdot\vec n \mathrm{d}S = 0,
+        \end{equation*}
+        since  $v_{n_k}|_{\partial\Omega} = 0$. Now replacing $v=c$ we get
+        \begin{equation*}
+            0 = \psi_{\vec{\phi}}(v) = \int_{\partial\Omega} v\vec\phi \cdot\vec n\mathrm{d}S = c\int_{\partial\Omega} \vec\phi\cdot\vec n \mathrm{d}S \qquad \forall \vec\phi \in [C^\infty(\overline\Omega)]^d,
+        \end{equation*}
+        and thus $c=0$, which is a contradiction since we assumed that $\|v\|_{0,\Omega}=1$. 
     \end{proof}
 \end{lemma}
 
 This proof can be modified to accomodate for boundary conditions holding only in some portion of the boundary $|\Gamma_D|>0$. We can further generalize this inequality for $u\in H^1(\Omega)$ by fixing the average of a function. 
 
-\begin{lemma}[Poincaré-Wirtinger inequality]
+\begin{lemma}[Poincaré-Wirtinger inequality]\label{lemma:poincare-wirtinger-inequality}
     Consider an open connected bounded domain $\Omega$ as previously. Then, if we define the volumetric average as $\bar u = \int_\Omega u\,dx$, then it holds that
     \begin{equation}\label{eq:poincare-wirtinger-inequality}
         \| u - \bar u \|_{L^p(\Omega)} \leq C \| \grad u \|_{L^p(\Omega)}.
