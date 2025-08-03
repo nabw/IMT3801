@@ -1,7 +1,6 @@
 This section has been heavily extracted from some notes from the WIAS in Berlin. They didn't have any authorship, so I don't really know who to thank for them. At the time of writing these notes, they can be found in \href{https://www.wias-berlin.de/people/john/LEHRE/NUMERIK\_IV\_21\_22/num\_konv\_dom\_prob\_3.pdf}{this website}.
-
+\section{First and second order discrete derivatives}
 Probably the simplest (and oldest) idea for approximating equations stems from the use of Taylor's theorem:
-
 \begin{theorem}\label{thm:taylor}
     Consider a function $f$ in $C^n((a,b), \R)$, i.e. $n$ times differentiable whose derivatives are well-defined in $a$. Then, there is some $\xi$ in $(a,b)$ such that
     \begin{equation}
@@ -12,7 +11,7 @@ Naturally, this arises from the mean value theorem when $n=1$. From now on we co
     \begin{equation}\label{eq:def-grid-function}
     R_hf = (f_1, \hdots, f_N) \coloneqq (f(x_1), \hdots, f(x_N)) \in \R^N,
     \end{equation}
-    where we have defined the $R_h$ operator such that $R_hf:\R^N \to \R^N$ and $R_h:C((a,b),\R)\to [\R^N\to\R^N]$.  We can then define the following difference operators: 
+    where we have defined the $R_h$ operator such that $R_h f:\R^N \to \R^N$ and $R_h:C((a,b),\R)\to [\R^N\to\R^N]$.  We can then define the following difference operators: 
     \begin{itemize}
         \item Forward difference: 
             \begin{equation*}
@@ -37,8 +36,6 @@ so that defining the matrix $\mat D_h^+$ in $\R^{N\times N}$ as
 \end{equation}
 we obtain an operator which, given a grid function, it yields its discrete derivative. Naturally, care has to be taken at the last point, where we can simply use instead a backwards difference. 
 
-
-\section{Second order derivatives}
 The standard way of approximating second order derivatives is that of using a finite difference approximation twice. It is given by the following: 
 \begin{tightalign}
     f''(x) &\approx D^+(f')(x) \notag \\
@@ -47,10 +44,8 @@ The standard way of approximating second order derivatives is that of using a fi
            &= \frac{f(x+h) - 2f(x) + f(x-h)}{h^2}.
     \end{tightalign}
 We note that the intermediate steps show that these computations can be represented as the matrix product $\mat D^+ \mat D^-$, where the order of differentiation can be inverted and thus equivalently $\mat D^- \mat D^+$. 
-\section{Order of convergence}
+
 The order of convergence of the previously computed schemes can be derived from Taylor's theorem. 
-
-
 \begin{figure}[!h]
     \centering
     \begin{tikzpicture}
@@ -86,39 +81,39 @@ The order of convergence of the previously computed schemes can be derived from 
 \end{figure}
 
 We can easily derive the order of convergence for sufficiently smooth functions. To see this, consider Taylor's theorem to obtain for $h>0$:
-    \begin{equation*}
-f(x+ h) = f(x) + f'(x)h + O(h^2),
+\begin{equation*}
+    f(x+ h) = f(x) + f'(x)h + O(h^2),
 \end{equation*}
 from which we readily obtain that 
-    \begin{equation*}
-| D^+f(x) - f'(x) | = O(h),
+\begin{equation*}
+    | D^+f(x) - f'(x) | = O(h),
 \end{equation*}
 so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. However, it is noteworthy that although centered differences also start converging linearly, they become unstable for very small $h$, see Figure~\ref{fig:fd_convergence}. Indeed we can do the same for centered differences. For this, we compute the third-order expansions
-    \begin{tightalign*}
-        f(x+h) &= f(x) + hf'(x) + \frac {h^2} 2 f''(x) + \mathcal O(h^3) \\
-        f(x-h) &= f(x) - hf'(x) + \frac {h^2} 2 f''(x) + \mathcal O(h^3),
-    \end{tightalign*}
+\begin{tightalign*}
+    f(x+h) &= f(x) + hf'(x) + \frac {h^2} 2 f''(x) + \mathcal O(h^3) \\
+    f(x-h) &= f(x) - hf'(x) + \frac {h^2} 2 f''(x) + \mathcal O(h^3),
+\end{tightalign*}
 and by simply adding both equations, it can be shown that the finite difference formula computed converges linearly.
-\section{The empirical convergence rate}
-One issue that is always overviewed is the computation of the \emph{observed} convergence rate, so we will write it here once and for all so that it is never an issue again. Assume that some error $\vec e_h$ converges to zero in some $X$ norm with rate $k$:
-    \begin{equation*}
-\|\vec e_h\|_X \leq C h^k.
+
+\paragraph{The empirical convergence rate} One issue that is always overviewed is the computation of an \emph{empirical} convergence rate, so we will write it here once and for all so that it is never an issue again. Assume that some error $\vec e_h$ converges to zero in some $X$ norm with rate $k$:
+\begin{equation*}
+    \|\vec e_h\|_X \leq C h^k.
 \end{equation*}
-    Then, given a sequence of mesh sizes $h$ and errors as $(h_j, [\vec e_h]_j)$, we would like to estimate $k$ to validate we really obtained the computed rate $k$. For this, we take the logarithm of the error expression:
-    \begin{equation*}
-\log \|[\vec e_h]_j\|_X \leq \log C + k \log h_j,
+Then, given a sequence of mesh sizes $h$ and errors as $(h_j, [\vec e_h]_j)$, we would like to estimate $k$ to validate we really obtained the computed rate $k$. For this, we take the logarithm of the error expression:
+\begin{equation*}
+    \log \|[\vec e_h]_j\|_X \leq \log C + k \log h_j,
 \end{equation*}
 and note that we obtain roughly a line equation if we assume an equality. Because of this, we can estimate now estimate the slope of our line equation using two consecutive points as
 \begin{equation*}
-k \approx \frac{\log \|[\vec e_h]_{j+1}\|_X - \log \|[\vec e_h]_j\|_X}{ \log h_{j+1} - \log h_j},
+    k \approx \frac{\log \|[\vec e_h]_{j+1}\|_X - \log \|[\vec e_h]_j\|_X}{ \log h_{j+1} - \log h_j},
 \end{equation*}
-which yields the classical expression one gets everywhere: 
-    \begin{equation*}
-k \approx  \frac{\log \left(\|[\vec e_h]_{j+1}\|_X / \|[\vec e_h]_j\|_X\right)}{ \log \left(h_{j+1} / h_j\right)}.
-\end{equation*}
+which yields the classical expression
+\begin{equation}
+    k \approx  \frac{\log \left(\|[\vec e_h]_{j+1}\|_X / \|[\vec e_h]_j\|_X\right)}{ \log \left(h_{j+1} / h_j\right)}.
+\end{equation}
 This is also referred to sometimes as \emph{numerical convergence rate}. 
 
-\section{Method of manufactured solutions}
+\section{Method of manufactured solutions}\label{sec:manufactured-solutions}
 A typical problem is that one wants to estimate the convergence of some discrete solution
     \begin{equation}
 \mat L_h \vec u_h = 0,
@@ -141,18 +136,18 @@ such that the solution of the modified problem
 \end{equation}
 converges to the continuous solution $u_{ex}$ by construction. 
 
-\section{Convergence Analysis}
+\section{Stability and convergence analysis}\label{sec:fd-convergence-analysiss}
 Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in the Lax equivalence theorem. We will first require other definitions, and we will assume that our differential operators are \emph{densely-defined}, a property that is studied more carefully in Section~\ref{chapter:sturm-liouville}.
 
 \begin{definition}[Consistency]
     Consider some differential operator $\mathcal A$ that is densely-defined. A discrete operator $\mat A_h$ in $\R^{N\times N}$ is said to be \emph{consistent} with $\mathcal A$ of order $k$ if for all sufficiently smooth functions it holds that
     \begin{equation}\label{def:consistency}
-        \max_{i\in\{1,\hdots,N\}}|\mathcal Af(x_i) - [\mat A_hR_hf]_i| =: \|R_h \mathcal Af - \mat A_hR_h f\|_{\infty,h} \leq C h^k,
+        \max_{i\in\{1,\hdots,N\}}|\mathcal Af(x_i) - [\mat A_h R_h f]_i| =: \|R_h \mathcal Af - \mat A_hR_h f\|_{\infty,h} \leq C h^k,
     \end{equation}
     where $\|\cdot \|_{\infty,h}$ is the induced infinity norm in $\R^N$ and $C$ is a positive constant independent of $h$. This is sometimes stated more weakly by saying that the norm is $\mathcal O(h^k)$. 
 \end{definition}
 
-\example{The difference operators are all consistent with the first order derivative, which can be seen immediately from Taylor's theorem.}
+A simple example is to verify that all finite difference operators are consistent with the first order derivative, which is a consequence of Taylor's theorem.
 \begin{definition}[Stability]
     A finite difference operator $\mat A_h$ is said to be stable (in the discrete maximum norm) if there is a stability constant $C>0$ that does not depend on the grid size such that
         \begin{equation}\label{def:stability}
@@ -175,47 +170,44 @@ which will allow us to define convergence.
     \begin{equation}\label{def:fd-convergence}
         \| \vec u_h - R_h u \|_{\infty,h} \leq C h^k.
     \end{equation}
-This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_h u \|_{\infty,h}$ is $\mathcal O(h^k)$. 
+    This is sometimes stated more weakly by saying simply that $\| \vec u_h - R_h u \|_{\infty,h}$ is $\mathcal O(h^k)$. 
 \end{definition}
 \begin{theorem}[Lax equivalence theorem]\label{thm:lax-equivalence}
     Let $ \mat A_h \vec u_h = \vec f_h$ be the finite difference discretization for the problem $\mathcal A u = f$ as defined above. If $A_h$ is consistent, then stability and convergence are equivalent. 
     \begin{proof}
-        The stability to convergence part is taken directly from the aforementionted notes. The convergence to stability is instead partly inspired by the notes by Long Chen on abstract convergence analysis \cite{chenLFDM}.
-
-        \paragraph{Stability $\implies$ convergence:}
-
-        We proceed directly through inequalities:
-        \begin{tightalign*}
-            \| \vec u_h - R_h u\|_{\infty,h} &\leq C\|\mat A_h(\vec u_h - R_hu) \|_{\infty,h}  \tag{Stability} \\
-            &=C \| f_h - \mat A_hR_h u \|_{\infty,h} \\
-            &=C \| R_h f - \mat A_hR_h u\|_{\infty,h}\\
-            &=C \|R_h(\mathcal A u) - \mat A_hR_h u\|_{\infty,h} \\
-            &\leq Ch^k  \tag{Consistency}.
-        \end{tightalign*}
-        \paragraph{Convergence $\implies$ stability:}
-
-        We note that by taking inverses, we can write stability as 
-        \begin{equation*}
-        \| \mat A_h^{-1}\vec f_h \|_{\infty, h} \leq C \|\vec f_h\|_{\infty, h},
-        \end{equation*}
-        which is simply the continuity of the inverse map $\mat A_h^{-1}$. Consider an arbitrary grid vector $\vec f_h$, and we denote the associated problem solution as $\vec u_h$, where $\mat A_h \vec u_h = \vec f_h$. Using this, we have that
-        \begin{tightalign*} 
-            \|\mat A_h^{-1}\vec f_h\|_{\infty,h} &= \| \vec u_h \|_{\infty, h} \leq \| \vec u_h - R_h u \|_{\infty, h} + \| R_h u \|_{\infty, h}    \tag{Convergence}\\
-            &\leq C h^k + \| R_h \mathcal A^{-1} f \|_{\infty, h}. 
-        \end{tightalign*}
-        To bound this last term, we note that $R_h$ yields pointwise evaluations, so for any continuous function $\eta$ it will hold that
-        \begin{equation*}
-        \| R_h \eta \|_{\infty,h} \leq \| \eta \|_0,
-        \end{equation*}
-        where $\| \eta \|_0$ is the supremum norm. Finally, we use that $\mathcal A$ is a continuous bijection, and thus from the open mapping theorem it holds that $\|\mathcal A^{-1}\|$ is bounded by some constant $C_2$. Using this fact, the previous estimate becomes 
-        \begin{equation*}
-        \| \mat A_h^{-1} \vec f_h \|_{\infty,h} \leq Ch^k + \| \mathcal A f \|_0 \leq C h^k + C_2 \| \vec f_h \|_0<\infty,
-        \end{equation*}
-        which in particular shows that $ \| \mat A_h^{-1} \vec f_h \|$ is bounded for all $\vec f_h$. The uniform boundedness principle then yields that the operator $\mat A_h^{-1}$ is bounded, which concludes the proof.
+        The stability to convergence part is taken directly from the aforementionted notes. The convergence to stability is instead partly inspired by the notes by Long Chen on abstract convergence analysis~\cite{chenLFDM}.
+        \begin{itemize}
+            \item Stability $\implies$ convergence: we bound the convergence error as
+            \begin{tightalign*}
+                \| \vec u_h - R_h u\|_{\infty,h} &\leq C\|\mat A_h(\vec u_h - R_hu) \|_{\infty,h}  \tag{Stability} \\
+                &=C \| f_h - \mat A_hR_h u \|_{\infty,h} \\
+                &=C \| R_h f - \mat A_hR_h u\|_{\infty,h}\\
+                &=C \|R_h(\mathcal A u) - \mat A_hR_h u\|_{\infty,h} \\
+                &\leq Ch^k  \tag{Consistency}.
+            \end{tightalign*}
+            \item Convergence $\implies$ stability: by taking inverses, we can write stability as 
+                \begin{equation*}
+                \| \mat A_h^{-1}\vec f_h \|_{\infty, h} \leq C \|\vec f_h\|_{\infty, h},
+                \end{equation*}
+                which is simply the continuity of the inverse map $\mat A_h^{-1}$. Consider an arbitrary grid vector $\vec f_h$, and we denote the associated problem solution as $\vec u_h$, where $\mat A_h \vec u_h = \vec f_h$. Using this, we have that
+                \begin{tightalign*} 
+                    \|\mat A_h^{-1}\vec f_h\|_{\infty,h} &= \| \vec u_h \|_{\infty, h} \leq \| \vec u_h - R_h u \|_{\infty, h} + \| R_h u \|_{\infty, h}    \tag{Convergence}\\
+                    &\leq C h^k + \| R_h \mathcal A^{-1} f \|_{\infty, h}. 
+                \end{tightalign*}
+                To bound this last term, we note that $R_h$ yields pointwise evaluations, so for any continuous function $\eta$ it will hold that
+                \begin{equation*}
+                \| R_h \eta \|_{\infty,h} \leq \| \eta \|_0,
+                \end{equation*}
+                where $\| \eta \|_0$ is the supremum norm. Finally, we use that $\mathcal A$ is a continuous bijection, and thus from the open mapping theorem it holds that $\|\mathcal A^{-1}\|$ is bounded by some constant $C_2$. Using this fact, the previous estimate becomes 
+                \begin{equation*}
+                \| \mat A_h^{-1} \vec f_h \|_{\infty,h} \leq Ch^k + \| \mathcal A f \|_0 \leq C h^k + C_2 \| \vec f_h \|_0<\infty,
+                \end{equation*}
+                which in particular shows that $ \| \mat A_h^{-1} \vec f_h \|$ is bounded for all $\vec f_h$. The uniform boundedness principle then yields that the operator $\mat A_h^{-1}$ is bounded, which concludes the proof.
+        \end{itemize}
     \end{proof}
 \end{theorem}
 
-\section{Stability of the discrete Laplacian in 1D}
+\subsection{Stability of the discrete Laplacian in 1D}
 Let us now study the stability of the discretized Laplacian operator in 1D, $-\Delta u = -u''$, over the interval $[a,b]$ with $a<b$ and homogeneous boundary conditions $u_h(x_1) = u_h(x_N) = 0$. Consider $\Omega_h = \{x_i\}_{i=1}^N$ a grid of $[a,b]$ with $N$ equispaced elements, where $x_1=a$ and $x_{N-1}=b$, and mesh size $h=(b-a)/N$. Recall that the numerical second derivative can be approximated by the three-point approximation derived above, which for a given interior point is given by
 \begin{equation}
 -u_h''(x_i) = -\left(\frac{u_h(x_{i-1}) - 2u_h(x_i) + u_h(x_{i+1})}{h^2}\right) = \frac{1}{h^2}(-u_h(x_{i-1}) + 2u_h(x_i) - u_h(x_{i+1})).
@@ -271,7 +263,95 @@ We can apply this principle to show that $A_h$ is stable.
     \end{proof}
 \end{theorem}
 
-\section{Discretization in 2D and 3D}
+\section{Unavoidable nonlinearities}
+Sometimes, specially in stationary models, we cannot avoid having to solve a nonlinear problem. Two common ways to obtain an approximate solution to a nonlinear problem are 1) fixed point methods (usually of first order), and 2) Newton-Raphson methods. To analyze them, consider the domain $\Omega=(a,b)$ and the example problem
+\begin{equation}
+    \begin{cases}
+        -u'' + \sin(u) &= 0\\
+        u(a) &= u^a\\
+        u(b) &= u^b.
+    \end{cases}
+\end{equation}
+As usual, we set a discrete grid of $N$ equispaced interior points $a=x_1<\cdots<x_N=b$. Thus, at each non-boundary node $x_i$ we have the equation
+\begin{equation}
+    -\frac{1}{h^2}(u^{i+1}-2u^i+u^{i-1}) + \sin(u^i) = 0.
+\end{equation}
+We write $g(\vec u_h) = \{g(u^i)\}$ for the vector of evaluations of $g$ at the non-boundary nodes. This allows us to write more compactly the root-finding problem
+\begin{equation}
+    F(\vec u_h) \coloneqq  \mat A_h \vec u_h + \sin(\vec u_h) = 0.
+\end{equation}
+Let us analyze both methods for solving this problem.
+\begin{enumerate}
+    \item \emph{Newton-Raphson}: we look for solutions of a linearized problems and iterate. Abstractly, we solve the equation $F(\vec x)=0$ by considering an initial point $\vec x^0$ and then using Taylor's theorem for linearizing $F(\vec x^{k+1})$ (unknown) around the previous iteration result $\vec x^k$ (known):
+    \begin{equation*}
+        F(\vec x^{k+1}) \approx F(\vec x^k) + \nabla F(\vec x^k)\cdot \underbrace{\vec{\delta x}^{k+1}}_{\vec x^{k+1} - \vec{x}^k}.
+    \end{equation*}
+    We can now solve a system for $\vec{\delta x}^{k+1}$ such that $F(\vec x^{k+1}) = 0$, that is,
+    \begin{equation*}
+        \underbrace{[\nabla F(\vec x^k)]}_{\text{matrix}} \underbrace{\vec{\delta x}^{k+1}}_{\text{vector}} = \underbrace{-F(\vec x^k)}_{\text{vector}},
+    \end{equation*}
+    along with the update step
+    \begin{equation*}
+        \vec x^{k+1} = \vec{x}^k + \vec{\delta x}^{k+1}.
+    \end{equation*}
+    We call such a system a \emph{Newton iteration} or \emph{tangent system}. Also, $\vec{\delta x}^{k}$ must have homogeneous (zero) boundary conditions, so that all $\{\vec x^{k}\}_k$ satisfy the original ones. 
+    
+    In our problem, the $i$-th component of $F(\vec u_h)$ is given by
+    \begin{equation*}
+        [F(\vec u_h)]^i = -\frac{1}{h^2}(u^{i-1}-2u^i+u^{i+1}) + \sin(u^i),
+    \end{equation*}
+    which we differentiate to get
+    \begin{equation*}
+        [\nabla F(\vec u_h)]_{ij} = \frac{\partial [F(\vec u_h)]^i}{\partial u^j} = \begin{cases}
+            -\frac{1}{h^2} &j\in\{i-1,i+1\}\\
+            \frac{2}{h^2} + \cos(u^i) &j=i\\
+            0 &\text{elsewhere.}
+        \end{cases}
+    \end{equation*}
+    We can write more compactly this gradient as
+    \begin{equation*}
+        \nabla F(\vec u_h) = \mat A_h + \textbf{diag}(\cos(\vec u_h)),
+    \end{equation*}
+    which allows us to write the tangent system as
+    \begin{equation*}
+        \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} = -\left(\mat A_h \vec{u}^k + \textbf{diag}(\sin(\vec u^k))\right).
+    \end{equation*}
+    \item \emph{Fixed point}: similarly to the time-dependent case, we can \emph{delay} the evaluation of a nonlinearity. We do this by choosing a starting point $\vec u^0$ and evaluating the nonlinear part in the previous iteration $\vec u^k$. This yields
+    \begin{equation*}
+        -\nabla \vec u^{k+1} + \sin(\vec u^k) = 0.
+    \end{equation*}
+    Note that we can enforce this equality at the discrete level as well, i.e. 
+    \begin{equation*}
+        -\nabla \vec u_h^{k+1} + \sin(\vec u_h^k) = 0,
+    \end{equation*}
+    where $\vec u_h^k$ is the discrete vector $\vec u_h$ at the $k$-th iteration. In such cases, we can sometimes prove the convergence of the scheme. For that, we consider the discrete iterates $\vec u_h^k$ given by
+    \begin{tightalign*}
+        \mat A_h \vec u_h^{k+1} + \sin(\vec u_h^k) &= 0 \\
+        \mat A_h \vec u_h^{k} + \sin(\vec u_h^{k-1}) &= 0,
+    \end{tightalign*}
+    which subtracted give the equation
+    \begin{equation*}
+        \mat A_h(\vec u_h^{k+1} - \vec u_h^{k}) = -(\sin(\vec u_h^k) - \sin(\vec u_h^{k-1})).
+    \end{equation*}
+    We typically call this equation an \emph{error equation}. Finally, we can use the fact that $\mat A_h$ is stable, so we can bound the error norm as
+    \begin{tightalign*}
+        \|\vec u_h^{k+1} - \vec u_h^{k}\|_{\infty, h} &\leq C\|\mat A_h (\vec u_h^{k+1} - \vec u_h^{k})\|_{\infty, h} \tag{Stability}\\
+        &= C\|-(\sin(\vec u_h^k) - \sin(\vec u_h^{k-1}))\|_{\infty, h}\tag{Error equation}\\
+        &\leq C\|\vec u_h^{k+1} - \vec u_h^{k}\|_{\infty, h},\tag{$\sin$ is $1$-Lipschitz}
+    \end{tightalign*}
+    thus the scheme is convergent if $C<1$. Otherwise, the scheme \emph{can converge}, but we have no theoretical guarantee from this analysis. Still, each fixed point iteration
+    \begin{equation*}
+        \mat A_h \vec u_h^{k+1} = - \sin(\vec u_h^k)
+    \end{equation*}
+    is much simpler than a Newton iteration
+    \begin{tightalign*}
+        \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} &= -\left(\mat A_h \vec{u}^k + \sin(\vec u^k)\right)\\
+        \vec u_h^{k+1} &= \vec{u}^k_h + \vec{\delta u}_h^{k+1}.
+    \end{tightalign*}
+\end{enumerate}
+Both fixed point and Newton-Raphson methods are commonly used strategies, and in general there is no universally better choice. We study nonlinear problems more thoroughly in Chapter~\ref{chapter:nonlinear}.
+
+\section{Finite differences in 2D and 3D}
 In this section we hint on how to address numerically higher dimensional problems, and also how to include time. The stability of such schemes will be studied further ahead with the von Neumann stability analysis. In typical 1D examples, one has a domain $(a,b)$ and an associated grid given by some points $\{x_i\}_i^N$ such that each index $i$ corresponds to an order of the domain, and thus naturally a finite difference operator is going to involve something like $i$ and its neighbors. This scenario would be different if, for example, one had a random ordering of the grid points such as
     \begin{equation*}
         x_0 = a,\; x_7 = a + h,\; x_{12} = a + 2h,\; \hdots, x_N = b,
@@ -335,10 +415,10 @@ For example, if one has a grid with $N_x=3$ and $N_y=2$, then the forward and in
     \end{table}
 
 Using these maps, we define a forward difference in $x$ and $y$ directions as $D^+_x f(\vec X)$ and $D^+_y f(\vec X)$ and note that they are given by
-    \begin{tightalign*}
-        D^+_x f(\vec X_{ij}) = \frac 1{h_x} \left(\vec f^{(i+1)j} - \vec f^{ij}\right)= \frac 1 {h_x} \left( \vec f^{I(i+1,j)} - \vec f^{I(i,j)}\right), \\
-        D^+_y f(\vec X_{ij}) = \frac 1{h_y} \left(\vec f^{i(j+1)} - \vec f^{ij}\right) = \frac 1{h_y} \left(\vec f^{I(i,j+1)} - \vec f^{I(i,j)}\right),
-    \end{tightalign*}
+\begin{tightalign*}
+    D^+_x f(\vec X_{ij}) = \frac 1{h_x} \left(\vec f^{(i+1)j} - \vec f^{ij}\right)= \frac 1 {h_x} \left( \vec f^{I(i+1,j)} - \vec f^{I(i,j)}\right), \\
+    D^+_y f(\vec X_{ij}) = \frac 1{h_y} \left(\vec f^{i(j+1)} - \vec f^{ij}\right) = \frac 1{h_y} \left(\vec f^{I(i,j+1)} - \vec f^{I(i,j)}\right),
+\end{tightalign*}
 where we have used a slight abuse of notation by denoting both the 2D vector and 1D vectors as $\vec f^{ij}$ and $\vec f^I$ respectively. Further, the second derivative operators can be defined as 
 \begin{tightalign*}
     D_{xx} f(\vec X_{ij}) &= \frac{-1}{h_x^2} \left( -\vec f^{(i+1)j} + 2\vec f^{ij} - \vec f^{(i-1)j}\right) = \frac{-1}{h_x^2} \left( -\vec f^{I(i+1,j)} + 2\vec f^{I(i,j)} - \vec f^{I(i-1,j)}\right) = A_h f(\vec X_{ij}), \\
@@ -357,22 +437,22 @@ Here, the corresponding discrete equation is
 \end{equation}
 which is a matrix equation since $u(\vec X_{ij})$ is a grid function. We define a suitable index map $I$, which allows us to write the 1D vectors $u^I$ and $f^I$, and now it remains to define the operator matrix for these 1D vectors. For this, we use the Kronecker product $\otimes$ defined by
 \begin{equation*}
-\begin{aligned}
-    \otimes : \R^{m\times n} \times \R^{p\times q} &\to \R^{mp\times nq}, \\
-    (A,B) &\mapsto A\otimes B \coloneqq \begin{bmatrix}
-        A_{11}B & A_{12}B & \cdots & A_{1n}B \\
-        A_{21}B & A_{22}B & \cdots & A_{2n}B \\
-        \vdots & \vdots & \ddots & \vdots \\
-        A_{m1}B & A_{m2}B & \cdots & A_{mn}B
-    \end{bmatrix}. \\
-\end{aligned}
+    \begin{aligned}
+        \otimes : \R^{m\times n} \times \R^{p\times q} &\to \R^{mp\times nq}, \\
+        (A,B) &\mapsto A\otimes B \coloneqq \begin{bmatrix}
+            A_{11}B & A_{12}B & \cdots & A_{1n}B \\
+            A_{21}B & A_{22}B & \cdots & A_{2n}B \\
+            \vdots & \vdots & \ddots & \vdots \\
+            A_{m1}B & A_{m2}B & \cdots & A_{mn}B
+        \end{bmatrix}. \\
+    \end{aligned}
 \end{equation*}
 Note that the meaning of $\otimes$ in this context is different to the tensor product defined in~\ref{eq:tensor-product-definition}. This operation is needed to correctly define the operator matrix. For this, we need a brief lemma to calculate this matrix. 
 \begin{lemma}
     Let $A\in R^{m\times n}$, $B\in \R^{p\times q}$ and $X\in \R^{q\times n}$. Denote the vector form of a matrix (in our case, a grid function) $A$ as $\vec A^I$, $A_i\in \R^n$ the rows of $A$ and $X_i\in \R^q$ the columns of $X$. Then, 
     \begin{equation*}
-(BXA^\top)^I = (A\otimes B)\vec X^I.
-\end{equation*}
+        (BXA^\top)^I = (A\otimes B)\vec X^I.
+    \end{equation*}
     \begin{proof}
         We expand from the right hand side:
         \begin{tightalign*}
@@ -412,7 +492,7 @@ Now, we take the 1D vector form of the discrete Laplace equation and invoke the 
 \end{tightalign*}
 Thus, our new operator is now $D^2_h = A_h\otimes I + I\otimes A_h$, and then the discrete Laplace equation is reduced to the linear system $D^2_h \vec u^I = \vec f^I$, where $D^2_h$ is sparse by construction. We can use the same methods as before to prove the stability of the scheme.  
 
-\section{Time discretization}
+\section{Time discretization}\label{sec:fd-time-discretization}
 Time discretization is an enormous topic, so here we provide simple strategies and ways to think about them. We will dedicate an entire section to their analysis using the von Neumann stability analysis. We consider a more general setting with Bochner spaces in~\ref{chapter:dependent}. Consider a differential operator $\mathcal L$ and its associated discrete matrix $\mat L_h$ which includes the problems boundary conditions. The continuous differential equation, for some initial condition $x(0) = x_0$, is given by 
 \begin{equation}
     \dot x + \mathcal L x = f,
@@ -452,12 +532,12 @@ A natural generalization of these three schemes is the $\theta$-method, which fo
 \end{equation}
 We note that $\theta=1$ corresponds to the explicit scheme, $\theta=0$ to the implicit scheme, and $\theta=1/2$ to the mid-point scheme. 
     
-\section{Von Neumann stability analysis}
+\subsection{Von Neumann stability analysis}
 Energy methods for stability analysis can quickly become untractable, so in order to get easier bounds, we can perform this analysis after moving the equation to the frequency domain. This is the so-called \emph{von Neumann stability analysis}, which is a very powerful tool for analyzing the stability of finite difference schemes. The idea is to assume that the solution can be expressed as a Fourier series, and then analyze the growth of the Fourier modes over time.
 
 For this analysis, we will use the Fourier transform, which is comfortable for this task as it yields simple eigenfunctions of the derivatives. 
 
-\begin{definition}[Fourier transform]
+\begin{definition}[Fourier transform]\label{def:fourier-transform}
     Let $v\in L^2(\Omega)$. Then, its Fourier transform $\mathcal{F}(v)  \coloneqq  \hat{v}$ is defined as
     \begin{equation}\label{def:fourier-transform}
         \mathcal{F}(v)(\xi)  \coloneqq  \hat{v}(\xi) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty} v(x)e^{-i\xi x}dx,
@@ -492,26 +572,26 @@ where $g(\xi)$ is defined as an amplification factor. This scheme will be stable
 
 Let us now illustrate the application on the heat equation. Consider the boundary value problem
 \begin{equation*}
-\begin{aligned}
-    \dot{u}(x,t) - u_{xx}(x,t) &= 0, &\quad (x,t) &\in \Omega \times (0,T), \\
-    u(x,0)                  &= u^0(x), &\quad x &\in \Omega, \\
-    u(x,t)                  &= f(x,t), &\quad (x,t) &\in \partial\Omega \times (0,T).
-\end{aligned}
+    \begin{aligned}
+        \dot{u}(x,t) - u_{xx}(x,t) &= 0, &&\quad (x,t) \tin \Omega \times (0,T), \\
+        u(x,0)                  &= u^0(x), &&\quad x \tin  \Omega, \\
+        u(x,t)                  &= f(x,t), &&\quad (x,t) \tin  \partial\Omega \times (0,T).
+    \end{aligned}
 \end{equation*}
 Introducing a finite difference scheme, we get
 \begin{equation}
-\frac{u^{n+1}_j - u^n_j}{\Delta t} + \frac{1}{h^2} (-u^n_{j+1} +2u^n_j - u^n_{j-1}) = 0.
+    \frac{u^{n+1}_j - u^n_j}{\Delta t} + \frac{1}{h^2} (-u^n_{j+1} +2u^n_j - u^n_{j-1}) = 0.
 \end{equation}
 Here we set $u_j^n = e^{i\xi (jh)}$, and introduce the ansatz $u_j^{n+1} = g(\xi) u_j^n = g(\xi) e^{i\xi (jh)}$. Inserting this into the scheme we get
 \begin{tightalign*}
-g(\xi) e^{i\xi j h} &= e^{i\xi (jh)} - \frac{\Delta t}{h^2}\left(-e^{i\xi (j-1) h} + 2e^{i\xi (jh)} - e^{i\xi (j+1) h}\right)\\
-&= \left(1 + \frac{\Delta t}{h^2}\left(e^{-i\xi h} - 2 + e^{i\xi h}\right)\right)e^{i\xi(jh)}.
+    g(\xi) e^{i\xi j h} &= e^{i\xi (jh)} - \frac{\Delta t}{h^2}\left(-e^{i\xi (j-1) h} + 2e^{i\xi (jh)} - e^{i\xi (j+1) h}\right)\\
+    &= \left(1 + \frac{\Delta t}{h^2}\left(e^{-i\xi h} - 2 + e^{i\xi h}\right)\right)e^{i\xi(jh)}.
 \end{tightalign*}
 Dividing by $e^{i\xi j h}$, we get
 \begin{tightalign*}
-g(\xi) &= 1 + \frac{\Delta t}{h^2}\left(e^{-i\xi h} + e^{i\xi h}- 2 \right) \\
-&= 1 + \frac{\Delta t}{h^2}\left(2\cos(\xi h) - 2\right) \tag{$e^{-i\xi h} + e^{i\xi h} = 2\cos(\xi h)$} \\
-&= 1 - \frac{2\Delta t}{h^2}\left(1 - \cos(\xi h)\right).
+    g(\xi) &= 1 + \frac{\Delta t}{h^2}\left(e^{-i\xi h} + e^{i\xi h}- 2 \right) \\
+    &= 1 + \frac{\Delta t}{h^2}\left(2\cos(\xi h) - 2\right) \tag{$e^{-i\xi h} + e^{i\xi h} = 2\cos(\xi h)$} \\
+    &= 1 - \frac{2\Delta t}{h^2}\left(1 - \cos(\xi h)\right).
 \end{tightalign*}
 We can now use the fact that $\cos(\xi h) \in (-1,1)$, which yield the following two bounds:
 \begin{tightalign}
@@ -525,7 +605,7 @@ We note that the first inequality yields $g(\xi)\leq 1$, and from the second ine
 \end{tightalign}
 which yields an upper bound for the time step $\Delta t$ to ensure stability of the finite difference scheme. Inequalities of this kind are studied more thoroughly in~\cite{LeVeque2007}.
 
-\section{Stability in time}
+\subsection{Time stability}
 We now look for stability estimates regarding also time. We first study a forward scheme 
 \begin{equation}
     \begin{cases}
@@ -580,91 +660,3 @@ Now we look at the stability of forward and backward Euler and the $\theta$-meth
         \item If $\Delta t$ is small, such that $1-(1-\theta)c\Delta t < 1 + \theta c \Delta t$, then we get $-c\Delta t < 1$, which is \emph{unconditionally stable}.
     \end{itemize}
 \end{enumerate}
-
-\section{Unavoidable nonlinearities}
-Sometimes, specially in stationary models, we cannot avoid having to solve a nonlinear problem. Two common ways to obtain an approximate solution to a nonlinear problem are 1) fixed point methods (usually of first order), and 2) Newton-Raphson methods. To analyze them, consider the domain $\Omega=(a,b)$ and the example problem
-\begin{equation}
-    \begin{cases}
-        -u'' + \sin(u) &= 0\\
-        u(a) &= u^a\\
-        u(b) &= u^b.
-    \end{cases}
-\end{equation}
-As usual, we set a discrete grid of $N$ equispaced interior points $a=x_1<\cdots<x_N=b$. Thus, at each non-boundary node $x_i$ we have the equation
-\begin{equation}
-    -\frac{1}{h^2}(u^{i+1}-2u^i+u^{i-1}) + \sin(u^i) = 0.
-\end{equation}
-We write $g(\vec u_h) = \{g(u^i)\}$ for the vector of evaluations of $g$ at the non-boundary nodes. This allows us to write more compactly the root-finding problem
-\begin{equation}
-    F(\vec u_h) \coloneqq  \mat A_h \vec u_h + \sin(\vec u_h) = 0.
-\end{equation}
-Let us analyze both methods for solving this problem.
-\begin{enumerate}
-    \item \emph{Newton-Raphson}: we look for solutions of a linearized problems and iterate. Abstractly, we solve the equation $F(\vec x)=0$ by considering an initial point $\vec x^0$ and then using Taylor's theorem for linearizing $F(\vec x^{k+1})$ (unknown) around the previous iteration result $\vec x^k$ (known):
-    \begin{equation*}
-        F(\vec x^{k+1}) \approx F(\vec x^k) + \nabla F(\vec x^k)\cdot \underbrace{\vec{\delta x}^{k+1}}_{\vec x^{k+1} - \vec{x}^k}.
-    \end{equation*}
-    We can now solve a system for $\vec{\delta x}^{k+1}$ such that $F(\vec x^{k+1}) = 0$, that is,
-    \begin{equation*}
-        \underbrace{[\nabla F(\vec x^k)]}_{\text{matrix}} \underbrace{\vec{\delta x}^{k+1}}_{\text{vector}} = \underbrace{-F(\vec x^k)}_{\text{vector}},
-    \end{equation*}
-    along with the update step
-    \begin{equation*}
-        \vec x^{k+1} = \vec{x}^k + \vec{\delta x}^{k+1}.
-    \end{equation*}
-    We call such a system a \emph{Newton iteration} or \emph{tangent system}. Also, $\vec{\delta x}^{k}$ must have homogeneous (zero) boundary conditions, so that all $\{\vec x^{k}\}_k$ satisfy the original ones. 
-    
-    In our problem, the $i$-th component of $F(\vec u_h)$ is given by
-    \begin{equation*}
-[F(\vec u_h)]^i = -\frac{1}{h^2}(u^{i-1}-2u^i+u^{i+1}) + \sin(u^i),
-\end{equation*}
-    which we differentiate to get
-    \begin{equation*}
-        [\nabla F(\vec u_h)]_{ij} = \frac{\partial [F(\vec u_h)]^i}{\partial u^j} = \begin{cases}
-            -\frac{1}{h^2} &j\in\{i-1,i+1\}\\
-            \frac{2}{h^2} + \cos(u^i) &j=i\\
-            0 &\text{elsewhere.}
-        \end{cases}
-    \end{equation*}
-    We can write more compactly this gradient as
-    \begin{equation*}
-        \nabla F(\vec u_h) = \mat A_h + \textbf{diag}(\cos(\vec u_h)),
-    \end{equation*}
-    which allows us to write the tangent system as
-    \begin{equation*}
-        \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} = -\left(\mat A_h \vec{u}^k + \textbf{diag}(\sin(\vec u^k))\right).
-    \end{equation*}
-    \item \emph{Fixed point}: similarly to the time-dependent case, we can \emph{delay} the evaluation of a nonlinearity. We do this by choosing a starting point $\vec u^0$ and evaluating the nonlinear part in the previous iteration $\vec u^k$. This yields
-    \begin{equation*}
-        -\nabla \vec u^{k+1} + \sin(\vec u^k) = 0.
-    \end{equation*}
-    Note that we can enforce this equality at the discrete level as well, i.e. 
-    \begin{equation*}
-        -\nabla \vec u_h^{k+1} + \sin(\vec u_h^k) = 0,
-    \end{equation*}
-    where $\vec u_h^k$ is the discrete vector $\vec u_h$ at the $k$-th iteration. In such cases, we can sometimes prove the convergence of the scheme. For that, we consider the discrete iterates $\vec u_h^k$ given by
-    \begin{tightalign*}
-        \mat A_h \vec u_h^{k+1} + \sin(\vec u_h^k) &= 0 \\
-        \mat A_h \vec u_h^{k} + \sin(\vec u_h^{k-1}) &= 0,
-    \end{tightalign*}
-    which subtracted give the equation
-    \begin{equation*}
-        \mat A_h(\vec u_h^{k+1} - \vec u_h^{k}) = -(\sin(\vec u_h^k) - \sin(\vec u_h^{k-1})).
-    \end{equation*}
-    We typically call this equation an \emph{error equation}. Finally, we can use the fact that $\mat A_h$ is stable, so we can bound the error norm as
-    \begin{tightalign*}
-        \|\vec u_h^{k+1} - \vec u_h^{k}\|_{\infty, h} &\leq C\|\mat A_h (\vec u_h^{k+1} - \vec u_h^{k})\|_{\infty, h} \tag{Stability}\\
-        &= C\|-(\sin(\vec u_h^k) - \sin(\vec u_h^{k-1}))\|_{\infty, h}\tag{Error equation}\\
-        &\leq C\|\vec u_h^{k+1} - \vec u_h^{k}\|_{\infty, h},\tag{$\sin$ is $1$-Lipschitz}
-    \end{tightalign*}
-    thus the scheme is convergent if $C<1$. Otherwise, the scheme \emph{can converge}, but we have no theoretical guarantee from this analysis. Still, each fixed point iteration
-    \begin{equation*}
-        \mat A_h \vec u_h^{k+1} = - \sin(\vec u_h^k)
-    \end{equation*}
-    is much simpler than a Newton iteration
-    \begin{tightalign*}
-        \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} &= -\left(\mat A_h \vec{u}^k + \sin(\vec u^k)\right)\\
-        \vec u_h^{k+1} &= \vec{u}^k_h + \vec{\delta u}_h^{k+1}.
-    \end{tightalign*}
-\end{enumerate}
-Both fixed point and Newton-Raphson methods are commonly used strategies, and in general there is no universally better choice. We study nonlinear problems more thoroughly in Chapter~\ref{chapter:nonlinear}.
