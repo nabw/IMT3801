@@ -376,6 +376,19 @@ For any continuous linear functional $f$ defined on the subspace $S'$, the natur
 \end{corollary}
 Note that this corollary is (i) an improvement over Urysohn's lemma, which provides a possibly nonlinear function, and (ii) is obvious in an inner product space, where we can just use $\overline{f} = v - \Pi_S v$, which is orthogonal to $S$, then scale $\overline{F}$ with the distance such that $f(v)=1$, and finally extend $f$ through the inner product. 
 
+While the Hahn-Banach theorem deals with a single functional, the \emph{uniform boundedness principle} makes a powerful statement about a \emph{family} of operators. It establishes that if a family of continuous linear operators is pointwise bounded, it must also be uniformly bounded in norm.
+\begin{theorem}[Uniform boundedness principle, Banach-Steinhaus theorem]\label{thm:banach-steinhaus}
+    Let $X$ be a Banach space and $Y$ be a normed vector space. Let $\mathcal{F}\subset \mathcal{L}(X,Y)$ be a collection of continuous linear operators from $X$ to $Y$. If for every $x \in X$, the set of norms of the images $\{ \|Tx\|_Y : T \in \mathcal{F} \}$ is bounded, i.e.,
+    \begin{equation*}
+        \sup_{T \in \mathcal{F}} \|Tx\|_Y < \infty,
+    \end{equation*}
+    then the collection of norms is uniformly bounded, i.e.
+    \begin{equation}
+        \sup_{T \in \mathcal{F}} \|T\|_{\mathcal{L}(X,Y)} < \infty.
+    \end{equation}
+\end{theorem}
+This theorem is a non-constructive result that relies on the completeness of $X$ via the Baire category theorem.
+
 Now, let $T\in \mathcal{L}(U,V)$ be a continuous, bounded linear operator, where $U,V$ are Banach spaces. Denote $\ker T\subset U$ and $\im T\subset V$ the \emph{kernel} (or \emph{null space}) and \emph{image} of $T$. Due to the continuity of $T$, $\ker T$ is a closed subspace of $U$. Recall that in a Hilbert space $H$, the \emph{orthogonal complement} of $S\subset H$, defined as
 \begin{equation*}
     S^\perp \coloneqq \{u\in H: (u,v)=0,\forall v\in S\}
@@ -553,7 +566,7 @@ where $F': U\to \mathcal{L}(X,Y)$, and so $dF'(u) \in \mathcal{L}(X, \mathcal{L}
 \begin{equation*}
     \Psi_A(u_1,u_2) = [A(u_1)](u_2),
 \end{equation*} 
-for $A\in \mathcal{L}(X,\mathcal{L}(X,Y))$. For this reason, most people write the second derivative as $d^2 F(u) [h_1,h_2]$, instead of $(d^2 F(u)[h_1])[h_2]$. In calculus of variations, it is common to study the second varition of a functional. This is simply $d^2 \Pi(u)[h,h]$, as seen in the second order term of the Taylor series
+for $A\in \mathcal{L}(X,\mathcal{L}(X,Y))$. For this reason, most people prefer the notation $d^2 F(u) [h_1,h_2]$ instead of $(d^2 F(u)[h_1])[h_2]$. In calculus of variations, it is common to study the second varition of a functional. This is simply $d^2 \Pi(u)[h,h]$, as seen in the second order term of the Taylor series
 \begin{equation*}
     f(x+h)\approx f(x) + \nabla f(x) \cdot h + \frac{1}{2} h^\top (Hf)(x) h,
 \end{equation*} 
