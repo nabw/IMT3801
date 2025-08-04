@@ -243,8 +243,8 @@ which allows us to conclude that the operator is symmetric with these boundary c
     with boundary conditions
     \begin{equation}\label{eq:regular-sturm-liouville-bcs}
         \begin{aligned}
-            \alpha_1 u(0) + \alpha_2 u'(0)&=0, &\quad \alpha_1^2 + \alpha_2^2 \neq 0\\
-            \beta_1 u(L) + \beta_2 u'(L)&=0, &\quad \beta_1^2 + \beta_2^2 \neq 0.
+            \alpha_1 u(0) + \alpha_2 u'(0)&=0, &&\quad \alpha_1^2 + \alpha_2^2 \neq 0\\
+            \beta_1 u(L) + \beta_2 u'(L)&=0, &&\quad \beta_1^2 + \beta_2^2 \neq 0.
         \end{aligned}
     \end{equation}
     is called a \emph{regular Sturm-Liouville problem}. If $p(a)=0$ or $p(b)=0$, or $a=-\infty$ or $b=\infty$, then the problem is called a \emph{singular Sturm-Liouville problem}.
@@ -280,7 +280,7 @@ with eigenvalues $\{\lambda_n\}_{k\in\mathbb{N}_0} = \left\{\left(\frac{2\pi}{L}
 
 \section{Separation of variables}\label{sec:separation-of-variables}
 Regular Sturm-Liouville problems arise when studying some particular cases of PDEs motivated by physics. Often, one assumes that time and space can be (multiplicatively) \emph{separated} in the solution of a time and space-dependent PDE, where the solution is $u(x,t) = X(x)T(t)$. Let us perform separation of variables and analytically solve some regular Sturm-Liouville problems that are \emph{homogeneous} ($Tu=0$) and \emph{nonhomogeneous} ($Tu=f$).
-\subsection{Homogeneous problems}
+\paragraph{Homogeneous problems}
 \paragraph{The heat equation} We state the time-dependent heat equation on the temperature $\theta=\theta(x,t)$ 
 \begin{equation}
     \rho c_v \partial_t \theta(x,t) - \dive (k\grad \theta) = r,
@@ -406,7 +406,7 @@ We can repeat this procedure for other types of boundary conditions, which also 
     \end{equation*}
 \end{itemize}
 The above analysis can be extended to other physics-based PDEs and to higher dimensions.
-\subsection{Nonhomogeneous problems}
+\paragraph{Nonhomogeneous problems}
 Let us now study the steady-state heat exchange equation with internal heat generation, i.e., the Poisson equation in 2D:
 \begin{equation}\label{eq:poisson-2d}
     -\nabla^{2}u=f, \quad \text{for }(x,y)\in(0,L)\times(0,H)
@@ -512,7 +512,7 @@ Here, we could use Fredholm theory to study how Green functions are related to t
 \end{equation}
 we need to use the principle of superposition. We solve two problems separately: 
 \begin{equation*}
-    (1)\begin{cases}-\nabla^{2}u&=0\\ u|_{\partial\Omega}&=g\end{cases}\qquad (2)\begin{cases}-\nabla^{2}u&=f\\ u|_{\partial\Omega}&=0\end{cases}.
+    (1)\left\{\begin{aligned}-\nabla^{2}u&=0\\ u|_{\partial\Omega}&=g\end{aligned}\right.\qquad (2)\left\{\begin{aligned}-\nabla^{2}u&=f\\ u|_{\partial\Omega}&=0\end{aligned}\right. .
 \end{equation*}
 Problem (1) can be solved by separation of variables and superposition. Problem (2) requires solving the eigenvalue and eigenfunction problem, which is done using the method of separation of variables, and then finding the relevant coefficients in the eigenfunction basis. The solution to the original problem will be the sum of the solutions to problems (1) and (2).
 

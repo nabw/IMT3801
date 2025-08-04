@@ -1,13 +1,13 @@
 In this section we set most of the foundational mathematics required to understand these notes. In general, this consists in defining rigorously the abstract functional setting and preparing the student for what a colleague calls the \emph{tensor-fu}, i.e. the capability of derivating anything.
 
-\section{Elements of functional analysis}\label{sec:elements-functional-analysis}
-In this section we recall some basic definitions and theorems of functional analysis by following closely the presentation by Long Chen in~\cite{chen2024infSup}. We refrain from giving a detailed explanation and proofs, which are covered in detail in standard functional analysis references, such as~\cite{BrezisFA}.
+\section{Elements of functional analysis and measure theory}\label{sec:elements-functional-analysis}
+In this section we recall some basic definitions and theorems of functional analysis and measure theory. The functional analysis presentation follows closely the presentation by Long Chen in~\cite{chen2024infSup}, and the measure theory . We refrain from giving a detailed explanation and proofs, which are covered in detail in standard functional analysis references, such as~\cite{BrezisFA}.
 
 In order to transfer the notions that are developed in undergraduate calculus and linear algebra courses to functional analysis, we need to define conditions on the \emph{spaces} and on the \emph{operators}. This occurs mainly due to the fact that we are now in an infinite-dimensional setting, which leads to non-intuitive results. There are three key properties that we will study: \emph{closeness} (or \emph{completeness}), \emph{continuity} (or \emph{boundedness}) and \emph{compactness}.
 
 We will study spaces of scalar-valued and vector-valued functions, which will often be denoted by $f, g$ and $\vec u, \vec v$, respectively. The domains of these functions will be usually denoted by $\Omega\subset\R^n$ for some $n\in\N$, and the properties of $\Omega$ (e.g. closed/open, compactness, boundedness) can impact the properties of the function spaces defined on $\Omega$.
 
-\subsection{Topology, normed spaces and metric spaces}
+\paragraph{Topology, normed spaces and metric spaces}
 We begin by considering a set $V$ with infinitely many elements, and introduce structures on this set. A fundamental structure is the \emph{linear structure}:
 \begin{equation}\label{eq:linearity}
     \alpha u + \beta v \in V,\quad \forall u,v\in V, \; \alpha, \beta\in \mathbb{F},
@@ -118,7 +118,7 @@ Through the structure provided by the norm and the metric it induces, we can tal
     We will denote inner products mostly by $\langle\cdot, \cdot\rangle$ and $(\cdot, \cdot)$. Sometimes it will be important to distinguish the specific product we consider, i.e. $(\cdot, \cdot)_H$. 
 \end{definition}
 
-\subsection{Banach and Hilbert spaces}\label{sec:banach-hilbert-spaces}
+\paragraph{Banach and Hilbert spaces}\label{sec:banach-hilbert-spaces}
 Throughout the entire manuscript, we will rely on \emph{Banach spaces}, \emph{Hilbert spaces}, and their dual spaces. Despite the existence of a flexible theory of Banach space formulations, we will mostly rely on Hilbert spaces because of their many nice properties. To define these spaces, we need to define \emph{completeness}.
 \begin{definition}[Completeness]
     A metric space $(X,d)$ is \emph{complete} if all Cauchy sequences in $X$ converge to a limit that is also in $X$.
@@ -221,7 +221,7 @@ Some common and simple examples: Helmholtz decomposition, zero average functions
         h = f - c = f -  \frac{(f,1)_H}{(1,1)_H}f.
     \end{equation*}\vspace{-10pt}
 }
-\subsection{$L^p$ spaces}
+\paragraph{$L^p$ spaces}
 The most important spaces for us are the Lebesgue spaces $L^p(\Omega;\R^n)$, which are equipped with a $p$-norm. To this end, we need to recall some basic definitions of measure theory. We will denote $\mathcal{P}(\Omega)$ as the \emph{power set} of $\Omega$, that is, the set of all subsets of $\Omega$. 
 \begin{definition}[Measure space, measurable sets, measure]
     A triplet $(\Omega, \Sigma, \mu)$ is called a \emph{measure space}, if 
@@ -236,7 +236,7 @@ The most important spaces for us are the Lebesgue spaces $L^p(\Omega;\R^n)$, whi
     \end{itemize}
     The elements (sets) contained in $\Sigma$ are called \emph{measurable sets}, and the pair $(\Omega,\Sigma)$ is often called a \emph{measurable space} without fixing a measure. We will always implicitly choose $\mu$ the \emph{Lebesgue measure}, which coincides with the usual length, area and volume in $\R^1$, $\R^2$ and $\R^3$, respectively. 
 \end{definition}
-\begin{definition}[Measurable functions, equality and boundedness hold almost everywhere]
+\begin{definition}[Measurable functions, equality and boundedness almost everywhere]
     Let $(X,\Sigma_X)$ and $(Y, \Sigma_Y)$ be measurable spaces. A function $f:X\to Y$ is \emph{measurable} if for every measurable set $S_Y\in\Sigma_Y$, the preimage $f^{-1}(S_Y)$ is in $\Sigma_X$. 
     
     Two measurable functions $f,g:\Omega\to\R$ are \emph{equal almost everywhere} if the set 
@@ -351,7 +351,7 @@ It will be important to know that if $|\Omega|<\infty$, then these spaces form a
 \end{equation}
 A simple way to remember this is to split a function as $f = I_{|f|\leq 1}f + I_{|f|\geq 1}f$ and note that $|x|^p < |x|^{p+\epsilon}$ for $\epsilon > 0$. 
 
-\subsection{The fundamental theorems}
+\paragraph{The fundamental theorems}
 In the finite dimensional case, elements in a space $V$ and its topological dual $V'$ can be represented by vectors in $\R^n$ with $n=\dim V$ when a basis is chosen, and a linear, bounded operator between two spaces can be represented as a matrix. In the infinite dimensional setting, we need to extend this result, which is done via the Riesz representation theorem. 
 
 \begin{theorem}[Riesz representation theorem]\label{thm:riesz-representation}
@@ -406,7 +406,7 @@ For a subset (not necessarily a subspace) $S\subset V$, $S\subseteq S^{\perp\per
     Let $U,V$ be Banach spaces and $T\in\mathcal{L}(U,V)$. Then, the following conditions are equivalent: 
     \begin{enumerate}
         \item $\im T$ is closed in $V$. 
-        \item $\im T*$ is closed in $U'$.
+        \item $\im T^*$ is closed in $U'$.
         \item $\im T = \phantom{.}^\circ (\ker T^*)$.
         \item $\im T^* = (\ker T)^\circ$.
     \end{enumerate}
@@ -484,7 +484,7 @@ We now define the Fréchet derivative map.
             u &\mapsto dF(u)
         \end{aligned}
     \end{equation}
-    is called the \emph{Fréchet derivative} of $F$. If $F'$ is continuous, we say that $F\in C^1$ and write $F\in C^1(U,Y)$.
+    is called the \emph{Fréchet derivative} of $F$. If $F'$ is continuous, we say that $F\in C^1(U,Y)$.
 \end{definition}
 
 We note that the definition of the Fréchet derivative gives no hints to actually compute it from a given $F$. We begin by defining a different notion of differentiability.
@@ -602,7 +602,7 @@ Let us list some useful properties:
         d^2\psi(u)[v_1,v_2] &= d(d F_{v_1}(u))[v_2] \\
         &= \frac{d}{d\varepsilon}|_{\varepsilon=0}\int_\Omega(u+\varepsilon v_2)^{p-1} v_1 dx\\
         &= (p-1)\int_\Omega u^{p-2}v_1 v_2 dx
-    \end{tightalign*}
+    \end{tightalign*} \vspace{-10pt}
 }
 
 In calculus of variations $d^2 F(u)[h] = d^2 F(u)[h,h]$ is used for checking the properties of the minimizers of problems in the same way one would do in finite-dimensional optimization.
@@ -612,7 +612,7 @@ In calculus of variations $d^2 F(u)[h] = d^2 F(u)[h,h]$ is used for checking the
 
 In addition, we also mention that we will stick to the convention that scalars, vectors, and matrices are denoted with $a$, $\vec a$, and $\mat A$. Higher order tensors are sometimes denoted with $\mathcal A$ (3rd order) and $\mathbb A$ (4th order), but we will not use those too much. 
 
-\subsection{Tensor algebra}
+\paragraph{Tensor algebra}
 We begin by introducing the \emph{Einstein notation}, where repeated indices imply summation:
 \begin{equation}\label{eq:einstein-notation}
     a_i b_i = a_1b_1 + \dots + a_n b_n.
@@ -715,7 +715,7 @@ We now define the concept of a \emph{tensor} on the standard Euclidean space.
         \ten A\Cof(\ten A)^\top = (\det\ten A)\ten I.
     \end{equation*}
 \end{definition}
-\subsection{Tensor derivative}\label{sec:tensor-derivative}
+\paragraph{Tensor derivative}\label{sec:tensor-derivative}
 Now that we are equipped with tensor algebra and index notation, we need to adapt our standard derivative definitions to this setting. For simplicity, we refer to zero-order tensors as scalars, and to first-order tensors as vectors. The derivative of scalars and vectors with respect to a scalar variable are defined just as in standard vector calculus. We do need to define the derivative of vectors with respect to other vectors, and the derivatives of scalars with respect to second-order tensors, both of which appear naturally in the conservation laws that will follow later in this chapter.
 \begin{definition}[(Tensor) derivative of a scalar field]\label{def:tensor-derivative-scalar}
     Let $\psi=\psi(\ten A)$ be a scalar-valued function defined over a second-order tensor argument $\ten A$. The first-order Taylor approximation of $\psi$ at $\ten A$ followed by a perturbation $d\ten A$ is $\psi(\ten A + d\ten A) = \psi(\ten A) + d\psi + o(d\ten A)$, which satisfies

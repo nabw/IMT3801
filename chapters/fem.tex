@@ -16,7 +16,7 @@ To build this theory, we follow the presentation in~\cite[Chapter 1]{ern2004theo
 
 A straightforward choice for one-dimensional approximation is to use polynomials, which we will begin to study in the one-dimensional case. For an integer $k \ge 0$, $\mathbb{P}_k$ denotes the space of the polynomials in one variable, of degree at most $k$, and with real coefficients.
 
-\subsection{The mesh}
+\paragraph{The mesh}
 \begin{definition}[Mesh]\label{def:mesh}
     Let $\Omega = ]a, b[$ be a one-dimensional domain. We define a mesh on $\Omega$ as an indexed collection of intervals with non-zero measure $\{I_i = [x_{1,i}, x_{2,i}]\}_{0 \leq i \leq N}$ forming a partition of $\Omega$, i.e.
     \begin{equation}\label{eq:def-mesh}
@@ -39,7 +39,7 @@ and we define the mesh size $h$ as
 
 In what follows, the intervals $I_i$ are also called \emph{elements} (or \emph{cells}) and the mesh is denoted by $\mathcal{T}_h = \{I_i\}_{0 \le i \le N}$, where the subscript $h$ refers to the refinement level given by the mesh size.
 
-\subsection{The $\mathbb{P}_1$ Lagrange finite element}
+\paragraph{The $\mathbb{P}_1$ Lagrange finite element}
 One of the simplest methods to approximate functions over $\Omega$ is to define piecewise-linear functions. We denote the vector space of continuous, piecewise-linear functions
 \begin{equation}
     P_h^1 = \{ v_h \in C(\bar{\Omega}): \forall i \in \{0, \dots, N\}, v_h|_{I_i} \in \mathbb{P}_1 \}.
@@ -141,7 +141,7 @@ The proofs of the two previous lemmas can now be rewritten using the local inter
 \begin{equation}
     \|v - \mathcal{I}_{I_i}^1 v\|_{0,I_i} \le h_i^2 |v|_{2,I_i},\qquad|\mathcal{I}_{I_i}^1 v|_{1,I_i} \le h_i |v|_{2,I_i}.
 \end{equation}
-\subsection{The $\mathbb{P}_k$ Lagrange finite elements}
+\paragraph{The $\mathbb{P}_k$ Lagrange finite elements}
 The interpolation technique presented for the piecewise-linear case (polynomial degree $1$) generalizes to higher-degree polynomials. Consider the mesh $\mathcal{T}_h = \{I_i\}_{0 \le i \le N}$ introduced previously. Let
 \begin{equation}\label{eq:def-Phk}
     P_h^k = \{ v_h \in C(\bar{\Omega}): \forall i \in \{0, \dots, N\}, v_h|_{I_i} \in \mathbb{P}_k \}.
@@ -303,7 +303,7 @@ However, one should bear in mind that the order of the interpolation error may n
 \section{Finite elements: definitions and examples}\label{sec:finite-element-definitions}
 With one-dimensional interpolation already covered, we now present a general definition of finite elements and local interpolation operators. We will see several examples in two and three dimensions. 
 
-\subsection{Main definitions}
+\paragraph{Main definitions}
 \begin{definition}[Finite element]\label{def:finiteelements}
     A \emph{finite element} consists of a triplet $\{K, P, \Sigma\}$, where:
     \begin{enumerate}
@@ -345,7 +345,7 @@ This property is usually referred to as unisolvence. In the literature, the bije
     Let $\{K, P, \Sigma\}$ be a finite element. If there is a set of points $\{a_1, \dots, a_{n_{sh}}\}$ in $K$ such that, for all $p \in P$, $\sigma_i(p) = p(a_i)$, $1 \le i \le n_{sh}$, $\{K, P, \Sigma\}$ is called a \emph{Lagrange finite element}. The points $\{a_1, \dots, a_{n_{sh}}\}$ are called the \emph{nodes} of the finite element, and the local shape functions $\{\theta_1, \dots, \theta_{n_{sh}}\}$ (which are such that $\theta_i(a_j) = \delta_{ij}$ for $1 \le i,j \le n_{sh}$) are called the \emph{nodal basis} of $P$.
 \end{definition}
 
-\subsection{Local interpolation operator}
+\paragraph{Local interpolation operator}
 Let $\{K, P, \Sigma\}$ be a finite element. Assume that there exists a normed vector space $V(K)$ of functions $v: K \rightarrow \mathbb{R}^m$ such that:
 \begin{enumerate}
     \item $P \subset V(K)$.
@@ -375,7 +375,7 @@ At this point, it may seem more appropriate to define a finite element as a quad
 
 \section{Finite elements in higher dimensions}\label{sec:finite-elements-high-dimensions}
 We now extend the above definitions to the higher-dimensional setting, by introducing simplicial and tensor product finite elements.
-\subsection{Simplicial Lagrange finite elements}
+\paragraph{Simplicial Lagrange finite elements}
 \paragraph{Simplices and barycentric coordinates} Let $\{a_0, \dots, a_d\}$ be a family of points in $\mathbb{R}^d$, $d \ge 1$. Assume that the vectors $\{a_1 - a_0, \dots, a_d - a_0\}$ are linearly independent. Then, the convex hull of $\{a_0, \dots, a_d\}$ is called a \emph{simplex}, and the points $\{a_0, \dots, a_d\}$ are called the vertices of the simplex. The \emph{unit simplex} of $\mathbb{R}^d$ is the set
 \begin{equation}
     \left\{x \in \mathbb{R}^d: x_i \ge 0, 1 \le i \le d, \text{ and } \sum_{i=1}^d x_i \le 1 \right\}.
@@ -424,7 +424,7 @@ and for $k=3$
 \begin{equation}
     \begin{cases} \frac{1}{2}\lambda_i(3\lambda_i - 1)(3\lambda_i - 2), & 0 \le i \le d, \\ \frac{9}{2}\lambda_i(3\lambda_i - 1)\lambda_j, & 0 \le i,j \le d, i \ne j, \\ 27\lambda_i \lambda_j \lambda_k, & 0 \le i < j < k \le d. \end{cases}
 \end{equation}
-\subsection{Tensor product Lagrange finite elements}
+\paragraph{Tensor product Lagrange finite elements}
 \paragraph{Cuboids} Given a set of $d$ intervals $\{[c_i, d_i]\}_{1 \le i \le d}$, all with non-zero measure, the set $K = \prod_{i=1}^d [c_i, d_i]$ is called a \emph{cuboid}. For $x \in K$, there exists a unique vector $(t_1, \dots, t_d) \in [0, 1]^d$ such that, for all $1 \le i \le d$, $x_i = c_i + t_i(d_i - c_i)$. The vector $(t_1, \dots, t_d)$ is called the \emph{local coordinate vector} of $x$ in $K$.
 
 \paragraph{The polynomial space $\mathbb{Q}_k$} Let $\mathbb{Q}_k$ be the polynomial space in the variables $x_1, \dots, x_d$, with real coefficients and of degree at most $k$ in each variable. In dimension 1, $\mathbb{Q}_k = \mathbb{P}_k$; in dimension $d \ge 2$
@@ -685,7 +685,7 @@ Thus, the mapping from the master element with coordinates $\vec\xi = (\xi_1,\xi
 \vec{x}(\xi_1, \xi_2) =  \vec{x}_0^e\xi_1  + \vec{x}_1^e \xi_2 + \vec{x}_2^e (1-\xi_1-\xi_2).
 \end{equation*}\vspace{-20pt}
 }
-\subsection{Nonhomogeneous Dirichlet boundary conditions}
+\paragraph{Nonhomogeneous Dirichlet boundary conditions}
 % 8.4 Ern & Guermond
 There exist several approaches to handle the numerical implementation of nonhomogeneous Dirichlet boundary conditions, which we introduce from~\cite{ern2004theory}. Assume that there exist $N_D$ Dirichlet nodes in the mesh, and thus $N_{free} = N_{el} - N_D$ free nodes.
 \begin{itemize}

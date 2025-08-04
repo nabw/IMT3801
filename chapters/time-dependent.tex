@@ -138,7 +138,7 @@ In a continuous setting, for $f\in L^2(\Omega_T)$ and $u_0\in L^2(\Omega)$, we s
     \end{aligned}
 \end{equation}
 Note that we simplify the notation for the duality pairing $\langle f, v\rangle = \langle f, v\rangle_{V'\times V}$, since~\ref{eq:parabolic-IBVP} is understood distributionally. 
-\subsection{The semi-discrete problem}
+\paragraph{The semi-discrete problem}
 As with stationary problems, we can prove a continuous a priori estimate. To derive it, we will work on a finite-dimensional approximation and take weak limits at the end, which will require solving a finite-dimensional initial value problem (i.e. a system of ODEs), where the existence and uniqueness of solutions is justified by \emph{Carathéodory's existence theorem}\footnote{This theorem essentially relaxes the conditions that other stronger existence and/or uniqueness theorems require for the right hand side $\vec g$, as we now need continuity in $t$ and measurability in $\vec y$. In this sense, Carathéodory's existence theorem is a relaxation of the Peano existence theorem, which requires continuity in $t$ and $\vec y$, and this is itself a relaxation of the well-known Picard-Lindelöf existence and uniqueness theorem, which requires continuity in $t$ and Lipschitz continuity in $\vec y$.}. 
 \begin{theorem}[Carathéodory's existence theorem]\label{thm:caratheodory-existence}
     Let $R = \{(t,y)\in \R\times \R^n: |t-t_0|\leq a, \|y-y_0\|\leq b\}$ be a rectangular domain. Consider the initial value problem
@@ -329,7 +329,7 @@ We first prove the following convergence result for the semi-discrete problem, s
         The resulting estimate comes from the convergence rate obtained from the Ritz projector.
     \end{proof}
 \end{theorem}
-\subsection{The fully-discrete problem}
+\paragraph{The fully-discrete problem}
 We finally derive a convergence estimate for the fully-discrete problem. As for finite differences, we could choose a forward, backward or centered difference scheme, and we will choose an implicit scheme. Let $M\in \N$ be the number of time steps with $\Delta t = T/M$, and $t_n = n\Delta t$ with $1\leq n\leq M$, such that $u(t_n)\approx u^n$. Recall the backward difference scheme
 \begin{equation}\label{eq:discrete-un}
     D^-_{\Delta t}u^n = \frac{u^{n+1}-u^n}{\Delta t},

@@ -144,7 +144,7 @@ The generalization of the Lax-Milgram lemma for the setting where $W$ is a Banac
 \section{Galerkin methods}\label{sec:galerkin}
 Instead of discretizing the differential operator, as one would do in the case of finite differences to obtain discrete derivatives, one can consider discrete functional spaces, with the idea that the discrete space somehow converges to the continuous space. This is known as a \emph{Galerkin scheme} or \emph{Galerkin method}.
 
-\subsection{The discrete Galerkin setting}
+\paragraph{The discrete Galerkin setting}
 Consider thus an abstract differential problem given by finding $u$ in $W$ such that
 \begin{equation}
     a(u, v) = f(v), \quad \forall v \in V,
@@ -191,7 +191,7 @@ Most of the time we will use conformal, consistent, standard Galerkin methods, w
 \end{equation*}
 One can further prove that for elliptic problems, the matrix $\ten{A}$ associated to the Galerkin scheme is positive-definite, and if $a$ is symmetric, then $\ten{A}$ is symmetric as well. The general case, when $a$ is not necessarily elliptic, is covered in~\ref{sec:inf-sup}.
 
-\subsection{Error analysis}
+\paragraph{Error analysis}
 The natural question is whether the discrete solution $u_h\in W_h$ converges to the continuous solution $u\in W$, which is studied through the \emph{error equation}. We define the \emph{approximation error} $e_h$ as 
 \begin{equation}
     e_h\coloneqq u - u_h.
@@ -255,7 +255,7 @@ With these two assumptions, we can derive an error estimate in the seminorm $|\c
     \end{proof}
 \end{lemma}
 
-\subsection{Examples}
+\paragraph{Examples}
 \paragraph{The Poisson problem} Consider $f$ in $H^{-1}(\Omega)$ and $g$ in $H^{1/2}(\Gamma)$ with $\Gamma\coloneqq \partial\Omega$. The Poisson problem in strong form is given as the following boundary value problem: 
 \begin{equation*}
     \begin{aligned}
@@ -355,7 +355,7 @@ We encourage the reader to try to compute the weak formulation of the Poisson pr
 \end{equation*}
 This problem will be studied in detail further ahead. 
 }
-\subsection{Non-conforming schemes}\label{sec:non-conforming-schemes}
+\paragraph{Non-conforming schemes}\label{sec:non-conforming-schemes}
 In order to have a good approximation, it is not necessary that the scheme is conforming. Some examples of conforming schemes are most finite element methods and spectral element methods, and among non-conforming schemes are discontinuous-Galerkin (DG) finite element methods, and methods that impose boundary conditions weakly. We will study several conforming finite element methods in Chapter~\ref{chapter:fem}. 
 
 \paragraph{Classical non-conforming schemes} Although conforming spaces have some nice properties, there exist some applications where the mesh and the domain boundaries may not match, or where traditional finite elements may not apply, forcing one to use other schemes such as spline-based methods, where the degrees of freedom are control points of the splines, rather than actual nodes. In these cases, we can use a non-conforming scheme. The following presentation is based on~\cite{Chouly2024}. Consider the Poisson problem with a nonhomogeneous Dirichlet boundary condition: find $u:\Omega\to \mathbb{R}$ such that

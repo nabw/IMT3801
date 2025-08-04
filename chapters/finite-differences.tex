@@ -114,31 +114,8 @@ which yields the classical expression
 \end{equation}
 This is also referred to sometimes as the \emph{numerical convergence rate}. 
 
-\section{Method of manufactured solutions}\label{sec:manufactured-solutions}
-A typical problem is that one wants to estimate the convergence of some discrete solution
-\begin{equation}
-    \mat L_h \vec u_h = 0,
-\end{equation}
-which approximates a differential equation
-\begin{equation}
-    \mathcal L u = 0,
-\end{equation}
-for which one typically does not know the analytical solution. This method allows to compute a modified problem in which we know the analytic solution. Indeed, consider an arbitrary analytic function that we already know, which we denote by $u_{ex}$. The main idea here is that we can define a right hand side 
-\begin{equation}
-    f_{ex} \coloneqq \mathcal L u_{ex},
-\end{equation}
-such that the solution of the modified problem 
-\begin{equation}
-    \mathcal L u = f \quad ( = \mathcal L u_{ex})
-\end{equation}
-is, if uniqueness holds, $u = u_{ex}$. To obtain the discrete problem, we consider the associated grid function $R_h u_{ex}$ and set the discrete right hand side $\vec f_h = R_h \mathcal L u_{ex}$ such that the solution of the discrete problem 
-\begin{equation}
-    \mat L_h \vec u_h = \vec f_h \quad (=R_h \mathcal L u_{ex})
-\end{equation}
-converges to the continuous solution $u_{ex}$ by construction. 
-
 \section{Stability and convergence analysis}\label{sec:fd-convergence-analysiss}
-Using these ideas, we can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in the Lax equivalence theorem. We will first require other definitions, and we will assume that our differential operators are \emph{densely-defined}, a property that is studied more carefully in Section~\ref{chapter:sturm-liouville}.
+We can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in the Lax equivalence theorem. We will first require other definitions, and we will assume that our differential operators are \emph{densely-defined}, a property that is studied more carefully in Section~\ref{chapter:sturm-liouville}.
 
 \begin{definition}[Consistency]
     Consider some differential operator $\mathcal A$ that is densely-defined. A discrete operator $\mat A_h$ in $\R^{N\times N}$ is said to be \emph{consistent} with $\mathcal A$ of order $k$ if for all sufficiently smooth functions it holds that
@@ -208,7 +185,15 @@ which will allow us to define convergence.
     \end{proof}
 \end{theorem}
 
-\subsection{Stability of the discrete Laplacian in 1D}
+\paragraph{Method of manufactured solutions} A practical difficulty in computing the convergence error $\|u - u_h\|$ is that the exact solution $u$ is often unknown for non-trivial problems. The \emph{method of manufactured solutions} is a standard technique that circumvents this issue. The procedure is as follows:
+\begin{enumerate}
+    \item Choose, or ``manufacture'', a sufficiently smooth function $u^{\text{ex}}$ that will serve as the exact solution. This function should ideally exercise various features of the code and be simple enough to qualitatively analyze once the solution is computed. The most common choices are trigonometric and polynomial functions.
+    \item Apply the continuous differential operator $\mathcal{A}$ to this manufactured solution to generate a source term $f^{\text{ex}} \coloneqq \mathcal{A}u^{\text{ex}}$.
+    \item Solve the modified problem $\mathcal{A}u = f^{\text{ex}}$ with the corresponding boundary conditions derived from $u^{\text{ex}}$, to find a discrete solution $u^{\text{ex}}_h$. When uniqueness holds, the solution to this problem is precisely $u=u^{\text{ex}}$, and thus the convergence error is computed as $\|u^{\text{ex}} - u^{\text{ex}}_h\|$.
+\end{enumerate}
+This technique allows for a direct and rigorous computation of the convergence error and its rate. An important remark is that one must be careful with the choice of $u^{\text{ex}}$, since for a fixed discrete method, some $u^{\text{ex}}$ may be inherently easier or harder to approximate, leading to deceptively low or high numerical convergence errors, and incorrect rates. This may be a desirable effect when comparing methods, but it may not be desirable when one is analyzing a different error behavior, for instance with respect to the mesh size.
+
+\paragraph{Stability of the discrete Laplacian in 1D}
 Let us now study the stability of the discretized Laplacian operator in 1D, $-\Delta u = -u''$, over the interval $[a,b]$ with $a<b$ and homogeneous boundary conditions $u_h(x_1) = u_h(x_N) = 0$. Consider $\Omega_h = \{x_i\}_{i=1}^N$ a grid of $[a,b]$ with $N$ equispaced elements, where $x_1=a$ and $x_{N-1}=b$, and mesh size $h=(b-a)/N$. Recall that the numerical second derivative can be approximated by the three-point approximation derived above, which for a given interior point is given by
 \begin{equation}
     -u_h''(x_i) =  \frac{1}{h^2}(-u_h(x_{i-1}) + 2u_h(x_i) - u_h(x_{i+1})).
@@ -264,7 +249,7 @@ We can apply this principle to show that $A_h$ is stable.
     \end{proof}
 \end{theorem}
 
-\section{Unavoidable nonlinearities}\label{sec:fd-nonlinearities}
+\paragraph{Unavoidable nonlinearities}
 Sometimes, specially in stationary models, we cannot avoid having to solve a nonlinear problem. Two common ways to obtain an approximate solution to a nonlinear problem are 1) fixed point methods (usually of first order), and 2) Newton-Raphson methods. To analyze them, consider the domain $\Omega=(a,b)$ and the example problem
 \begin{equation}
     \begin{aligned}
@@ -535,7 +520,7 @@ A natural generalization of these three schemes is the $\theta$-method, which fo
 \end{equation}
 We note that $\theta=1$ corresponds to the explicit scheme, $\theta=0$ to the implicit scheme, and $\theta=1/2$ to the mid-point scheme. 
     
-\subsection{Von Neumann stability analysis}
+\paragraph{Von Neumann stability analysis}
 Energy methods for stability analysis can quickly become untractable, so in order to get easier bounds, we can perform this analysis after moving the equation to the frequency domain. This is the so-called \emph{von Neumann stability analysis}, which is a very powerful tool for analyzing the stability of finite difference schemes. The idea is to assume that the solution can be expressed as a Fourier series, and then analyze the growth of the Fourier modes over time.
 
 For this analysis, we will use the Fourier transform, which is comfortable for this task as it yields simple eigenfunctions of the derivatives. 
@@ -608,7 +593,7 @@ We note that the first inequality yields $g(\xi)\leq 1$, and from the second ine
 \end{tightalign}
 which yields an upper bound for the time step $\Delta t$ to ensure stability of the finite difference scheme. Inequalities of this kind are studied more thoroughly in~\cite{LeVeque2007}.
 
-\subsection{Time stability}
+\paragraph{Time stability}
 We now look for stability estimates regarding also time. We first study a forward scheme 
 \begin{equation}
     \begin{aligned}
