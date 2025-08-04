@@ -1,7 +1,7 @@
-In this section we set most of the foundational mathematics required to understand these notes. In general, this consists in defining rigorously the abstract functional setting and preparing the student for what a colleague calls the \emph{tensor-fu}, i.e. the capability of derivating anything.
+In this section we set most of the foundational mathematics required to understand these notes. In general, this consists in defining rigorously the abstract functional setting and preparing the student for what a colleague calls the \emph{tensor-fu}, i.e. the capability of deriving anything.
 
 \section{Elements of functional analysis and measure theory}\label{sec:elements-functional-analysis}
-In this section we recall some basic definitions and theorems of functional analysis and measure theory. The functional analysis presentation follows closely the presentation by Long Chen in~\cite{chen2024infSup}, and the measure theory . We refrain from giving a detailed explanation and proofs, which are covered in detail in standard functional analysis references, such as~\cite{BrezisFA}.
+In this section we recall some basic definitions and theorems of functional analysis and measure theory. The functional analysis presentation follows closely the presentation by Long Chen in~\cite{chen2024infSup} and the amazing book by H. Brezis~\cite{BrezisFA}, and the measure theory presentation is partially adapted from~\cite{Tao_2021,Rudin_2013}. We refrain from giving detailed explanations and proofs, which are covered in detail in the aforementioned references.
 
 In order to transfer the notions that are developed in undergraduate calculus and linear algebra courses to functional analysis, we need to define conditions on the \emph{spaces} and on the \emph{operators}. This occurs mainly due to the fact that we are now in an infinite-dimensional setting, which leads to non-intuitive results. There are three key properties that we will study: \emph{closeness} (or \emph{completeness}), \emph{continuity} (or \emph{boundedness}) and \emph{compactness}.
 
@@ -33,6 +33,17 @@ Using open sets, we can define the three important notions: \emph{neighborhood} 
 \end{definition}
 \begin{definition}[Closure]
     For a subset $S$ of a topological space $X$, its \emph{closure} $\overline{S}$ is the intersection of all closed sets containing $S$, i.e. the smallest closed set that contains $S$.
+\end{definition}
+\begin{definition}[Compactness]
+    Let $K\subset X$ where $X$ is a topological space. A collection $\{V_\alpha\}_{\alpha\in I}$ of subsets of $X$, where $I$ an index set (possibly infinite), is called an \emph{open cover} of $K$ if $K\subset \cup_{\alpha\in I}V_\alpha$. We say that $K$ is \emph{compact} if every open cover $\{V_\alpha\}_{\alpha\in I}$ of $K$ contains a finite sub-cover (subset) that also contains $K$. If $X$ is itself compact, then we say that $X$ a \emph{compact space}. Further, closed subsets of compact spaces are also compact.
+\end{definition}
+\begin{definition}[Support, compactly-supported functions]
+    The \emph{support} $\supp f$ of a function $f:X\to Y$ between topological spaces $X, Y$ is defined as the closure of the set of $x\in X$ whose images under $f$ are nonzero, i.e.
+    \begin{equation}
+        \supp f \coloneqq \overline{\{x\in X: f(x)\neq 0\}}.
+    \end{equation}
+
+    The space of continuous functions $f:\R^n \to \R$ with compact support is denoted by $C_0(\R^n)$.
 \end{definition}
 \begin{definition}[Continuity]\label{def:continuity-topological}
     A function $f:X\to Y$ between two topological spaces $X$ and $Y$ is \emph{continuous} if the preimage $f^{-1}(U)\subset X$ of an open set $U\subset Y$ is also open. 
@@ -70,7 +81,7 @@ as the open sets, and it is easy to prove that a normed vector space is indeed a
         \item a symmetry property $d(x,y) = d(y,x)$ ,
         \item a triangle inequality $d(x,z) \leq d(x,y) + d(y,z)$,
         \item is non-negative, i.e. $d(x,x) \geq 0$, and
-        \item $d(x,x)=0$.
+        \item $d(x,y) = 0 \iff x=y$.
     \end{itemize}
     A \emph{metric space} $(X,d)$ is a set $X$ with a metric $d:X\times X\to \R^+$ on $X$. If $X$ is a normed vector space, then we define a \emph{metric induced by the norm} 
     \begin{equation}
@@ -80,7 +91,7 @@ as the open sets, and it is easy to prove that a normed vector space is indeed a
 \end{definition}
 A broad class of norms are the $p$-norms, which will be useful when dealing with $L^p$ spaces later on. 
 \begin{definition}[$p$-norm of a vector]
-    Let $x\in\Omega\subset\R^n$. For $1\leq p, \infty$, the \emph{$p$-norm} of $x$ is defined as 
+    Let $x\in\Omega\subset\R^n$. For $1\leq p\leq \infty$, the \emph{$p$-norm} of $x$ is defined as 
     \begin{equation}
         \|x\|_p \coloneqq \left(\sum_{i=1}^n |x_i|^p\right)^{1/p},
     \end{equation}
@@ -90,6 +101,14 @@ A broad class of norms are the $p$-norms, which will be useful when dealing with
     \end{equation}
     A simple exercise proves that these functions are indeed norms, and we can further prove that $\R^n$ is complete with respect to these norms, which implies that $(\R^n, \|\cdot\|_p)$ is a Banach space for $1\leq p\leq \infty$.
 \end{definition}
+An important characterization of compact sets in $\R^n$ is through the \emph{Heine-Borel} theorem.
+\begin{definition}[Boundedness]
+    A subset $S\subset X$ of a metric space $(X,d)$ is \emph{bounded} if there exists $R>0$ such that for all $s,t\in S$, $d(s,t)<r$. If $X$ is bounded itself, then it is called a \emph{bounded metric space}.
+\end{definition}
+\begin{theorem}[Heine-Borel]
+    If $K\subset\R^n$, then $K$ is compact if and only if $K$ is closed and bounded.  
+\end{theorem}
+There exist special characterizations of boundedness and compactness that we will not use in these notes, namely \emph{total boundedness}, \emph{pre-compactness}, \emph{relative compactness} and \emph{local compactness}. Total boundedness and pre-compactness are similar (and coincide in Banach spaces), and refer to a generalization of the boundedness property via finite open set coverings.
 
 Through the structure provided by the norm and the metric it induces, we can talk about the length (norm) of vectors in a space, and the distances (metric) between two vectors. In some cases, we will have additional geometric structure in our space thanks to an \emph{inner product}. 
 \begin{definition}[Inner product space]
@@ -97,13 +116,13 @@ Through the structure provided by the norm and the metric it induces, we can tal
     \begin{itemize}
         \item $(x,x)\geq 0$ and $(x,x)=0$ if and only if $x=0$, 
         \item a symmetry property $(x,y)=(y,x)$, and
-        \item a \emph{bilinearity} property $(\alpha x+\beta y, z)=\alpha(x,z)$.
+        \item a \emph{linearity} property $(\alpha x+\beta y, z)=\alpha(x,z)+\beta(y,z)$.
     \end{itemize}
-    An \emph{inner product space} $(X,(\cdot,\cdot))$ is a vector space $X$ with a product space defined on $X$. Given an inner product $(\cdot,\cdot)$, there always exists a \emph{norm induced by the inner product} $\|x\|\coloneqq (x,x)^{1/2}$ and a \emph{metric induced by the inner product} $d(x,y)\coloneqq (x,y)^{1/2}$, and thus all inner product spaces are normed spaces and metric spaces. In the case that a norm $\|\cdot\|$ is induced by an inner product, we obtain three important properties: 
+    An \emph{inner product space} $(X,(\cdot,\cdot))$ is a vector space $X$ with an inner product defined on $X$. Given an inner product $(\cdot,\cdot)$, there always exists a \emph{norm induced by the inner product} $\|x\|\coloneqq (x,x)^{1/2}$ and a \emph{metric induced by the inner product} $d(x,y)\coloneqq (x-y, x-y)^{1/2}$, and thus all inner product spaces are normed spaces and metric spaces. In the case that a norm $\|\cdot\|$ is induced by an inner product, we obtain three important properties: 
     \begin{enumerate}
         \item the \emph{Cauchy-Schwarz inequality}, which states that for any $u,v$ in an inner product space, 
             \begin{equation}
-                |\langle u, v\rangle| \leq \|u\| \|v\|,
+                |(u, v)| \leq \|u\| \|v\|,
             \end{equation}
             where $\|\cdot\|$ is the induced norm,
         \item the \emph{parallelogram property}:
@@ -115,17 +134,20 @@ Through the structure provided by the norm and the metric it induces, we can tal
                 \|x\pm y\|^2 = \|x\|^2 \pm 2(x,y) + \|y\|^2.
             \end{equation}
     \end{enumerate}
-    We will denote inner products mostly by $\langle\cdot, \cdot\rangle$ and $(\cdot, \cdot)$. Sometimes it will be important to distinguish the specific product we consider, i.e. $(\cdot, \cdot)_H$. 
+    We will denote inner products mostly by $(\cdot, \cdot)$, and sometimes by $\langle\cdot, \cdot\rangle$. Sometimes it will be important to distinguish the specific product we consider, i.e. $(\cdot, \cdot)_H$. 
 \end{definition}
 
 \paragraph{Banach and Hilbert spaces}\label{sec:banach-hilbert-spaces}
 Throughout the entire manuscript, we will rely on \emph{Banach spaces}, \emph{Hilbert spaces}, and their dual spaces. Despite the existence of a flexible theory of Banach space formulations, we will mostly rely on Hilbert spaces because of their many nice properties. To define these spaces, we need to define \emph{completeness}.
 \begin{definition}[Completeness]
-    A metric space $(X,d)$ is \emph{complete} if all Cauchy sequences in $X$ converge to a limit that is also in $X$.
+    A metric space $(X,d)$ is \emph{complete} if all Cauchy sequences $\{x_n\}_{n\in\N}\subset X$ converge to a limit that is also in $X$, i.e.
+    \begin{equation}
+        \forall \epsilon > 0, \exists N\in\N, \forall n,m\geq N,\quad  d(x_n, x_m) < \epsilon,
+    \end{equation}
 \end{definition}
 Completeness allows us to take limits in a safe and consistence manner, without having to worry about converging to points outside the space, e.g. having a space of continuous functions that contains a sequence whose limit is not continuous. 
 \begin{definition}[Banach space]\label{def:banach-space}
-    We say that a metric space $(X,d)$ is a \emph{Banach space} if it is complete.
+    We say that a normed space $(X,\|\cdot\|)$ is a \emph{Banach space} if it is complete in the metric induced by its norm.
 \end{definition}
 \begin{definition}[Hilbert space]\label{def:hilbert-space}
     We say that an inner product space $H$ is a \emph{Hilbert space} if it is complete with respect to the metric induced by the inner product.
@@ -147,7 +169,7 @@ Completeness allows us to take limits in a safe and consistence manner, without 
     \begin{equation}
         \langle T^* f, x\rangle_{X',X} = \langle f, Tx\rangle_{Y',Y},
     \end{equation}
-    The \emph{bidual space} is the dual of the dual space, i.e. $X'' \coloneqq (X')'$. One can identify a part $X''$ through the evaluation operator $T_f = X'\mapsto \R$ in $X''$ defined as $T_f(L) \coloneqq \mathcal{L}(f)$. This immersion is always injective by the Hahn-Banach theorem~\ref{thm:hahn-banach}, but it is not necessarily surjective, and in the case that indeed $X''=X$ (i.e. $T_f$ is surjective), the space $X$ is said to be \emph{reflexive}. In reflexive spaces, bounded sequences always have weakly convergent subsequences. %! weak convergence
+    The \emph{bidual space} is the dual of the dual space, i.e. $X'' \coloneqq (X')'$. One can identify a part $X''$ through the evaluation operator $T_f = X'\mapsto \R$ in $X''$ defined as $T_f(L) \coloneqq L(f)$ for $L\in X'$. This immersion is always injective by the Hahn-Banach theorem~\ref{thm:hahn-banach}, but it is not necessarily surjective, and in the case that indeed $X''=X$ (i.e. $T_f$ is surjective), the space $X$ is said to be \emph{reflexive}. In reflexive spaces, bounded sequences always have weakly convergent subsequences. %! weak convergence
 \end{definition}
 \begin{definition}[Bounded operators and operator norm]\label{def:bounded-operator}
     An operator $T:X\to Y$ is \emph{bounded} if it maps bounded sets into bounded sets. When $X$ and $Y$ are normed spaces, (i) boundedness is equivalent to continuity, and thus $\mathcal{L}(X,Y)$ is the set of continuous, bounded linear operators, and (ii) for every bounded operator there exists a constant $M\geq 0$ such that $\|T(x)\|\leq M\|x\|$. The smallest constant $M$ is defined as the \emph{operator norm}
@@ -300,17 +322,24 @@ The most important spaces for us are the Lebesgue spaces $L^p(\Omega;\R^n)$, whi
     In this case, we say that $f$ is \emph{Lebesgue integrable}. A direct consequence of this definition is that $f$ is Lebesgue integrable if and only if $|f|$ is Lebesgue integrable.
 \end{definition}
 \begin{definition}[$L^p$ space and norm]
-    Let $(\Omega, \Sigma, \mu)$ be a measure space, and $1\leq p<\infty$. We define the \emph{Lebesgue space} $L^p(\Omega,\mu)$ as the set of measurable functions $f:\Omega\to \R$ such that $|f|^p$ is Lebesgue integrable, i.e. its $p$-norm is finite:
+    Let $(\Omega, \Sigma, \mu)$ be a measure space, and $1\leq p<\infty$. We define the \emph{Lebesgue space} $(L^p(\Omega,\mu), \|\cdot\|_p)$ as the set of measurable functions $f:\Omega\to \R$ such that $|f|^p$ is Lebesgue integrable, i.e. its $p$-norm is finite:
     \begin{equation*}
         \|f\|_p \coloneqq \left(\int_\Omega |f|^p d\mu\right)^{1/p} < \infty.
     \end{equation*}
-    For $p=\infty$, the space $L^\infty(\Omega,\mu)$ is the set of measurable functions $f$ that are bounded everywhere, and the $p$-norm (i.e. the $\infty$-norm) is defined as the infimum of such bounds: 
+    For $p=\infty$, the space $L^\infty(\Omega,\mu)$ is the set of measurable functions $f$ that are bounded almost everywhere, and the $p$-norm (i.e. the $\infty$-norm) is defined as the infimum of such bounds: 
     \begin{equation*}
         \|f\|_\infty \coloneqq \inf\{C\in\R^+: |f(x)|\leq C \text{ almost everywhere}\}.
     \end{equation*}
 
     When the choice of $\mu$ and/or the space $\Omega$ is obvious, then we simply write $L^p(\Omega)$ or even just $L^p$. Note that $L^1$ is the space of Lebesgue integrable functions.
 \end{definition}
+\begin{theorem}
+    For $1\leq p\leq\infty$, the space $(L^p(\Omega, \mu), d_p)$ is a Banach space, where $d_p(f,g) \coloneqq \|f-g\|_p$ is the metric induced by the $p$-norm.
+    \begin{proof}
+        The proof uses the Minkowski inequality, Fatou's lemma and the properties of measures. For details, see~\cite[Theorem 3.11]{Rudin_2013}.
+    \end{proof}
+\end{theorem}
+In $L^p$, one has to be careful with the interpretation of the metric $d_p$ induced by $\|\cdot\|_p$, since we may have two functions $f,g\in L^p$ that are equal almost everywhere, and the choice of the set of measure zero where $f\neq g$ could be arbitrary. This implies that, when regarding $L^p$ as a metric space, then the elements $f\in L^p$ are not functions, but \emph{equivalence classes} of functions, which is always ommited for the sake of simplicity, see~\cite[Remark 3.10]{Rudin_2013}.
 
 For $1\leq p\leq \infty$, we can prove that $\|\cdot\|_p$ is indeed a norm. There are three central inequalities that stem from these definitions, whose proofs we omit here since they are covered in standard real analysis courses. 
 \begin{theorem}[Minkowski inequality]
@@ -320,7 +349,7 @@ For $1\leq p\leq \infty$, we can prove that $\|\cdot\|_p$ is indeed a norm. Ther
     \end{equation}
 \end{theorem}
 \begin{theorem}[Young's inequality]\label{thm:young-inequality}
-    Let $a,b,p,q\geq 0$ be non-negative real numbers, where $p$ and $q$ are \emph{Hölder conjugates}, i.e. $\frac{1}{p}+\frac{1}{q}=1$. If $p>1$ and $q>1$, it holds that 
+    Let $a,b,p,q\geq 0$ be non-negative real numbers, where $p$ and $q$ are \emph{Hölder conjugates}, i.e. $\frac{1}{p}+\frac{1}{q}=1$. If $p,q>1$ (i.e. $p,q<\infty$), it holds that 
     \begin{equation}
         ab\leq \frac{a^p}{p} + \frac{b^q}{q},
     \end{equation}
@@ -606,6 +635,15 @@ Let us list some useful properties:
 }
 
 In calculus of variations $d^2 F(u)[h] = d^2 F(u)[h,h]$ is used for checking the properties of the minimizers of problems in the same way one would do in finite-dimensional optimization.
+
+\begin{definition}[$C^k$, $C^\infty$ and $C_0^\infty$ functions]
+    Let $f:U\to Y$ be a function. 
+    \begin{enumerate}
+        \item If for $k\in \N$ fixed, all derivatives up to $d^k f$ exist and are continuous, then we say that $f\in C^k(U)$ i.e. the space of \emph{$k$-times differentiable functions}.
+        \item If $f\in C^k(U)$ for all $k\in \N$, then we say that $f\in C^\infty(U)$, i.e. the space of \emph{infinitely-differentiable functions}.
+        \item If $f\in C^\infty(U)$ and $\supp f$ is compact, then we say that $f\in C_0^\infty(U)$, i.e. the space of \emph{infinitely-differentiable functions with compact support.}
+    \end{enumerate}
+\end{definition}
 
 \section{Tensors}\label{sec:tensors}
 \emph{Tensors} are the natural way to put into one consistent algebraic setting all indexed objects, by further considering them to be independent of the coordinate system being used. In the end we will have that scalars are 0-tensors, vectors are 1-tensors, matrices are 3-tensors and so on. In addition, it will be fundamental to extend common calculus derivatives to tensor functions, which is the second topic of this section. Tensors are object of deep study in both algebra and geometry communities, so to maintain the presentation under control (and within our knowledge), we will present everything in Euclidean space $\R^3$. Generalizations should be clear by context. 
