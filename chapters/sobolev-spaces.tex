@@ -1,4 +1,8 @@
-In this section we will review some important properties of the functional spaces in which we will formulate all equations. Most, if not all, results will be coming from the amazing books \emph{Linear and nonlinear functional analysis} by PG Ciarlet~\cite{ciarlet2013linear} and the standard PDEs book by L Evans~\cite{evans2022partial}.
+The classical notion of a derivative, as used in the finite difference method, requires functions to be smooth in a pointwise sense---a condition that is often too restrictive for the solutions of many partial differential equations. A key insight from calculus is the integration by parts formula, which allows us to transfer a derivative from one function to another within an integral. This raises a fundamental question: can we generalize the concept of a derivative for functions that are merely integrable, say in $L^p(\Omega)$, by defining it through this integral identity?
+
+The affirmative answer to this question leads to the theory of \emph{weak derivatives} and the construction of \emph{Sobolev spaces}. These spaces, denoted $W^{m,p}(\Omega)$, are comprised of functions in $L^p(\Omega)$ whose weak derivatives up to order $m$ are also in $L^p(\Omega)$. They provide the natural functional setting for the modern theory of PDEs, allowing us to handle solutions with limited regularity, such as those with kinks or jumps in their derivatives.
+
+In this chapter, we will formally develop these concepts. We will define weak derivatives and the corresponding Sobolev spaces, and then study their most crucial properties: the \emph{embedding theorems} that relate different spaces and provide regularity results, and the \emph{trace theorems} that give a rigorous meaning to boundary values. These results come from the amazing books \emph{Linear and nonlinear functional analysis with applications} by P.G. Ciarlet~\cite{ciarlet2013linear}, \emph{Partial Differential Equations} by L. Evans~\cite{evans2022partial}, and \emph{Theory and Practice of Finite Elements} by A. Ern and J-L. Guermond~\cite{ern2004theory}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Weak derivatives and Sobolev spaces}\label{sec:weak-derivatives-sobolev-spaces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,7 +70,7 @@ as given by integration by parts. This is known as a \emph{weak derivative}. Arb
     \end{equation}
 \end{definition}
 
-Note that~\ref{eq:norm-sobolev-1} is the graph norm of the $\nabla$ operator, and it can be further seen as the $\ell^1$ norm of the two-dimensional vector $(\|x\|_{L^p(\Omega)}, \|\grad x\|_{L^p(\Omega)})$, and thus all vector norms for such a vector induce equivalent norms for Sobolev spaces. It is very common to use the following notations:   
+Note that~\eqref{eq:norm-sobolev-1} is the graph norm of the $\nabla$ operator, and it can be further seen as the $1$-norm of the two-dimensional vector $(\|x\|_{L^p(\Omega)}, \|\grad x\|_{L^p(\Omega)})$, and thus all vector norms for such a vector induce equivalent norms for Sobolev spaces. It is very common to use the following notations:   
 \begin{itemize}
     \item $H^1(\Omega) = W^{1,2}(\Omega)$.
     \item $H^m(\Omega) = W^{m,2}(\Omega)$.
@@ -78,9 +82,9 @@ The space $H^m(\Omega)$ equipped with the scalar product
     (u,v)_{H^m(\Omega)} \coloneqq \sum_{0\leq |\alpha|\leq m}(D^\alpha u, D^\alpha v)_{L^2(\Omega)}
 \end{equation}
 is a Hilbert space~\cite{BrezisFA}, and the most important one for our applications is $H^1(\Omega)$, where the inner product reads
-\begin{equation*}
+\begin{equation}
     (x,y)_{1,\Omega} \coloneqq (x,y)_{0,\Omega} + (\grad x, \grad y)_{0,\Omega}.
-\end{equation*}
+\end{equation}
 Analogously, we can define the spaces of functions whose divergence or curl is also in $L^p$:
 \begin{equation}\label{eq:def-hdiv}
     H(\dive; \Omega) = \left\{f\in L^2(\Omega): \dive f \in L^2(\Omega)\right\}
@@ -143,9 +147,8 @@ and thus we can bound
 \end{equation*}
 This shows that if $f'\in L^2(I)$, then $f$ is uniformly continuous. In particular, we have the injection $H^1(I)\to C^0(\overline{I})$. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Traces}\label{sec:traces}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{Traces}\label{sec:traces}
 Traces or trace operators are the ones that restrict a function in $\R^d$ to some set in $\R^{d-1}$, most commonly the boundary of a domain. They are fundamental to adequately define boundary conditions. For the presentation of this section, we follow~\cite{gatica2014simple} and~\cite{monk2003finite}. Some details about Sobolev spaces are drawn from~\cite{adams2003sobolev}. The fundamental difficulty of defining trace operators is that the domain where the boundary condition is defined has measure 0 in the measure of the starting domain, so some regularity of the function is required to guarantee that this operation makes sense. We will not enter the details of how a Lipschitz boundary is defined, see~\cite{monk2003finite} for further details.
 
 There are several definitions and constructions here that are needed for everything to make sense. We will follow them in a reasonable order, but this might be a very personal vision, so please read other formulations to have a more well-rounded vision. We will denote with $C_0^\infty(X)$ the space of functions with compact support in $X$, and also with $\D(\bar\Omega)$ the functions in $C_0^\infty(\R^d)$ with support in an open set $U$ such that $\bar\Omega\subset U$. This belongs to a wider set known as the Schwartz class of functions. If the set $X$ is open, we may denote $\D(X)$ as $C_0^\infty(X)$ with a bit of an abuse of notation.
@@ -153,7 +156,7 @@ The preliminary notions we will need are the following:
 \begin{itemize}
     \item $\D(\bar\Omega)$ is dense in $L^p(\Omega)$ if $\Omega$ is bounded and Lipschitz.
     \item $C^\infty(\bar\Omega)$ is dense in $W^{s,p}(\Omega)$ for $s$ a positive integer and $p\in [1,\infty)$.
-    \item For $s$ a positive integer and $p\in (1,\infty)$, we have that there is a continuous linear extension $\Pi: W^{s,p}(\Omega) \to W^{s,p}(\R^d)$ such that $\Pi u|_\Omega = u$ for all $u$ in $W^{s,p}(\Omega)$. A detailed analysis of extension operators in Sobolev spaces is done in~\cite{BrezisFA}, sect. 9.2.
+    \item For $s$ a positive integer and $p\in (1,\infty)$, we have that there is a continuous linear extension $\Pi: W^{s,p}(\Omega) \to W^{s,p}(\R^d)$ such that $\Pi u|_\Omega = u$ for all $u$ in $W^{s,p}(\Omega)$. A detailed analysis of extension operators in Sobolev spaces is done in~\cite[Section 9.2]{BrezisFA}.
 \end{itemize}
 
 Some technicalities arise when $\Omega$ is unbounded. For the sake of this course, all domains are bounded and Lipschitz unless otherwise stated. 
@@ -193,9 +196,9 @@ In practice, we need $\gamma_0$ to be extended to a more general domain, which i
         which concludes the proof. 
     \end{proof}
 \end{theorem}
-We can now define the Sobolev spaces "with boundary conditions" via the kernel of the trace operator, and their corresponding dual spaces, which will be useful when dealing with weak formulations.
+We can now define the Sobolev spaces ``with boundary conditions'' via the kernel of the trace operator, and their corresponding dual spaces, which will be useful when dealing with weak formulations.
 \begin{definition}[Kernel of the trace operator]\label{def:sobolev-spaces-zerobc}
-    Let $\gamma_0: W^{s,p}(\Omega) \to W^{\frac{s-1}{p}, p}(\partial\Omega)$ be the trace operator extended as stated in the trace theorem~\ref{thm:trace-theorem}. We define the space $W_0^{s,p}$ as the kernel of the trace operator, i.e. %! almost certainly W^{s - 1/p, p}! also, surjectivity?
+    Let $\gamma_0: W^{s,p}(\Omega) \to W^{s-1/p, p}(\partial\Omega)$ be the trace operator extended as stated in the trace theorem~\ref{thm:trace-theorem}. We define the space $W_0^{s,p}$ as the kernel of the trace operator, i.e. %! surjectivity?
     \begin{equation}\label{eq:def-W0sp}
         W_0^{s,p} \coloneqq \ker \gamma_0 = \{ u \in W^{s,p} \text{ and } \gamma_0 u = 0 \}.
     \end{equation}
@@ -226,7 +229,10 @@ Moreover, the dual of this space is
 \end{equation}
 Having the trace operator at hand allows us to formally interpret the Dirichlet boundary conditions in a boundary value problem. Indeed, recalling the Poisson problem of finding $u\in H^1(\Omega)$ such that
 \begin{equation*}
-    -\Delta u = f \text{  in }\Omega, \qquad \gamma_0 u = g,
+    \begin{aligned}
+        -\Delta u &= f &&\tin \Omega\\
+        \gamma_0 u &= g &&\ton \partial\Omega
+    \end{aligned}
 \end{equation*}
 we can conclude two things. First, the Dirichlet condition $\gamma_0 u = g$ makes sense in $H^{1/2}(\partial\Omega)$ since $u\in H^1(\Omega)$, which is a necessary regularity requirement for the Laplacian to be well defined. Second, the Dirichlet condition $\gamma_0 u = g$ only makes sense when $g\in H^{1/2}(\partial\Omega)$, otherwise there does not exist a solution $u\in H^1(\Omega)$ of the boundary value problem, due to the surjectivity of the trace operator. % https://www.ltcc.ac.uk/media/london-taught-course-centre/documents/Applied-Computational-Methods---Notes-4.pdf
 \paragraph{The trace spaces} The trace space $H^{1/2}(\partial\Omega)$ has some nice properties, which we detail now. Its norm\footnote{Sobolev spaces of fractional order are a best on their own. The rigorous definition can be given using either Fourier transforms or by using the Slobodeckij seminorm. Both are very cumbersome and seldom used.} is given by 
@@ -340,54 +346,57 @@ H_0(\dive;\Omega) = \{\vec v\in H(\dive;\Omega): \gamma_N \vec v = 0 \}.
 
 \paragraph{$H(\curl)$ and the tangential traces} In the proofs involving $H(\dive)$, we heavily used the fact that the $\grad$ and $\dive$ are the transpose of one another. This is not the case for the $\curl$ operator, so the proofs for this case are notoriously more complicated. Instead, it will suffice to state the relevant results:
 \begin{itemize}
-\item As with the previous spaces, one can define $H_0(\curl,\Omega)$ by density with the appropriate norm:
-\begin{equation}\label{eq:def-Hcurl-density}
-H_0(\curl, \Omega) \coloneqq \overline{[C_0^\infty(\Omega)]^d}^{\|\cdot\|_{H(\curl)}}.
-\end{equation}
-\item For a bounded Lipschitz domain $\Omega$ it holds that, if $\vec u$ in $H(\curl;\Omega)$ is such that
-\begin{equation*}
-(\curl \vec u, \vec \phi) - ( \vec u, \curl \vec \phi) = 0
-\end{equation*}
-for all $\vec \phi$ in $[C^\infty(\bar\Omega)]^3$, then $\vec u$ is actually in $H_0(\curl;\Omega)$.
-\item The trace operators here are two: 
-\begin{align*}
-\gamma_t \vec v &= \vec n \times \vec v, \\
-\gamma_T \vec v &= (\vec n \times \vec v) \times \vec n. 
-\end{align*}
-\item Characterizing $\gamma_T$ is out of scope in this course. 
-\item  The following theorems:
-\begin{theorem}\label{thm:curl-identity-H0}
-For a bounded Lipschitz domain $\Omega\subset\R^n$ it holds that the extension $\gamma_t: H(\curl;\Omega) \to H^{-1/2}(\partial\Omega)$ is bounded and linear, with the following integration by parts formula: 
-\begin{equation*}
-(\curl \vec v, \vec\phi) - (\vec v, \curl\vec \phi) = \langle \gamma_t \vec v, \vec \phi\rangle \qquad\forall \vec v \in H(\curl;\Omega), \vec\phi \in \vec H^1(\Omega),
-\end{equation*}
-where we used bold notation for the vector-valued space, i.e. $\vec H^1(\Omega) \coloneqq [H^1(\Omega)]^n$.
-\end{theorem}
-The operator $\gamma_t$ is not surjective, simply because it is the limit of tangential vectors which will never have a normal component (at least intuitively). 
-\begin{theorem}\label{thm:H0curl-characterization-gammat}
-Consider a bounded Lipschitz domain $\Omega$. Then, 
-\begin{equation*}
-H_0(\curl;\Omega) = \{ \vec v \in H(\curl;\Omega): \gamma_t \vec v = \vec 0\}.
-\end{equation*}
-\end{theorem}
-\begin{theorem}\label{thm:density-C-Hcurl}
-For a bounded Lipschitz domain $\Omega$, it holds that $[C(\bar\Omega)]^3$ is dense in $H(\curl;\Omega)$.
-\end{theorem}
-
+    \item As with the previous spaces, one can define $H_0(\curl,\Omega)$ by density with the appropriate norm:
+    \begin{equation}\label{eq:def-Hcurl-density}
+        H_0(\curl, \Omega) \coloneqq \overline{[C_0^\infty(\Omega)]^d}^{\|\cdot\|_{H(\curl)}}.
+    \end{equation}
+    \item For a bounded Lipschitz domain $\Omega$ it holds that, if $\vec u$ in $H(\curl;\Omega)$ is such that
+    \begin{equation*}
+        (\curl \vec u, \vec \phi) - ( \vec u, \curl \vec \phi) = 0
+    \end{equation*}
+    for all $\vec \phi$ in $[C^\infty(\bar\Omega)]^3$, then $\vec u\in H_0(\curl;\Omega)$.
+    \item The trace operators here are two: 
+    \begin{tightalign}
+        \gamma_t \vec v &= \vec n \times \vec v, \\
+        \gamma_T \vec v &= (\vec n \times \vec v) \times \vec n. 
+    \end{tightalign}
+    \item Characterizing $\gamma_T$ is out of scope in this course. 
+    \item The following theorems:
+    \begin{theorem}\label{thm:curl-identity-H0}
+        For a bounded Lipschitz domain $\Omega\subset\R^n$ it holds that the extension
+        \begin{equation}
+            \gamma_t: H(\curl;\Omega) \to H^{-1/2}(\partial\Omega)
+        \end{equation}
+        is bounded and linear, with the following integration by parts formula: 
+        \begin{equation}
+            (\curl \vec v, \vec\phi) - (\vec v, \curl\vec \phi) = \langle \gamma_t \vec v, \vec \phi\rangle \qquad\forall \vec v \in H(\curl;\Omega), \vec\phi \in \vec H^1(\Omega),
+        \end{equation}
+        where we used bold notation for the vector-valued space, i.e. $\vec H^1(\Omega) \coloneqq [H^1(\Omega)]^n$.
+    \end{theorem}
+    The operator $\gamma_t$ is not surjective, simply because it is the limit of tangential vectors which will never have a normal component (at least intuitively). 
+    \begin{theorem}\label{thm:H0curl-characterization-gammat}
+        Consider a bounded Lipschitz domain $\Omega$. Then, 
+        \begin{equation}
+            H_0(\curl;\Omega) = \{ \vec v \in H(\curl;\Omega): \gamma_t \vec v = \vec 0\}.
+        \end{equation}
+    \end{theorem}
+    \begin{theorem}\label{thm:density-C-Hcurl}
+        For a bounded Lipschitz domain $\Omega$, it holds that $[C(\bar\Omega)]^3$ is dense in $H(\curl;\Omega)$.
+    \end{theorem}
 \end{itemize}
 
 \example{
 One interesting context in which these trace operators show up is when considering normal or tangential boundary conditions. As we will see, one typically requires boundary information on all components of the solution on the boundary, but how this is done is highly context dependent. One nice example are \emph{slip} boundary conditions in fluid dynamics, where only the normal component of the fluid velocity is required to be 0: 
-    \begin{equation*}
-\vec u \cdot \vec n = 0.
+\begin{equation*}
+    \vec u \cdot \vec n = 0.
 \end{equation*}
 This has to be complemented with conditions in the tangential direction. One possibility would be to prescribe some tangential velocity: 
-    \begin{equation*}
-(\ten I - \vec n \otimes \vec n)\vec u = (\vec n \times \vec u) \times \vec n = \vec v_\tau,
+\begin{equation*}
+    (\ten I - \vec n \otimes \vec n)\vec u = (\vec n \times \vec u) \times \vec n = \vec v_\tau,
 \end{equation*}
 but one can also look at the tangential components of the stress tensor, thus generating a "tangential" Neumann boundary condition: 
-    \begin{equation*}
-(I - \vec n \otimes \vec n)[\sigma(\vec u)\vec n] = \vec g_\tau.
+\begin{equation*}
+    (I - \vec n \otimes \vec n)[\sigma(\vec u)\vec n] = \vec g_\tau.
 \end{equation*}\vspace{-20pt}
 }
 

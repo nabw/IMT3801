@@ -1,4 +1,8 @@
-Under appropriate boundary conditions, linear self-adjoint second-order differential operators have solutions that form orthogonal sets of functions in $L^2$. These problems are commonly referred to as Sturm-Liouville problems, and their study arises as a result of the application of the separation of variables technique to classical PDEs found in physics, such as the heat equation and the wave equation. 
+Second-order PDEs and their associated boundary value problems are encountered in many applications, such as heat and wave propagation. One of the most classical techniques for solving such systems is the method of \emph{separation of variables}. This method seeks to decompose the PDE into a set of simpler, uncoupled ordinary differential equations. This decomposition invariably leads to an eigenvalue problem for a second-order differential operator in 1D.
+
+\emph{Sturm-Liouville theory} provides the rigorous mathematical framework for studying precisely these types of eigenvalue problems. Under reasonable boundary conditions, the eigenfunctions of these operators form a complete orthogonal basis for the function space, typically $L^2$. This guarantees that any solution can be represented as a generalized Fourier series expansion in terms of these eigenfunctions.
+
+To appropriately analyze eigenvalues and eigenfunctions of operators, we need to recall the relevant results from \emph{spectral theory}. In this chapter, we will develop the necessary definitions, such as \emph{self-adjointedness} and \emph{compactness} of operators, to state the \emph{spectral theorem for compact, self-adjoint operators}. This theorem will provide conditions for the existence of a complete eigenbasis on a Hilbert space. We will then introduce the general \emph{Sturm-Liouville problem}, show how it naturally arises from the separation of variables for canonical PDEs like the heat and wave equations, and finally connect its solution to the concept of \emph{Green's functions}, which represent the kernel of the inverse (solution) operator.
 
 \section{Spectral theory}\label{sec:spectral-theory}
 \begin{definition}[Densely-defined operators]\label{def:densely-defined}
@@ -275,7 +279,6 @@ Here we also obtain a countable number of eigenvalues, but almost all of them ha
 with eigenvalues $\{\lambda_n\}_{k\in\mathbb{N}_0} = \left\{\left(\frac{2\pi}{L}k\right)^2\right\}_{k\in\mathbb{N}_0}$ which have multiplicity two for $k\geq 1$ and multiplicity one for $k=0$.
 
 \section{Separation of variables}\label{sec:separation-of-variables}
-
 Regular Sturm-Liouville problems arise when studying some particular cases of PDEs motivated by physics. Often, one assumes that time and space can be (multiplicatively) \emph{separated} in the solution of a time and space-dependent PDE, where the solution is $u(x,t) = X(x)T(t)$. Let us perform separation of variables and analytically solve some regular Sturm-Liouville problems that are \emph{homogeneous} ($Tu=0$) and \emph{nonhomogeneous} ($Tu=f$).
 \subsection{Homogeneous problems}
 \paragraph{The heat equation} We state the time-dependent heat equation on the temperature $\theta=\theta(x,t)$ 

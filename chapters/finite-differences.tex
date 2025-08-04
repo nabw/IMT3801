@@ -1,38 +1,43 @@
-This section has been heavily extracted from some notes from the WIAS in Berlin. They didn't have any authorship, so I don't really know who to thank for them. At the time of writing these notes, they can be found in \href{https://www.wias-berlin.de/people/john/LEHRE/NUMERIK\_IV\_21\_22/num\_konv\_dom\_prob\_3.pdf}{this website}.
-\section{First and second order discrete derivatives}
+The most direct path to solving a differential equation numerically is to approximate the derivatives themselves. This is the central idea of the \emph{finite difference method} (FDM), which replaces the continuous differential operators with discrete analogues derived from Taylor's theorem. Instead of seeking a solution function over the entire domain, we seek its values on a discrete set of points, i.e. a \emph{grid}. This method stands in contrast to the variational methods we will study later, which are based on weak formulations, and its strength lies in its simple and intuitive nature, making it a good starting point tackling the analysis of approximation methods for PDEs. 
+
+In this chapter, we will formalize the concepts of \emph{consistency}, \emph{stability} and \emph{convergence}, and establish their connection through the \emph{Lax equivalence theorem}, which states that for a consistent scheme, stability is equivalent to convergence. We will begin by deriving first and second-order difference operators in one dimension and analyzing their convergence properties. We will then extend these ideas to higher-dimensional problems on structured grids and introduce the essential techniques for handling time-dependent equations.
+
+This section has been partly extracted from some notes from the WIAS in Berlin. They didn't have any authorship, so I don't really know who to thank for them. At the time of writing these notes, they can be found in \href{https://www.wias-berlin.de/people/john/LEHRE/NUMERIK\_IV\_21\_22/num\_konv\_dom\_prob\_3.pdf}{this website}.
+
+\section{First and second order discrete derivatives}\label{sec:first-second-fd}
 Probably the simplest (and oldest) idea for approximating equations stems from the use of Taylor's theorem:
 \begin{theorem}\label{thm:taylor}
     Consider a function $f$ in $C^n((a,b), \R)$, i.e. $n$ times differentiable whose derivatives are well-defined in $a$. Then, there is some $\xi$ in $(a,b)$ such that
     \begin{equation}
-    f(b) = \sum_{k=0}^{n-1}\frac{f^{(k)}(a)}{k!}(b-a)^k + \frac{f^{(n)}(\xi)}{n!}(b-a)^n.
+        f(b) = \sum_{k=0}^{n-1}\frac{f^{(k)}(a)}{k!}(b-a)^k + \frac{f^{(n)}(\xi)}{n!}(b-a)^n.
     \end{equation}
 \end{theorem}
 Naturally, this arises from the mean value theorem when $n=1$. From now on we consider our setting to be in $\R$. For any continuous function $f:(a,b)\to \R$, we can define its associated \emph{grid function} given by its evaluation in a finite set of points. We sometimes refer to this as \emph{collocation}. Set $a<b$, and define the points $a=x_1<\hdots<x_N=b$ with $h_i=x_{i}-x_{i-1}$, such that we have $N$ points, and define the grid function as the vector
-    \begin{equation}\label{eq:def-grid-function}
+\begin{equation}\label{eq:def-grid-function}
     R_hf = (f_1, \hdots, f_N) \coloneqq (f(x_1), \hdots, f(x_N)) \in \R^N,
-    \end{equation}
-    where we have defined the $R_h$ operator such that $R_h f:\R^N \to \R^N$ and $R_h:C((a,b),\R)\to [\R^N\to\R^N]$.  We can then define the following difference operators: 
-    \begin{itemize}
-        \item Forward difference: 
-            \begin{equation*}
-            D^+f(x_i) \coloneqq \frac{f_{i+1} - f_i}{h_{i+1}}
-            \end{equation*}
-        \item Backward difference: 
-            \begin{equation*}
-            D^-f(x_i) \coloneqq \frac{f_{i} - f_{i-1}}{h_{i}}
-            \end{equation*}
-        \item Centered difference:
-            \begin{equation*}
-            Df(x_i) \coloneqq \frac{f_{i+1} - f_{i-1}}{h_{i+1} - h_{i-1}}
-            \end{equation*}
-    \end{itemize}
+\end{equation}
+where we have defined the $R_h$ operator such that $R_h f:\R^N \to \R^N$ and $R_h:C((a,b),\R)\to [\R^N\to\R^N]$.  We can then define the following difference operators: 
+\begin{itemize}
+    \item Forward difference: 
+        \begin{equation*}
+        D^+f(x_i) \coloneqq \frac{f_{i+1} - f_i}{h_{i+1}}
+        \end{equation*}
+    \item Backward difference: 
+        \begin{equation*}
+        D^-f(x_i) \coloneqq \frac{f_{i} - f_{i-1}}{h_{i}}
+        \end{equation*}
+    \item Centered difference:
+        \begin{equation*}
+        Df(x_i) \coloneqq \frac{f_{i+1} - f_{i-1}}{h_{i+1} - h_{i-1}}
+        \end{equation*}
+\end{itemize}
 A nice simple exercise is to extend these ideas to second order derivatives, which all stem from Taylor's formula. The application we will be interested is in that of approximating the action of a differential operator using these formulas. For this, we will focus on the forward difference formula. At each grid point we will have
 \begin{equation}
-D^+f(x_i) = \frac{f_{i+1} - f_i}{h_{i+1}} = \frac 1{h_{i+1}} [-1\quad 1]\begin{bmatrix}f_i \\ f_{i+1}\end{bmatrix},
+    D^+f(x_i) = \frac{f_{i+1} - f_i}{h_{i+1}} = \frac 1{h_{i+1}} [-1\quad 1]\begin{bmatrix}f_i \\ f_{i+1}\end{bmatrix},
 \end{equation}
 so that defining the matrix $\mat D_h^+$ in $\R^{N\times N}$ as
 \begin{equation}
-[\mat D_h^+]_{ij} = \begin{cases} -1/h_{i+1} & j=i \\ 1/h_i  & j=i+1 \\ 0 & \text{elsewhere} \end{cases}
+    [\mat D_h^+]_{ij} = \begin{cases} -1/h_{i+1} & j=i \\ 1/h_i  & j=i+1 \\ 0 & \text{elsewhere} \end{cases}
 \end{equation}
 we obtain an operator which, given a grid function, it yields its discrete derivative. Naturally, care has to be taken at the last point, where we can simply use instead a backwards difference. 
 
@@ -42,7 +47,7 @@ The standard way of approximating second order derivatives is that of using a fi
            &=\frac{f'(x+h) - f'(x)}{h} \notag\\
            &\approx\frac{\frac{f(x+h) - f(x)}{h} - \frac{f(x) - f(x-h)}{h}}{h} \notag\\
            &= \frac{f(x+h) - 2f(x) + f(x-h)}{h^2}.
-    \end{tightalign}
+\end{tightalign}
 We note that the intermediate steps show that these computations can be represented as the matrix product $\mat D^+ \mat D^-$, where the order of differentiation can be inverted and thus equivalently $\mat D^- \mat D^+$. 
 
 The order of convergence of the previously computed schemes can be derived from Taylor's theorem. 
@@ -84,11 +89,7 @@ We can easily derive the order of convergence for sufficiently smooth functions.
 \begin{equation*}
     f(x+ h) = f(x) + f'(x)h + O(h^2),
 \end{equation*}
-from which we readily obtain that 
-\begin{equation*}
-    | D^+f(x) - f'(x) | = O(h),
-\end{equation*}
-so that forward differences and also backward differences (straightforward calculation) converge pointwise linearly. However, it is noteworthy that although centered differences also start converging linearly, they become unstable for very small $h$, see Figure~\ref{fig:fd_convergence}. Indeed we can do the same for centered differences. For this, we compute the third-order expansions
+from which we readily obtain that $| D^+f(x) - f'(x) | = O(h)$, so that forward differences and also backward differences (through a straightforward calculation) converge pointwise linearly. However, it is noteworthy that although centered differences also start converging linearly, they become unstable for very small $h$, see Figure~\ref{fig:fd_convergence}. Indeed we can do the same for centered differences. For this, we compute the third-order expansions
 \begin{tightalign*}
     f(x+h) &= f(x) + hf'(x) + \frac {h^2} 2 f''(x) + \mathcal O(h^3) \\
     f(x-h) &= f(x) - hf'(x) + \frac {h^2} 2 f''(x) + \mathcal O(h^3),
@@ -111,28 +112,28 @@ which yields the classical expression
 \begin{equation}
     k \approx  \frac{\log \left(\|[\vec e_h]_{j+1}\|_X / \|[\vec e_h]_j\|_X\right)}{ \log \left(h_{j+1} / h_j\right)}.
 \end{equation}
-This is also referred to sometimes as \emph{numerical convergence rate}. 
+This is also referred to sometimes as the \emph{numerical convergence rate}. 
 
 \section{Method of manufactured solutions}\label{sec:manufactured-solutions}
 A typical problem is that one wants to estimate the convergence of some discrete solution
-    \begin{equation}
-\mat L_h \vec u_h = 0,
+\begin{equation}
+    \mat L_h \vec u_h = 0,
 \end{equation}
 which approximates a differential equation
-    \begin{equation}
-\mathcal L u = 0,
+\begin{equation}
+    \mathcal L u = 0,
 \end{equation}
 for which one typically does not know the analytical solution. This method allows to compute a modified problem in which we know the analytic solution. Indeed, consider an arbitrary analytic function that we already know, which we denote by $u_{ex}$. The main idea here is that we can define a right hand side 
-    \begin{equation}
-f_{ex} \coloneqq \mathcal L u_{ex},
+\begin{equation}
+    f_{ex} \coloneqq \mathcal L u_{ex},
 \end{equation}
 such that the solution of the modified problem 
-    \begin{equation}
-\mathcal L u = f \quad ( = \mathcal L u_{ex})
+\begin{equation}
+    \mathcal L u = f \quad ( = \mathcal L u_{ex})
 \end{equation}
-    is, if uniqueness holds, $u = u_{ex}$. To obtain the discrete problem, we consider the associated grid function $R_h u_{ex}$ and set the discrete right hand side $\vec f_h = R_h \mathcal L u_{ex}$ such that the solution of the discrete problem 
-    \begin{equation}
-\mat L_h \vec u_h = \vec f_h \quad (=R_h \mathcal L u_{ex})
+is, if uniqueness holds, $u = u_{ex}$. To obtain the discrete problem, we consider the associated grid function $R_h u_{ex}$ and set the discrete right hand side $\vec f_h = R_h \mathcal L u_{ex}$ such that the solution of the discrete problem 
+\begin{equation}
+    \mat L_h \vec u_h = \vec f_h \quad (=R_h \mathcal L u_{ex})
 \end{equation}
 converges to the continuous solution $u_{ex}$ by construction. 
 
@@ -150,19 +151,19 @@ Using these ideas, we can now proceed to propose a mechanisms for discretizing d
 A simple example is to verify that all finite difference operators are consistent with the first order derivative, which is a consequence of Taylor's theorem.
 \begin{definition}[Stability]
     A finite difference operator $\mat A_h$ is said to be stable (in the discrete maximum norm) if there is a stability constant $C>0$ that does not depend on the grid size such that
-        \begin{equation}\label{def:stability}
-            \| \vec v_h \|_{\infty,h} \leq C \|\mat A_h \vec v_h \|_{\infty,h}
-        \end{equation}
-        for all grid functions $\vec v_h$. 
+    \begin{equation}\label{def:stability}
+        \| \vec v_h \|_{\infty,h} \leq C \|\mat A_h \vec v_h \|_{\infty,h}
+    \end{equation}
+    for all grid functions $\vec v_h$. 
 \end{definition}
 We finally consider an infinite dimensional problem given by
-    \begin{equation}
-        \mathcal A u = f
-    \end{equation}
+\begin{equation}
+    \mathcal A u = f
+\end{equation}
 and its finite difference approximation as
-    \begin{equation}\label{def:fd-approx}
-        \mat A_h \vec u_h = \vec f_h,
-    \end{equation}
+\begin{equation}\label{def:fd-approx}
+    \mat A_h \vec u_h = \vec f_h,
+\end{equation}
 which will allow us to define convergence. 
 
 \begin{definition}[Convergence]
@@ -179,28 +180,28 @@ which will allow us to define convergence.
         \begin{itemize}
             \item Stability $\implies$ convergence: we bound the convergence error as
             \begin{tightalign*}
-                \| \vec u_h - R_h u\|_{\infty,h} &\leq C\|\mat A_h(\vec u_h - R_hu) \|_{\infty,h}  \tag{Stability} \\
+                \| \vec u_h - R_h u\|_{\infty,h} &\leq C\|\mat A_h(\vec u_h - R_hu) \|_{\infty,h}  \tag{stability} \\
                 &=C \| f_h - \mat A_hR_h u \|_{\infty,h} \\
                 &=C \| R_h f - \mat A_hR_h u\|_{\infty,h}\\
                 &=C \|R_h(\mathcal A u) - \mat A_hR_h u\|_{\infty,h} \\
-                &\leq Ch^k  \tag{Consistency}.
+                &\leq Ch^k  \tag{consistency}.
             \end{tightalign*}
             \item Convergence $\implies$ stability: by taking inverses, we can write stability as 
                 \begin{equation*}
-                \| \mat A_h^{-1}\vec f_h \|_{\infty, h} \leq C \|\vec f_h\|_{\infty, h},
+                    \| \mat A_h^{-1}\vec f_h \|_{\infty, h} \leq C \|\vec f_h\|_{\infty, h},
                 \end{equation*}
                 which is simply the continuity of the inverse map $\mat A_h^{-1}$. Consider an arbitrary grid vector $\vec f_h$, and we denote the associated problem solution as $\vec u_h$, where $\mat A_h \vec u_h = \vec f_h$. Using this, we have that
                 \begin{tightalign*} 
-                    \|\mat A_h^{-1}\vec f_h\|_{\infty,h} &= \| \vec u_h \|_{\infty, h} \leq \| \vec u_h - R_h u \|_{\infty, h} + \| R_h u \|_{\infty, h}    \tag{Convergence}\\
-                    &\leq C h^k + \| R_h \mathcal A^{-1} f \|_{\infty, h}. 
+                    \|\mat A_h^{-1}\vec f_h\|_{\infty,h} = \| \vec u_h \|_{\infty, h} &\leq \| \vec u_h - R_h u \|_{\infty, h} + \| R_h u \|_{\infty, h}    \tag{convergence}\\
+                    &\leq C h^k + \| R_h \mathcal A^{-1} f \|_{\infty, h}. \tag{stability}
                 \end{tightalign*}
                 To bound this last term, we note that $R_h$ yields pointwise evaluations, so for any continuous function $\eta$ it will hold that
                 \begin{equation*}
-                \| R_h \eta \|_{\infty,h} \leq \| \eta \|_0,
+                    \| R_h \eta \|_{\infty,h} \leq \| \eta \|_0,
                 \end{equation*}
                 where $\| \eta \|_0$ is the supremum norm. Finally, we use that $\mathcal A$ is a continuous bijection, and thus from the open mapping theorem it holds that $\|\mathcal A^{-1}\|$ is bounded by some constant $C_2$. Using this fact, the previous estimate becomes 
                 \begin{equation*}
-                \| \mat A_h^{-1} \vec f_h \|_{\infty,h} \leq Ch^k + \| \mathcal A f \|_0 \leq C h^k + C_2 \| \vec f_h \|_0<\infty,
+                    \| \mat A_h^{-1} \vec f_h \|_{\infty,h} \leq Ch^k + \| \mathcal A f \|_0 \leq C h^k + C_2 \| \vec f_h \|_0<\infty,
                 \end{equation*}
                 which in particular shows that $ \| \mat A_h^{-1} \vec f_h \|$ is bounded for all $\vec f_h$. The uniform boundedness principle then yields that the operator $\mat A_h^{-1}$ is bounded, which concludes the proof.
         \end{itemize}
@@ -210,7 +211,7 @@ which will allow us to define convergence.
 \subsection{Stability of the discrete Laplacian in 1D}
 Let us now study the stability of the discretized Laplacian operator in 1D, $-\Delta u = -u''$, over the interval $[a,b]$ with $a<b$ and homogeneous boundary conditions $u_h(x_1) = u_h(x_N) = 0$. Consider $\Omega_h = \{x_i\}_{i=1}^N$ a grid of $[a,b]$ with $N$ equispaced elements, where $x_1=a$ and $x_{N-1}=b$, and mesh size $h=(b-a)/N$. Recall that the numerical second derivative can be approximated by the three-point approximation derived above, which for a given interior point is given by
 \begin{equation}
--u_h''(x_i) = -\left(\frac{u_h(x_{i-1}) - 2u_h(x_i) + u_h(x_{i+1})}{h^2}\right) = \frac{1}{h^2}(-u_h(x_{i-1}) + 2u_h(x_i) - u_h(x_{i+1})).
+    -u_h''(x_i) =  \frac{1}{h^2}(-u_h(x_{i-1}) + 2u_h(x_i) - u_h(x_{i+1})).
 \end{equation}
 We note that in our discretized system we do not need to solve for $u_h(x_1)=u_h(x_N)=0$ because of the boundary condition. This implies that the derivative at $x_2$ and $x_{N-1}$ is
 \begin{tightalign*}
@@ -241,8 +242,8 @@ We can apply this principle to show that $A_h$ is stable.
     Let $\Omega$ be a domain with boundary $\Gamma$, and $A_h$ the finite difference operator associated to the problem
     \begin{equation}
         \begin{aligned}
-            -\Delta u &= f & \tin \Omega, \\
-            u &= g & \ton \Gamma.
+            -\Delta u &= f && \tin \Omega, \\
+            u &= g && \ton \Gamma.
         \end{aligned}
     \end{equation}
     Then, if $A_h u_h = f_h$ in $\Omega_h$ and $u_h = g_h$ in $\Gamma_h$, it holds that
@@ -263,14 +264,14 @@ We can apply this principle to show that $A_h$ is stable.
     \end{proof}
 \end{theorem}
 
-\section{Unavoidable nonlinearities}
+\section{Unavoidable nonlinearities}\label{sec:fd-nonlinearities}
 Sometimes, specially in stationary models, we cannot avoid having to solve a nonlinear problem. Two common ways to obtain an approximate solution to a nonlinear problem are 1) fixed point methods (usually of first order), and 2) Newton-Raphson methods. To analyze them, consider the domain $\Omega=(a,b)$ and the example problem
 \begin{equation}
-    \begin{cases}
+    \begin{aligned}
         -u'' + \sin(u) &= 0\\
         u(a) &= u^a\\
         u(b) &= u^b.
-    \end{cases}
+    \end{aligned}
 \end{equation}
 As usual, we set a discrete grid of $N$ equispaced interior points $a=x_1<\cdots<x_N=b$. Thus, at each non-boundary node $x_i$ we have the equation
 \begin{equation}
@@ -349,23 +350,23 @@ Let us analyze both methods for solving this problem.
         \vec u_h^{k+1} &= \vec{u}^k_h + \vec{\delta u}_h^{k+1}.
     \end{tightalign*}
 \end{enumerate}
-Both fixed point and Newton-Raphson methods are commonly used strategies, and in general there is no universally better choice. We study nonlinear problems more thoroughly in Chapter~\ref{chapter:nonlinear}.
+Both fixed point and Newton-Raphson methods are commonly used strategies, and in general there is no universally better choice. We study these nonlinear methods more thoroughly in Chapter~\ref{chapter:nonlinear}.
 
-\section{Finite differences in 2D and 3D}
+\section{Finite differences in 2D and 3D}\label{sec:fd-high-dimensions}
 In this section we hint on how to address numerically higher dimensional problems, and also how to include time. The stability of such schemes will be studied further ahead with the von Neumann stability analysis. In typical 1D examples, one has a domain $(a,b)$ and an associated grid given by some points $\{x_i\}_i^N$ such that each index $i$ corresponds to an order of the domain, and thus naturally a finite difference operator is going to involve something like $i$ and its neighbors. This scenario would be different if, for example, one had a random ordering of the grid points such as
-    \begin{equation*}
-        x_0 = a,\; x_7 = a + h,\; x_{12} = a + 2h,\; \hdots, x_N = b,
-    \end{equation*}
+\begin{equation*}
+    x_0 = a,\; x_7 = a + h,\; x_{12} = a + 2h,\; \hdots, x_N = b,
+\end{equation*}
 so that in such a grid, a forward difference with respect to the point $x_0$ would be given by
-    \begin{equation*}
-        D^+f(x_0) = \frac 1 h \left( f^7 - f^0 \right).
-    \end{equation*}
+\begin{equation*}
+    D^+f(x_0) = \frac 1 h \left( f^7 - f^0 \right).
+\end{equation*}
 Although this is an unnatural way to do things in 1D, it is the natural scenario arising in higher dimensions. For this, and for the sake of simplicity, we will restrict the presentation to meshes given by tensor products of intervals, i.e. $\Omega = (a_x, b_x) \times (a_y, b_y)$ in 2D and $\Omega = (a_x, b_x) \times (a_y, b_y) \times (a_z, b_z)$ in 3D. The main difficulty will be that of creating an ordering of the degrees of freedom.
 
 Let us now consider the 2D case. Consider $\Omega = (a_x, b_x) \times (a_y, b_y)$ and an equispaced discrete grid $\Omega_h$ with $ a_x = x_0, \hdots, x_{N_x-1} = b_x$ and $a_y = y_0, \hdots, b_y = y_{N_y-1}$, where $N_x$ and $N_y$ are number of points in each subdomain. Then, each grid point will be given by     
-    \begin{equation}
-        \vec X_{ij} \coloneqq (x_i, y_j) \qquad \forall i,j \in \{0,\hdots, N_x-1\}\times \{0,\hdots, N_y-1\},
-    \end{equation}
+\begin{equation}
+    \vec X_{ij} \coloneqq (x_i, y_j) \qquad \forall i,j \in \{0,\hdots, N_x-1\}\times \{0,\hdots, N_y-1\},
+\end{equation}
 and analogously we can define a (matrix) grid function associated to some continuous function $f:\Omega\to \R$ as 
 \begin{equation*}
     \vec f^{ij} \coloneqq f(\vec X_{ij}) = f(x_i, y_j) \in \R^{N_x}\times \R^{N_y}
@@ -382,37 +383,37 @@ and so we can uniquely define the 1D vector $\vec f^I$ as the vector of all grid
 \begin{equation*}
     \vec f^I \coloneqq \vec f^{i(I)j(I)} = f(\vec X_{i(I)j(I)}) \in \R^{N_x N_y}.
 \end{equation*}
-For example, if one has a grid with $N_x=3$ and $N_y=2$, then the forward and inverse index maps are as follows:
-    \begin{table}[ht!]
+For example, if one has a grid with $N_x=3$ and $N_y=2$, then the forward and inverse index maps are given as in Table 2.1.
+\begin{table}[ht!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
         \centering
-        \begin{subfigure}{0.45\textwidth}
-            \centering
-        \begin{tabular}{c c | c}
-            \toprule $i$ & $j$ & $I(i,j)$ \\ \midrule
-            0 & 0 & 0 \\
-            1 & 0 & 1 \\
-            2 & 0 & 2 \\
-            0 & 1 & 3 \\
-            1 & 1 & 4 \\
-            2 & 1 & 5 \\ \bottomrule
-        \end{tabular}
-        \caption{Forward map}
-        \end{subfigure}
-        \begin{subfigure}{0.45\textwidth}
-            \centering
-        \begin{tabular}{c | c c}
-            \toprule $I$ & $i(I)$ & $j(I)$ \\ \midrule
-            0 & 0 & 0 \\
-            1 & 1 & 0 \\
-            2 & 2 & 0 \\
-            3 & 0 & 1 \\
-            4 & 1 & 1 \\
-            5 & 2 & 1 \\ \bottomrule
-        \end{tabular}
-        \caption{Backward map}
-        \end{subfigure}
-        \caption{Forward and inverse index maps for a 2D example.}
-    \end{table}
+    \begin{tabular}{c c | c}
+        \toprule $i$ & $j$ & $I(i,j)$ \\ \midrule
+        0 & 0 & 0 \\
+        1 & 0 & 1 \\
+        2 & 0 & 2 \\
+        0 & 1 & 3 \\
+        1 & 1 & 4 \\
+        2 & 1 & 5 \\ \bottomrule
+    \end{tabular}
+    \caption{Forward map}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+    \begin{tabular}{c | c c}
+        \toprule $I$ & $i(I)$ & $j(I)$ \\ \midrule
+        0 & 0 & 0 \\
+        1 & 1 & 0 \\
+        2 & 2 & 0 \\
+        3 & 0 & 1 \\
+        4 & 1 & 1 \\
+        5 & 2 & 1 \\ \bottomrule
+    \end{tabular}
+    \caption{Backward map}
+    \end{subfigure}
+    \caption{Forward and inverse index maps for a 2D example.}
+\end{table}
 
 Using these maps, we define a forward difference in $x$ and $y$ directions as $D^+_x f(\vec X)$ and $D^+_y f(\vec X)$ and note that they are given by
 \begin{tightalign*}
@@ -421,15 +422,15 @@ Using these maps, we define a forward difference in $x$ and $y$ directions as $D
 \end{tightalign*}
 where we have used a slight abuse of notation by denoting both the 2D vector and 1D vectors as $\vec f^{ij}$ and $\vec f^I$ respectively. Further, the second derivative operators can be defined as 
 \begin{tightalign*}
-    D_{xx} f(\vec X_{ij}) &= \frac{-1}{h_x^2} \left( -\vec f^{(i+1)j} + 2\vec f^{ij} - \vec f^{(i-1)j}\right) = \frac{-1}{h_x^2} \left( -\vec f^{I(i+1,j)} + 2\vec f^{I(i,j)} - \vec f^{I(i-1,j)}\right) = A_h f(\vec X_{ij}), \\
-    D_{yy} f(\vec X_{ij}) &= \frac{-1}{h_y^2} \left( -\vec f^{i(j+1)} + 2\vec f^{ij} - \vec f^{i(j-1)}\right) = \frac{-1}{h_y^2} \left( -\vec f^{I(i,j+1)} + 2\vec f^{I(i,j)} - \vec f^{I(i,j-1)}\right) = f(\vec X_{ij})A_h^\top,
+    D_{xx} f(\vec X_{ij}) &= \frac{1}{h_x^2} \left( -\vec f^{(i+1)j} + 2\vec f^{ij} - \vec f^{(i-1)j}\right) = \frac{-1}{h_x^2} \left(\vec f^{I(i+1,j)} - 2\vec f^{I(i,j)} + \vec f^{I(i-1,j)}\right) = A_h f(\vec X_{ij}), \\
+    D_{yy} f(\vec X_{ij}) &= \frac{1}{h_y^2} \left( -\vec f^{i(j+1)} + 2\vec f^{ij} - \vec f^{i(j-1)}\right) = \frac{1}{h_y^2} \left( \vec f^{I(i,j+1)} - 2\vec f^{I(i,j)} + \vec f^{I(i,j-1)}\right) = f(\vec X_{ij})A_h^\top,
 \end{tightalign*}
 where $A_h$ is the discrete second derivative matrix. Let us now apply this for the Laplace equation with zero boundary conditions, that is,
 \begin{equation}
-\begin{aligned}
-    -\Delta u &= f & \tin \Omega, \\
-    u &= 0 & \ton \partial\Omega.
-\end{aligned}
+    \begin{aligned}
+        -\Delta u &= f && \tin \Omega, \\
+        u &= 0 && \ton \partial\Omega.
+    \end{aligned}
 \end{equation}
 Here, the corresponding discrete equation is
 \begin{equation}
@@ -493,31 +494,33 @@ Now, we take the 1D vector form of the discrete Laplace equation and invoke the 
 Thus, our new operator is now $D^2_h = A_h\otimes I + I\otimes A_h$, and then the discrete Laplace equation is reduced to the linear system $D^2_h \vec u^I = \vec f^I$, where $D^2_h$ is sparse by construction. We can use the same methods as before to prove the stability of the scheme.  
 
 \section{Time discretization}\label{sec:fd-time-discretization}
-Time discretization is an enormous topic, so here we provide simple strategies and ways to think about them. We will dedicate an entire section to their analysis using the von Neumann stability analysis. We consider a more general setting with Bochner spaces in~\ref{chapter:dependent}. Consider a differential operator $\mathcal L$ and its associated discrete matrix $\mat L_h$ which includes the problems boundary conditions. The continuous differential equation, for some initial condition $x(0) = x_0$, is given by 
+Time discretization is an enormous topic, so here we provide simple strategies and ways to think about them. We will dedicate an entire section to their analysis using the von Neumann stability analysis. We consider a more general setting with Bochner spaces in~\ref{chapter:dependent}. 
+
+Consider a differential operator $A$ and its associated discrete matrix $\mat A_h$ which includes the problems boundary conditions. The continuous differential equation, for some initial condition $x(0) = x_0$, is given by 
 \begin{equation}
-    \dot x + \mathcal L x = f,
+    \dot x + A x = f,
 \end{equation}
 which we can discretize in space to obtain the system of differential equations
 \begin{equation}
-    \dot x_h + \mat L_h \vec x_h = \vec f_h.
+    \dot x_h + \mat A_h \vec x_h = \vec f_h.
 \end{equation}
 Instead of considering a Taylor approximation of the time derivative, we will use a quadrature rule to obtain different strategies. For this, integrating in the interval $(t^n, t^{n+1})$ and using the notation $\vec x(t^n) \approx \vec x^{n}$, yields
 \begin{equation}
-    \vec x^{n+1} - \vec x^n + \int_{t^n}^{t^{n+1}} \mat L_h \vec x_h(s) \,ds = \int_{t^n}^{t^{n+1}} \vec f_h(s)\,ds.
+    \vec x^{n+1} - \vec x^n + \int_{t^n}^{t^{n+1}} \mat A_h \vec x_h(s) \,ds = \int_{t^n}^{t^{n+1}} \vec f_h(s)\,ds.
 \end{equation}
 We present three different schemes depending on three different quadrature rules: 
 \begin{itemize}
     \item Left-sided rule (Explicit):
         \begin{equation}
-            \int \mat L_h \vec x_h(s)\,ds \approx \Delta t \mat L_h\vec x_h^n.
+            \int \mat A_h \vec x_h(s)\,ds \approx \Delta t \mat A_h\vec x_h^n.
         \end{equation}
     \item Right-sided rule (Implicit): 
         \begin{equation}
-            \int \mat L_h \vec x_h(s)\,ds \approx \Delta t\mat L_h\vec x_h^{n+1}.
+            \int \mat A_h \vec x_h(s)\,ds \approx \Delta t\mat A_h\vec x_h^{n+1}.
         \end{equation}
     \item Trapezoidal rule (Mid-point): 
         \begin{equation}
-            \int \mat L_h \vec x_h(s)\,ds \approx \frac{\Delta t}{2}\left(\mat L_h\vec x_h^{n+1}+ \mat L_h \vec x_h^n\right).
+            \int \mat A_h \vec x_h(s)\,ds \approx \frac{\Delta t}{2}\left(\mat A_h\vec x_h^{n+1}+ \mat A_h \vec x_h^n\right).
         \end{equation}
     \end{itemize}
     The commonly acknowledged relevant points here are: 
@@ -528,7 +531,7 @@ We present three different schemes depending on three different quadrature rules
     \end{itemize}
 A natural generalization of these three schemes is the $\theta$-method, which for a fixed parameter $\theta\in[0,1]$, results in the quadrature rule
 \begin{equation}
-    \int \mat L_h \vec x_h(s)\,ds \approx \theta\Delta t \mat L_h\vec x_h^{n+1} + (1-\theta)\Delta t \mat L_h \vec x_h^n.
+    \int \mat A_h \vec x_h(s)\,ds \approx \theta\Delta t \mat A_h\vec x_h^{n+1} + (1-\theta)\Delta t \mat A_h \vec x_h^n.
 \end{equation}
 We note that $\theta=1$ corresponds to the explicit scheme, $\theta=0$ to the implicit scheme, and $\theta=1/2$ to the mid-point scheme. 
     
@@ -539,7 +542,7 @@ For this analysis, we will use the Fourier transform, which is comfortable for t
 
 \begin{definition}[Fourier transform]\label{def:fourier-transform}
     Let $v\in L^2(\Omega)$. Then, its Fourier transform $\mathcal{F}(v)  \coloneqq  \hat{v}$ is defined as
-    \begin{equation}\label{def:fourier-transform}
+    \begin{equation}\label{eq:fourier-transform}
         \mathcal{F}(v)(\xi)  \coloneqq  \hat{v}(\xi) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty} v(x)e^{-i\xi x}dx,
     \end{equation}
     where $\xi$ is the frequency variable and $i=\sqrt{-1}$. This transform satisfies the Parseval identity:
@@ -608,17 +611,17 @@ which yields an upper bound for the time step $\Delta t$ to ensure stability of 
 \subsection{Time stability}
 We now look for stability estimates regarding also time. We first study a forward scheme 
 \begin{equation}
-    \begin{cases}
+    \begin{aligned}
         \displaystyle\frac{u^{n+1}-u^n}{\Delta t} &= cu^n\\
         u^0&= u_{h,0},
-    \end{cases}
+    \end{aligned}
 \end{equation}
 with $c\in \R$. We note that a result such as $\|u^{n+1}\|\leq c\|u^n\|$ for $c\leq 1$ results in $\|u_h\|_{\infty, h} \leq \|u^0\|_{\infty, h}$. This is indeed a stability result, so it will be common tu study equations in the form $u^{n+1} = g(u^n)$. Given that our theory works for linear operators, we will start by studying a simple first-order equation:
 \begin{equation}
-    \begin{cases}
+    \begin{aligned}
         u'+cu &= f\\
         u(0) &= u_0.
-    \end{cases}
+    \end{aligned}
 \end{equation}
 Now we look at the stability of forward and backward Euler and the $\theta$-method. 
 \begin{enumerate}
