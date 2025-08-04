@@ -1,4 +1,5 @@
-A common application of the numerical analysis of PDEs is continuum mechanics, which consists of a framework of modeling mechanics through collections of deformable bodies. In this section, we set the background space $\mathcal{E} = \R^3$ as the standard Euclidean space equipped with a fixed orthonormal basis $\{\vec e_1, \vec e_2, \vec e_3\}$ where $\vec e_i\cdot\vec e_j = \delta_{ij}$ is the Kronecker delta.
+A common application of the numerical analysis of PDEs is \emph{continuum mechanics}, which consists of a framework of modeling mechanics through collections of deformable bodies. In this section, we set the background space $\mathcal{E} = \R^3$ as the standard Euclidean space equipped with a fixed orthonormal basis $\{\vec e_1, \vec e_2, \vec e_3\}$ where $\vec e_i\cdot\vec e_j = \delta_{ij}$ is the Kronecker delta.
+
 \section{Kinematics and strain}\label{sec:kinematics-strain}
 \begin{definition}[Configuration]\label{def:configuration}
     We define the \emph{configuration} of a body $\Omega_t\subset \R^3$ as the physical space it occupies at time $t$. By convention, we set the reference (initial) time $t=0$, where the body occupies a known \emph{reference configuration} $\Omega_0$ with a known physical state, such as its velocity or physical boundary conditions. We assume $\Omega_0$ is a bounded, open and connected set.
@@ -632,7 +633,9 @@ We will further use this form to deduce \emph{physically consistent} constitutiv
     -\frac{1}{\theta}\vec q \cdot\vx\theta \geq 0.
 \end{equation}
 This inequality states that $\vec q$ is a vector whose direction indicates heat flux, and $\vx\theta$ indicates the direction of fastest temperature growth. Thus, since the inner product must be positive, and due to the minus sign, the vector $\vec q$ points from high temperature regions to low temperature regions.
-\section{Constitutive models} Let us go back to the linear momentum conservation, which is the time-dependent, vector-valued, possibly nonlinear partial differential equation 
+
+\section{Constitutive models}\label{sec:constitutive-models} 
+Let us go back to the linear momentum conservation, which is the time-dependent, vector-valued, possibly nonlinear partial differential equation 
 \begin{equation}
     \rho_0 \ddot{\vec u} = \vec f_0 + \vX \cdot(\tenF\ten S).
 \end{equation}
@@ -673,7 +676,7 @@ which we can differentiate easily to get the explicit equations. Another way of 
 \end{tightalign*}
 In the stationary case, there is no dependence on time, and thus it is not necessary to specify any initial conditions, but we do requiere boundary conditions on the displacement or the stress. Moreover, the solutions for the nonlinear $\ten S$ case may not be unique, but they are indeed unique in the linear case, where we can rewrite our problem in terms of an elliptic operator. We also note that the linear elastic model is an isotropic material model, and only depends on the two Lamé parameters $\lambda, \mu$. By contrast, linear materials with less symmetries on $\mathbb{C}$ requiere up to 21 parameters to fully describe their behavior. 
 
-To check for thermodynamical consistency, we need to evaluate whether the constitutive model actually satisfies the Clausius-Duhem inequality. To this end, Coleman and Noll described a procedure that gives us an explicit condition for tensor $\ten S$ as a function of the Helmholtz free energy. Recall the Clausius-Duhem inequality written in terms of the Helmholtz free energy $\psi = e - \theta\eta$: in the spatial frame, we have
+To check for thermodynamical consistency, we need to evaluate whether the constitutive model actually satisfies the Clausius-Duhem inequality. To this end, Coleman and Noll described a procedure that gives us an explicit condition for tensor $\ten S$ as a function of the Helmholtz free energy. Recall the Clausius-Duhem inequality in terms of the Helmholtz free energy $\psi = e - \theta\eta$: in the spatial frame, we have
 \begin{equation}
     -\rho\frac{D\psi}{Dt} - \rho\eta \frac{D\theta}{Dt} + \ten\sigma:\ten D - \frac{1}{\theta}\vx \theta\cdot\vec q \geq 0
 \end{equation}
@@ -846,4 +849,3 @@ This system can be analyzed through Brouwer's fixed-point theorem, as detailed i
 \end{theorem}
 
 Note that this is a only a special case of existence, and uniqueness is not ensured for the velocity field. There are some cases where we can prove uniqueness when the $\nu^{-2}\|\vec f\|_{H^{-1}(\Omega)}$ is small enough, but in general, the Navier-Stokes equations are known to be ill-posed, and thus it is not possible to prove existence and uniqueness of solutions in all cases.
-

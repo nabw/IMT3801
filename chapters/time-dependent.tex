@@ -1,11 +1,17 @@
-We now study time-dependent problems, where the solutions are functions $V\ni u:[0,T]\times \Omega\to \R$. In this section, we consider $A:V\to V'$ an elliptic operator, and follow the presentations from~\cite{thomee2007galerkin,quarteroni2008numerical}.
+Our analysis so far has focused on stationary problems. We now turn our attention to the more general case of time-dependent problems, where the solution $u(t,x)$ evolves over a time interval $[0,T]$. The inclusion of a time derivative fundamentally alters the nature of the governing equations, leading to a rich classification of physical behaviors. 
+
+This chapter introduces framework for analyzing such evolution problems. We begin by distinguishing between two primary classes of time-dependent systems based on their energy behavior: \emph{parabolic} systems, which are dissipative and model processes like heat diffusion, and \emph{hyperbolic} systems, which are conservative and describe wave propagation.
+
+To rigorously formulate these problems, we must extend our functional analysis toolkit to handle functions that map time to a function space. This leads naturally to the theory of \emph{Bochner spaces}, such as $L^2(0,T;V)$, which provide the proper setting for our analysis. With this machinery in place, we will establish the well-posedness of parabolic problems using the powerful \emph{Faedo-Galerkin method}. This constructive proof serves as the foundation for the numerical discretization strategy known as the \emph{method of lines}, where we first discretize in space to obtain a large system of ordinary differential equations, and then apply a subsequent time-stepping scheme to obtain a fully-discrete solution. This chapter follows the presentations from~\cite{thomee2007galerkin,quarteroni2008numerical}.
 
 \section{Parabolic and hyperbolic systems}\label{sec:parabolic-hyperbolic-systems}
+From now on, our time-dependent solutions are functions $V\ni u:[0,T]\times \Omega\to \R$. In this section, we consider $A:V\to V'$ an elliptic operator.
+
 \begin{definition}[Parabolic and hyperbolic generic operators]\label{def:parabolic-hyperbolic-operators}
     Let $\partial_t$ and $\partial_{tt}$ represent the first and second order time derivative operators, respectively. Then, we say that
     \begin{tightalign*}
-        \partial_t + A &\qquad \text{is parabolic,}\\
-        \partial_{tt} + A &\qquad \text{is hyperbolic.}
+        \partial_t + A &\quad \text{is parabolic,}\\
+        \partial_{tt} + A &\quad \text{is hyperbolic.}
     \end{tightalign*}
 \end{definition}
 The fundamental difference between parabolic and hyperbolic systems is the behaviour of their \emph{energy} $E(t)$. Let us formally derive this fact.
@@ -56,9 +62,9 @@ The fundamental difference between parabolic and hyperbolic systems is the behav
 Our generic, parabolic initial boundary value problem is given by
 \begin{equation}\label{eq:parabolic-IBVP}
     \begin{aligned}
-        \partial_t + Au &= f &&\quad \text{in }\Omega_T  \coloneqq  (0,T) \times \Omega\\
-        \hfill Bu &= g &&\quad \text{in }\Sigma_T  \coloneqq  (0,T) \times \partial\Omega\\
-        \hfill u(0,x)&= u_0(x) &&\quad \text{in }\Omega,
+        \partial_t + Au &= f &&\quad \tin\Omega_T  \coloneqq  (0,T) \times \Omega\\
+        \hfill Bu &= g &&\quad \tin\Sigma_T  \coloneqq  (0,T) \times \partial\Omega\\
+        \hfill u(0,x)&= u_0(x) &&\quad \tin\Omega,
     \end{aligned}
 \end{equation}
 with $f,g:\Omega_T\to \R$ and $u_0:\Omega\to\R$. We can analyze how to deal with the time dependence of our system by introducing the \emph{Bochner integral}.
@@ -66,7 +72,7 @@ with $f,g:\Omega_T\to \R$ and $u_0:\Omega\to\R$. We can analyze how to deal with
 \section{The Bochner integral}\label{sec:bochner}
 We seek to integrate functions $f:\R\to X$, where $X$ is a Banach space. To this end, we need to redefine our notion of simple functions. 
 \begin{definition}[Bochner integral]\label{def:bochner-integral}
-    We seek to integrate functions  We extend the notion of simple functions introduced in~\ref{def:simple-functions} as %!!!!
+    We seek to integrate functions  We extend the notion of simple functions introduced in~\ref{def:simple-functions} as
     \begin{equation}
         f^N(t) = \sum_{i=1}^N \lambda_i \phi_i(t),
     \end{equation}
@@ -120,9 +126,8 @@ We now state an embedding theorem for Bochner spaces.
     \end{equation}
     for any $s_1\geq 0$, $0\leq r_1 < r(1-s_1/s)$ and $0\leq \sigma_1 < \sigma$.
 \end{theorem}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Faedo-Galerkin and the method of lines}\label{sec:faedo-galerkin}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In this section we seek to generalize the error analysis we performed for stationary PDEs via Galerkin schemes. We will limit ourselves to analyzing the parabolic initial boundary value problem~\eqref{eq:parabolic-IBVP} with an elliptic operator, and in a finite interval in time, assuming that the Dirichlet condition is $g=0$ for simplicity.
 
 In a continuous setting, for $f\in L^2(\Omega_T)$ and $u_0\in L^2(\Omega)$, we seek a solution $u\in L^2(0,T;V)\cap C([0,T];V)$ such that 
@@ -403,5 +408,3 @@ Thus, we got the final bound for the fully-discrete problem
     \|\eta_h^M\| \leq \|\eta_h^0\| + C\Delta t \|\ddot u\|_{L^1(L^2)} + Ch \|\dot u\|_{L^1(L^2)}.
 \end{equation}
 Here, we can often take $\Delta t = h$, which allows us to control both terms linearly in $h$ and ensure the consistency of the method. Finally, due to the convergence rate of the Ritz projector we can immediately bound the norm of $\xi_h^n$, and thus we can conclude the convergence $\|e_h\|$ by summing the errors over $n$.
-
-

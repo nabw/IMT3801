@@ -1,27 +1,41 @@
+The theory of well-posedness for linear problems, centered on the Lax-Milgram lemma~\ref{lemma:lax-milgram}, provides a robust framework for proving existence and uniqueness of solutions. Its power lies in its direct application to any problem whose weak formulation can be expressed through a continuous and elliptic bilinear form $a(u,v)$. Many physical models, however, are inherently nonlinear, leading to equations where this linear structure is lost. Consider, for instance, a semilinear problem of the form
+\begin{equation}\label{eq:semilinear-example}
+    \begin{aligned}
+        -\Delta u + F(u) &= f &&\tin \Omega,  \\
+        u &= 0 && \ton \partial\Omega.
+    \end{aligned}
+\end{equation}
+Its weak formulation, $(\nabla u, \nabla v) + (F(u),v) = (f,v)$, results in a form $a(u;v)$ that depends nonlinearly on $u$, and consequently, the Lax-Milgram lemma is not applicable. Thus, we need a new set of tools to establish the well-posedness of such problems.
+
+This chapter introduces the foundational methods of nonlinear functional analysis. Unlike in the linear setting, there is no single, universally applicable theorem for existence and uniqueness. Instead, we will build a toolkit of three distinct and powerful approaches, each suited for a different class of nonlinear problems.
+
+We will begin with a \emph{local analysis} based on the inverse function theorem, which provides conditions for a unique solution to exist in a neighborhood of a known solution. We then move to more global methods founded on the \emph{fixed point theorems} of Banach, Brouwer, and Schauder, which provide existence results under assumptions of contractivity or compactness. Finally, we will explore the theory of \emph{monotone operators}, a nonlinear generalization of positive definite operators, and establish the Minty-Browder theorem, a cornerstone result that guarantees the existence of solutions for coercive and monotone operators.
+
 \section{Local analysis}\label{sec:local-analysis}
 Consider the set
-\[ \text{Inv}(X,Y) = \left\{ A\in \mathcal{L}(X,Y): A \text{ is invertible} \right\}. \]
+\[ \inv(X,Y) = \left\{ A\in \mathcal{L}(X,Y): A \text{ is invertible} \right\}. \]
 
 Then, we have the following local inversion result
 \begin{theorem}[Local invertibility]\label{thm:local-invertibility}
-    Consider $F\in C^1(X,Y)$, $F'(u^*)\in\text{Inv}(X,Y)$. Then, $F$ is locally invertible at $u^*$ with $F^{-1}\in C^1$. In fact,
+    Consider $F\in C^1(X,Y)$, $F'(u^*)\in\inv(X,Y)$. Then, $F$ is locally invertible at $u^*$ with $F^{-1}\in C^1$. In fact,
     \begin{equation}
         dF^{-1}(v) = (F'(u))^{-1}, \quad u=F^{-1}(v).
     \end{equation}
 \end{theorem}
 
 \example{
-    \begin{equation}
-        \left\{\begin{array}{rc}
-            -\Delta u + u^p  = h, &\Omega,\\
-            u=0, &\partial\Omega,
-        \end{array}\right.
-    \end{equation}
+    Consider the nonlinear problem 
+    \begin{equation*}
+        \begin{aligned}
+            \Delta u + u^p  &= h, &&\tin \Omega,\\
+            u&=0, &&\ton\partial\Omega,
+        \end{aligned}
+    \end{equation*}
     where $p>1$, $h\in H^{-1}(\Omega)$, so $F:X\to Y$ with $X\coloneqq H_0^1(\Omega)$ and $Y\coloneqq H^{-1}(\Omega)$. We compute
     \begin{equation}
         dF(u)[w] = -\Delta w + p u^{p-1} w.
     \end{equation}
-    We want to show that $dF(u)\in\text{Inv}(X,Y)$. That is, for a given $g\in Y$, we need to prove that there exists a $w\in X$ that solves
+    We want to show that $dF(u)\in\inv(X,Y)$. That is, for a given $g\in Y$, we need to prove that there exists a $w\in X$ that solves
     \begin{equation*}
         a(w,v) = (\nabla w, \nabla v) + p(u^{p-1}w,v) = \langle g,v \rangle \quad \forall v\in X.
     \end{equation*}
@@ -29,16 +43,17 @@ Then, we have the following local inversion result
     \begin{equation*}
         |(u^{p-1}w,v)|\leq \|u^{p-1} \|_{L^\infty} \|w\|_{0} \|v \|_{0}.
     \end{equation*}
-    Note that if $u\geq 0$, then $a$ is elliptic. Then, if $u\in X\cap L^\infty \cap \{u\geq 0\}$ we have that $dF(u)\in\text{Inv}(X,Y)$ and we can use Theorem~\ref{thm:local-invertibility}.
+    Note that if $u\geq 0$, then $a$ is elliptic. Then, if $u\in X\cap L^\infty \cap \{u\geq 0\}$ we have that $dF(u)\in\inv(X,Y)$ and we can use Theorem~\ref{thm:local-invertibility}.
 }
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Fixed point theorems}\label{sec:fixed-point-theorems}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The main idea is that certain nonlinearities would be less terrible if we could fix one of the functions. For example, consider the problem of finding a function $u$ such that
 \begin{equation}
     \begin{aligned}
-        -\Delta u &= \sin (u) &&\qquad \text{in $\Omega$},  \\
-        u &= 0 && \qquad \text{on $\partial\Omega$}.
+        -\Delta u &= \sin (u) &&\tin \Omega,  \\
+        u &= 0 && \ton  \partial\Omega.
     \end{aligned}
 \end{equation}
 This problem is non-linear, but given $w$, finding $u$ such that
@@ -82,7 +97,7 @@ We note that if $X$ is compact, then this theorem can be extended to \emph{weak}
     Then, if $C<1$ there exists $\bar u$ such that $T(\bar u)= \bar u$. 
 }
 \begin{theorem}[Brouwer fixed point]\label{thm:brouwer-fixed-point}
-    Set $K$ a non-empty, compact and convex subset of a finite-dimensional Banach space. Then, every continuous $f:K\to K$ has a fixed point.
+    Set $K$ a non-empty, compact and convex subset of a finite-dimensional Banach space. Then, every continuous function $f:K\to K$ has a fixed point.
 \end{theorem}
 \example{
     Let's go back to~\eqref{eq:fixed-point-sin}, and consider its Galerkin scheme for some given $w_h$:
@@ -115,8 +130,8 @@ From the previous result we can extend to $h\to 0$ through compactness. This gen
     Consider again~\eqref{eq:fixed-point-sin}, with its induced Picard mapping $w \mapsto u\coloneqq T(w)$ given by 
     \begin{equation}
         \begin{aligned}
-            -\Delta u &= \sin(w) \text{ on }\Omega,\\
-            u&=0\text{ on }\partial\Omega,
+            -\Delta u &= \sin(w) && \tin \Omega,\\
+            u&=0 &&\ton \partial\Omega,
         \end{aligned}
     \end{equation}
     whose solution is guaranteed by Lax-Milgram's lemma, with $u$ in $H_0^1(\Omega)$. From the a priori bound $\|u||\leq\dfrac{1}{\alpha}\|f\|$ we get $\|u\|_1\leq C\|\sin(w)\|_0\leq C|\Omega|=:r_0$. Our candidate set will be $\mathcal C = \bar{B}(0,r_0)\subset L^2(\Omega)$ which is closed, convex and contained in both $L^2(\Omega)$ and $H_0^1(\Omega)$. To prove that $\overline{T(\mathcal C)}$ is compact, consider a sequence $(w_k)_{k>1}$ in $\mathcal C$, which yields $(v_k)_{k>1}=(T(w_k))_{k>1}$ in $\mathcal C$ and additionally $v_k\in H_0^1(\Omega)$ for all $k$. Now, we note that we have a sequence in $H^1$, and as the unit ball is weakly compact, we obtain that is has some weakly convergent sequence in $H^1$. The final detail is that, if we consider $\mathcal C$ to be a ball in $L^2$, then the mapping $T$ can be written additionally as $T\circ i$, where $i:L^2(\Omega)\to H^1(\Omega)$ is the compact embedding of $H^1$ into $L^2$. We thus have that $T\circ i$ is the composition of a continuous and a compact mapping, and thus a compact map. This in particular implies that our sequence $(v_k)$ has a strongly convergent subsequence in $L^2$. This concludes that $T:L^2(\Omega)\to L^2(\Omega)$ is compact, and thus we can use Schauder's fixed point theorem to show the existence of a fixed point $\bar u = T(\bar u)$ in $L^2(\Omega)$. Naturally, the equation itself reveals that actually $\bar u$ belongs to $H_0^1(\Omega)$, so we have some additional regularity on the fixed point we just found.
@@ -131,6 +146,7 @@ A consequence of the Schauder fixed point theorem is the Schaefer fixed point th
 \end{theorem}
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Monotone operators}\label{sec:monotone}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Among nonlinear operators, there is a class of operators that provide efficient means to prove existence and uniqueness of solutions. These operators are called \emph{monotone}, and they have been extensively studied. We follow this section closely from~\cite{ciarlet2013linear}.
@@ -139,7 +155,7 @@ Among nonlinear operators, there is a class of operators that provide efficient 
     \begin{equation}
         \langle A(v)-A(u),v-u\rangle \geq 0 \qquad \forall u,v\in V,
     \end{equation}
-    and \emph{strictly monotone} if the previous inequality is strict for $u\neq v$.
+    and \emph{strictly monotone} if the inequality is strict for $u\neq v$.
 \end{definition}
 We note that if $f:X\to \R$ is a convex and differentiable function, then $\nabla f$ is a monotone operator. Indeed, from convexity applied to $x,y\in X$ and adding we get
 \begin{tightalign*}
@@ -226,7 +242,7 @@ This functional is GÃ¢teaux-differentiable, and we explicitly compute its the GÃ
 \end{tightalign*}
 and thus $d\Psi = -\Delta_p$. This operator is hemicontinuous: take $t\in \R$ and $u,v,w\in W_0^{1,p}(\Omega)$, and define $\varphi(t) = \langle A(u+tv),w\rangle$. With this, we have
 \begin{tightalign*}
-    |\varphi(t)-\varphi(0)| &= \left|\int_\Omega \left(|\nabla (u+tv)|^{p-2}\nabla (u+tv) - |\nabla u|^{p-2}\nabla u\right)\cdot \nabla w dx \right|\\
+    |\varphi(t)-&\varphi(0)| = \left|\int_\Omega \left(|\nabla (u+tv)|^{p-2}\nabla (u+tv) - |\nabla u|^{p-2}\nabla u\right)\cdot \nabla w dx \right|\\
     &= \left|\int_\Omega \left((|\nabla u + t\nabla v|^{p-2} - |\nabla u|^{p-2})\nabla u \cdot \nabla w + t|\nabla u + t\nabla v|^{p-2} \nabla v\cdot \nabla w \right) dx\right|\\
     &\leq \int_\Omega \left(|\nabla u + t\nabla v|^{p-2} - |\nabla u|^{p-2}\right)|\nabla u||\nabla w| dx + |t|\int_\Omega |\nabla u + t\nabla v|^{p-2}|\nabla v||\nabla w| dx,
 \end{tightalign*}
