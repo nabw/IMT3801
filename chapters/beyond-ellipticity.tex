@@ -41,11 +41,11 @@ To characterize the surjectivity of the operator, we use its topological dual.
         \end{equation}
         where $\ker(T')$ is the kernel of $T'$. Now, since $V = \im(T) = \ker(T')^\bot$, then, for each $v' \in \ker(T')$, it holds that $ \langle v', v\rangle = 0$ $\forall v \in V$, which means that $v' = 0$. Thus, $\ker(T') = \{0\}$, so $T'$ is injective.
 
-        For the proof in the other direction, we get from the closed range theorem~\ref{thm:closed-range-theorem} that also $\im(T)$ is closed. By contradiction, consider $v$in $V$ such that $v\not\in \im(T)$. By the Hahn-Banach extension corollary~\ref{cor:hahn-banach-extension} we get that there exists $f$ in $V'$ such that $f(\im(T)) = 0$ and $f(v)=1$\footnote{This is an improvement over Urysohn's Lemma, which yields only a possibly nonlinear function}. Then, $T'f$ is such that
+        For the proof in the other direction, we get from the closed range theorem~\ref{thm:closed-range-theorem} that also $\im(T)$ is closed. By contradiction, consider $v$in $V$ such that $v\not\in \im(T)$. By the Hahn-Banach extension corollary~\ref{cor:hahn-banach-extension} we get that there exists $f$ in $V'$ such that $f(\im(T)) = 0$ and $f(v)=1$\footnote{This is an improvement over Urysohn's Lemma, which yields only a possibly nonlinear function}. This implies that $\langle f, Tu\rangle_{V'\times V} = 0$ for all $u\in U$, and by taking transposes, we get 
         \begin{equation*}
-            \langle T'f', u\rangle = \langle f, Tu\rangle = u \qquad \forall u\in U.
+            0 = \langle f, Tu\rangle_{V'\times V} = \langle T'f, u\rangle_{V'\times V} \qquad \forall u\in U.
         \end{equation*}
-        This implies that $f=0$, which contradicts that $f(v)=1$. 
+        This implies that $T'f=0$, and since we assumed that $T'$ is injective, we have $f=0$, which contradicts $f(v)=1$. 
     \end{proof}
 \end{lemma}
 Combining both lemmas, we can write
@@ -169,7 +169,7 @@ which carries naturally to the discrete problem:
 \begin{equation}
     \alpha \|u_h\|_H \leq \|f\|_{H^*}\quad\text{ for }\quad a(u_h,v_h) = \langle f, v\rangle, \quad \forall v_h\in H_h.
 \end{equation}
-This can be rewritten as follows: denote the orthogonal projection $\Pi_h: H\to H^*$, and $R_H:H\to H^*$ the Riesz map. Then,
+This can be rewritten as follows: denote the orthogonal projection $\Pi_h: H\to H_h $, and $R_H:H\to H^*$ the Riesz map. Then,
 \begin{tightalign*}
     &a(u,v) = \langle f, v\rangle_{H^*\times H}\quad \forall v\in H,\\
     \iff &\langle Au, v\rangle_{H'\times H} = \langle f, v\rangle_{H'\times H}\quad \forall v\in H,\\
@@ -429,9 +429,9 @@ To grasp the relevance of this formulations, let's first see some examples:
 \end{itemize}
 
 Now that we know some examples of saddle points problems, a natural question is to ask for conditions for the existence and uniqueness of solutions. Fortunately, this has already been done and it's known as the \emph{Ladyzhenskaya-Babu\v{s}hka-Brezzi Theory}, typically denoted as LBB theory.
-\begin{theorem}
+\begin{theorem}\label{thm:mixed}
     Consider the problem
-    \begin{equation*}\label{mixed}
+    \begin{equation*}
         \begin{bmatrix}
             A & B^{T}\\ 
             B & 0
@@ -449,7 +449,7 @@ Now that we know some examples of saddle points problems, a natural question is 
         \item $\Pi A\colon V\to V$ is a bijection;
         \item the bilinear form $b$ (associated to $B$) satisfies the inf-sup condition with constant $\beta$.
     \end{itemize}
-    Then, for each $(f,g)$ in $H'\times Q'$ there exists a unique pair $(u,p)\in H\times Q$ such that Theorem~\eqref{mixed} holds. Moreover, there is a positive constant $C=C(\|A\|, \| (\Pi A)^{-1}\|, \beta)$ such that
+    Then, for each $(f,g)$ in $H'\times Q'$ there exists a unique pair $(u,p)\in H\times Q$ such that Theorem~\ref{thm:mixed} holds. Moreover, there is a positive constant $C=C(\|A\|, \| (\Pi A)^{-1}\|, \beta)$ such that
     \begin{equation*}
         \| (u,p) \| \le C \left( \|f\| + \|g\| \right) 
     \end{equation*}
@@ -526,7 +526,7 @@ The previous theory can be used in this context unchanged, with only some mild c
     V_h = \ker B_h = \{v_h \in H_h: b(v_h, q_h) = 0 \quad\forall q_h \in Q_h\}.
 \end{equation}
 \begin{theorem}\label{thm:uniqueness-mixed} 
-    Consider the orthogonal projection $\Pi_h: H_h \to Q_h$. Then, if 
+    Consider the orthogonal projection $\Pi_h: H_h \to V_h$. Then, if 
     \begin{itemize}
         \item The operator $\Pi_h A_h|_{V_h}: V_h\to V_h$ is injective (or surjective), and
         \item the bilinear form $b:H_h\times Q_h\to \R$ satisfies and inf-sup condition, then
