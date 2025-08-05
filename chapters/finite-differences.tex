@@ -2,7 +2,7 @@ The most direct path to solving a differential equation numerically is to approx
 
 In this chapter, we will formalize the concepts of \emph{consistency}, \emph{stability} and \emph{convergence}, and establish their connection through the \emph{Lax equivalence theorem}, which states that for a consistent scheme, stability is equivalent to convergence. We will begin by deriving first and second-order difference operators in one dimension and analyzing their convergence properties. We will then extend these ideas to higher-dimensional problems on structured grids and introduce the essential techniques for handling time-dependent equations.
 
-This section has been partly extracted from some notes from the WIAS in Berlin. They didn't have any authorship, so I don't really know who to thank for them. At the time of writing these notes, they can be found in \href{https://www.wias-berlin.de/people/john/LEHRE/NUMERIK\_IV\_21\_22/num\_konv\_dom\_prob\_3.pdf}{this website}.
+This section has been partly extracted from some notes from the WIAS in Berlin. At the time of writing these notes, the original document did not list an author, and we gratefully acknowledge the unknown contributor. The notes can be found in \href{https://www.wias-berlin.de/people/john/LEHRE/NUMERIK\_IV\_21\_22/num\_konv\_dom\_prob\_3.pdf}{this website}.
 
 \section{First and second order discrete derivatives}\label{sec:first-second-fd}
 Probably the simplest (and oldest) idea for approximating equations stems from the use of Taylor's theorem:
@@ -12,24 +12,27 @@ Probably the simplest (and oldest) idea for approximating equations stems from t
         f(b) = \sum_{k=0}^{n-1}\frac{f^{(k)}(a)}{k!}(b-a)^k + \frac{f^{(n)}(\xi)}{n!}(b-a)^n.
     \end{equation}
 \end{theorem}
-Naturally, this arises from the mean value theorem when $n=1$. From now on we consider our setting to be in $\R$. For any continuous function $f:(a,b)\to \R$, we can define its associated \emph{grid function} given by its evaluation in a finite set of points. We sometimes refer to this as \emph{collocation}. Set $a<b$, and define the points $a=x_1<\hdots<x_N=b$ with $h_i=x_{i}-x_{i-1}$, such that we have $N$ points, and define the grid function as the vector
+Naturally, this arises from the mean value theorem when $n=1$. From now on we consider our setting to be in $\R$. For any continuous function $f:(a,b)\to \R$, we can define its associated \emph{grid function} given by its evaluation in a finite set of points. We sometimes refer to this as \emph{collocation}. Set $a<b$, and define the points $a=x_1<\hdots<x_N=b$ with $h_i=x_{i}-x_{i-1}$, such that we have $N$ points, and define the grid operator $R_h$ and the grid function $R_h f$ as
 \begin{equation}\label{eq:def-grid-function}
-    R_hf = (f_1, \hdots, f_N) \coloneqq (f(x_1), \hdots, f(x_N)) \in \R^N,
+    \begin{aligned}
+        R_h:C((a,b),\R)&\to [\R^N\to \R^N]\\
+        f &\mapsto R_h f \coloneqq (f(x_1), \dots, f(x_N)).
+    \end{aligned}
 \end{equation}
-where we have defined the $R_h$ operator such that $R_h f:\R^N \to \R^N$ and $R_h:C((a,b),\R)\to [\R^N\to\R^N]$.  We can then define the following difference operators: 
+We can then define the following difference operators: 
 \begin{itemize}
     \item Forward difference: 
-        \begin{equation*}
+    \begin{equation*}
         D^+f(x_i) \coloneqq \frac{f_{i+1} - f_i}{h_{i+1}}
-        \end{equation*}
+    \end{equation*}
     \item Backward difference: 
-        \begin{equation*}
+    \begin{equation*}
         D^-f(x_i) \coloneqq \frac{f_{i} - f_{i-1}}{h_{i}}
-        \end{equation*}
+    \end{equation*}
     \item Centered difference:
-        \begin{equation*}
-        Df(x_i) \coloneqq \frac{f_{i+1} - f_{i-1}}{h_{i+1} - h_{i-1}}
-        \end{equation*}
+    \begin{equation*}
+        Df(x_i) \coloneqq \frac{f_{i+1} - f_{i-1}}{h_{i+1} + h_{i-1}}
+    \end{equation*}
 \end{itemize}
 A nice simple exercise is to extend these ideas to second order derivatives, which all stem from Taylor's formula. The application we will be interested is in that of approximating the action of a differential operator using these formulas. For this, we will focus on the forward difference formula. At each grid point we will have
 \begin{equation}
@@ -89,14 +92,14 @@ We can easily derive the order of convergence for sufficiently smooth functions.
 \begin{equation*}
     f(x+ h) = f(x) + f'(x)h + O(h^2),
 \end{equation*}
-from which we readily obtain that $| D^+f(x) - f'(x) | = O(h)$, so that forward differences and also backward differences (through a straightforward calculation) converge pointwise linearly. However, it is noteworthy that although centered differences also start converging linearly, they become unstable for very small $h$, see Figure~\ref{fig:fd_convergence}. Indeed we can do the same for centered differences. For this, we compute the third-order expansions
+from which we readily obtain that $| D^+f(x) - f'(x) | = O(h)$, so that forward differences and also backward differences (through a straightforward calculation) converge pointwise linearly. A better rate is obtained through centered differences, which converge pointwise quadratically. To justify this, we compute the third-order expansions
 \begin{tightalign*}
     f(x+h) &= f(x) + hf'(x) + \frac {h^2} 2 f''(x) + \mathcal O(h^3) \\
     f(x-h) &= f(x) - hf'(x) + \frac {h^2} 2 f''(x) + \mathcal O(h^3),
 \end{tightalign*}
-and by simply adding both equations, it can be shown that the finite difference formula computed converges linearly.
+and the conclusion follows from adding both equations. However, it is noteworthy that although the convergence is quadratic for large $h$, they become unstable for very small $h$, see Figure~\ref{fig:fd_convergence}.
 
-\paragraph{The empirical convergence rate} One issue that is always overviewed is the computation of an \emph{empirical} convergence rate, so we will write it here once and for all so that it is never an issue again. Assume that some error $\vec e_h$ converges to zero in some $X$ norm with rate $k$:
+\paragraph{The empirical convergence rate} One issue that is always overlooked is the computation of an \emph{empirical} convergence rate, so we will write it here once and for all so that it is never an issue again. Assume that some error $\vec e_h$ converges to zero in some $X$ norm with rate $k$:
 \begin{equation*}
     \|\vec e_h\|_X \leq C h^k.
 \end{equation*}
@@ -114,8 +117,8 @@ which yields the classical expression
 \end{equation}
 This is also referred to sometimes as the \emph{numerical convergence rate}. 
 
-\section{Stability and convergence analysis}\label{sec:fd-convergence-analysiss}
-We can now proceed to propose a mechanisms for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in the Lax equivalence theorem. We will first require other definitions, and we will assume that our differential operators are \emph{densely-defined}, a property that is studied more carefully in Section~\ref{chapter:sturm-liouville}.
+\section{Stability and convergence analysis}\label{sec:fd-convergence-analysis}
+We can now propose a mechanism for discretizing differential operators. A central question regards the capability of approximation that such an objects has, which finds its answer in the Lax equivalence theorem. We will first require other definitions, and we will assume that our differential operators are \emph{densely-defined}, a property that is studied more carefully in Section~\ref{chapter:sturm-liouville}.
 
 \begin{definition}[Consistency]
     Consider some differential operator $\mathcal A$ that is densely-defined. A discrete operator $\mat A_h$ in $\R^{N\times N}$ is said to be \emph{consistent} with $\mathcal A$ of order $k$ if for all sufficiently smooth functions it holds that
@@ -153,7 +156,7 @@ which will allow us to define convergence.
 \begin{theorem}[Lax equivalence theorem]\label{thm:lax-equivalence}
     Let $ \mat A_h \vec u_h = \vec f_h$ be the finite difference discretization for the problem $\mathcal A u = f$ as defined above. If $A_h$ is consistent, then stability and convergence are equivalent. 
     \begin{proof}
-        The stability to convergence part is taken directly from the aforementionted notes. The convergence to stability is instead partly inspired by the notes by Long Chen on abstract convergence analysis~\cite{chenLFDM}.
+        The stability to convergence part is taken directly from the aforementioned notes. The convergence to stability is instead partly inspired by the notes by Long Chen on abstract convergence analysis~\cite{chenLFDM}.
         \begin{itemize}
             \item Stability $\implies$ convergence: we bound the convergence error as
             \begin{tightalign*}
@@ -194,7 +197,7 @@ which will allow us to define convergence.
 This technique allows for a direct and rigorous computation of the convergence error and its rate. An important remark is that one must be careful with the choice of $u^{\text{ex}}$, since for a fixed discrete method, some $u^{\text{ex}}$ may be inherently easier or harder to approximate, leading to deceptively low or high numerical convergence errors, and incorrect rates. This may be a desirable effect when comparing methods, but it may not be desirable when one is analyzing a different error behavior, for instance with respect to the mesh size.
 
 \paragraph{Stability of the discrete Laplacian in 1D}
-Let us now study the stability of the discretized Laplacian operator in 1D, $-\Delta u = -u''$, over the interval $[a,b]$ with $a<b$ and homogeneous boundary conditions $u_h(x_1) = u_h(x_N) = 0$. Consider $\Omega_h = \{x_i\}_{i=1}^N$ a grid of $[a,b]$ with $N$ equispaced elements, where $x_1=a$ and $x_{N-1}=b$, and mesh size $h=(b-a)/N$. Recall that the numerical second derivative can be approximated by the three-point approximation derived above, which for a given interior point is given by
+Let us now study the stability of the discretized Laplacian operator in 1D, $-\Delta u = -u''$, over the interval $[a,b]$ with $a<b$ and homogeneous boundary conditions $u_h(x_1) = u_h(x_N) = 0$. Consider $\Omega_h = \{x_i\}_{i=1}^N$ a grid of $[a,b]$ with $N$ equispaced elements, where $x_1=a$ and $x_{N}=b$, and mesh size $h=(b-a)/N$. Recall that the numerical second derivative can be approximated by the three-point approximation derived above, which for a given interior point is given by
 \begin{equation}
     -u_h''(x_i) =  \frac{1}{h^2}(-u_h(x_{i-1}) + 2u_h(x_i) - u_h(x_{i+1})).
 \end{equation}
@@ -296,19 +299,19 @@ Let us analyze both methods for solving this problem.
     \end{equation*}
     We can write more compactly this gradient as
     \begin{equation*}
-        \nabla F(\vec u_h) = \mat A_h + \textbf{diag}(\cos(\vec u_h)),
+        \nabla F(\vec u_h) = \mat A_h + \bolddiag(\cos(\vec u_h)),
     \end{equation*}
     which allows us to write the tangent system as
     \begin{equation*}
-        \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} = -\left(\mat A_h \vec{u}^k + \textbf{diag}(\sin(\vec u^k))\right).
+        \left(\mat A_h + \bolddiag(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} = -\left(\mat A_h \vec{u}^k + \bolddiag(\sin(\vec u^k))\right).
     \end{equation*}
     \item \emph{Fixed point}: similarly to the time-dependent case, we can \emph{delay} the evaluation of a nonlinearity. We do this by choosing a starting point $\vec u^0$ and evaluating the nonlinear part in the previous iteration $\vec u^k$. This yields
     \begin{equation*}
-        -\nabla \vec u^{k+1} + \sin(\vec u^k) = 0.
+        -\Delta \vec u^{k+1} + \sin(\vec u^k) = 0.
     \end{equation*}
     Note that we can enforce this equality at the discrete level as well, i.e. 
     \begin{equation*}
-        -\nabla \vec u_h^{k+1} + \sin(\vec u_h^k) = 0,
+        -A_h \vec u_h^{k+1} + \sin(\vec u_h^k) = 0,
     \end{equation*}
     where $\vec u_h^k$ is the discrete vector $\vec u_h$ at the $k$-th iteration. In such cases, we can sometimes prove the convergence of the scheme. For that, we consider the discrete iterates $\vec u_h^k$ given by
     \begin{tightalign*}
@@ -323,15 +326,15 @@ Let us analyze both methods for solving this problem.
     \begin{tightalign*}
         \|\vec u_h^{k+1} - \vec u_h^{k}\|_{\infty, h} &\leq C\|\mat A_h (\vec u_h^{k+1} - \vec u_h^{k})\|_{\infty, h} \tag{Stability}\\
         &= C\|-(\sin(\vec u_h^k) - \sin(\vec u_h^{k-1}))\|_{\infty, h}\tag{Error equation}\\
-        &\leq C\|\vec u_h^{k+1} - \vec u_h^{k}\|_{\infty, h},\tag{$\sin$ is $1$-Lipschitz}
+        &\leq C\|\vec u_h^{k+1} - \vec u_h^{k}\|_{\infty, h}.\tag{$\sin$ is $1$-Lipschitz}
     \end{tightalign*}
-    thus the scheme is convergent if $C<1$. Otherwise, the scheme \emph{can converge}, but we have no theoretical guarantee from this analysis. Still, each fixed point iteration
+    Thus, as justified by the Banach fixed point theorem, which we will study in more detail in Section~\ref{sec:fixed-point-theorems}, the scheme is convergent if $C<1$, i.e. the iterative map is a \emph{contraction}. Otherwise, the scheme \emph{can converge}, but we have no theoretical guarantee from this analysis. Still, each fixed point iteration
     \begin{equation*}
         \mat A_h \vec u_h^{k+1} = - \sin(\vec u_h^k)
     \end{equation*}
     is much simpler than a Newton iteration
     \begin{tightalign*}
-        \left(\mat A_h + \textbf{diag}(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} &= -\left(\mat A_h \vec{u}^k + \sin(\vec u^k)\right)\\
+        \left(\mat A_h + \bolddiag(\cos(\vec u^k))\right)\vec{\delta u}^{k+1} &= -\left(\mat A_h \vec{u}^k + \sin(\vec u^k)\right)\\
         \vec u_h^{k+1} &= \vec{u}^k_h + \vec{\delta u}_h^{k+1}.
     \end{tightalign*}
 \end{enumerate}
@@ -496,17 +499,17 @@ Instead of considering a Taylor approximation of the time derivative, we will us
 We present three different schemes depending on three different quadrature rules: 
 \begin{itemize}
     \item Left-sided rule (Explicit):
-        \begin{equation}
-            \int \mat A_h \vec x_h(s)\,ds \approx \Delta t \mat A_h\vec x_h^n.
-        \end{equation}
+    \begin{equation}
+        \int_{t^n}^{t^{n+1}} \mat A_h \vec x_h(s)\,ds \approx \Delta t \mat A_h\vec x_h^n.
+    \end{equation}
     \item Right-sided rule (Implicit): 
-        \begin{equation}
-            \int \mat A_h \vec x_h(s)\,ds \approx \Delta t\mat A_h\vec x_h^{n+1}.
-        \end{equation}
+    \begin{equation}
+        \int_{t^n}^{t^{n+1}} \mat A_h \vec x_h(s)\,ds \approx \Delta t\mat A_h\vec x_h^{n+1}.
+    \end{equation}
     \item Trapezoidal rule (Mid-point): 
-        \begin{equation}
-            \int \mat A_h \vec x_h(s)\,ds \approx \frac{\Delta t}{2}\left(\mat A_h\vec x_h^{n+1}+ \mat A_h \vec x_h^n\right).
-        \end{equation}
+    \begin{equation}
+        \int_{t^n}^{t^{n+1}} \mat A_h \vec x_h(s)\,ds \approx \frac{\Delta t}{2}\left(\mat A_h\vec x_h^{n+1}+ \mat A_h \vec x_h^n\right).
+    \end{equation}
     \end{itemize}
     The commonly acknowledged relevant points here are: 
     \begin{itemize}
@@ -518,7 +521,7 @@ A natural generalization of these three schemes is the $\theta$-method, which fo
 \begin{equation}
     \int \mat A_h \vec x_h(s)\,ds \approx \theta\Delta t \mat A_h\vec x_h^{n+1} + (1-\theta)\Delta t \mat A_h \vec x_h^n.
 \end{equation}
-We note that $\theta=1$ corresponds to the explicit scheme, $\theta=0$ to the implicit scheme, and $\theta=1/2$ to the mid-point scheme. 
+We note that $\theta=0$ corresponds to the explicit scheme, $\theta=1$ to the implicit scheme, and $\theta=1/2$ to the mid-point scheme. 
     
 \paragraph{Von Neumann stability analysis}
 Energy methods for stability analysis can quickly become untractable, so in order to get easier bounds, we can perform this analysis after moving the equation to the frequency domain. This is the so-called \emph{von Neumann stability analysis}, which is a very powerful tool for analyzing the stability of finite difference schemes. The idea is to assume that the solution can be expressed as a Fourier series, and then analyze the growth of the Fourier modes over time.

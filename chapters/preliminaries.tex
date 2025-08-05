@@ -12,7 +12,7 @@ We begin by considering a set $V$ with infinitely many elements, and introduce s
 \begin{equation}\label{eq:linearity}
     \alpha u + \beta v \in V,\quad \forall u,v\in V, \; \alpha, \beta\in \mathbb{F},
 \end{equation}
-where $\mathbb{F}$ is a field. In our notes, we will always consider $\mathbb{F}=\R$, and thus the set $V$ equipped with property~\eqref{eq:linearity} is a \emph{real vector space}. It is clear here that properties from finite-dimensional vector spaces are not inherited to our infinite-dimensional setting, since we would have an infinite basis and infinitely many coordinates. 
+where $\mathbb{F}$ is a field. In our notes, we will always consider $\mathbb{F}=\R$, and thus the set $V$ equipped with property~\eqref{eq:linearity} is a \emph{real vector space}. It is clear here that properties from finite-dimensional vector spaces are not inherited to our infinite-dimensional setting, since we would have an infinite basis (e.g. a Hamel or Schauder basis) and infinitely many coordinates. 
 
 Another important structure is the \emph{topology}, which allow us to define concepts such as the interior, exterior and boundary of a set.
 \begin{definition}[Topology, open sets, closed sets, topological space] 
@@ -42,7 +42,6 @@ Using open sets, we can define the three important notions: \emph{neighborhood} 
     \begin{equation}
         \supp f \coloneqq \overline{\{x\in X: f(x)\neq 0\}}.
     \end{equation}
-
     The space of continuous functions $f:\R^n \to \R$ with compact support is denoted by $C_0(\R^n)$.
 \end{definition}
 \begin{definition}[Continuity]\label{def:continuity-topological}
@@ -61,7 +60,7 @@ Note that if $X=Y=\R$, then this definition is equivalent to the definition of a
 
 An important type of topological vector spaces are \emph{normed vector spaces}.
 \begin{definition}[Normed vector space]
-    A \emph{normed vector space} $(X,\|\cdot\|)$ is a vector space $X$ endowed with a \emph{norm}, which is a map $\|\cdot\|:X\to \R^+$ that for any $x,y\in X$ satisfies
+    A \emph{normed vector space} $(X,\|\cdot\|)$ is a vector space $X$ endowed with a \emph{norm}, which is a map $\|\cdot\|:X\to \R_{\geq 0}$ that for any $x,y\in X$ satisfies
     \begin{itemize}
         \item a scalar multiplication property $\|\alpha x\|=|\alpha|\|x\|$ for all $\alpha\in\R$,
         \item a triangle inequality $\|x+y\|\leq \|x\|+\|y\|$, and 
@@ -76,14 +75,14 @@ A norm will induce a topology by considering \emph{open balls}
 \end{equation}
 as the open sets, and it is easy to prove that a normed vector space is indeed a topological vector space. This norm structure allows us to calculate lengths (norms) of vectors, and also to induce a \emph{metric}.
 \begin{definition}[Metric and metric space]
-    A function $d:X\times X\to \R^+$ is a \emph{metric} on $X$ if for any $x,y,z\in X$, it satisfies
+    A function $d:X\times X\to \R_{\geq 0}$ is a \emph{metric} on $X$ if for any $x,y,z\in X$, it satisfies
     \begin{itemize}
         \item a symmetry property $d(x,y) = d(y,x)$ ,
         \item a triangle inequality $d(x,z) \leq d(x,y) + d(y,z)$,
         \item is non-negative, i.e. $d(x,x) \geq 0$, and
         \item $d(x,y) = 0 \iff x=y$.
     \end{itemize}
-    A \emph{metric space} $(X,d)$ is a set $X$ with a metric $d:X\times X\to \R^+$ on $X$. If $X$ is a normed vector space, then we define a \emph{metric induced by the norm} 
+    A \emph{metric space} $(X,d)$ is a set $X$ with a metric $d:X\times X\to \R_{\geq 0}$ on $X$. If $X$ is a normed vector space, then we define a \emph{metric induced by the norm} 
     \begin{equation}
         d(x,y) \coloneqq \|x-y\|,
     \end{equation}
@@ -91,7 +90,7 @@ as the open sets, and it is easy to prove that a normed vector space is indeed a
 \end{definition}
 A broad class of norms are the $p$-norms, which will be useful when dealing with $L^p$ spaces later on. 
 \begin{definition}[$p$-norm of a vector]
-    Let $x\in\Omega\subset\R^n$. For $1\leq p\leq \infty$, the \emph{$p$-norm} of $x$ is defined as 
+    Let $x\in\R^n$. For $1\leq p\leq \infty$, the \emph{$p$-norm} of $x$ is defined as 
     \begin{equation}
         \|x\|_p \coloneqq \left(\sum_{i=1}^n |x_i|^p\right)^{1/p},
     \end{equation}
@@ -120,9 +119,9 @@ Through the structure provided by the norm and the metric it induces, we can tal
     \end{itemize}
     An \emph{inner product space} $(X,(\cdot,\cdot))$ is a vector space $X$ with an inner product defined on $X$. Given an inner product $(\cdot,\cdot)$, there always exists a \emph{norm induced by the inner product} $\|x\|\coloneqq (x,x)^{1/2}$ and a \emph{metric induced by the inner product} $d(x,y)\coloneqq (x-y, x-y)^{1/2}$, and thus all inner product spaces are normed spaces and metric spaces. In the case that a norm $\|\cdot\|$ is induced by an inner product, we obtain three important properties: 
     \begin{enumerate}
-        \item the \emph{Cauchy-Schwarz inequality}, which states that for any $u,v$ in an inner product space, 
+        \item the \emph{Cauchy-Schwarz inequality}, which states that for any $x,y$ in an inner product space, 
             \begin{equation}
-                |(u, v)| \leq \|u\| \|v\|,
+                |(x, y)| \leq \|x\| \|y\|,
             \end{equation}
             where $\|\cdot\|$ is the induced norm,
         \item the \emph{parallelogram property}:
@@ -140,9 +139,9 @@ Through the structure provided by the norm and the metric it induces, we can tal
 \paragraph{Banach and Hilbert spaces}\label{sec:banach-hilbert-spaces}
 Throughout the entire manuscript, we will rely on \emph{Banach spaces}, \emph{Hilbert spaces}, and their dual spaces. Despite the existence of a flexible theory of Banach space formulations, we will mostly rely on Hilbert spaces because of their many nice properties. To define these spaces, we need to define \emph{completeness}.
 \begin{definition}[Completeness]
-    A metric space $(X,d)$ is \emph{complete} if all Cauchy sequences $\{x_n\}_{n\in\N}\subset X$ converge to a limit that is also in $X$, i.e.
+    A metric space $(X,d)$ is \emph{complete} if all Cauchy sequences $\{x_n\}_{n\in\N}\subset X$ converge to a limit $x$ that is also in $X$, i.e.
     \begin{equation}
-        \forall \epsilon > 0, \exists N\in\N, \forall n,m\geq N,\quad  d(x_n, x_m) < \epsilon,
+        \left(\forall \epsilon > 0, \exists N\in\N, \forall n,m\geq N,\quad  d(x_n, x_m) < \epsilon\right) \implies x_n \to x\in X.
     \end{equation}
 \end{definition}
 Completeness allows us to take limits in a safe and consistence manner, without having to worry about converging to points outside the space, e.g. having a space of continuous functions that contains a sequence whose limit is not continuous. 
@@ -153,7 +152,7 @@ Completeness allows us to take limits in a safe and consistence manner, without 
     We say that an inner product space $H$ is a \emph{Hilbert space} if it is complete with respect to the metric induced by the inner product.
 \end{definition}
 \begin{definition}[Linear operators]\label{def:linear-operator}
-    Given two Banach spaces $X$ and $Y$, we denote the set of continuous linear operators from $X$ to $Y$ as $\mathcal{L}(X,Y)$. Naturally, for a linear operator $T\in \mathcal{L}(X,Y)$, for $x_1,x_2\in X$ and $\alpha\in\R$, it holds that 
+    Given two Banach spaces $X$ and $Y$, we denote the set of continuous linear operators from $X$ to $Y$ as $\mathcal{L}(X,Y)$. The image of $x\in X$ under $T$ is $T(x)\in Y$, and often one just writes $Tx = T(x)$, as to resemble the notation from finite-dimensional linear operators, which are isomorphic to matrices. Naturally, for a linear operator $T\in \mathcal{L}(X,Y)$, for $x_1,x_2\in X$ and $\alpha\in\R$, it holds that 
     \begin{equation}
         T(x_1+\alpha x_2) = T(x_1) + \alpha T(x_2).
     \end{equation}
@@ -169,7 +168,7 @@ Completeness allows us to take limits in a safe and consistence manner, without 
     \begin{equation}
         \langle T^* f, x\rangle_{X',X} = \langle f, Tx\rangle_{Y',Y},
     \end{equation}
-    The \emph{bidual space} is the dual of the dual space, i.e. $X'' \coloneqq (X')'$. One can identify a part $X''$ through the evaluation operator $T_f = X'\mapsto \R$ in $X''$ defined as $T_f(L) \coloneqq L(f)$ for $L\in X'$. This immersion is always injective by the Hahn-Banach theorem~\ref{thm:hahn-banach}, but it is not necessarily surjective, and in the case that indeed $X''=X$ (i.e. $T_f$ is surjective), the space $X$ is said to be \emph{reflexive}. In reflexive spaces, bounded sequences always have weakly convergent subsequences. %! weak convergence
+    The \emph{bidual space} is the dual of the dual space, i.e. $X'' \coloneqq (X')'$. One can identify a part $X''$ through the evaluation operator $X''\ni T_f = X'\to \R$ defined as $T_f(L) \coloneqq L(f)$ for $L\in X'$. This immersion is always injective by the Hahn-Banach theorem~\ref{thm:hahn-banach}, but it is not necessarily surjective, and in the case that indeed $X''=X$ (i.e. $T_f$ is surjective), the space $X$ is said to be \emph{reflexive}. In reflexive spaces, bounded sequences always have weakly convergent subsequences. %! weak convergence
 \end{definition}
 \begin{definition}[Bounded operators and operator norm]\label{def:bounded-operator}
     An operator $T:X\to Y$ is \emph{bounded} if it maps bounded sets into bounded sets. When $X$ and $Y$ are normed spaces, (i) boundedness is equivalent to continuity, and thus $\mathcal{L}(X,Y)$ is the set of continuous, bounded linear operators, and (ii) for every bounded operator there exists a constant $M\geq 0$ such that $\|T(x)\|\leq M\|x\|$. The smallest constant $M$ is defined as the \emph{operator norm}
@@ -199,7 +198,7 @@ Let us now review some relevant properties:
     \end{itemize}
     \item Inner products are mostly used as projections. This means that, in the same way that we can orthogonalize a vector $x$ with respect to $y$, we can also do this in the Hilbert space setting analogously as 
     \begin{equation}\label{eq:projection-orthogonalization}
-        x_\perp \coloneqq x - (x, y)_H y.
+        x_\perp \coloneqq x - \frac{(x, y)_H}{(y, y)_H} y.
     \end{equation}
     It can be quickly verified that the function $x_\perp$ is indeed perpendicular to $y$ in the sense that $(x_\perp, y)_H=0$.
     \item The inner product yields the fantastic Riesz map, which is actually an isometry. This is given as follows: consider a Hilbert space $H$ with inner product $(\cdot, \cdot)_H$, then a Riesz map is an operator $R_H: H\mapsto H'$ such that for any $x,y$ in $H$ it holds that $\langle R_H(x), y\rangle_{H'\times H} = (x, y)_H$. Notably, $\|R_H(x)\|_{H'} = \| x \|_H$. 
@@ -240,7 +239,7 @@ Some common and simple examples: Helmholtz decomposition, zero average functions
     \end{equation*}
     and
     \begin{equation*}
-        h = f - c = f -  \frac{(f,1)_H}{(1,1)_H}f.
+        h = f - c = f -  \frac{(f,1)_H}{(1,1)_H}    .
     \end{equation*}\vspace{-10pt}
 }
 \paragraph{$L^p$ spaces}
@@ -300,7 +299,7 @@ The most important spaces for us are the Lebesgue spaces $L^p(\Omega;\R^n)$, whi
     \end{equation*}
     which can attain the value $+\infty$. To handle signed functions, we can repeat the above procedure to define non-positive simple functions $f_s^-$ and for any non-positive function $f^-$.
 
-    For an arbitrary signed function $f=f^+ + f^-$ with non-negative and non-positive parts 
+    For an arbitrary signed function $f=f^+ - f^-$ with non-negative and non-positive parts 
     \begin{equation*}
         f^+(x) = \begin{cases}
             f(x)& f(x)>0\\
@@ -319,7 +318,7 @@ The most important spaces for us are the Lebesgue spaces $L^p(\Omega;\R^n)$, whi
     \begin{equation*}
         \min\left\{\int_B f^+d\mu, \int_B f^- d\mu\right\}<\infty.
     \end{equation*}
-    In this case, we say that $f$ is \emph{Lebesgue integrable}. A direct consequence of this definition is that $f$ is Lebesgue integrable if and only if $|f|$ is Lebesgue integrable.
+    In this case, we say that $f$ is \emph{Lebesgue integrable}. A direct consequence of this definition is that $f$ is Lebesgue integrable if and only if $|f|=f^+ + f^-$ is Lebesgue integrable.
 \end{definition}
 \begin{definition}[$L^p$ space and norm]
     Let $(\Omega, \Sigma, \mu)$ be a measure space, and $1\leq p<\infty$. We define the \emph{Lebesgue space} $(L^p(\Omega,\mu), \|\cdot\|_p)$ as the set of measurable functions $f:\Omega\to \R$ such that $|f|^p$ is Lebesgue integrable, i.e. its $p$-norm is finite:
@@ -339,7 +338,7 @@ The most important spaces for us are the Lebesgue spaces $L^p(\Omega;\R^n)$, whi
         The proof uses the Minkowski inequality, Fatou's lemma and the properties of measures. For details, see~\cite[Theorem 3.11]{Rudin_2013}.
     \end{proof}
 \end{theorem}
-In $L^p$, one has to be careful with the interpretation of the metric $d_p$ induced by $\|\cdot\|_p$, since we may have two functions $f,g\in L^p$ that are equal almost everywhere, and the choice of the set of measure zero where $f\neq g$ could be arbitrary. This implies that, when regarding $L^p$ as a metric space, then the elements $f\in L^p$ are not functions, but \emph{equivalence classes} of functions, which is always ommited for the sake of simplicity, see~\cite[Remark 3.10]{Rudin_2013}.
+In $L^p$, one has to be careful with the interpretation of the metric $d_p$ induced by $\|\cdot\|_p$, since we may have two functions $f,g\in L^p$ that are equal almost everywhere, and the choice of the set of measure zero where $f\neq g$ could be arbitrary. This implies that, when regarding $L^p$ as a metric space, then the elements $f\in L^p$ are not functions, but \emph{equivalence classes} of functions, which is always omitted for the sake of simplicity, see~\cite[Remark 3.10]{Rudin_2013}.
 
 For $1\leq p\leq \infty$, we can prove that $\|\cdot\|_p$ is indeed a norm. There are three central inequalities that stem from these definitions, whose proofs we omit here since they are covered in standard real analysis courses. 
 \begin{theorem}[Minkowski inequality]
@@ -386,7 +385,7 @@ In the finite dimensional case, elements in a space $V$ and its topological dual
 \begin{theorem}[Riesz representation theorem]\label{thm:riesz-representation}
     Let $V$ be a Hilbert space with inner product $(\cdot,\cdot)$. For any $u\in V$, the map $f_u\coloneqq (u,\cdot):V\to \R$ is a continuous linear functional, i.e. $f_u\in V'$, and we have a mapping $V\to V'$ via $u\mapsto f_u=(u,\cdot)$. It holds that for any $f\in V'$ there exists a unique element $u\in V$ such that 
     \begin{equation}
-        (f,v) = (u,v)\quad \forall v\in V,
+        \langle f, v\rangle_{V'\times V} = (u,v)\quad \forall v\in V,
     \end{equation}
     where we identify $f=f_u$. Furthermore, $\|f\|_{V'} = \|u\|_V$, and thus $V$ and $V'$ are isometric.
 \end{theorem}
@@ -424,7 +423,7 @@ Now, let $T\in \mathcal{L}(U,V)$ be a continuous, bounded linear operator, where
 \end{equation*}
 is also a closed subspace. For a general Banach space $V$, we do not have the inner product structure, but we can use the duality pairing $\langle\cdot,\cdot\rangle:V'\times V\to \R$ to define an orthogonal complement for $S\subset V$, called the \emph{annhilator}, as 
 \begin{equation*}
-    S^\circ \coloneqq \{f\in V': \langle f, v\rangle,\forall v\in S\},
+    S^\circ \coloneqq \{f\in V': \langle f, v\rangle = 0,\forall v\in S\},
 \end{equation*}
 which is a closed subspace, and similarly, for $F\subset V'$, define
 \begin{equation*}
@@ -554,7 +553,7 @@ In order to show the equivalence between Fréchet and Gâteaux derivatives, we r
         \end{equation*}
         and 
         \begin{equation*}
-            h'(\theta) = \langle \psi, d_G F(\gamma(\theta))[u,v]\rangle \leq \underbrace{\|\psi\|}_{=1} \|d_G F(\gamma(\theta))\| \|u-v\|,
+            h'(\theta) = \langle \psi, d_G F(\gamma(\theta))[u-v]\rangle \leq \underbrace{\|\psi\|}_{=1} \|d_G F(\gamma(\theta))\| \|u-v\|,
         \end{equation*}
         where we used the Cauchy-Schwarz inequality followed by the continuity of $d_G F(\gamma(\theta))$. Taking $\sup$ over $\theta$ completes the proof. 
     \end{proof}
@@ -646,7 +645,7 @@ In calculus of variations $d^2 F(u)[h] = d^2 F(u)[h,h]$ is used for checking the
 \end{definition}
 
 \section{Tensors}\label{sec:tensors}
-\emph{Tensors} are the natural way to put into one consistent algebraic setting all indexed objects, by further considering them to be independent of the coordinate system being used. In the end we will have that scalars are 0-tensors, vectors are 1-tensors, matrices are 3-tensors and so on. In addition, it will be fundamental to extend common calculus derivatives to tensor functions, which is the second topic of this section. Tensors are object of deep study in both algebra and geometry communities, so to maintain the presentation under control (and within our knowledge), we will present everything in Euclidean space $\R^3$. Generalizations should be clear by context. 
+\emph{Tensors} are the natural way to put into one consistent algebraic setting all indexed objects, by further considering them to be independent of the coordinate system being used. In the end we will have that scalars are 0-tensors, vectors are 1-tensors, matrices are 2-tensors and so on. In addition, it will be fundamental to extend common calculus derivatives to tensor functions, which is the second topic of this section. Tensors are object of deep study in both algebra and geometry communities, so to maintain the presentation under control (and within our knowledge), we will present everything in Euclidean space $\R^3$. Generalizations should be clear by context. 
 
 In addition, we also mention that we will stick to the convention that scalars, vectors, and matrices are denoted with $a$, $\vec a$, and $\mat A$. Higher order tensors are sometimes denoted with $\mathcal A$ (3rd order) and $\mathbb A$ (4th order), but we will not use those too much. 
 
@@ -762,7 +761,7 @@ Now that we are equipped with tensor algebra and index notation, we need to adap
     \end{equation*}
     where $\frac{\partial\psi}{\partial\ten A}$ is a second-order tensor defined as the \emph{(tensor) derivative} of $\psi$ at $\ten A$. In some cases, $\psi$ can be differentiated directly in tensor form, but sometimes it is useful to differentiate it component-wise as 
     \begin{equation}
-        \left[\frac{\partial \phi}{\partial\ten A}\right]_{ij} = \frac{\partial\phi}{A_{ij}},
+        \left[\frac{\partial \phi}{\partial\ten A}\right]_{ij} = \frac{\partial\phi}{\partial A_{ij}},
     \end{equation}
     which may be written back in tensor form. 
 \end{definition}
@@ -791,7 +790,7 @@ Now that we are equipped with tensor algebra and index notation, we need to adap
     \end{equation}
     The \emph{divergence} of $\vec u$ is denoted by $\dive \vec u$ or $\nabla\cdot \vec u$, and is defined as the scalar field
     \begin{equation}\label{eq:def-div-vector}
-        \nabla\cdot\vec u = \frac{\partial u_j}{x_i}\vec e_j\cdot\vec e_i = \frac{\partial u_i}{\partial x_i} = \frac{\partial u_1}{\partial x_1} + \frac{\partial u_2}{\partial x_2} + \frac{\partial u_3}{\partial x_3}.
+        \nabla\cdot\vec u = \frac{\partial u_j}{\partial x_i}\vec e_j\cdot\vec e_i = \frac{\partial u_i}{\partial x_i} = \frac{\partial u_1}{\partial x_1} + \frac{\partial u_2}{\partial x_2} + \frac{\partial u_3}{\partial x_3}.
     \end{equation}
     From the above definitions, we can easily check that $\tr\nabla\vec u = \nabla \vec u : \ten I = \nabla\cdot\vec u$.  The \emph{curl} of $\vec u$ is denoted by $\curl\vec u$ or $\nabla\times\vec u$, and is defined as the vector field
     \begin{equation}\label{eq:def-curl-vector}
@@ -801,10 +800,10 @@ Now that we are equipped with tensor algebra and index notation, we need to adap
 \begin{definition}[Divergence of a tensor field]\label{def:div-tensor}
     The vector operator $\nabla$ dotted with any smooth, second-order tensor field $\ten A$ yields a vector field denoted by $\vec\dive \ten A$, where 
     \begin{equation}\label{eq:def-div-tensor}
-        \vec \dive \ten A = \frac{\partial A_{ij}}{x_j}\vec e_i,
+        \vec \dive \ten A = \frac{\partial A_{ij}}{\partial x_j}\vec e_i,
     \end{equation}
     that is, the divergence operator acts row-wise. We highlight that there is a mild ambiguity when reviewing literature from the mathematical or mechanical communities, where some authors define a column-wise divergence, which we denote by $\nabla\cdot\ten A$, defined as 
     \begin{equation}
-        \nabla\cdot\ten A = \frac{\partial A_{ij}}{x_i}\vec e_j
+        \nabla\cdot\ten A = \frac{\partial A_{ij}}{\partial x_i}\vec e_j
     \end{equation}
 \end{definition}

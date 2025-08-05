@@ -541,7 +541,7 @@ which further relates the interpolation results.
 \section{FEM implementation}\label{sec:finite-element-implementation}
 % 8.1.2 Ern & Guermond
 % C21-23 Federico
-Let us now illustrate how to efficiently approximate the solution a boundary value problem using the finite element method. Given $\Omega\subset \R^d$ with boundary $\overline{\partial \Omega} = \overline{\partial\Omega_D} \cup \overline{\partial\Omega_N}$, we define an approximating mesh  $\mathcal{T}_h = \{\Omega^e\}_{e=1}^{N_{el}}$ with $N_{el}$ elements and parameterized by $h$ the mesh size. With a mild abuse of notation, we can write the mesh describing the boundary $\partial\Omega$ as 
+Let us now illustrate how to efficiently approximate the solution a boundary value problem using the finite element method. Given $\Omega\subset \R^d$ with boundary $\overline{\partial \Omega} = \overline{\partial\Omega_D} \cup \overline{\partial\Omega_N}$, we define an approximating mesh  $\mathcal{T}_h = \{\Omega^e\}_{e=1}^{N_{el}}$ with $N_{el}$ elements and parameterized by the mesh size $h$. With a mild abuse of notation, we can write the mesh describing the boundary $\partial\Omega$ as 
 \begin{equation}
     \partial\mathcal{T}_h = \partial\mathcal{T}_h^D \cup\partial\mathcal{T}_h^N = \{\partial\Omega^e_D\}_{e=1}^{N_{el}^D} \cup \{\partial\Omega^e_N\}_{e=1}^{N_{el}^N}.
 \end{equation}

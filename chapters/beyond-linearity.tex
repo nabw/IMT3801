@@ -12,15 +12,17 @@ This chapter introduces the foundational methods of nonlinear functional analysi
 We will begin with a \emph{local analysis} based on the inverse function theorem, which provides conditions for a unique solution to exist in a neighborhood of a known solution. We then move to more global methods founded on the \emph{fixed point theorems} of Banach, Brouwer, and Schauder, which provide existence results under assumptions of contractivity or compactness. Finally, we will explore the theory of \emph{monotone operators}, a nonlinear generalization of positive definite operators, and establish the Minty-Browder theorem, a cornerstone result that guarantees the existence of solutions for coercive and monotone operators.
 
 \section{Local analysis}\label{sec:local-analysis}
-Consider the set
-\[ \inv(X,Y) = \left\{ A\in \mathcal{L}(X,Y): A \text{ is invertible} \right\}. \]
-
-Then, we have the following local inversion result
-\begin{theorem}[Local invertibility]\label{thm:local-invertibility}
-    Consider $F\in C^1(X,Y)$, $F'(u^*)\in\inv(X,Y)$. Then, $F$ is locally invertible at $u^*$ with $F^{-1}\in C^1$. In fact,
+Consider the set of \emph{invertible linear operators}
+\begin{equation}
+    \inv(X,Y) \coloneqq \left\{ A\in \mathcal{L}(X,Y): A \text{ is invertible} \right\}.
+\end{equation}
+For generic $C^1$ functions, we have a local inversion result, known as the \emph{inverse function theorem}.
+\begin{theorem}[Inverse function theorem]\label{thm:local-invertibility}
+    Consider $F\in C^1(X,Y)$, $F'(u^*)\in\inv(X,Y)$. Then, $F$ is \emph{locally invertible} at $u^*$, i.e.
     \begin{equation}
-        dF^{-1}(v) = (F'(u))^{-1}, \quad u=F^{-1}(v).
+        dF^{-1}(v) = (F'(u))^{-1}, \quad u=F^{-1}(v),
     \end{equation}
+    and $F^{-1}\in C^1$.
 \end{theorem}
 
 \example{
@@ -76,7 +78,7 @@ is linear on $u$. It also induces a mapping $w \mapsto T(w) = u$ such that, \emp
         \|x^{n+1}-x^n\| &\leq \lambda \|x^n-x^{n-1}\|\leq \underbrace{\dots}_\text{induction} \lambda^n\|x^1-x^0\|\\
         \Rightarrow  \| x^{n+m}-x^n\| &\leq \|x^{n+m}-x^{n+m-1}\|+ \cdots = \|x^{n+1}-x^n\|\\
         &\leq (\lambda ^{n+m-1}+\cdots+\lambda^n)\|x^1-x^0\|\\
-        &=\lambda^n\left(\displaystyle\sum_{j=0}^m\lambda^j\right)\|x^1-x^0\|\\
+        &=\lambda^n\left(\displaystyle\sum_{j=0}^{m-1}\lambda^j\right)\|x^1-x^0\|\\
         &\leq\lambda^n\left(\displaystyle\sum_{j=0}^\infty\lambda^j\right)\|x^1-x^0\|\\
         &=\lambda^n\dfrac{1}{1-\lambda}\|x^1-x^0\|
     \end{tightalign*}
@@ -86,7 +88,7 @@ is linear on $u$. It also induces a mapping $w \mapsto T(w) = u$ such that, \emp
 We note that if $X$ is compact, then this theorem can be extended to \emph{weak} contractions, i.e. $\|f(x)-f(y)\|< \|x-y\|$.\\
 
 \example{
-    Consider problem~\eqref{eq:fixed-point-sin}, where we note that the Lax-Milgram lemma~\eqref{lemma:lax-milgram} immediately yields the existence of a unique solution $u$ for each $w$. From the mean value theorem~\eqref{thm:mean-value-banach} one has that differentiable functions satisfy $f(x) - f(y) = f'(\xi)(x-y)$ for some $\xi$ in $(x,y)$. This in particular shows that $\sin$ is a Lipschitz function as $\sup_{\xi\in \R}\sin(\xi) = 1$. Using this fact we can compute the following for some given $w_1, w_2$:  
+    Consider problem~\eqref{eq:fixed-point-sin}, where we note that the Lax-Milgram lemma~\eqref{lemma:lax-milgram} immediately yields the existence of a unique solution $u$ for each $w$. From the mean value theorem~\eqref{thm:mean-value-banach} one has that differentiable functions satisfy $f(x) - f(y) = f'(\xi)(x-y)$ for some $\xi$ in $(x,y)$. This in particular shows that $\sin$ is a Lipschitz function as it is differentiable, with $\sin' = \cos$, and $\sup_{\xi\in \R}\cos(\xi) = 1$. Using this fact we can compute the following for some given $w_1, w_2$:  
     \begin{equation*}
         -\Delta(T(w_1)-T(w_2))= \sin(w_1)-\sin(w_2),
     \end{equation*} 
@@ -134,7 +136,7 @@ From the previous result we can extend to $h\to 0$ through compactness. This gen
             u&=0 &&\ton \partial\Omega,
         \end{aligned}
     \end{equation}
-    whose solution is guaranteed by Lax-Milgram's lemma, with $u$ in $H_0^1(\Omega)$. From the a priori bound $\|u||\leq\dfrac{1}{\alpha}\|f\|$ we get $\|u\|_1\leq C\|\sin(w)\|_0\leq C|\Omega|=:r_0$. Our candidate set will be $\mathcal C = \bar{B}(0,r_0)\subset L^2(\Omega)$ which is closed, convex and contained in both $L^2(\Omega)$ and $H_0^1(\Omega)$. To prove that $\overline{T(\mathcal C)}$ is compact, consider a sequence $(w_k)_{k>1}$ in $\mathcal C$, which yields $(v_k)_{k>1}=(T(w_k))_{k>1}$ in $\mathcal C$ and additionally $v_k\in H_0^1(\Omega)$ for all $k$. Now, we note that we have a sequence in $H^1$, and as the unit ball is weakly compact, we obtain that is has some weakly convergent sequence in $H^1$. The final detail is that, if we consider $\mathcal C$ to be a ball in $L^2$, then the mapping $T$ can be written additionally as $T\circ i$, where $i:L^2(\Omega)\to H^1(\Omega)$ is the compact embedding of $H^1$ into $L^2$. We thus have that $T\circ i$ is the composition of a continuous and a compact mapping, and thus a compact map. This in particular implies that our sequence $(v_k)$ has a strongly convergent subsequence in $L^2$. This concludes that $T:L^2(\Omega)\to L^2(\Omega)$ is compact, and thus we can use Schauder's fixed point theorem to show the existence of a fixed point $\bar u = T(\bar u)$ in $L^2(\Omega)$. Naturally, the equation itself reveals that actually $\bar u$ belongs to $H_0^1(\Omega)$, so we have some additional regularity on the fixed point we just found.
+    whose solution is guaranteed by Lax-Milgram's lemma, with $u$ in $H_0^1(\Omega)$. From the a priori bound $\|u||\leq\dfrac{1}{\alpha}\|f\|$ we get $\|u\|_1\leq C\|\sin(w)\|_0\leq C|\Omega|=:r_0$. Our candidate set will be $\mathcal C = \bar{B}(0,r_0)\subset L^2(\Omega)$ which is closed, convex and contained in both $L^2(\Omega)$ and $H_0^1(\Omega)$. To prove that $\overline{T(\mathcal C)}$ is compact, consider a sequence $(w_k)_{k>1}$ in $\mathcal C$, which yields $(v_k)_{k>1}=(T(w_k))_{k>1}$ in $\mathcal C$ and additionally $v_k\in H_0^1(\Omega)$ for all $k$. Now, we note that we have a sequence in $H^1$, and as the unit ball is weakly compact, we obtain that is has some weakly convergent sequence in $H^1$. The final detail is that, if we consider $\mathcal C$ to be a ball in $L^2$, then the mapping $T$ can be written additionally as $T\circ i$, where $i:H^1(\Omega)\hookrightarrow L^2(\Omega)$ is the compact embedding of $H^1$ into $L^2$. We thus have that $T\circ i$ is the composition of a continuous and a compact mapping, and thus a compact map. This in particular implies that our sequence $(v_k)$ has a strongly convergent subsequence in $L^2$. This concludes that $T:L^2(\Omega)\to L^2(\Omega)$ is compact, and thus we can use Schauder's fixed point theorem to show the existence of a fixed point $\bar u = T(\bar u)$ in $L^2(\Omega)$. Naturally, the equation itself reveals that actually $\bar u$ belongs to $H_0^1(\Omega)$, so we have some additional regularity on the fixed point we just found.
 }
 A consequence of the Schauder fixed point theorem is the Schaefer fixed point theorem. We state it for completeness without proof.
 \begin{theorem}[Schaefer fixed point]\label{thm:schaefer-fixed-point}
@@ -194,7 +196,7 @@ We now introduce the notion of coercive ($\neq$ elliptic) and hemicontinuous ope
         \varphi:(-t_0,t_0)&\to \R\\
         t&\mapsto \langle A(u+tv),w\rangle
     \end{tightalign*}
-    at $t=0$. 
+    is continuous at $t=0$. 
 \end{definition}
 Hemicontinuity is a weaker property than continuity, as we shall prove in the following theorem.
 \begin{theorem}
@@ -203,7 +205,7 @@ Hemicontinuity is a weaker property than continuity, as we shall prove in the fo
         Let $\varphi(t)=\langle A(u+tv),w\rangle$. Then, we get
         \begin{tightalign*}
             |\varphi(t)-\varphi(0)| &= |\langle A(u+tv),w\rangle - \langle A(u),w\rangle|\\
-            &\leq |\langle A(u+tv)-A(u),w\rangle| \tag{Linearity of $A$}\\
+            &\leq |\langle A(u+tv)-A(u),w\rangle| \tag{Linearity of the duality pairing}\\
             &\leq \|A(u+tv)-A(u)\|_{V'} \|w\|_V. \tag{Cauchy-Schwarz}
         \end{tightalign*}
         Thus, as $\|(u+tv)-u\|_V=\|tv\|\leq |t|\|u\|_V$, then $u+tv\overset{t\to 0}{\to} u$ in norm, and since $A$ is continuous, we get $A(u+tv)\overset{t\to 0}{\to} A(u)$ in $V'$. Thus, taking limit as $t\to 0$ we immediately conclude that $\varphi$ is continuous at $t=0$.

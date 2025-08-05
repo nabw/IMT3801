@@ -10,12 +10,12 @@ In this chapter, we will formally develop these concepts. We will define weak de
 {\color{blue}
 To formulate differential equations in Banach/Hilbert spaces, it will be important to be able to define derivatives in such spaces. This is done through the language of \emph{distributions}, invented (discovered) by L Schwartz. For this, we require the notion of `test functions', i.e. functions on which we can discharge derivatives of abstract objects through integration by parts.
 \begin{definition}[Distribution, action of a distribution]
-    Consider then a function $f$ in $C_0^\infty(\R^d)$. A \emph{distribution} is an element $T\in (C_0^\infty(\R^d))'$, whose action can be written as $\langle T, f\rangle_{(C_0^\infty)'\times C_0^\infty}$, or sometimes simply as $\langle T, f\rangle$, if it is clear by context. 
+    Consider then a function $f$ in $C_0^\infty(\R^n)$. A \emph{distribution} is an element $T\in (C_0^\infty(\R^n))'$, whose action can be written as $\langle T, f\rangle_{(C_0^\infty)'\times C_0^\infty}$, or sometimes simply as $\langle T, f\rangle$, if it is clear by context. 
 \end{definition}
 
-The topology we consider in each space is the usual one, meaning the ones induced by the norms. In $\mathcal D(\R^d)\coloneqq C_0^\infty(\R^d)$, the norm is the supremum over all derivatives:
+The topology we consider in each space is the usual one, meaning the ones induced by the norms. In $\mathcal D(\R^n)\coloneqq C_0^\infty(\R^n)$, the norm is the supremum over all derivatives:
 \begin{equation} %! verify
-    \| f \|_{\mathcal D(\R^d)} \coloneqq \sup_{k} \sup_{|\alpha|} \|D^\alpha f\|_\infty,
+    \| f \|_{\mathcal D(\R^n)} \coloneqq \sup_{k} \sup_{|\alpha|} \|D^\alpha f\|_\infty,
 \end{equation}
 where $\alpha=(\alpha_1, \hdots, \alpha_N)$ is called a \emph{multi-index}, with $|\alpha| = \sum_i \alpha_i$, and $D^\alpha$ is a differential operator given by 
 \begin{equation}
@@ -30,7 +30,7 @@ Using that, the norm of a distribution is simply given by the operator norm. }
 
 The idea now is to generalize the notion of action through integration, so that for sufficiently smooth functions $f$, their induced distribution is $Tf$ given by
 \begin{equation}\label{eq:action-distribution}
-    \langle Tf, g \rangle = \int_{\R^d} fg\,dx.
+    \langle Tf, g \rangle = \int_{\R^n} fg\,dx.
 \end{equation}
 \example{All classical (or strong) derivatives coincide with the weak derivatives, as seen from the integration by parts formulas. Also, consider the Dirac delta distribution given by
 \begin{equation*}
@@ -96,10 +96,11 @@ and
 \begin{equation}\label{eq:def-hcurl}
     H(\curl; \Omega) = \left\{f\in L^2(\Omega): \curl f \in L^2(\Omega)\right\}
 \end{equation}
-Their application depends on the context, so we only keep here their definition. They are also Hilbert spaces, with the inner product defined as the one in $H^1$ but with the corresponding differential operators. Note that $H^1$ functions belong to both $H(\dive)$ and $H(\curl)$, but inclusions among them are not clear. Further, we note that vector-valued Sobolev spaces are constructed component-wise, and we will often encounter special cases of $[W^{m,p}]^n$, such as $[H^p(\Omega)]^n$, which appear when studying the regularity needed in elasticity equations. 
+Their application depends on the context, so we only keep here their definition. They are also Hilbert spaces, with the inner product defined as the one in $H^1$ but with the corresponding differential operators. Note that $\vec H^1$ functions belong to both $H(\dive)$ and $H(\curl)$, but inclusions among them are not clear. Further, we note that vector-valued Sobolev spaces are constructed component-wise, and we will often encounter special cases of $[W^{m,p}]^n$, such as $[H^p(\Omega)]^n$, which appear when studying the regularity needed in elasticity equations. We will often use bold notation for the vector-valued space, i.e. $\vec H^p(\Omega) \coloneqq [H^p(\Omega)]^n$.
+
 We conclude this section with the celebrated Sobolev embedding results, which allow us to obtain certain inclusions (embeddings) between Sobolev spaces, and the compactness of those embeddings: 
 \begin{theorem}[Sobolev embeddings (continuous)]
-Consider $\Omega$ a bounded Lipschitz domain in $\R^d$, set $m,j$ two non-negative integers, and $p$ in $[1,\infty]$. Then the following embeddings hold: 
+Consider $\Omega$ a bounded Lipschitz domain in $\R^n$, set $m,j$ two non-negative integers, and $p$ in $[1,\infty]$. Then the following embeddings hold: 
 \begin{enumerate}
     \item If $mp < d$ then for $p \leq q \leq \frac{dp}{d-mp}$:
         \begin{equation}
@@ -117,7 +118,7 @@ Consider $\Omega$ a bounded Lipschitz domain in $\R^d$, set $m,j$ two non-negati
 \end{theorem}
 
 \begin{theorem}[Sobolev embeddings (compact)]
-Consider $\Omega$ a bounded Lipschitz domain in $\R^d$, $m\geq 1$ integer, $j\geq 0$ integer and let $p$ in $[1,\infty)$. Then the following embeddings are compact:
+Consider $\Omega$ a bounded Lipschitz domain in $\R^n$, $m\geq 1$ integer, $j\geq 0$ integer and let $p$ in $[1,\infty)$. Then the following embeddings are compact:
 \begin{enumerate}
     \item If $mp \leq d$  then for $q$ in $[1, \frac{dp}{d - mp})$:
         \begin{equation}
@@ -149,17 +150,28 @@ and thus we can bound
     |f(x+h)-f(x)|\leq \left|\int_x^{x+h}f'(s)\mathrm{d}s\right|\leq \int_x^{x+h}|f'(s)|\mathrm{d}s \overset{\text{C-S}}{\leq} \|f'\|_{L^2((x,x+h))}h \leq \|f'\|_{L^2(I)}h \quad \forall x\in I.
 \end{equation*}
 This shows that if $f'\in L^2(I)$, then $f$ is uniformly continuous. In particular, we have the injection $H^1(I)\to C^0(\overline{I})$. 
+
+%! revise.
+% \example{
+%     An embedding $W^{j+m,p}(\Omega) \hookrightarrow W^{j,q}(\Omega)$ means that any function that is in the first space is guaranteed to also be in the second, and the identity map between them is continuous. Essentially, having a certain amount of differentiability (controlled by $m$) in $L^p$ forces the function to have a certain amount of integrability (controlled by $q$) or even continuity. Let's see this in action for a function in $H^1(\Omega) = W^{1,2}(\Omega)$, so $m=1, p=2, j=0$. 
+    
+%     In 2D ($d=2$), we have $mp = 1\cdot 2 = 2$, which equals the dimension $d$. Case 2 of the continuous embedding theorem applies. This gives us the embedding $H^1(\Omega) \hookrightarrow L^q(\Omega)$ for any $q \in [2, \infty)$. A function with one $L^2$ derivative in 2D is so regular that it belongs to \emph{all} $L^q$ spaces.
+    
+%     In 3D ($d=3$), we have $mp = 1\cdot 2 = 2$, which is less than the dimension $d$. Case 1 of the theorem applies. The critical exponent is $q = \frac{dp}{d-mp} = \frac{3 \cdot 2}{3 - 2} = 6$. This gives us the embedding $H^1(\Omega) \hookrightarrow L^q(\Omega)$ only for $q \in [2, 6]$. In 3D, having one $L^2$ derivative is less powerful; the function is guaranteed to be in $L^6$, but might not be, for instance, in $L^7$.
+    
+%     In 1D ($d=1$), we have $mp = 1\cdot 2 = 2$, which is greater than the dimension $d$. Case 3 of the theorem applies. This gives the powerful result $H^1(\Omega) \hookrightarrow C^0(\overline{\Omega})$, meaning any $H^1$ function on an interval is guaranteed to be continuous. This specific result was demonstrated directly earlier in the text.
+% }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Traces}\label{sec:traces}
-Traces or trace operators are the ones that restrict a function in $\R^d$ to some set in $\R^{d-1}$, most commonly the boundary of a domain. They are fundamental to adequately define boundary conditions. For the presentation of this section, we follow~\cite{gatica2014simple} and~\cite{monk2003finite}. Some details about Sobolev spaces are drawn from~\cite{adams2003sobolev}. The fundamental difficulty of defining trace operators is that the domain where the boundary condition is defined has measure 0 in the measure of the starting domain, so some regularity of the function is required to guarantee that this operation makes sense. We will not enter the details of how a Lipschitz boundary is defined, see~\cite{monk2003finite} for further details.
+Traces or trace operators are the ones that restrict a function in $\R^n$ to some set in $\R^{d-1}$, most commonly the boundary of a domain. They are fundamental to adequately define boundary conditions. For the presentation of this section, we follow~\cite{gatica2014simple} and~\cite{monk2003finite}. Some details about Sobolev spaces are drawn from~\cite{adams2003sobolev}. The fundamental difficulty of defining trace operators is that the domain where the boundary condition is defined has measure 0 in the measure of the starting domain, so some regularity of the function is required to guarantee that this operation makes sense. We will not enter the details of how a Lipschitz boundary is defined, see~\cite{monk2003finite} for further details.
 
-There are several definitions and constructions here that are needed for everything to make sense. We will follow them in a reasonable order, but this might be a very personal vision, so please read other formulations to have a more well-rounded vision. We will denote with $C_0^\infty(X)$ the space of functions with compact support in $X$, and also with $\D(\bar\Omega)$ the functions in $C_0^\infty(\R^d)$ with support in an open set $U$ such that $\bar\Omega\subset U$. This belongs to a wider set known as the Schwartz class of functions. If the set $X$ is open, we may denote $\D(X)$ as $C_0^\infty(X)$ with a bit of an abuse of notation.
+There are several definitions and constructions here that are needed for everything to make sense. We will follow them in a reasonable order, but this might be a very personal vision, so please read other formulations to have a more well-rounded vision. We will denote with $C_0^\infty(X)$ the space of functions with compact support in $X$, and also with $\D(\bar\Omega)$ the functions in $C_0^\infty(\R^n)$ with support in an open set $U$ such that $\bar\Omega\subset U$. This belongs to a wider set known as the Schwartz class of functions. If the set $X$ is open, we may denote $\D(X)$ as $C_0^\infty(X)$ with a bit of an abuse of notation.
 The preliminary notions we will need are the following:
 \begin{itemize}
     \item $\D(\bar\Omega)$ is dense in $L^p(\Omega)$ if $\Omega$ is bounded and Lipschitz.
     \item $C^\infty(\bar\Omega)$ is dense in $W^{s,p}(\Omega)$ for $s$ a positive integer and $p\in [1,\infty)$.
-    \item For $s$ a positive integer and $p\in (1,\infty)$, we have that there is a continuous linear extension $\Pi: W^{s,p}(\Omega) \to W^{s,p}(\R^d)$ such that $\Pi u|_\Omega = u$ for all $u$ in $W^{s,p}(\Omega)$. A detailed analysis of extension operators in Sobolev spaces is done in~\cite[Section 9.2]{BrezisFA}.
+    \item For $s$ a positive integer and $p\in (1,\infty)$, we have that there is a continuous linear extension $\Pi: W^{s,p}(\Omega) \to W^{s,p}(\R^n)$ such that $\Pi u|_\Omega = u$ for all $u$ in $W^{s,p}(\Omega)$. A detailed analysis of extension operators in Sobolev spaces is done in~\cite[Section 9.2]{BrezisFA}.
 \end{itemize}
 
 Some technicalities arise when $\Omega$ is unbounded. For the sake of this course, all domains are bounded and Lipschitz unless otherwise stated. 
@@ -182,7 +194,7 @@ This trace is sometimes referred to as the \emph{Dirichlet} trace, as it is used
 
 In practice, we need $\gamma_0$ to be extended to a more general domain, which is justified via a trace theorem. The more general case of functions in $W^{m,p}$, i.e. with higher-order differentiability, is treated with Sobolev-Slobodeckij spaces, which is out of the scope of this course. Thus, we will restrict ourselves to the extension to $W^{1,p}$, which is studied in the trace theorem below.
 \begin{theorem}[Trace theorem]\label{thm:trace-theorem}
-    Let $\Omega$ be a bounded and Lipschitz domain. Then, considering $1/p < s \leq 1$, there exists a continuous extension of $\gamma_0$ given by $\gamma_0: W^{s,p}(\Omega) \to W^{\frac{s-1}{p}, p}(\partial\Omega)$. The image of the trace operator, $W^{\frac{s-1}{p}, p}(\partial\Omega)$, is called the \emph{trace space} associated to $W^{s,p}(\Omega)$.
+    Let $\Omega$ be a bounded and Lipschitz domain. Then, considering $1/p < s \leq 1$, there exists a continuous extension of $\gamma_0$ given by $\gamma_0: W^{s,p}(\Omega) \to W^{s-1/p, p}(\partial\Omega)$. The image of the trace operator, $W^{s-1/p, p}(\partial\Omega)$, is called the \emph{trace space} associated to $W^{s,p}(\Omega)$.
     \begin{proof}
         We refer to~\cite{adams2003sobolev} for a complete proof. We will simply see how to extend $\gamma_0$ from smooth functions to a linear bounded operator from $H^1(\Omega)$ to $L^2(\partial\Omega)$. This result requires the density of $\mathcal D$ in $H^1$ and the trace inequality. Consider thus a Cauchy sequence $\{\varphi_i\}_i$ in $\mathcal D(\bar\Omega)$ converging to some $v$ in $H^1(\Omega)$. Using linearity and continuity, we get that for some pair of indexes $i,j$: 
         \begin{equation*}
@@ -199,9 +211,10 @@ In practice, we need $\gamma_0$ to be extended to a more general domain, which i
         which concludes the proof. 
     \end{proof}
 \end{theorem}
+
 We can now define the Sobolev spaces ``with boundary conditions'' via the kernel of the trace operator, and their corresponding dual spaces, which will be useful when dealing with weak formulations.
 \begin{definition}[Kernel of the trace operator]\label{def:sobolev-spaces-zerobc}
-    Let $\gamma_0: W^{s,p}(\Omega) \to W^{s-1/p, p}(\partial\Omega)$ be the trace operator extended as stated in the trace theorem~\ref{thm:trace-theorem}. We define the space $W_0^{s,p}$ as the kernel of the trace operator, i.e. %! surjectivity?
+    Let $\gamma_0: W^{s,p}(\Omega) \to W^{s-1/p, p}(\partial\Omega)$ be the trace operator extended as stated in the trace theorem~\ref{thm:trace-theorem}. We define the space $W_0^{s,p}$ as the kernel of the trace operator, i.e.
     \begin{equation}\label{eq:def-W0sp}
         W_0^{s,p} \coloneqq \ker \gamma_0 = \{ u \in W^{s,p} \text{ and } \gamma_0 u = 0 \}.
     \end{equation}
@@ -254,12 +267,13 @@ where $V_i$ are the extension functions such that $\gamma_0 V_i = v_i$. Finally,
 \begin{equation}\label{eq:def-H01-closure}
     H_0^1(\Omega) \coloneqq \overline{C_0^\infty(\Omega)}^{\|\cdot \|_{1,\Omega}}.
 \end{equation}
+
 \paragraph{Normal and tangential traces}
 In a similar fashion to the Dirichlet trace, we need to define normal and tangential traces to extend the above notions to Neumann boundary conditions and to the $H(\dive)$ and $H(\curl)$ spaces, and to perform integration by parts in our future weak formulations.
 
 All integration by parts formulas stem from the divergence theorem, which we state below.
 \begin{theorem}[Divergence theorem]\label{thm:divergence}
-    Consider a bounded Lipschitz domain $\Omega$ in $\R^{d=2,3}$ and consider a vector field $\vec F:\R^d \to \R^d$ in $[C^1(\bar\Omega)]^d$. Then it holds that
+    Consider a bounded Lipschitz domain $\Omega$ in $\R^{d=2,3}$ and consider a vector field $\vec F:\R^n \to \R^n$ in $[C^1(\bar\Omega)]^d$. Then it holds that
     \begin{equation*}
         \int_\Omega \dive \vec F\,dx = \int_{\partial\Omega}\vec F\cdot \vec n\,ds,
     \end{equation*}
@@ -283,13 +297,13 @@ The relevant formulas are the following:
 
 \paragraph{$H(\dive)$ and the normal trace} In this space, we have a first simple density result: 
 \begin{theorem}\label{thm:def-Hdiv-closure}
-Consider a bounded and Lipschitz domain $\Omega$ in $\R^d$, then $H(\dive;\Omega)$ is the closure of $[C(\bar\Omega)]^d$ in the $H(\dive)$ norm.
+Consider a bounded and Lipschitz domain $\Omega$ in $\R^n$, then $H(\dive;\Omega)$ is the closure of $[C(\bar\Omega)]^d$ in the $H(\dive)$ norm.
 \begin{proof}
-We only present a sketch of the proof, which is covered in more detail in~\cite[Thm 3.22]{monk2003finite}. The main idea is to show that the orthogonal complement of $[C(\bar\Omega)]^d$ in $H(\dive;\Omega)$ is the trivial one. Then, one uses the fact that the orthogonality condition 
+We only present a sketch of the proof, which is covered in more detail in~\cite[Theorem 3.22]{monk2003finite}. The main idea is to show that the orthogonal complement of $[C(\bar\Omega)]^d$ in $H(\dive;\Omega)$ is the trivial one. Then, one uses the fact that the orthogonality condition 
 \begin{equation*}
     (\vec u, \vec \phi) + (\dive \vec u, \dive \vec \phi) = 0
 \end{equation*}
-for all $\vec\phi$ in $[C(\Omega)]^d$ implies that $\grad \dive\vec u = \vec u$ is in $L^2$, and thus $\dive \vec u$ is in $H^1$. An adequate extension to all $\R^d$ and a density argument concludes the proof.
+for all $\vec\phi$ in $[C(\Omega)]^d$ implies that $\grad \dive\vec u = \vec u$ is in $L^2$, and thus $\dive \vec u$ is in $H^1$. An adequate extension to all $\R^n$ and a density argument concludes the proof.
 \end{proof}
 \end{theorem}
 \begin{definition}[Normal trace]\label{def:normal-trace}
@@ -300,7 +314,7 @@ for all $\vec\phi$ in $[C(\Omega)]^d$ implies that $\grad \dive\vec u = \vec u$ 
     where $\vec n $ is the outwards normal vector. This can be extended up to functions in $H(\dive)$ as stated in the following theorem.
 \end{definition}
 \begin{theorem}[Normal trace theorem]\label{thm:normal-trace}
-Consider a bounded Lipschitz domain $\Omega$ in $\R^d$ with outwards unit normal $\vec n$. Then, the mapping $\gamma_N$ can be extended to a continuous linear map $\gamma_N: H(\dive; \Omega) \to H^{-1/2}(\partial\Omega)$, and the following integration by parts formula holds: 
+Consider a bounded Lipschitz domain $\Omega$ in $\R^n$ with outwards unit normal $\vec n$. Then, the mapping $\gamma_N$ can be extended to a continuous linear map $\gamma_N: H(\dive; \Omega) \to H^{-1/2}(\partial\Omega)$, and the following integration by parts formula holds: 
 \begin{equation}\label{eq:ibp-normal-trace}
     \langle \gamma_N \vec v, \phi \rangle_{-1/2, 1/2} = (\vec v, \grad \phi) + (\dive \vec v, \phi) \qquad \forall \vec v\in H(\dive;\Omega), \phi \in H^1(\Omega).
 \end{equation}
@@ -338,7 +352,7 @@ H_0(\dive, \Omega) \coloneqq \overline{[C_0^\infty(\Omega)]^d}^{\|\cdot \|_{\div
 \end{equation}
 i.e. the closure in the $\dive$ norm. The following result makes all the trouble worth it. 
 \begin{theorem}
-Consider a bounded Lipschitz domain $\Omega$ in $\R^d$. Then: 
+Consider a bounded Lipschitz domain $\Omega$ in $\R^n$. Then: 
 \begin{equation}\label{def-H0div-kernel}
 H_0(\dive;\Omega) = \{\vec v\in H(\dive;\Omega): \gamma_N \vec v = 0 \}.
 \end{equation}
@@ -372,9 +386,8 @@ H_0(\dive;\Omega) = \{\vec v\in H(\dive;\Omega): \gamma_N \vec v = 0 \}.
         \end{equation}
         is bounded and linear, with the following integration by parts formula: 
         \begin{equation}
-            (\curl \vec v, \vec\phi) - (\vec v, \curl\vec \phi) = \langle \gamma_t \vec v, \vec \phi\rangle \qquad\forall \vec v \in H(\curl;\Omega), \vec\phi \in \vec H^1(\Omega),
+            (\curl \vec v, \vec\phi) - (\vec v, \curl\vec \phi) = \langle \gamma_t \vec v, \vec \phi\rangle \qquad\forall \vec v \in H(\curl;\Omega), \vec\phi \in \vec H^1(\Omega).
         \end{equation}
-        where we used bold notation for the vector-valued space, i.e. $\vec H^1(\Omega) \coloneqq [H^1(\Omega)]^n$.
     \end{theorem}
     The operator $\gamma_t$ is not surjective, simply because it is the limit of tangential vectors which will never have a normal component (at least intuitively). 
     \begin{theorem}\label{thm:H0curl-characterization-gammat}
@@ -407,7 +420,7 @@ but one can also look at the tangential components of the stress tensor, thus ge
 Using all of the previous definitions, we can finally look at actual problems and some first well-posedness results. For all of them, the Poincaré inequality will be fundamental.
 
 \begin{lemma}[Poincaré inequality]\label{lemma:poincare-inequality}
-    Let $\Omega\subset \R^d$ be a bounded Lipschitz domain. Then, there exists $C>0$ such that
+    Let $\Omega\subset \R^n$ be a bounded Lipschitz domain. Then, there exists $C>0$ such that
     \begin{equation}\label{eq:poincare-inequality}
         \|u\|_{0,\Omega} \leq C\|\nabla u\|_{0,\Omega} \qquad \forall u\in H^1_0(\Omega).
     \end{equation}

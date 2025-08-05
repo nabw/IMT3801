@@ -115,7 +115,7 @@ which one could also write as $Au = a(u, \cdot)$. Naturally, the bilinear form $
     \end{tightalign*}
     \begin{tightalign*}
         \| \mathcal R^{-1} \circ A(u-v) \|_H &= \| A(u-v) \|_{H'} \tag{Riesz isometry}\\
-        &= C \| u-v \|_H^2. \tag{continuity}
+        &\leq  C \| u-v \|_H. \tag{continuity}
     \end{tightalign*}
     Plugging this into our previous estimate we get
     \begin{equation*}
@@ -149,7 +149,7 @@ Consider thus an abstract differential problem given by finding $u$ in $W$ such 
 \begin{equation}
     a(u, v) = f(v), \quad \forall v \in V,
 \end{equation}
-such that the hypotheses the Lax-Milgram lemma~\ref{lemma:lax-milgram} hold. We can consider a discrete \emph{solution (or trial) space} $W_h$ and a discrete \emph{test space} $h$ that approximate $W$ and $V$, where the subindex $h$ refers to the characteristic size of the elements of a discrete mesh of the domain $\Omega$. and define a \emph{Petrov-Galerkin method (or scheme)} as the following discrete problem: find $u_h \in W_h$ such that 
+such that the hypotheses the Lax-Milgram lemma~\ref{lemma:lax-milgram} hold. We can consider a discrete \emph{solution (or trial) space} $W_h$ and a discrete \emph{test space} $V_h$ that approximate $W$ and $V$, where the subindex $h$ refers to the characteristic size of the elements of a discrete mesh of the domain $\Omega$. and define a \emph{Petrov-Galerkin method (or scheme)} as the following discrete problem: find $u_h \in W_h$ such that 
 \begin{equation}\label{eq:galerkinscheme}
     a_h(u_h, v_h) = f_h(v_h) \qquad \forall v_h \in V_h,
 \end{equation}
@@ -201,7 +201,7 @@ We can use the Galerkin orthogonality~\ref{eq:galerkin-orthogonality} to compute
 \begin{lemma}[Céa's estimate]\label{lemma:cea-estimate}
     Consider a consistent, conformal approximation of~\ref{eq:galerkinscheme}, i.e. with $W_h=V_h$ and $W=V$. Assume that the bilinear form $a$ is elliptic with ellipticity constant $\alpha$ and continuity constant $C$. Then, we have the error estimate 
     \begin{equation}
-        \| u - u_h \|_V \leq \frac C \alpha \inf_{v_h\in V_h} \|u - v_h\|_{V_h}.
+        \| u - u_h \|_V \leq \frac C \alpha \inf_{v_h\in V_h} \|u - v_h\|_V.
     \end{equation}
     \begin{proof}
         Let $z_h\in V_h$ be an arbitrary test function. We proceed directly:
